@@ -3,21 +3,34 @@
 Game Design Document
 
 Resumen del Juego
+
 El juego es un juego de cartas de duelos entre héroes, donde los jugadores invocan héroes, lanzan hechizos, equipan artefactos y manipulan el campo de batalla para ganar ventaja sobre sus oponentes. Cada jugador debe gestionar su energía, planear sus movimientos en el campo y aprovechar las debilidades elementales de sus enemigos. El objetivo es derrotar al equipo del oponente o agotar su vida mediante estrategias de ataque, defensa y control del campo de batalla.
+
 
 Los héroes, que cuentan con estadísticas como ataque, defensa, vida y velocidad, forman el núcleo de las tácticas, ya que pueden usar ataques normales y especiales. Las cartas de campo añaden una capa estratégica al juego, modificando condiciones y habilidades en el campo de batalla según dónde y cómo se coloquen.
 
+
 1. Mecánica de Turnos
+
 Resumen General del Turno
+
 En el juego, ambos jugadores realizan sus acciones de forma simultánea en cada turno. El turno se divide en dos fases principales: Fase de Preparación y Fase de Batalla. Cada fase tiene su propósito y permite a los jugadores utilizar sus recursos estratégicamente para posicionar, atacar, o realizar movimientos tácticos.
 
+
 Fase de Preparación
+
 Robo y Energía:
+
 Al inicio de la fase, ambos jugadores roban una carta de su mazo y reciben una cantidad de energía. Esta energía se utiliza para jugar cartas de héroes, hechizos, artefactos, o cartas de campo en el campo de batalla.
+
 Colocación de Cartas:
+
 Los jugadores pueden colocar sus cartas en el campo pagando su coste de energía:
+
 Héroes se colocan en una de las tres líneas del campo, en posiciones estratégicas según sus roles de combate.
+
 Artefactos y hechizos pueden usarse para mejorar a los héroes o aplicar efectos instantáneos.
+
 Cartas de Campo se colocan en el área deseada (campo completo, del jugador, rival, línea, o posición específica) para modificar el entorno o aplicar efectos.
 Zona de Acción Rápida: Los jugadores también pueden colocar hechizos y artefactos boca abajo en esta zona pagando un coste de energia fijo, preparándolos para activarse durante la Fase de Batalla, y pagan un coste de energía al activarlas en ese momento.
 Finalización de Preparación:
