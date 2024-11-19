@@ -211,4 +211,6 @@ Ruptura de Defensa: Algunos ataques pueden ignorar la defensa y atacar directame
 
 Refuerzo de Defensa: Algunas habilidades aumentan la defensa temporalmente, proporcionando mayor resistencia hasta el final del turno.
 
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Jaribi%20carta.png) 
+![Game Screenshot](Epic%20Legions/Assets/Sprites/YANSSO%20carta.png))
 
