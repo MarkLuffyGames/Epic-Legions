@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class CardSelector : MonoBehaviour
@@ -26,6 +27,7 @@ public class CardSelector : MonoBehaviour
 
     void Update()
     {
+        if(NetworkManager.Singleton.IsServer)return;
         DetectCardUnderMouse();
 
         // Detecta si el clic izquierdo del mouse está presionado
@@ -161,6 +163,7 @@ public class CardSelector : MonoBehaviour
 
         if(currentFieldPosition != null && handCardHandler.IsCardOwnedByPlayer(currentCard) && currentFieldPosition.IsFree())
         {
+            //DuelManager.instance.PlaceCardOnTheFieldServerRpc(currentCard, currentFieldPosition);
             handCardHandler.QuitCard(currentCard);
             currentFieldPosition.SetCard(currentCard);
             currentFieldPosition = null;

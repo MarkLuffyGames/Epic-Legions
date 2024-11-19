@@ -177,9 +177,10 @@ public class DuelManager : NetworkBehaviour
     }
 
     /////////// Player Actions ////////////////////////////////
-    
-    public void PlaceCardOnTheField()
+
+    /*[ServerRpc]
+    public void PlaceCardOnTheFieldServerRpc(Card card, FieldPosition fieldPosition)
     {
 
-    }
+    }*/
 }
