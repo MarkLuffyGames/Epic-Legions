@@ -165,7 +165,7 @@ public class DuelManager : NetworkBehaviour
                 duelPhase.Value = DuelPhase.Battle;
             }
 
-            playerReady[clientId] = false;
+            playerReady = playerReady.ToDictionary(kvp => kvp.Key, kvp => false);
         }
         
     }
