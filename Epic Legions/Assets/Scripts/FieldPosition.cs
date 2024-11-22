@@ -6,6 +6,7 @@ public class FieldPosition : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     [SerializeField] private Color isFreeColor;
+    [SerializeField] private int positionIndex;
 
     private void Awake()
     {
@@ -26,14 +27,14 @@ public class FieldPosition : MonoBehaviour
     /// Establece la carta en esta pocion del campo.
     /// </summary>
     /// <param name="card"></param>
-    public void SetCard(Card card)
+    public void SetCard(Card card, bool isPlayer)
     {
         this.card = card;
         card.isVisible = true;
         card.transform.parent = transform;
         card.transform.localScale = Vector3.one;
         card.MoveToPosition(Vector3.up * 0.01f, 20, false, true);
-        card.RotateToAngle(new Vector3(90, 0, 0), 20);
+        card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), 20);
         card.SetSortingOrder(0);
     }
 
@@ -54,5 +55,10 @@ public class FieldPosition : MonoBehaviour
     public void RemoveHighlight()
     {
         spriteRenderer.color = originalColor;
+    }
+
+    public int GetPositionIndex()
+    {
+        return positionIndex;
     }
 }

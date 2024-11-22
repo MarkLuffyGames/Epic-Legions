@@ -27,7 +27,7 @@ public class CardSelector : MonoBehaviour
 
     void Update()
     {
-        if(NetworkManager.Singleton.IsServer)return;
+        if(NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
         DetectCardUnderMouse();
 
         // Detecta si el clic izquierdo del mouse está presionado
@@ -152,21 +152,29 @@ public class CardSelector : MonoBehaviour
             }
         }
 
-        if (currentCard != null && isHoldingCard)
+        
+
+        if(currentFieldPosition != null && handCardHandler.IsCardOwnedByPlayer(currentCard) 
+            && currentFieldPosition.IsFree() && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
+            && !playerManager.isReady)
+        {
+            DuelManager.instance.PlaceCardOnTheFieldServerRpc(
+                handCardHandler.GetIdexOfCard(currentCard), 
+                currentFieldPosition.GetPositionIndex(),
+                NetworkManager.Singleton.LocalClientId);
+
+            card.waitForServer = true;
+            currentFieldPosition = null;
+            isHoldingCard = false;
+            card.StopDragging(false);
+        }
+        else if (currentCard != null && isHoldingCard)
         {
             isHoldingCard = false;
             if (handCardHandler.IsCardOwnedByPlayer(card))
             {
-                card.StopDragging();
+                card.StopDragging(true);
             }
-        }
-
-        if(currentFieldPosition != null && handCardHandler.IsCardOwnedByPlayer(currentCard) && currentFieldPosition.IsFree())
-        {
-            //DuelManager.instance.PlaceCardOnTheFieldServerRpc(currentCard, currentFieldPosition);
-            handCardHandler.QuitCard(currentCard);
-            currentFieldPosition.SetCard(currentCard);
-            currentFieldPosition = null;
         }
 
         playerManager.HideAvailablePositions();
@@ -181,7 +189,9 @@ public class CardSelector : MonoBehaviour
     {
         float heldTime = Time.time - mouseDownTime;
 
-        if (handCardHandler.IsCardOwnedByPlayer(card) && !isAnyFocusedCard)
+        if (handCardHandler.IsCardOwnedByPlayer(card) && !isAnyFocusedCard
+            && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
+            && !playerManager.isReady)
         {
             card.StartDragging();
 

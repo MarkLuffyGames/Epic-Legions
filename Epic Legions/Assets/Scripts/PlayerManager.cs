@@ -1,8 +1,6 @@
-using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -13,8 +11,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private HandCardHandler handCardHandler;
     [SerializeField] private DuelManager duelManager;
     [SerializeField] private PlayerManager rivalPlayerManager;
+    [SerializeField] private GameObject nextPhaseButton;
+    [SerializeField] private GameObject waitTextGameObject;
 
-    public GameObject cardPrafabTest;
+    public GameObject cardPrafab;
 
     private List<Card> card = new List<Card>();
     public int playerRole;
@@ -29,7 +29,7 @@ public class PlayerManager : MonoBehaviour
     public void AddCardToPlayerDeck(CardSO cardSO, int numberOfCards)
     {
         deck.Add(cardSO);
-
+        
         if(deck.Count == numberOfCards)
         {
             InstancePlayerDeck();
@@ -43,7 +43,7 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0; i < deck.Count; i++)
         {
-            var newCard = Instantiate(cardPrafabTest, deckPosition);
+            var newCard = Instantiate(cardPrafab, deckPosition);
             newCard.transform.rotation = Quaternion.Euler(-90, 0, 0);
             newCard.transform.localPosition = new Vector3(0, i * 0.02f, 0);
             card.Add(newCard.GetComponent<Card>());
@@ -51,10 +51,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         isReady = true;
-        if (isReady && rivalPlayerManager.isReady)
-        {
-            DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId, true);
-        }
+        IsReady();
     }
 
     /// <summary>
@@ -63,6 +60,7 @@ public class PlayerManager : MonoBehaviour
     /// <returns></returns>
     public void DrawStartCards()
     {
+        Debug.Log("Robando cartas de inicio.");
         StartCoroutine(DrawStartCardsCoroutine());
     }
 
@@ -73,14 +71,46 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < 7; i++)
         {
             DrawCard();
+            Debug.Log("Carta robada");
             yield return new WaitForSeconds(0.05f);
         }
 
         isReady = true;
-        if(isReady && rivalPlayerManager.isReady)
+        IsReady();
+    }
+
+    private void IsReady()
+    {
+        if (isReady && rivalPlayerManager.isReady && NetworkManager.Singleton.IsClient)
         {
-            DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId, true);
+            DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         }
+    }
+
+    public void SetPlayerReady()
+    {
+        DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        isReady = true;
+    }
+
+    public void ShowNextPhaseButton()
+    {
+        nextPhaseButton.SetActive(true);
+    }
+
+    public void HideNextPhaseButton()
+    {
+        nextPhaseButton.SetActive(false);
+    }
+
+    public void ShowWaitTextGameObject()
+    {
+        waitTextGameObject.SetActive(true);
+    }
+
+    public void HideWaitTextGameObject()
+    {
+        waitTextGameObject.SetActive(false);
     }
 
     /// <summary>
@@ -114,5 +144,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public List<FieldPosition> GetFieldPositionList()
+    {
+        return fieldPositionList;
+    }
 
+    public HandCardHandler GetHandCardHandler()
+    {
+        return handCardHandler;
+    }
 }

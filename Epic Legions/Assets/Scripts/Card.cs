@@ -28,6 +28,7 @@ public class Card : MonoBehaviour
     public bool isTemporalPosition;
 
     public bool isVisible;
+    public bool waitForServer;
 
     /// <summary>
     /// Establece todos los datos de la carta.
@@ -193,7 +194,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ResetSize()
     {
-        MoveToPosition(lastPosition, 20, false, true);
+        MoveToLastPosition();
         RotateToAngle(lastRotation, 20);
         canvasFront.sortingOrder = sortingOrder;
         canvasBack.sortingOrder = sortingOrder;
@@ -214,12 +215,12 @@ public class Card : MonoBehaviour
     /// <summary>
     /// Termina el arrastre de la carta
     /// </summary>
-    public void StopDragging()
+    public void StopDragging(bool returnLastPosition)
     {
         isDragging = false;
-        if (!isFocused)
+        if (!isFocused && returnLastPosition)
         {
-            MoveToPosition(lastPosition, 20, false, true);
+            MoveToLastPosition();
         }
     }
 

@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class HandCardHandler : MonoBehaviour
@@ -31,6 +29,8 @@ public class HandCardHandler : MonoBehaviour
         {
             for (int i = 0; i < cardsList.Count; i++)
             {
+                if(cardsList[i].waitForServer)continue;
+
                 float distance = 6.0f / (cardsList.Count - 1);
                 if (distance > maxDistanceCards) distance = maxDistanceCards;
 
@@ -108,5 +108,15 @@ public class HandCardHandler : MonoBehaviour
             isHideCard = true;
 
         }
+    }
+
+    public List<Card> GetCardInHandList()
+    {
+        return cardsList;
+    }
+
+    public int GetIdexOfCard(Card card)
+    {
+        return cardsList.IndexOf(card);
     }
 }

@@ -1,11 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.Burst.Intrinsics;
 using Unity.Netcode;
-using Unity.Services.Matchmaker.Models;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Battle, None }
@@ -31,7 +27,7 @@ public class DuelManager : NetworkBehaviour
 
     private void Awake()
     {
-        DuelManager.instance = this;
+        instance = this;
     }
 
     private void Start()
@@ -51,10 +47,6 @@ public class DuelManager : NetworkBehaviour
     private void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
     {
         UpdateDuelPhaseText();
-        if (IsServer)
-        {
-            playerReady.Clear();
-        }
 
         player1Manager.isReady = false;
         player2Manager.isReady = false;
@@ -63,12 +55,21 @@ public class DuelManager : NetworkBehaviour
         {
             SendDeckToServerRpc(NetworkManager.Singleton.LocalClientId, deckCardIds.ToArray());
         }
-
-        if (newPhase == DuelPhase.Starting)
+        else if (newPhase == DuelPhase.Starting)
         {
             player1Manager.DrawStartCards();
             player2Manager.DrawStartCards();
         }
+        else if (newPhase == DuelPhase.Preparation)
+        {
+            player1Manager.ShowNextPhaseButton();
+        }
+        else if(newPhase == DuelPhase.Battle)
+        {
+            player1Manager.HideWaitTextGameObject();
+        }
+
+
     }
 
     public void RegisterPlayer(ulong clientId)
@@ -77,6 +78,7 @@ public class DuelManager : NetworkBehaviour
         {
             connectedPlayerCount++;
             playerRoles[clientId] = connectedPlayerCount;
+            playerReady[clientId] = false;
         }
 
         if (connectedPlayerCount == 2)
@@ -144,9 +146,9 @@ public class DuelManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SetPlayerReadyServerRpc(ulong clientId, bool isReady)
+    public void SetPlayerReadyServerRpc(ulong clientId)
     {
-        playerReady[clientId] = isReady;
+        playerReady[clientId] = true;
 
         if (AreAllTrue(playerReady))
         {
@@ -158,7 +160,14 @@ public class DuelManager : NetworkBehaviour
             {
                 duelPhase.Value = DuelPhase.Preparation;
             }
+            else if(duelPhase.Value == DuelPhase.Preparation)
+            {
+                duelPhase.Value = DuelPhase.Battle;
+            }
+
+            playerReady[clientId] = false;
         }
+        
     }
     public bool AreAllTrue(Dictionary<ulong, bool> clientStatus)
     {
@@ -176,11 +185,53 @@ public class DuelManager : NetworkBehaviour
         duelPhaseText.text = duelPhase.Value.ToString();
     }
 
+    public DuelPhase GetDuelPhase()
+    {
+        return duelPhase.Value;
+    }
+
     /////////// Player Actions ////////////////////////////////
 
-    /*[ServerRpc]
-    public void PlaceCardOnTheFieldServerRpc(Card card, FieldPosition fieldPosition)
+    [ServerRpc(RequireOwnership = false)]
+    public void PlaceCardOnTheFieldServerRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
     {
 
-    }*/
+        if (playerRoles[clientId] == 1)
+        {
+            Card card = player1Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
+            player1Manager.GetHandCardHandler().QuitCard(card);
+            player1Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, true);
+            card.waitForServer = false;
+        }
+        else if (playerRoles[clientId] == 2)
+        {
+            Card card = player2Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
+            player2Manager.GetHandCardHandler().QuitCard(card);
+            player2Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, false);
+            card.waitForServer = false;
+        }
+
+        PlaceCardOnTheFieldClientRpc(cardIndex, fieldPositionIdex, clientId);
+    }
+
+    [ClientRpc]
+    private void PlaceCardOnTheFieldClientRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
+    {
+        if(NetworkManager.Singleton.IsHost)return;
+
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            Card card = player1Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
+            player1Manager.GetHandCardHandler().QuitCard(card);
+            player1Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, true);
+            card.waitForServer = false;
+        }
+        else
+        {
+            Card card = player2Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
+            player2Manager.GetHandCardHandler().QuitCard(card);
+            player2Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, false);
+            card.waitForServer = false;
+        }
+    }
 }
