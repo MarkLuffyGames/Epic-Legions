@@ -18,7 +18,7 @@ MonoBehaviour:
   cardElemnt: 3
   cardType: 0
   heroClass: 2
-  attack: 10
+  attack: 15
   defence: 10
-  speed: 10
+  speed: 5
   energy: 10

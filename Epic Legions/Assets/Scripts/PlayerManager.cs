@@ -51,6 +51,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         isReady = true;
+        Debug.Log("IsReady");
         IsReady();
     }
 

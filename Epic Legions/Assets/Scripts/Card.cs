@@ -30,6 +30,16 @@ public class Card : MonoBehaviour
     public bool isVisible;
     public bool waitForServer;
 
+    private int attack;
+    private int defence;
+    private int speed;
+    private int energy;
+
+    public int Attack => attack;
+    public int Defence => defence;
+    public int Speed => speed;
+    public int Energy => energy;
+
     /// <summary>
     /// Establece todos los datos de la carta.
     /// </summary>
@@ -42,11 +52,21 @@ public class Card : MonoBehaviour
         cardImage.sprite = cardSO.CardSprite;
         if(cardSO is HeroCardSO heroCardSO)
         {
-            cardAttack.text = heroCardSO.Attack.ToString();
-            cardDefence.text = heroCardSO.Defence.ToString();
-            cardSpeed.text = heroCardSO.Speed.ToString();
-            cardEnergy.text = heroCardSO.Energy.ToString();
+            attack = heroCardSO.Attack;
+            defence = heroCardSO.Defence;
+            speed = heroCardSO.Speed;
+            energy = heroCardSO.Energy;
+
+            UpdateText();
         }
+    }
+
+    private void UpdateText()
+    {
+        cardAttack.text = attack.ToString();
+        cardDefence.text = defence.ToString();
+        cardSpeed.text = speed.ToString();
+        cardEnergy.text = energy.ToString();
     }
 
     /// <summary>

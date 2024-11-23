@@ -3,6 +3,7 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.Rendering.GPUSort;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Battle, None }
 public class DuelManager : NetworkBehaviour
@@ -22,6 +23,7 @@ public class DuelManager : NetworkBehaviour
 
 
     private NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
+    private List<Card> HeroCardsOnTheField = new List<Card>();
 
     public TextMeshProUGUI duelPhaseText;
 
@@ -48,6 +50,7 @@ public class DuelManager : NetworkBehaviour
     {
         UpdateDuelPhaseText();
 
+        Debug.Log("Fase cambiada");
         player1Manager.isReady = false;
         player2Manager.isReady = false;
 
@@ -202,6 +205,7 @@ public class DuelManager : NetworkBehaviour
             player1Manager.GetHandCardHandler().QuitCard(card);
             player1Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, true);
             card.waitForServer = false;
+            InsertCardInOrder(HeroCardsOnTheField, card);
         }
         else if (playerRoles[clientId] == 2)
         {
@@ -209,9 +213,27 @@ public class DuelManager : NetworkBehaviour
             player2Manager.GetHandCardHandler().QuitCard(card);
             player2Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, false);
             card.waitForServer = false;
+            InsertCardInOrder(HeroCardsOnTheField, card);
         }
 
         PlaceCardOnTheFieldClientRpc(cardIndex, fieldPositionIdex, clientId);
+    }
+
+    private void InsertCardInOrder(List<Card> heroCards, Card newCard)
+    {
+        // Encuentra la posición donde insertar la nueva carta
+        int insertIndex = heroCards.FindLastIndex(card => card.Speed >= newCard.Speed);
+
+        // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
+        if (insertIndex == -1)
+        {
+            heroCards.Insert(0, newCard);
+        }
+        else
+        {
+            // Inserta después de la última carta con la misma velocidad o mayor
+            heroCards.Insert(insertIndex + 1, newCard);
+        }
     }
 
     [ClientRpc]

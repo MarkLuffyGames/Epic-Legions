@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum HeroClass { Warrior, Archer, Wizard, Druid, Necromancer }
@@ -17,4 +18,7 @@ public class HeroCardSO : CardSO
     public int Speed => speed;
     public int Energy => energy;
 
+
 }
+
+
