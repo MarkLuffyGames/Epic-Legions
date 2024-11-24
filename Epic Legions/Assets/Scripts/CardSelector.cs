@@ -158,15 +158,17 @@ public class CardSelector : MonoBehaviour
             && currentFieldPosition.IsFree() && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
             && !playerManager.isReady)
         {
+
+            card.waitForServer = true;
+            isHoldingCard = false;
+            card.StopDragging(false);
+
             DuelManager.instance.PlaceCardOnTheFieldServerRpc(
                 handCardHandler.GetIdexOfCard(currentCard), 
                 currentFieldPosition.GetPositionIndex(),
                 NetworkManager.Singleton.LocalClientId);
 
-            card.waitForServer = true;
             currentFieldPosition = null;
-            isHoldingCard = false;
-            card.StopDragging(false);
         }
         else if (currentCard != null && isHoldingCard)
         {

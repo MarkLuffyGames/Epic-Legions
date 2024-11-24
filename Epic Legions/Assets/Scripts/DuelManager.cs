@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -50,7 +51,6 @@ public class DuelManager : NetworkBehaviour
     {
         UpdateDuelPhaseText();
 
-        Debug.Log("Fase cambiada");
         player1Manager.isReady = false;
         player2Manager.isReady = false;
 
@@ -117,6 +117,18 @@ public class DuelManager : NetworkBehaviour
     [ClientRpc]
     private void SendDeckToClientsClientRpc(ulong targetClientId, int[] deckCardIds)
     {
+        if (duelPhase.Value != DuelPhase.PreparingDuel)
+        {
+            Debug.Log("Deck received, but phase is not 'Preparing'. Waiting for phase update...");
+            StartCoroutine(WaitForPhaseAndProcessDeck(targetClientId, deckCardIds));
+            return;
+        }
+
+        ProcessDeck(targetClientId, deckCardIds);
+    }
+
+    private void ProcessDeck(ulong targetClientId, int[] deckCardIds)
+    {
         if (NetworkManager.Singleton.LocalClientId == targetClientId)
         {
             Debug.Log($"Deck del jugador validado por el servidor: {string.Join(", ", deckCardIds)}");
@@ -127,6 +139,12 @@ public class DuelManager : NetworkBehaviour
             Debug.Log($"Deck del rival recibido del servidor: {string.Join(", ", deckCardIds)}");
             SetDeck(2, deckCardIds);
         }
+    }
+
+    private IEnumerator WaitForPhaseAndProcessDeck(ulong targetClientId, int[] deckCardIds)
+    {
+        yield return new WaitUntil(() => duelPhase.Value == DuelPhase.PreparingDuel);
+        ProcessDeck(targetClientId, deckCardIds);
     }
 
     private void SetDeck(int playerRole, int[] deckCardIds)
