@@ -8,6 +8,9 @@ public class FieldPosition : MonoBehaviour
     [SerializeField] private Color isFreeColor;
     [SerializeField] private int positionIndex;
 
+    public Card Card => card;
+    public int PositionIndex => positionIndex;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -36,6 +39,7 @@ public class FieldPosition : MonoBehaviour
         card.MoveToPosition(Vector3.up * 0.01f, 20, false, true);
         card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), 20);
         card.SetSortingOrder(0);
+        card.SetFieldPosition(this);
     }
 
     /// <summary>

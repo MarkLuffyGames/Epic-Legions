@@ -21,7 +21,7 @@ public class CardDatabase : MonoBehaviour
     {
         for (int i = array.Length - 1; i > 0; i--)
         {
-            // Generar un índice aleatorio con UnityEngine.Random
+            // Generar un índice aleatorio
             int randomIndex = Random.Range(0, i + 1);
 
             // Intercambiar el elemento actual con el elemento aleatorio

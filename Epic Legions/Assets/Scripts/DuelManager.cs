@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using static UnityEngine.Rendering.GPUSort;
 
@@ -17,6 +18,7 @@ public class DuelManager : NetworkBehaviour
     public List<int> deckCardIds;
 
     private Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
+    private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
     private int connectedPlayerCount = 0;
 
     private Dictionary<ulong, List<int>> playerDecks = new Dictionary<ulong, List<int>>();
@@ -24,9 +26,12 @@ public class DuelManager : NetworkBehaviour
 
 
     private NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
+
     private List<Card> HeroCardsOnTheField = new List<Card>();
+    private int heroTurnIndex;
 
     public TextMeshProUGUI duelPhaseText;
+    public Card heroTurn;
 
     private void Awake()
     {
@@ -70,6 +75,18 @@ public class DuelManager : NetworkBehaviour
         else if(newPhase == DuelPhase.Battle)
         {
             player1Manager.HideWaitTextGameObject();
+
+            if (IsServer)
+            {
+                heroTurnIndex = 0;
+
+                StartHeroTurn();
+            }
+
+            if(IsClient)
+            {
+                player1Manager.GetHandCardHandler().HideHandCard();
+            }
         }
 
 
@@ -81,6 +98,7 @@ public class DuelManager : NetworkBehaviour
         {
             connectedPlayerCount++;
             playerRoles[clientId] = connectedPlayerCount;
+            playerId[connectedPlayerCount] = clientId;
             playerReady[clientId] = false;
         }
 
@@ -240,7 +258,7 @@ public class DuelManager : NetworkBehaviour
     private void InsertCardInOrder(List<Card> heroCards, Card newCard)
     {
         // Encuentra la posición donde insertar la nueva carta
-        int insertIndex = heroCards.FindLastIndex(card => card.Speed >= newCard.Speed);
+        int insertIndex = heroCards.FindLastIndex(card => card.SpeedPoint >= newCard.SpeedPoint);
 
         // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
         if (insertIndex == -1)
@@ -273,5 +291,49 @@ public class DuelManager : NetworkBehaviour
             player2Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, false);
             card.waitForServer = false;
         }
+    }
+
+    private void StartHeroTurn()
+    {
+        SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForCurrentTurnHero());
+        heroTurn = HeroCardsOnTheField[heroTurnIndex];
+    }
+
+    private ulong GetClientIdForCurrentTurnHero()
+    {
+        if (player1Manager.GetFieldPositionList().Contains(HeroCardsOnTheField[heroTurnIndex].FieldPosition))
+        {
+            return playerId[1];
+        }
+        else if (player2Manager.GetFieldPositionList().Contains(HeroCardsOnTheField[heroTurnIndex].FieldPosition))
+        {
+            return playerId[2];
+        }
+        
+        Debug.LogError("El heroe no pertenece a ningun jugador");
+        return 0;
+    }
+
+    [ClientRpc]
+    private void SetHeroTurnClientRpc(int fieldPositionIndex, ulong ownerClientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == ownerClientId)
+        {
+            Card card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            card.SetTurn(true);
+            heroTurn = card;
+        }
+        else
+        {
+            Card card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            card.SetTurn(false);
+            heroTurn = card;
+        }
+    }
+
+    [ServerRpc]
+    public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId)
+    {
+
     }
 }

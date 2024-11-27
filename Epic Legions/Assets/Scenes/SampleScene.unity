@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 1
+  positionIndex: 7
 --- !u!1 &62251279
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,7 +627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 7
+  positionIndex: 6
 --- !u!1 &185299982
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,7 +906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 12
+  positionIndex: 10
 --- !u!1 &238012930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 10
+  positionIndex: 9
 --- !u!1 &239649237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,6 +1063,8 @@ MonoBehaviour:
   cardsList: []
   maxDistanceCards: 1.5
   IsPlayer: 0
+  hideCardButton: {fileID: 0}
+  isHideCards: 0
 --- !u!4 &239649239
 Transform:
   m_ObjectHideFlags: 0
@@ -1599,6 +1601,149 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 7
+--- !u!1 &346859191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 346859192}
+  - component: {fileID: 346859195}
+  - component: {fileID: 346859194}
+  - component: {fileID: 346859193}
+  - component: {fileID: 346859196}
+  m_Layer: 5
+  m_Name: Hide Cards Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &346859192
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346859191}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1952202793}
+  m_Father: {fileID: 1479318188}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -565}
+  m_SizeDelta: {x: 200, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &346859193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346859191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 346859194}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1185561294}
+        m_TargetAssemblyTypeName: HandCardHandler, Assembly-CSharp
+        m_MethodName: HideHandCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &346859194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346859191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &346859195
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346859191}
+  m_CullTransparentMesh: 1
+--- !u!1652712579 &346859196
+MultiplayerRolesData:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346859191}
+  m_GameObjectRolesMask: 3
+  m_ComponentsRolesMasks: []
 --- !u!1 &349084751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,7 +1972,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 3
+  positionIndex: 13
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,7 +2341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 5
+  positionIndex: 3
 --- !u!1 &530183223
 GameObject:
   m_ObjectHideFlags: 0
@@ -3085,7 +3230,6 @@ MonoBehaviour:
   nextPhaseButton: {fileID: 0}
   waitTextGameObject: {fileID: 0}
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
-  playerRole: 0
   isReady: 0
 --- !u!4 &739325802
 Transform:
@@ -3444,7 +3588,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   player1Manager: {fileID: 1302324177}
   player2Manager: {fileID: 739325801}
-  deckCardIds: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  deckCardIds: 000000000000000000000000000000000000000000000000010000000100000001000000010000000100000001000000020000000200000002000000020000000200000002000000030000000300000003000000030000000300000003000000040000000400000004000000040000000400000004000000050000000500000005000000050000000500000005000000060000000600000006000000060000000600000006000000
   duelPhaseText: {fileID: 1502091619}
 --- !u!4 &797659817
 Transform:
@@ -3936,7 +4080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 11
+  positionIndex: 4
 --- !u!1 &979212335
 GameObject:
   m_ObjectHideFlags: 0
@@ -4060,7 +4204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 4
+  positionIndex: 8
 --- !u!1 &980378220
 GameObject:
   m_ObjectHideFlags: 0
@@ -4372,6 +4516,8 @@ MonoBehaviour:
   cardsList: []
   maxDistanceCards: 1.5
   IsPlayer: 1
+  hideCardButton: {fileID: 346859191}
+  isHideCards: 0
 --- !u!4 &1185561295
 Transform:
   m_ObjectHideFlags: 0
@@ -4580,7 +4726,6 @@ MonoBehaviour:
   nextPhaseButton: {fileID: 1485996881}
   waitTextGameObject: {fileID: 1589047957}
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
-  playerRole: 0
   isReady: 0
 --- !u!114 &1302324178
 MonoBehaviour:
@@ -4725,7 +4870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 0
+  positionIndex: 12
 --- !u!1 &1458365888
 GameObject:
   m_ObjectHideFlags: 0
@@ -4930,7 +5075,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 200
   m_TargetDisplay: 0
 --- !u!224 &1479318188
 RectTransform:
@@ -4947,6 +5092,7 @@ RectTransform:
   - {fileID: 1502091617}
   - {fileID: 1485996882}
   - {fileID: 1589047958}
+  - {fileID: 346859192}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5039,6 +5185,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1302324177}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: ShowWaitTextGameObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1302324177}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: SetPlayerReady
         m_Mode: 1
         m_Arguments:
@@ -5052,18 +5210,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1302324177}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: HideNextPhaseButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1302324177}
-        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
-        m_MethodName: ShowWaitTextGameObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5583,7 +5729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 13
+  positionIndex: 5
 --- !u!1 &1813710116
 GameObject:
   m_ObjectHideFlags: 0
@@ -5707,7 +5853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 14
+  positionIndex: 0
 --- !u!1 &1864424657
 GameObject:
   m_ObjectHideFlags: 0
@@ -5831,7 +5977,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 9
+  positionIndex: 14
 --- !u!1 &1866308401
 GameObject:
   m_ObjectHideFlags: 0
@@ -6339,7 +6485,82 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 8
+  positionIndex: 11
+--- !u!1 &1952202792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1952202793}
+  - component: {fileID: 1952202795}
+  - component: {fileID: 1952202794}
+  m_Layer: 5
+  m_Name: Imagen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1952202793
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952202792}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 346859192}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &1952202794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952202792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1952202795
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952202792}
+  m_CullTransparentMesh: 1
 --- !u!1 &1995100165
 GameObject:
   m_ObjectHideFlags: 0
@@ -6463,7 +6684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
-  positionIndex: 6
+  positionIndex: 1
 --- !u!1 &2008372520
 GameObject:
   m_ObjectHideFlags: 0
@@ -6496,6 +6717,11 @@ MonoBehaviour:
   AllCards:
   - {fileID: 11400000, guid: 896a8395db0cfeb49946d303efc505dc, type: 2}
   - {fileID: 11400000, guid: 6856d093e4152ef41b369e7f745dd47e, type: 2}
+  - {fileID: 11400000, guid: ee3bdfab0690d704ab3bdf150578cd55, type: 2}
+  - {fileID: 11400000, guid: 412c44fb1f829a44b9e98440f7cf6d08, type: 2}
+  - {fileID: 11400000, guid: 283001055bdfdd64bbd39f131a531b10, type: 2}
+  - {fileID: 11400000, guid: 1fa951a73121dc143ae786585053d27d, type: 2}
+  - {fileID: 11400000, guid: 3a9012e5cf73919449e0fe8288e412b5, type: 2}
 --- !u!4 &2008372522
 Transform:
   m_ObjectHideFlags: 0

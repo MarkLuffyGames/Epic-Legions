@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class HandCardHandler : MonoBehaviour
 {
     [SerializeField] private List<Card> cardsList = new List<Card>();
     [SerializeField] private float maxDistanceCards = 1.5f;
     [SerializeField] private bool IsPlayer;
+    [SerializeField] private GameObject hideCardButton;
 
-    private bool isHideCard;
+    public bool isHideCards;
 
     private void Awake()
     {
@@ -19,14 +22,20 @@ public class HandCardHandler : MonoBehaviour
     /// </summary>
     private void SetCardsPosition()
     {
-        if (cardsList.Count == 0) return;
+        if (cardsList.Count == 0)
+        {
+            if (IsPlayer) hideCardButton.SetActive(false);
+            return;
+        }
 
         if (cardsList.Count == 1)
         {
+            if (IsPlayer) hideCardButton.SetActive(true);
             cardsList[0].transform.localPosition = Vector3.zero;
         }
         else
         {
+            if(IsPlayer)hideCardButton.SetActive(true);
             for (int i = 0; i < cardsList.Count; i++)
             {
                 if(cardsList[i].waitForServer)continue;
@@ -44,6 +53,8 @@ public class HandCardHandler : MonoBehaviour
                 cardsList[i].SetSortingOrder(i + 100);
             }
         }
+
+        isHideCards = false;
     }
 
     /// <summary>
@@ -83,10 +94,10 @@ public class HandCardHandler : MonoBehaviour
     /// </summary>
     public void ShowHandCard()
     {
-        if (isHideCard)
+        if (isHideCards)
         {
             SetCardsPosition();
-            isHideCard = false;
+            hideCardButton.SetActive(true);
         }
     }
     
@@ -95,17 +106,19 @@ public class HandCardHandler : MonoBehaviour
     /// </summary>
     public void HideHandCard()
     {
-        if (!isHideCard)
+        if (!isHideCards)
         {
             foreach (Card card in cardsList)
             {
                 if (!card.IsDragging())
                 {
                     card.MoveToPosition(card.transform.localPosition + Vector3.back * 1.3f, 20, true, true);
+                    if(card.IsHighlight())card.RemoveHighlight();
                 }
             }
 
-            isHideCard = true;
+            hideCardButton.SetActive(false);
+            isHideCards = true;
 
         }
     }
@@ -118,5 +131,22 @@ public class HandCardHandler : MonoBehaviour
     public int GetIdexOfCard(Card card)
     {
         return cardsList.IndexOf(card);
+    }
+
+    public static bool IsMouseOverButton()
+    {
+        // Obtén el objeto debajo del mouse
+        GameObject hoveredObject = EventSystem.current.currentSelectedGameObject;
+
+        if(hoveredObject != null)
+        {
+            //Comprueba que es un boton
+            if (hoveredObject.TryGetComponent<Button>(out Button button))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

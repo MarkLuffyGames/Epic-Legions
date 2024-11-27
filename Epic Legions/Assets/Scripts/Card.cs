@@ -7,6 +7,8 @@ public class Card : MonoBehaviour
 {
     [SerializeField] private Canvas canvasFront;
     [SerializeField] private Canvas canvasBack;
+    [SerializeField] private Canvas cardSelected;
+    [SerializeField] private Canvas cardActions;
     [SerializeField] private Image cardImage;
     [SerializeField] private TextMeshProUGUI cardName;
     [SerializeField] private TextMeshProUGUI cardAttack;
@@ -18,13 +20,15 @@ public class Card : MonoBehaviour
 
     private Vector3 offset;
     private bool isDragging = false;
-
+    private bool isMyTurn;
+    private bool activeActions;
     private int sortingOrder;
 
     private Vector3 lastPosition;
     private Vector3 lastRotation;
 
     private bool isFocused;
+    private bool isHighlight;
     public bool isTemporalPosition;
 
     public bool isVisible;
@@ -34,11 +38,17 @@ public class Card : MonoBehaviour
     private int defence;
     private int speed;
     private int energy;
+    private int currentEnergy;
+    private ulong ownerClientId;
+    private FieldPosition fieldPosition; 
 
-    public int Attack => attack;
-    public int Defence => defence;
-    public int Speed => speed;
-    public int Energy => energy;
+    public int AttackPoint => attack;
+    public int DefencePoint => defence;
+    public int SpeedPoint => speed;
+    public int MaxEnergy => energy;
+    public int CurrentEnergy => currentEnergy;
+    public FieldPosition FieldPosition => fieldPosition;
+
 
     /// <summary>
     /// Establece todos los datos de la carta.
@@ -59,6 +69,11 @@ public class Card : MonoBehaviour
 
             UpdateText();
         }
+    }
+
+    public void SetFieldPosition(FieldPosition fieldPosition)
+    {
+        this.fieldPosition = fieldPosition;
     }
 
     private void UpdateText()
@@ -161,10 +176,10 @@ public class Card : MonoBehaviour
     public void Highlight()
     {
         // Aumenta ligeramente el tamaño de la carta.
+        isHighlight = true;
         transform.localScale = new Vector3(1.05f, 1.05f, 1.05f); // Ejemplo: agrandar
         transform.localPosition += Vector3.up * 0.1f;
-        canvasFront.sortingOrder = 110;
-        canvasBack.sortingOrder = 110;
+        ChangedSortingOrder(110);
     }
 
     /// <summary>
@@ -173,10 +188,10 @@ public class Card : MonoBehaviour
     public void RemoveHighlight()
     {
         // Vuelve la carta al tamaño original.
+        isHighlight = false;
         transform.localScale = new Vector3(1, 1, 1); // Ejemplo: volver al tamaño original
         transform.localPosition -= Vector3.up * 0.1f;
-        canvasFront.sortingOrder = sortingOrder;
-        canvasBack.sortingOrder = sortingOrder;
+        ChangedSortingOrder(sortingOrder);
     }
 
     /// <summary>
@@ -186,8 +201,7 @@ public class Card : MonoBehaviour
     public void SetSortingOrder(int sortingOrder)
     {
         this.sortingOrder = sortingOrder;
-        canvasFront.sortingOrder = sortingOrder;
-        canvasBack.sortingOrder = sortingOrder;
+        ChangedSortingOrder(sortingOrder);
     }
 
     /// <summary>
@@ -200,8 +214,9 @@ public class Card : MonoBehaviour
         {
             MoveToPosition(new Vector3(0, 9.18f, -4.3f), 20, true, false);
             RotateToAngle(Vector3.right * 70, 20);
-            canvasFront.sortingOrder = 110;
-            canvasBack.sortingOrder = 110;
+            ChangedSortingOrder(110);
+            cardSelected.enabled = false;
+            cardActions.enabled = activeActions;
             isFocused = true;
             return true;
         }
@@ -216,9 +231,18 @@ public class Card : MonoBehaviour
     {
         MoveToLastPosition();
         RotateToAngle(lastRotation, 20);
+        ChangedSortingOrder(sortingOrder);
+        if(isMyTurn) cardSelected.enabled = true;
+        cardActions.enabled = false;
+        isFocused = false;
+    }
+
+    private void ChangedSortingOrder(int sortingOrder)
+    {
         canvasFront.sortingOrder = sortingOrder;
         canvasBack.sortingOrder = sortingOrder;
-        isFocused = false;
+        cardSelected.sortingOrder = sortingOrder;
+        cardActions.sortingOrder = sortingOrder;
     }
 
     /// <summary>
@@ -284,4 +308,27 @@ public class Card : MonoBehaviour
     {
         return isDragging;
     }
+
+    public bool IsHighlight()
+    {
+        return isHighlight;
+    }
+
+    public void SetTurn(bool isPlayer)
+    {
+        isMyTurn = true;
+        cardSelected.enabled = true;
+
+        if(isPlayer)
+        {
+            activeActions = true;
+        }
+    }
+
+    public void Attack()
+    {
+
+    }
+
+
 }

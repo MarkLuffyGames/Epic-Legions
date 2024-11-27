@@ -28,6 +28,9 @@ public class CardSelector : MonoBehaviour
     void Update()
     {
         if(NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
+
+        if (HandCardHandler.IsMouseOverButton()) return;
+
         DetectCardUnderMouse();
 
         // Detecta si el clic izquierdo del mouse está presionado
@@ -153,7 +156,7 @@ public class CardSelector : MonoBehaviour
         }
 
         
-
+        //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
         if(currentFieldPosition != null && handCardHandler.IsCardOwnedByPlayer(currentCard) 
             && currentFieldPosition.IsFree() && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
             && !playerManager.isReady)
@@ -180,7 +183,10 @@ public class CardSelector : MonoBehaviour
         }
 
         playerManager.HideAvailablePositions();
-        handCardHandler.ShowHandCard();
+        if(card.FieldPosition == null)
+        {
+            handCardHandler.ShowHandCard();
+        }
     }
 
     /// <summary>

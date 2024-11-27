@@ -17,14 +17,8 @@ public class PlayerManager : MonoBehaviour
     public GameObject cardPrafab;
 
     private List<Card> card = new List<Card>();
-    public int playerRole;
 
     public bool isReady;
-
-    public void SetPlayerRole(int role)
-    {
-        playerRole = role;
-    }
 
     public void AddCardToPlayerDeck(CardSO cardSO, int numberOfCards)
     {
@@ -51,7 +45,6 @@ public class PlayerManager : MonoBehaviour
         }
 
         isReady = true;
-        Debug.Log("IsReady");
         IsReady();
     }
 
@@ -61,7 +54,6 @@ public class PlayerManager : MonoBehaviour
     /// <returns></returns>
     public void DrawStartCards()
     {
-        Debug.Log("Robando cartas de inicio.");
         StartCoroutine(DrawStartCardsCoroutine());
     }
 
@@ -72,7 +64,6 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < 7; i++)
         {
             DrawCard();
-            Debug.Log("Carta robada");
             yield return new WaitForSeconds(0.05f);
         }
 
