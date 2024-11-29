@@ -189,10 +189,13 @@ public class Card : MonoBehaviour
     public void RemoveHighlight()
     {
         // Vuelve la carta al tamaño original.
-        isHighlight = false;
-        transform.localScale = new Vector3(1, 1, 1); // Ejemplo: volver al tamaño original
-        transform.localPosition -= Vector3.up * 0.1f;
-        ChangedSortingOrder(sortingOrder);
+        if (isHighlight)
+        {
+            isHighlight = false;
+            transform.localScale = new Vector3(1, 1, 1); // Ejemplo: volver al tamaño original
+            transform.localPosition -= Vector3.up * 0.1f;
+            ChangedSortingOrder(sortingOrder);
+        }
     }
 
     /// <summary>
@@ -334,7 +337,7 @@ public class Card : MonoBehaviour
 
     public void Attack()
     {
-        DuelManager.instance.isAttacking = true;
+        DuelManager.instance.settingAttackTarget = true;
         cardActions.enabled = false;
         ResetSize();
     }

@@ -30,7 +30,7 @@ public class DuelManager : NetworkBehaviour
 
     public TextMeshProUGUI duelPhaseText;
     public Card heroTurn;
-    public bool isAttacking;
+    public bool settingAttackTarget;
 
     private void Awake()
     {
@@ -128,7 +128,6 @@ public class DuelManager : NetworkBehaviour
             deckCardIds = CardDatabase.ShuffleArray(deckCardIds);
 
             playerDecks[clientId] = deckCardIds.ToList();
-            Debug.Log($"Deck received from Player {clientId}: {string.Join(", ", deckCardIds)}");
 
             SendDeckToClientsClientRpc(clientId, deckCardIds);
 
@@ -153,12 +152,10 @@ public class DuelManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId == targetClientId)
         {
-            Debug.Log($"Deck del jugador validado por el servidor: {string.Join(", ", deckCardIds)}");
             SetDeck(1, deckCardIds);
         }
         else
         {
-            Debug.Log($"Deck del rival recibido del servidor: {string.Join(", ", deckCardIds)}");
             SetDeck(2, deckCardIds);
         }
     }
@@ -363,16 +360,14 @@ public class DuelManager : NetworkBehaviour
         if (playerRoles[clientId] == 1)
         {
             Card card = player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
-            Debug.Log($"El jugador 1 ataca a la carta en la pocision {heroToAttackPositionIndex}");
             HeroAttack(card, 1);
         }
         else if (playerRoles[clientId] == 2)
         {
             Card card = player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
-            Debug.Log($"El jugador 2 ataca a la carta en la pocision {heroToAttackPositionIndex}");
             HeroAttack(card, 2);
         }
-        isAttacking = false;
+        settingAttackTarget = false;
 
         HeroAttackClientRpc(heroToAttackPositionIndex, clientId);
 
@@ -417,7 +412,7 @@ public class DuelManager : NetworkBehaviour
             HeroAttack(card, 2);
         }
 
-        isAttacking = false;
+        settingAttackTarget = false;
     }
 
     private void NextTurn()

@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public class CardSelector : MonoBehaviour
@@ -33,7 +34,7 @@ public class CardSelector : MonoBehaviour
 
         if (HandCardHandler.IsMouseOverButton()) return;
 
-        // Detecta si el clic izquierdo del mouse está presionado
+        // Detecta si el clic izquierdo del mouse está presionado sobre una carta
         if (Input.GetMouseButtonDown(0) && currentCard != null)
         {
             OnMouseDownCard(currentCard);
@@ -60,9 +61,10 @@ public class CardSelector : MonoBehaviour
     /// </summary>
     private void DetectCardUnderMouse()
     {
+
         if (isHoldingCard || isAnyFocusedCard)
         {
-            if (DuelManager.instance.isAttacking)
+            if (DuelManager.instance.settingAttackTarget)
             {
                 isAnyFocusedCard = false;
             }
@@ -110,11 +112,7 @@ public class CardSelector : MonoBehaviour
     /// <param name="card">Carta a la que entra el mouse</param>
     private void OnMouseEnterCard(Card card)
     {
-        if (handCardHandler.IsCardOwnedByPlayer(card) && !isAnyFocusedCard)
-        {
-            card.Highlight();
-        }
-        
+        HighlightCardInHand(card);
     }
 
     /// <summary>
@@ -123,10 +121,7 @@ public class CardSelector : MonoBehaviour
     /// <param name="card">Carta de la que salio el mouse</param>
     private void OnMouseExitCard(Card card)
     {
-        if (handCardHandler.IsCardOwnedByPlayer(card) && !isAnyFocusedCard)
-        {
-            card.RemoveHighlight();
-        }
+        RemoveHighlightCardInHand(card);
     }
 
     /// <summary>
@@ -147,56 +142,60 @@ public class CardSelector : MonoBehaviour
         // Calcula el tiempo que el mouse se mantuvo presionado
         float heldTime = Time.time - mouseDownTime;
 
-        // Si el tiempo es menor al tiempo de "clickHoldTime", considera como clic rápido para enfocar
+        // Si el tiempo es menor al tiempo de "clickHoldTime", considera como clic rápido
         if (heldTime < clickHoldTime)
         {
-            if (DuelManager.instance.isAttacking)
-            {
-                DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
-            }
-            else if (!isAnyFocusedCard && card.isVisible)
-            {
-                card.RemoveHighlight();
-                isAnyFocusedCard = card.Enlarge();
-            }
-            else if(isAnyFocusedCard)
-            {
-                card.ResetSize();
-                isAnyFocusedCard = false;
-            }
+            OnQuickClick(card);
         }
 
         
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
-        if(currentFieldPosition != null && handCardHandler.IsCardOwnedByPlayer(currentCard) 
+        if(currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard) 
             && currentFieldPosition.IsFree() && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
             && !playerManager.isReady)
         {
-
-            card.waitForServer = true;
-            isHoldingCard = false;
-            card.StopDragging(false);
-
-            DuelManager.instance.PlaceCardOnTheFieldServerRpc(
-                handCardHandler.GetIdexOfCard(currentCard), 
-                currentFieldPosition.GetPositionIndex(),
-                NetworkManager.Singleton.LocalClientId);
-
-            currentFieldPosition = null;
+            PlaceCardOnTheField(card);
         }
+        //Si se suelta la carta pero no se puede colocar en el campo dejar de arrastrar.
         else if (currentCard != null && isHoldingCard)
         {
             isHoldingCard = false;
-            if (handCardHandler.IsCardOwnedByPlayer(card))
+            if (handCardHandler.CardInThePlayerHand(card))
             {
                 card.StopDragging(true);
             }
         }
 
+        //En cualquier caso se ocultan las pocisiones disponibles en el campo.
         playerManager.HideAvailablePositions();
+        //Si la carta que se solto no esta pocisionada en el campo mostrar las cartas de la mano.
         if(card.FieldPosition == null)
         {
             handCardHandler.ShowHandCard();
+        }
+    }
+
+    /// <summary>
+    /// Se llama a este metodo cuando se realiza un clic rapido sobre una carta.
+    /// </summary>
+    private void OnQuickClick(Card card)
+    {
+        //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
+        if (DuelManager.instance.settingAttackTarget)
+        {
+            DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
+        }
+        //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
+        else if (!isAnyFocusedCard && card.isVisible)
+        {
+            card.RemoveHighlight();
+            isAnyFocusedCard = card.Enlarge();
+        }
+        //Si hay una carta enfocada desenfocar la carta.
+        else if (isAnyFocusedCard)
+        {
+            card.ResetSize();
+            isAnyFocusedCard = false;
         }
     }
 
@@ -208,7 +207,7 @@ public class CardSelector : MonoBehaviour
     {
         float heldTime = Time.time - mouseDownTime;
 
-        if (handCardHandler.IsCardOwnedByPlayer(card) && !isAnyFocusedCard
+        if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard
             && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
             && !playerManager.isReady)
         {
@@ -277,6 +276,38 @@ public class CardSelector : MonoBehaviour
             currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false);
             currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
         }
+    }
+
+    ////////////////////////////////////////////////////////////////
+
+    private void HighlightCardInHand(Card card)
+    {
+        if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard)
+        {
+            card.Highlight();
+        }
+    }
+
+    private void RemoveHighlightCardInHand(Card card)
+    {
+        if (handCardHandler.CardInThePlayerHand(card))
+        {
+            card.RemoveHighlight();
+        }
+    }
+
+    private void PlaceCardOnTheField(Card card)
+    {
+        card.waitForServer = true;
+        isHoldingCard = false;
+        card.StopDragging(false);
+
+        DuelManager.instance.PlaceCardOnTheFieldServerRpc(
+            handCardHandler.GetIdexOfCard(currentCard),
+            currentFieldPosition.GetPositionIndex(),
+            NetworkManager.Singleton.LocalClientId);
+
+        currentFieldPosition = null;
     }
 }
 

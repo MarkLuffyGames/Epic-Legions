@@ -84,7 +84,7 @@ public class HandCardHandler : MonoBehaviour
     /// </summary>
     /// <param name="card">Carta que queremos comprobar</param>
     /// <returns>Devuelve true si la carta esta en la mano</returns>
-    public bool IsCardOwnedByPlayer(Card card)
+    public bool CardInThePlayerHand(Card card)
     {
         return cardsList.Contains(card);
     }
