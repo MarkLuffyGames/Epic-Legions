@@ -66,6 +66,7 @@ public class Card : MonoBehaviour
             defence = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
+            currentEnergy = energy;
 
             UpdateText();
         }
@@ -81,7 +82,7 @@ public class Card : MonoBehaviour
         cardAttack.text = attack.ToString();
         cardDefence.text = defence.ToString();
         cardSpeed.text = speed.ToString();
-        cardEnergy.text = energy.ToString();
+        cardEnergy.text = currentEnergy.ToString();
     }
 
     /// <summary>
@@ -325,10 +326,41 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void Attack()
+    public void EndTurn()
     {
-
+        isMyTurn = false;
+        cardSelected.enabled = false;
     }
 
+    public void Attack()
+    {
+        DuelManager.instance.isAttacking = true;
+        cardActions.enabled = false;
+        ResetSize();
+    }
 
+    /// <summary>
+    /// Recibe el daño de un ataque o efecto.
+    /// </summary>
+    /// <param name="amountDamage"></param>
+    /// <returns>Si el heroe se queda sin energia debuelve true</returns>
+    public bool ReceiveDamage(int amountDamage)
+    {
+        defence -= amountDamage;
+        if(defence < 0)
+        {
+            currentEnergy += defence;
+            defence = 0;
+
+            if(currentEnergy <= 0)
+            {
+                currentEnergy = 0;
+                return true;
+            }
+        }
+
+        UpdateText();
+
+        return false;
+    }
 }

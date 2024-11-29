@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Battle, None }
 public class DuelManager : NetworkBehaviour
@@ -32,6 +30,7 @@ public class DuelManager : NetworkBehaviour
 
     public TextMeshProUGUI duelPhaseText;
     public Card heroTurn;
+    public bool isAttacking;
 
     private void Awake()
     {
@@ -87,6 +86,11 @@ public class DuelManager : NetworkBehaviour
             {
                 player1Manager.GetHandCardHandler().HideHandCard();
             }
+        }
+        else if(newPhase == DuelPhase.DrawingCards)
+        {
+            player1Manager.DrawCard();
+            player2Manager.DrawCard();
         }
 
 
@@ -203,6 +207,10 @@ public class DuelManager : NetworkBehaviour
             {
                 duelPhase.Value = DuelPhase.Battle;
             }
+            else if(duelPhase.Value == DuelPhase.DrawingCards)
+            {
+                duelPhase.Value = DuelPhase.Preparation;
+            }
 
             playerReady = playerReady.ToDictionary(kvp => kvp.Key, kvp => false);
         }
@@ -295,8 +303,21 @@ public class DuelManager : NetworkBehaviour
 
     private void StartHeroTurn()
     {
-        SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForCurrentTurnHero());
+        if(HeroCardsOnTheField.Count == 0)
+        {
+            NextTurn();
+            return;
+        }
+
         heroTurn = HeroCardsOnTheField[heroTurnIndex];
+
+        if (heroTurn.CurrentEnergy <= 0)
+        {
+            NextTurn();
+            return;
+        }
+        SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForCurrentTurnHero());
+        
     }
 
     private ulong GetClientIdForCurrentTurnHero()
@@ -331,9 +352,91 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    public Card GetHeroTurn()
+    {
+        return heroTurn;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
     public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId)
     {
+        if (playerRoles[clientId] == 1)
+        {
+            Card card = player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+            Debug.Log($"El jugador 1 ataca a la carta en la pocision {heroToAttackPositionIndex}");
+            HeroAttack(card, 1);
+        }
+        else if (playerRoles[clientId] == 2)
+        {
+            Card card = player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+            Debug.Log($"El jugador 2 ataca a la carta en la pocision {heroToAttackPositionIndex}");
+            HeroAttack(card, 2);
+        }
+        isAttacking = false;
 
+        HeroAttackClientRpc(heroToAttackPositionIndex, clientId);
+
+        NextTurn();
+    }
+
+    private void HeroAttack(Card cardToAttack, int player)
+    {
+        if (cardToAttack.ReceiveDamage(heroTurn.AttackPoint))
+        {
+            Transform playerGraveyard = null;
+            bool isPlayer = false;
+            if (player == 1)
+            {
+                playerGraveyard = player2Manager.GetGraveyard();
+                isPlayer = false;
+            }
+            else if(player == 2)
+            {
+                playerGraveyard = player1Manager.GetGraveyard();
+                isPlayer = true;
+            }
+
+            cardToAttack.FieldPosition.DestroyCard(playerGraveyard, isPlayer);
+        }
+        heroTurn.EndTurn();
+    }
+
+    [ClientRpc]
+    private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId)
+    {
+        if (IsHost) return;
+
+        if (NetworkManager.Singleton.LocalClientId == attackerClientId)
+        {
+            Card card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            HeroAttack(card, 1);
+        }
+        else
+        {
+            Card card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            HeroAttack(card, 2);
+        }
+
+        isAttacking = false;
+    }
+
+    private void NextTurn()
+    {
+        if(heroTurnIndex < HeroCardsOnTheField.Count - 1)
+        {
+            heroTurnIndex++;
+            StartHeroTurn();
+        }
+        else
+        {
+            RemoveCardsWithoutEnergy();
+            duelPhase.Value = DuelPhase.DrawingCards;
+        }
+    }
+
+    // Método para remover las cartas sin energía
+    private void RemoveCardsWithoutEnergy()
+    {
+        HeroCardsOnTheField.RemoveAll(card => card.CurrentEnergy <= 0);
     }
 }

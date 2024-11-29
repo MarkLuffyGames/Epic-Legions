@@ -29,9 +29,9 @@ public class CardSelector : MonoBehaviour
     {
         if(NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
 
-        if (HandCardHandler.IsMouseOverButton()) return;
-
         DetectCardUnderMouse();
+
+        if (HandCardHandler.IsMouseOverButton()) return;
 
         // Detecta si el clic izquierdo del mouse está presionado
         if (Input.GetMouseButtonDown(0) && currentCard != null)
@@ -60,7 +60,14 @@ public class CardSelector : MonoBehaviour
     /// </summary>
     private void DetectCardUnderMouse()
     {
-        if (isHoldingCard || isAnyFocusedCard) return;
+        if (isHoldingCard || isAnyFocusedCard)
+        {
+            if (DuelManager.instance.isAttacking)
+            {
+                isAnyFocusedCard = false;
+            }
+            return;
+        } 
 
         // Convierte la posición del mouse en un rayo en el espacio de la cámara
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -143,7 +150,11 @@ public class CardSelector : MonoBehaviour
         // Si el tiempo es menor al tiempo de "clickHoldTime", considera como clic rápido para enfocar
         if (heldTime < clickHoldTime)
         {
-            if (!isAnyFocusedCard && card.isVisible)
+            if (DuelManager.instance.isAttacking)
+            {
+                DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
+            }
+            else if (!isAnyFocusedCard && card.isVisible)
             {
                 card.RemoveHighlight();
                 isAnyFocusedCard = card.Enlarge();

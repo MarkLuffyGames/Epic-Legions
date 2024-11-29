@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum HeroClass { Warrior, Archer, Wizard, Druid, Necromancer }

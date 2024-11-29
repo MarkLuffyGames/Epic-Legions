@@ -28,11 +28,11 @@ public class HandCardHandler : MonoBehaviour
             return;
         }
 
-        if (cardsList.Count == 1)
+        /*if (cardsList.Count == 1)
         {
             if (IsPlayer) hideCardButton.SetActive(true);
             cardsList[0].transform.localPosition = Vector3.zero;
-        }
+        }*/
         else
         {
             if(IsPlayer)hideCardButton.SetActive(true);
@@ -133,18 +133,25 @@ public class HandCardHandler : MonoBehaviour
         return cardsList.IndexOf(card);
     }
 
+    private static GameObject selectedButtonObject;
     public static bool IsMouseOverButton()
     {
         // Obtén el objeto debajo del mouse
-        GameObject hoveredObject = EventSystem.current.currentSelectedGameObject;
+        GameObject newSelectedButtonObject = EventSystem.current.currentSelectedGameObject;
 
-        if(hoveredObject != null)
+        if(newSelectedButtonObject != null)
         {
-            //Comprueba que es un boton
-            if (hoveredObject.TryGetComponent<Button>(out Button button))
+            if(newSelectedButtonObject != selectedButtonObject)
             {
-                return true;
+                selectedButtonObject = newSelectedButtonObject;
+                //Comprueba que es un boton
+                if (selectedButtonObject.TryGetComponent<Button>(out Button button))
+                {
+                    return true;
+                }
             }
+
+            return true;
         }
 
         return false;

@@ -7,6 +7,7 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private List<CardSO> deck;
     [SerializeField] private Transform deckPosition;
+    [SerializeField] private Transform graveyardPosition;
     [SerializeField] private List<FieldPosition> fieldPositionList;
     [SerializeField] private HandCardHandler handCardHandler;
     [SerializeField] private DuelManager duelManager;
@@ -112,6 +113,13 @@ public class PlayerManager : MonoBehaviour
     {
         handCardHandler.GetNewCard(card[card.Count - 1]);
         card.RemoveAt(card.Count - 1);
+
+        if(duelManager.GetDuelPhase() == DuelPhase.DrawingCards)
+        {
+            isReady = true;
+            IsReady();
+        }
+        
     }
 
     /// <summary>
@@ -144,5 +152,10 @@ public class PlayerManager : MonoBehaviour
     public HandCardHandler GetHandCardHandler()
     {
         return handCardHandler;
+    }
+
+    public Transform GetGraveyard()
+    {
+        return graveyardPosition;
     }
 }
