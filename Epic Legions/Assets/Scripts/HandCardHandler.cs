@@ -27,12 +27,6 @@ public class HandCardHandler : MonoBehaviour
             if (IsPlayer) hideCardButton.SetActive(false);
             return;
         }
-
-        /*if (cardsList.Count == 1)
-        {
-            if (IsPlayer) hideCardButton.SetActive(true);
-            cardsList[0].transform.localPosition = Vector3.zero;
-        }*/
         else
         {
             if(IsPlayer)hideCardButton.SetActive(true);

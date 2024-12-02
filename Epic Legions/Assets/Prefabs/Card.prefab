@@ -1693,6 +1693,9 @@ MonoBehaviour:
   cardDefence: {fileID: 7366237707526491110}
   cardSpeed: {fileID: 1106663729349222624}
   cardEnergy: {fileID: 6153432091646338378}
+  EnergyPopUpPrefab: {fileID: 2889455318098897411, guid: 0a429e1aecab39e4bb0daf0347e1de43, type: 3}
+  DefencePopUpPrefab: {fileID: 8420613145126704882, guid: a9577b953ab201649a62ac17265edfa7, type: 3}
+  HitEffect: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
   cardSO: {fileID: 0}
   isTemporalPosition: 0
   isVisible: 0

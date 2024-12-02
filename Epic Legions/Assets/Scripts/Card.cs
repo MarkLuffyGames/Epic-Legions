@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour
@@ -15,6 +16,9 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI cardDefence;
     [SerializeField] private TextMeshProUGUI cardSpeed;
     [SerializeField] private TextMeshProUGUI cardEnergy;
+    [SerializeField] private GameObject EnergyPopUpPrefab;
+    [SerializeField] private GameObject DefencePopUpPrefab;
+    [SerializeField] private GameObject HitEffect;
 
     public CardSO cardSO;
 
@@ -299,7 +303,21 @@ public class Card : MonoBehaviour
     /// <returns>Devuelve la posicion del mouse en pantalla</returns>
     private Vector3 GetMouseWorldPosition()
     {
-        Vector3 mousePos = Input.mousePosition;
+
+        Vector3 mousePos = Vector3.zero;
+
+        // Detectar entrada del mouse
+        if (Mouse.current != null && Mouse.current.leftButton.isPressed)
+        {
+            mousePos = Mouse.current.position.ReadValue();
+        }
+
+        // Detectar entrada táctil
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            mousePos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+
         mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z; // Distancia de la cámara
         return Camera.main.ScreenToWorldPoint(mousePos);
     }
@@ -333,6 +351,7 @@ public class Card : MonoBehaviour
     {
         isMyTurn = false;
         cardSelected.enabled = false;
+        activeActions = false;
     }
 
     public void Attack()
@@ -342,6 +361,11 @@ public class Card : MonoBehaviour
         ResetSize();
     }
 
+    public void AttackAnimation()
+    {
+
+    }
+
     /// <summary>
     /// Recibe el daño de un ataque o efecto.
     /// </summary>
@@ -349,13 +373,22 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
-        defence -= amountDamage;
-        if(defence < 0)
+        Instantiate(HitEffect, transform.position, Quaternion.identity);
+
+        if (defence >= amountDamage)
         {
+            defence -= amountDamage;
+            ShowTextDamage(true, amountDamage);
+        }
+        else if(defence < amountDamage)
+        {
+            if (defence > 0) ShowTextDamage(true, defence);
+            defence -= amountDamage;
             currentEnergy += defence;
+            ShowTextDamage(false, Mathf.Abs(defence));
             defence = 0;
 
-            if(currentEnergy <= 0)
+            if (currentEnergy <= 0)
             {
                 currentEnergy = 0;
                 return true;
@@ -365,5 +398,14 @@ public class Card : MonoBehaviour
         UpdateText();
 
         return false;
+    }
+
+    private void ShowTextDamage(bool isDefence, int amountDamage)
+    {
+        var position = isDefence ? cardDefence.transform.position : cardEnergy.transform.position;
+        position += Vector3.up;
+
+        var popUp = Instantiate(isDefence ? DefencePopUpPrefab : EnergyPopUpPrefab, position, Quaternion.identity);
+        popUp.GetComponentInChildren<TextMeshProUGUI>().text = $"-{amountDamage}";
     }
 }

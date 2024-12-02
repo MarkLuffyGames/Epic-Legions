@@ -376,6 +376,11 @@ public class DuelManager : NetworkBehaviour
 
     private void HeroAttack(Card cardToAttack, int player)
     {
+
+        //Aqui va el metodo para iniciar la animacion de ataque.
+
+
+        //Aplicar daño al opnente.
         if (cardToAttack.ReceiveDamage(heroTurn.AttackPoint))
         {
             Transform playerGraveyard = null;

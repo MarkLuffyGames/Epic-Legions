@@ -1,6 +1,6 @@
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CardSelector : MonoBehaviour
 {
@@ -35,7 +35,7 @@ public class CardSelector : MonoBehaviour
         if (HandCardHandler.IsMouseOverButton()) return;
 
         // Detecta si el clic izquierdo del mouse está presionado sobre una carta
-        if (Input.GetMouseButtonDown(0) && currentCard != null)
+        if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)) && currentCard != null)
         {
             OnMouseDownCard(currentCard);
             isClickingCard = true;
@@ -43,7 +43,7 @@ public class CardSelector : MonoBehaviour
         }
 
         // Detecta si el clic izquierdo del mouse se suelta
-        if (Input.GetMouseButtonUp(0) && isClickingCard)
+        if (((Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame)) && isClickingCard)
         {
             OnMouseUpCard(currentCard);
             isClickingCard = false;
@@ -69,10 +69,24 @@ public class CardSelector : MonoBehaviour
                 isAnyFocusedCard = false;
             }
             return;
-        } 
+        }
 
-        // Convierte la posición del mouse en un rayo en el espacio de la cámara
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = new();
+
+        // Detectar entrada del mouse
+        if (Mouse.current != null)
+        {
+            // Convierte la posición del mouse en un rayo en el espacio de la cámara
+            ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        }
+
+        // Detectar entrada táctil
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            // Convierte la posición del toque en un rayo en el espacio de la cámara
+            ray = Camera.main.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
+        }
+
         RaycastHit hit;
 
         // Lanza el rayo y verifica si colisiona con una carta en la capa de cartas
@@ -169,7 +183,7 @@ public class CardSelector : MonoBehaviour
         //En cualquier caso se ocultan las pocisiones disponibles en el campo.
         playerManager.HideAvailablePositions();
         //Si la carta que se solto no esta pocisionada en el campo mostrar las cartas de la mano.
-        if(card.FieldPosition == null)
+        if(handCardHandler.GetCardInHandList().Contains(card))
         {
             handCardHandler.ShowHandCard();
         }
@@ -183,11 +197,10 @@ public class CardSelector : MonoBehaviour
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
         if (DuelManager.instance.settingAttackTarget)
         {
-            if (!playerManager.GetFieldPositionList().Contains(card.FieldPosition))
+            if (card.FieldPosition != null && !playerManager.GetFieldPositionList().Contains(card.FieldPosition) && DuelManager.instance.GetDuelPhase() == DuelPhase.Battle)
             {
                 DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
             }
-            
         }
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
         else if (!isAnyFocusedCard && card.isVisible)
@@ -231,8 +244,24 @@ public class CardSelector : MonoBehaviour
     /// </summary>
     private void DetectPositionForPlaceCard()
     {
-        // Convierte la posición del mouse en un rayo en el espacio de la cámara
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        Ray ray = new();
+
+        // Detectar entrada del mouse
+        if (Mouse.current != null)
+        {
+            // Convierte la posición del mouse en un rayo en el espacio de la cámara
+            ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        }
+
+        // Detectar entrada táctil
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            // Convierte la posición del toque en un rayo en el espacio de la cámara
+            ray = Camera.main.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
+        }
+
+        
         RaycastHit hit;
 
         // Lanza el rayo y verifica si colisiona con una posicion de campo.
