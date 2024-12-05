@@ -1786,7 +1786,7 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 0.0.0.0
+    ServerListenAddress: 192.168.1.40
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -5204,7 +5204,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -82.339966, y: -116.65991}
+  m_AnchoredPosition: {x: -82.33984, y: -116.65991}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1485996883
@@ -6344,7 +6344,7 @@ MonoBehaviour:
   startHost: {fileID: 952224447}
   startClient: {fileID: 1540433124}
   startServer: {fileID: 1272818056}
-  serverIP: 192.168.1.18
+  serverIP: 192.168.1.40
   serverPort: 7777
 --- !u!114 &1918686025
 MonoBehaviour:

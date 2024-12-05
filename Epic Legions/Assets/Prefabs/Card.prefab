@@ -606,7 +606,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5372613516196620512}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Attack
+        m_MethodName: SelectAttackTarget
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1688,6 +1688,7 @@ MonoBehaviour:
   cardSelected: {fileID: 5637825164746040741}
   cardActions: {fileID: 4191007347987392996}
   cardImage: {fileID: 8462960837391840768}
+  cardSelectedImage: {fileID: 3586479339192117371}
   cardName: {fileID: 8397680356145545021}
   cardAttack: {fileID: 4516886441853098544}
   cardDefence: {fileID: 7366237707526491110}

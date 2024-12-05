@@ -354,6 +354,41 @@ public class DuelManager : NetworkBehaviour
         return heroTurn;
     }
 
+    public void SelectAttackTarget()
+    {
+        settingAttackTarget = true;
+
+        foreach(Card card in ObtainAttackableTargets())
+        {
+            card.ActiveAttackableTarget();
+        }
+    }
+
+    private List<Card> ObtainAttackableTargets()
+    {
+        if(heroTurn.cardSO is HeroCardSO heroCardSO)
+        {
+            List<Card> targets = new List<Card>();
+            for (int i = 0; i < player2Manager.GetFieldPositionList().Count; i++)
+            {
+                if (player2Manager.GetFieldPositionList()[i].Card != null)
+                {
+                    targets.Add(player2Manager.GetFieldPositionList()[i].Card);
+                }
+
+                if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroCardSO.HeroClass == HeroClass.Warrior)
+                {
+                    return targets;
+                }
+
+            }
+
+            return targets;
+        }
+
+        return null;
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId)
     {
@@ -380,6 +415,16 @@ public class DuelManager : NetworkBehaviour
         //Aqui va el metodo para iniciar la animacion de ataque.
 
 
+
+        //Desactivar los objetivos atacables.
+        foreach (var fieldPosition in player2Manager.GetFieldPositionList())
+        {
+            if (fieldPosition.Card != null)
+            {
+                fieldPosition.Card.DesactiveAttackableTarget();
+            }
+        }
+
         //Aplicar daño al opnente.
         if (cardToAttack.ReceiveDamage(heroTurn.AttackPoint))
         {
@@ -398,6 +443,7 @@ public class DuelManager : NetworkBehaviour
 
             cardToAttack.FieldPosition.DestroyCard(playerGraveyard, isPlayer);
         }
+
         heroTurn.EndTurn();
     }
 
@@ -418,6 +464,7 @@ public class DuelManager : NetworkBehaviour
         }
 
         settingAttackTarget = false;
+        
     }
 
     private void NextTurn()

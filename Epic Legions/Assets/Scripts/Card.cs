@@ -11,6 +11,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas cardSelected;
     [SerializeField] private Canvas cardActions;
     [SerializeField] private Image cardImage;
+    [SerializeField] private Image cardSelectedImage;
     [SerializeField] private TextMeshProUGUI cardName;
     [SerializeField] private TextMeshProUGUI cardAttack;
     [SerializeField] private TextMeshProUGUI cardDefence;
@@ -44,7 +45,8 @@ public class Card : MonoBehaviour
     private int energy;
     private int currentEnergy;
     private ulong ownerClientId;
-    private FieldPosition fieldPosition; 
+    private FieldPosition fieldPosition;
+    public bool isAttackable;
 
     public int AttackPoint => attack;
     public int DefencePoint => defence;
@@ -340,8 +342,9 @@ public class Card : MonoBehaviour
     {
         isMyTurn = true;
         cardSelected.enabled = true;
+        cardSelectedImage.color = Color.yellow;
 
-        if(isPlayer)
+        if (isPlayer)
         {
             activeActions = true;
         }
@@ -354,11 +357,24 @@ public class Card : MonoBehaviour
         activeActions = false;
     }
 
-    public void Attack()
+    public void SelectAttackTarget()
     {
-        DuelManager.instance.settingAttackTarget = true;
+        DuelManager.instance.SelectAttackTarget();
         cardActions.enabled = false;
         ResetSize();
+    }
+
+    public void ActiveAttackableTarget()
+    {
+        cardSelected.enabled = true;
+        cardSelectedImage.color = Color.red;
+        isAttackable = true;
+    }
+
+    public void DesactiveAttackableTarget()
+    {
+        cardSelected.enabled = false;
+        isAttackable = false;
     }
 
     public void AttackAnimation()
@@ -373,6 +389,7 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
+        //Efecto de daño.
         Instantiate(HitEffect, transform.position, Quaternion.identity);
 
         if (defence >= amountDamage)
