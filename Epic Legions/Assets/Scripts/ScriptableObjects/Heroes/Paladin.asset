@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: feerico
+  m_Name: Paladin
   m_EditorClassIdentifier: 
-  cardId: 4
-  cardName: 
-  cardSprite: {fileID: 21300000, guid: 039051e1c3512e84faf6a5b6a754e542, type: 3}
-  cardElemnt: 1
+  cardId: 5
+  cardName: Paladin
+  cardSprite: {fileID: 21300000, guid: daf07be321483c541bdfbe30cb3c48db, type: 3}
+  cardElemnt: 0
   cardType: 0
-  heroClass: 2
-  attack: 10
-  defence: 10
+  heroClass: 0
+  healt: 20
+  defence: 15
   speed: 10
-  energy: 10
+  energy: 20
+  move: {fileID: 11400000, guid: 5ce00e2a123d53346b81601a8a861a1c, type: 2}

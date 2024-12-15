@@ -12,11 +12,6 @@ public class HandCardHandler : MonoBehaviour
 
     public bool isHideCards;
 
-    private void Awake()
-    {
-        Application.targetFrameRate = 60;
-    }
-
     /// <summary>
     /// Establece las posiciones de las cartas en la mano
     /// </summary>

@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: Paladin
+  m_Name: YANSSO
   m_EditorClassIdentifier: 
-  cardId: 5
-  cardName: 
-  cardSprite: {fileID: 21300000, guid: daf07be321483c541bdfbe30cb3c48db, type: 3}
-  cardElemnt: 0
+  cardId: 1
+  cardName: YANSSO
+  cardSprite: {fileID: 21300000, guid: 0e03bd315ef6de946aaaa53e72e4be04, type: 3}
+  cardElemnt: 3
   cardType: 0
-  heroClass: 0
-  attack: 5
-  defence: 15
-  speed: 10
-  energy: 20
+  heroClass: 2
+  healt: 20
+  defence: 10
+  speed: 5
+  energy: 10
+  move: {fileID: 11400000, guid: 5ce00e2a123d53346b81601a8a861a1c, type: 2}

@@ -12,11 +12,15 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas cardActions;
     [SerializeField] private Image cardImage;
     [SerializeField] private Image cardSelectedImage;
-    [SerializeField] private TextMeshProUGUI cardName;
-    [SerializeField] private TextMeshProUGUI cardAttack;
-    [SerializeField] private TextMeshProUGUI cardDefence;
-    [SerializeField] private TextMeshProUGUI cardSpeed;
-    [SerializeField] private TextMeshProUGUI cardEnergy;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI healtText;
+    [SerializeField] private TextMeshProUGUI defenceText;
+    [SerializeField] private TextMeshProUGUI speedText;
+    [SerializeField] private TextMeshProUGUI energyText;
+    [SerializeField] private TextMeshProUGUI move1NameText;
+    [SerializeField] private TextMeshProUGUI move1DescriptionText;
+    [SerializeField] private TextMeshProUGUI Move2NameText;
+    [SerializeField] private TextMeshProUGUI Move2DescriptionText;
     [SerializeField] private GameObject EnergyPopUpPrefab;
     [SerializeField] private GameObject DefencePopUpPrefab;
     [SerializeField] private GameObject HitEffect;
@@ -39,21 +43,24 @@ public class Card : MonoBehaviour
     public bool isVisible;
     public bool waitForServer;
 
-    private int attack;
+    private int healt;
     private int defence;
     private int speed;
     private int energy;
-    private int currentEnergy;
-    private ulong ownerClientId;
+
+    private int currentHealt;
+    private int currentDefence;
+    private int currentSpeed;
+
+    private MoveSO move;
     private FieldPosition fieldPosition;
     public bool isAttackable;
 
-    public int AttackPoint => attack;
-    public int DefencePoint => defence;
-    public int SpeedPoint => speed;
-    public int MaxEnergy => energy;
-    public int CurrentEnergy => currentEnergy;
+    public int CurrentHealtPoints => currentHealt;
+    public int CurrentSpeedPoints => currentSpeed;
+    public MoveSO Move => move;
     public FieldPosition FieldPosition => fieldPosition;
+
 
 
     /// <summary>
@@ -64,15 +71,22 @@ public class Card : MonoBehaviour
     {
         this.cardSO = cardSO;
 
-        cardName.text = cardSO.CardName;
+        nameText.text = cardSO.CardName;
         cardImage.sprite = cardSO.CardSprite;
         if(cardSO is HeroCardSO heroCardSO)
         {
-            attack = heroCardSO.Attack;
+            healt = heroCardSO.Healt;
             defence = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
-            currentEnergy = energy;
+            move = heroCardSO.Move;
+
+            currentHealt = healt;
+            currentDefence = defence;
+            currentSpeed = speed;
+
+            move1NameText.text = heroCardSO.Move.MoveName;
+            move1DescriptionText.text = heroCardSO.Move.MoveDescription;
 
             UpdateText();
         }
@@ -85,10 +99,10 @@ public class Card : MonoBehaviour
 
     private void UpdateText()
     {
-        cardAttack.text = attack.ToString();
-        cardDefence.text = defence.ToString();
-        cardSpeed.text = speed.ToString();
-        cardEnergy.text = currentEnergy.ToString();
+        healtText.text = currentHealt.ToString();
+        defenceText.text = currentDefence.ToString();
+        speedText.text = currentSpeed.ToString();
+        energyText.text = energy.ToString();
     }
 
     /// <summary>
@@ -392,22 +406,22 @@ public class Card : MonoBehaviour
         //Efecto de daño.
         Instantiate(HitEffect, transform.position, Quaternion.identity);
 
-        if (defence >= amountDamage)
+        if (currentDefence >= amountDamage)
         {
-            defence -= amountDamage;
+            currentDefence -= amountDamage;
             ShowTextDamage(true, amountDamage);
         }
-        else if(defence < amountDamage)
+        else if(currentDefence < amountDamage)
         {
-            if (defence > 0) ShowTextDamage(true, defence);
-            defence -= amountDamage;
-            currentEnergy += defence;
-            ShowTextDamage(false, Mathf.Abs(defence));
-            defence = 0;
+            if (currentDefence > 0) ShowTextDamage(true, currentDefence);
+            currentDefence -= amountDamage;
+            currentHealt += currentDefence;
+            ShowTextDamage(false, Mathf.Abs(currentDefence));
+            currentDefence = 0;
 
-            if (currentEnergy <= 0)
+            if (currentHealt <= 0)
             {
-                currentEnergy = 0;
+                currentHealt = 0;
                 return true;
             }
         }
@@ -419,7 +433,7 @@ public class Card : MonoBehaviour
 
     private void ShowTextDamage(bool isDefence, int amountDamage)
     {
-        var position = isDefence ? cardDefence.transform.position : cardEnergy.transform.position;
+        var position = isDefence ? defenceText.transform.position : energyText.transform.position;
         position += Vector3.up;
 
         var popUp = Instantiate(isDefence ? DefencePopUpPrefab : EnergyPopUpPrefab, position, Quaternion.identity);

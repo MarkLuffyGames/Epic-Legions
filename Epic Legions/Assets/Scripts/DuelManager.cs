@@ -35,6 +35,7 @@ public class DuelManager : NetworkBehaviour
     private void Awake()
     {
         instance = this;
+        Application.targetFrameRate = 60;
     }
 
     private void Start()
@@ -263,7 +264,7 @@ public class DuelManager : NetworkBehaviour
     private void InsertCardInOrder(List<Card> heroCards, Card newCard)
     {
         // Encuentra la posición donde insertar la nueva carta
-        int insertIndex = heroCards.FindLastIndex(card => card.SpeedPoint >= newCard.SpeedPoint);
+        int insertIndex = heroCards.FindLastIndex(card => card.CurrentSpeedPoints >= newCard.CurrentSpeedPoints);
 
         // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
         if (insertIndex == -1)
@@ -308,7 +309,7 @@ public class DuelManager : NetworkBehaviour
 
         heroTurn = HeroCardsOnTheField[heroTurnIndex];
 
-        if (heroTurn.CurrentEnergy <= 0)
+        if (heroTurn.CurrentHealtPoints <= 0)
         {
             NextTurn();
             return;
@@ -426,7 +427,7 @@ public class DuelManager : NetworkBehaviour
         }
 
         //Aplicar daño al opnente.
-        if (cardToAttack.ReceiveDamage(heroTurn.AttackPoint))
+        if (cardToAttack.ReceiveDamage(heroTurn.Move.Damage))
         {
             Transform playerGraveyard = null;
             bool isPlayer = false;
@@ -481,9 +482,9 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    // Método para remover las cartas sin energía
+    // Método para remover las cartas sin vida
     private void RemoveCardsWithoutEnergy()
     {
-        HeroCardsOnTheField.RemoveAll(card => card.CurrentEnergy <= 0);
+        HeroCardsOnTheField.RemoveAll(card => card.CurrentHealtPoints <= 0);
     }
 }
