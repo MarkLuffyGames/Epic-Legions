@@ -9,11 +9,9 @@ public class CardSO : ScriptableObject
     [SerializeField] private string cardName;
     [SerializeField] private Sprite cardSprite;
     [SerializeField] private CardElement cardElemnt;
-    [SerializeField] private CardType cardType;
 
     public int CardID => cardId;
     public string CardName => cardName;
     public Sprite CardSprite => cardSprite;
     public CardElement CardElemnt => cardElemnt;
-    public CardType CardType => cardType;
 }

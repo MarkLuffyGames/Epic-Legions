@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Battle, None }
@@ -209,6 +210,10 @@ public class DuelManager : NetworkBehaviour
             {
                 duelPhase.Value = DuelPhase.Preparation;
             }
+            else if(duelPhase.Value == DuelPhase.Battle)
+            {
+                NextTurn();
+            }
 
             playerReady = playerReady.ToDictionary(kvp => kvp.Key, kvp => false);
         }
@@ -393,24 +398,27 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId)
     {
+        StartCoroutine(HeroAttackServer(heroToAttackPositionIndex, clientId));
+    }
+    IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId)
+    {
+
+        HeroAttackClientRpc(heroToAttackPositionIndex, clientId);
+
         if (playerRoles[clientId] == 1)
         {
             Card card = player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
-            HeroAttack(card, 1);
+            yield return HeroAttack(card, 1);
         }
         else if (playerRoles[clientId] == 2)
         {
             Card card = player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
-            HeroAttack(card, 2);
+            yield return HeroAttack(card, 2);
         }
         settingAttackTarget = false;
-
-        HeroAttackClientRpc(heroToAttackPositionIndex, clientId);
-
-        NextTurn();
     }
 
-    private void HeroAttack(Card cardToAttack, int player)
+    private IEnumerator HeroAttack(Card cardToAttack, int player)
     {
 
         //Aqui va el metodo para iniciar la animacion de ataque.
@@ -425,6 +433,10 @@ public class DuelManager : NetworkBehaviour
                 fieldPosition.Card.DesactiveAttackableTarget();
             }
         }
+
+        //Animacion de daño del oponente
+        cardToAttack.DamageAnimation();
+        yield return new WaitForSeconds(1);
 
         //Aplicar daño al opnente.
         if (cardToAttack.ReceiveDamage(heroTurn.Move.Damage))
@@ -446,26 +458,30 @@ public class DuelManager : NetworkBehaviour
         }
 
         heroTurn.EndTurn();
+        if(IsClient)SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     [ClientRpc]
     private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId)
     {
-        if (IsHost) return;
+        StartCoroutine(HeroAttackClient(fieldPositionIndex, attackerClientId));
+    }
+    private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId)
+    {
+        if (IsHost) yield break;
 
         if (NetworkManager.Singleton.LocalClientId == attackerClientId)
         {
             Card card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
-            HeroAttack(card, 1);
+            yield return HeroAttack(card, 1);
         }
         else
         {
             Card card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
-            HeroAttack(card, 2);
+            yield return HeroAttack(card, 2);
         }
 
         settingAttackTarget = false;
-        
     }
 
     private void NextTurn()

@@ -366,12 +366,13 @@ public class Card : MonoBehaviour
 
     public void EndTurn()
     {
+        Debug.Log("Terminar turno");
         isMyTurn = false;
         cardSelected.enabled = false;
         activeActions = false;
     }
 
-    public void SelectAttackTarget()
+    public void SelectAttackTarget(int attackNumber)
     {
         DuelManager.instance.SelectAttackTarget();
         cardActions.enabled = false;
@@ -396,6 +397,12 @@ public class Card : MonoBehaviour
 
     }
 
+    public void DamageAnimation()
+    {
+        //Efecto de daño.
+        Instantiate(HitEffect, transform.position, Quaternion.identity);
+    }
+
     /// <summary>
     /// Recibe el daño de un ataque o efecto.
     /// </summary>
@@ -403,9 +410,6 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
-        //Efecto de daño.
-        Instantiate(HitEffect, transform.position, Quaternion.identity);
-
         if (currentDefence >= amountDamage)
         {
             currentDefence -= amountDamage;
@@ -433,7 +437,7 @@ public class Card : MonoBehaviour
 
     private void ShowTextDamage(bool isDefence, int amountDamage)
     {
-        var position = isDefence ? defenceText.transform.position : energyText.transform.position;
+        var position = isDefence ? defenceText.transform.position : healtText.transform.position;
         position += Vector3.up;
 
         var popUp = Instantiate(isDefence ? DefencePopUpPrefab : EnergyPopUpPrefab, position, Quaternion.identity);
