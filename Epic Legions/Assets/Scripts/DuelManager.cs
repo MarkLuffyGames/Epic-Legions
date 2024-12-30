@@ -31,6 +31,7 @@ public class DuelManager : NetworkBehaviour
 
     public TextMeshProUGUI duelPhaseText;
     public Card heroTurn;
+    public int movementToUseIndex;
     public bool settingAttackTarget;
 
     private void Awake()
@@ -194,6 +195,8 @@ public class DuelManager : NetworkBehaviour
 
         if (AreAllTrue(playerReady))
         {
+            playerReady = playerReady.ToDictionary(kvp => kvp.Key, kvp => false);
+
             if (duelPhase.Value == DuelPhase.PreparingDuel)
             {
                 duelPhase.Value = DuelPhase.Starting;
@@ -214,8 +217,6 @@ public class DuelManager : NetworkBehaviour
             {
                 NextTurn();
             }
-
-            playerReady = playerReady.ToDictionary(kvp => kvp.Key, kvp => false);
         }
         
     }
@@ -360,14 +361,23 @@ public class DuelManager : NetworkBehaviour
         return heroTurn;
     }
 
-    public void SelectAttackTarget()
+    public void SelectAttackTarget(int movementToUse)
     {
         settingAttackTarget = true;
 
-        foreach(Card card in ObtainAttackableTargets())
+        movementToUseIndex = movementToUse;
+        SetMovementToUseServerRpc(movementToUse);
+
+        foreach (Card card in ObtainAttackableTargets())
         {
             card.ActiveAttackableTarget();
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetMovementToUseServerRpc(int movementToUse)
+    {
+        movementToUseIndex = movementToUse;
     }
 
     private List<Card> ObtainAttackableTargets()
@@ -403,7 +413,7 @@ public class DuelManager : NetworkBehaviour
     IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId)
     {
 
-        HeroAttackClientRpc(heroToAttackPositionIndex, clientId);
+        HeroAttackClientRpc(heroToAttackPositionIndex, clientId, movementToUseIndex);
 
         if (playerRoles[clientId] == 1)
         {
@@ -439,7 +449,7 @@ public class DuelManager : NetworkBehaviour
         yield return new WaitForSeconds(1);
 
         //Aplicar daño al opnente.
-        if (cardToAttack.ReceiveDamage(heroTurn.Move.Damage))
+        if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].Damage))
         {
             Transform playerGraveyard = null;
             bool isPlayer = false;
@@ -457,13 +467,15 @@ public class DuelManager : NetworkBehaviour
             cardToAttack.FieldPosition.DestroyCard(playerGraveyard, isPlayer);
         }
 
+        movementToUseIndex = -1;
         heroTurn.EndTurn();
         if(IsClient)SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     [ClientRpc]
-    private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId)
+    private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId, int movementToUseIndex)
     {
+        this.movementToUseIndex = movementToUseIndex;
         StartCoroutine(HeroAttackClient(fieldPositionIndex, attackerClientId));
     }
     private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId)

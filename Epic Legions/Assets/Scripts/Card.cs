@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -52,13 +53,13 @@ public class Card : MonoBehaviour
     private int currentDefence;
     private int currentSpeed;
 
-    private MoveSO move;
+    private List<MoveSO> moves;
     private FieldPosition fieldPosition;
     public bool isAttackable;
 
     public int CurrentHealtPoints => currentHealt;
     public int CurrentSpeedPoints => currentSpeed;
-    public MoveSO Move => move;
+    public List<MoveSO> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
 
@@ -79,14 +80,14 @@ public class Card : MonoBehaviour
             defence = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
-            move = heroCardSO.Move;
+            moves = new List<MoveSO>(heroCardSO.Moves);
 
             currentHealt = healt;
             currentDefence = defence;
             currentSpeed = speed;
 
-            move1NameText.text = heroCardSO.Move.MoveName;
-            move1DescriptionText.text = heroCardSO.Move.MoveDescription;
+            move1NameText.text = heroCardSO.Moves[0].MoveName;
+            move1DescriptionText.text = heroCardSO.Moves[0].MoveDescription;
 
             UpdateText();
         }
@@ -366,7 +367,6 @@ public class Card : MonoBehaviour
 
     public void EndTurn()
     {
-        Debug.Log("Terminar turno");
         isMyTurn = false;
         cardSelected.enabled = false;
         activeActions = false;
@@ -374,7 +374,7 @@ public class Card : MonoBehaviour
 
     public void SelectAttackTarget(int attackNumber)
     {
-        DuelManager.instance.SelectAttackTarget();
+        DuelManager.instance.SelectAttackTarget(attackNumber);
         cardActions.enabled = false;
         ResetSize();
     }

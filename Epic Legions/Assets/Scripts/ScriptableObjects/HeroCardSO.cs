@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum HeroClass { Warrior, Archer, Wizard, Druid, Necromancer }
@@ -10,15 +11,14 @@ public class HeroCardSO : CardSO
     [SerializeField] private int defence;
     [SerializeField] private int speed;
     [SerializeField] private int energy;
-    [SerializeField] private MoveSO move;
+    [SerializeField] private List<MoveSO> moves;
 
     public HeroClass HeroClass => heroClass;
     public int Healt => healt;
     public int Defence => defence;
     public int Speed => speed;
     public int Energy => energy;
-    public MoveSO Move => move;
-
+    public List<MoveSO> Moves => moves;
 
 }
 
