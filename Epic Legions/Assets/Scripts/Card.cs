@@ -20,8 +20,8 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI move1NameText;
     [SerializeField] private TextMeshProUGUI move1DescriptionText;
-    [SerializeField] private TextMeshProUGUI Move2NameText;
-    [SerializeField] private TextMeshProUGUI Move2DescriptionText;
+    [SerializeField] private TextMeshProUGUI move2NameText;
+    [SerializeField] private TextMeshProUGUI move2DescriptionText;
     [SerializeField] private GameObject EnergyPopUpPrefab;
     [SerializeField] private GameObject DefencePopUpPrefab;
     [SerializeField] private GameObject HitEffect;
@@ -85,9 +85,17 @@ public class Card : MonoBehaviour
             currentHealt = healt;
             currentDefence = defence;
             currentSpeed = speed;
-
-            move1NameText.text = heroCardSO.Moves[0].MoveName;
-            move1DescriptionText.text = heroCardSO.Moves[0].MoveDescription;
+            
+            if (moves[1] != null)
+            {
+                move1NameText.text = heroCardSO.Moves[0].MoveName;
+                move1DescriptionText.text = heroCardSO.Moves[0].MoveEffect.EffectDescription;
+            }
+            if (moves[1] != null)
+            {
+                move2NameText.text = heroCardSO.Moves[1].MoveName;
+                move2DescriptionText.text = heroCardSO.Moves[1].MoveEffect.EffectDescription;
+            }
 
             UpdateText();
         }

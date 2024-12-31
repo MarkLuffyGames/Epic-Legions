@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 1
   cardName: YANSSO
-  cardSprite: {fileID: 21300000, guid: 0e03bd315ef6de946aaaa53e72e4be04, type: 3}
+  cardSprite: {fileID: 21300000, guid: c72e3b9f50b186743bf734458d243c9b, type: 3}
   cardElemnt: 3
   heroClass: 2
   healt: 20
@@ -22,4 +22,5 @@ MonoBehaviour:
   speed: 5
   energy: 10
   moves:
+  - {fileID: 11400000, guid: 5ce00e2a123d53346b81601a8a861a1c, type: 2}
   - {fileID: 11400000, guid: 5ce00e2a123d53346b81601a8a861a1c, type: 2}

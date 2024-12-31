@@ -2109,8 +2109,8 @@ MonoBehaviour:
   energyText: {fileID: 6153432091646338378}
   move1NameText: {fileID: 2059784032325631284}
   move1DescriptionText: {fileID: 5368696133612444724}
-  Move2NameText: {fileID: 3020894858418228820}
-  Move2DescriptionText: {fileID: 7786888700075625512}
+  move2NameText: {fileID: 3020894858418228820}
+  move2DescriptionText: {fileID: 7786888700075625512}
   EnergyPopUpPrefab: {fileID: 2889455318098897411, guid: 0a429e1aecab39e4bb0daf0347e1de43, type: 3}
   DefencePopUpPrefab: {fileID: 8420613145126704882, guid: a9577b953ab201649a62ac17265edfa7, type: 3}
   HitEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
@@ -2600,7 +2600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f0f1a99ea45e9b74ba0853b1eaaae98a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4844fa2ebee1d2241ac9eab3f3e7b9e2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 5
   cardName: Paladin
-  cardSprite: {fileID: 21300000, guid: daf07be321483c541bdfbe30cb3c48db, type: 3}
+  cardSprite: {fileID: 21300000, guid: e81327ae025dd004dad290afc4f3a30b, type: 3}
   cardElemnt: 0
   heroClass: 0
   healt: 20
@@ -22,4 +22,5 @@ MonoBehaviour:
   speed: 10
   energy: 20
   moves:
+  - {fileID: 11400000, guid: 5ce00e2a123d53346b81601a8a861a1c, type: 2}
   - {fileID: 11400000, guid: 5ce00e2a123d53346b81601a8a861a1c, type: 2}
