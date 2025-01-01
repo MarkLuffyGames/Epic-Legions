@@ -11,5 +11,7 @@ public class MoveSO : ScriptableObject
     public string MoveName => moveName;
     public int Damage => damage;
     public CardEffect MoveEffect => moveEffect;
+
+
 }
 

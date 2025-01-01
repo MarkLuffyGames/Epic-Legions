@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Testudo Divino
+  m_Script: {fileID: 11500000, guid: 4e8705cbf60df404da13a0037f266442, type: 3}
+  m_Name: Stun
   m_EditorClassIdentifier: 
-  moveName: Testudo Divino
-  damage: 0
-  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
+  effectDescription: "Aturde al objetivo si no le queda defensa cuando este ataque
+    impacta, dej\xE1ndolo inm\xF3vil durante un turno."

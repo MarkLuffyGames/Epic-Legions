@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -22,9 +23,10 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI move1DescriptionText;
     [SerializeField] private TextMeshProUGUI move2NameText;
     [SerializeField] private TextMeshProUGUI move2DescriptionText;
-    [SerializeField] private GameObject EnergyPopUpPrefab;
-    [SerializeField] private GameObject DefencePopUpPrefab;
-    [SerializeField] private GameObject HitEffect;
+    [SerializeField] private GameObject energyPopUpPrefab;
+    [SerializeField] private GameObject defencePopUpPrefab;
+    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private GameObject stunEffect;
 
     public CardSO cardSO;
 
@@ -50,7 +52,7 @@ public class Card : MonoBehaviour
     private int energy;
 
     private int currentHealt;
-    private int currentDefence;
+    private int currentDefense;
     private int currentSpeed;
 
     private List<MoveSO> moves;
@@ -58,11 +60,12 @@ public class Card : MonoBehaviour
     public bool isAttackable;
 
     public int CurrentHealtPoints => currentHealt;
+    public int CurrentDefensePoints => currentDefense;
     public int CurrentSpeedPoints => currentSpeed;
     public List<MoveSO> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
-
+    public int stunned { get; private set; }
 
     /// <summary>
     /// Establece todos los datos de la carta.
@@ -83,18 +86,18 @@ public class Card : MonoBehaviour
             moves = new List<MoveSO>(heroCardSO.Moves);
 
             currentHealt = healt;
-            currentDefence = defence;
+            currentDefense = defence;
             currentSpeed = speed;
             
             if (moves[1] != null)
             {
-                move1NameText.text = heroCardSO.Moves[0].MoveName;
-                move1DescriptionText.text = heroCardSO.Moves[0].MoveEffect.EffectDescription;
+                move1NameText.text = moves[0].MoveName;
+                move1DescriptionText.text = moves[0].MoveEffect.EffectDescription;
             }
             if (moves[1] != null)
             {
-                move2NameText.text = heroCardSO.Moves[1].MoveName;
-                move2DescriptionText.text = heroCardSO.Moves[1].MoveEffect.EffectDescription;
+                move2NameText.text = moves[1].MoveName;
+                move2DescriptionText.text = moves[1].MoveEffect.EffectDescription;
             }
 
             UpdateText();
@@ -109,7 +112,7 @@ public class Card : MonoBehaviour
     private void UpdateText()
     {
         healtText.text = currentHealt.ToString();
-        defenceText.text = currentDefence.ToString();
+        defenceText.text = currentDefense.ToString();
         speedText.text = currentSpeed.ToString();
         energyText.text = energy.ToString();
     }
@@ -361,7 +364,7 @@ public class Card : MonoBehaviour
         return isHighlight;
     }
 
-    public void SetTurn(bool isPlayer)
+    public bool SetTurn(bool isPlayer)
     {
         isMyTurn = true;
         cardSelected.enabled = true;
@@ -371,6 +374,8 @@ public class Card : MonoBehaviour
         {
             activeActions = true;
         }
+
+        return true;
     }
 
     public void EndTurn()
@@ -408,7 +413,7 @@ public class Card : MonoBehaviour
     public void DamageAnimation()
     {
         //Efecto de daño.
-        Instantiate(HitEffect, transform.position, Quaternion.identity);
+        Instantiate(hitEffect, transform.position, Quaternion.identity);
     }
 
     /// <summary>
@@ -418,22 +423,23 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
-        if (currentDefence >= amountDamage)
+        if (currentDefense >= amountDamage)
         {
-            currentDefence -= amountDamage;
+            currentDefense -= amountDamage;
             ShowTextDamage(true, amountDamage);
         }
-        else if(currentDefence < amountDamage)
+        else if(currentDefense < amountDamage)
         {
-            if (currentDefence > 0) ShowTextDamage(true, currentDefence);
-            currentDefence -= amountDamage;
-            currentHealt += currentDefence;
-            ShowTextDamage(false, Mathf.Abs(currentDefence));
-            currentDefence = 0;
+            if (currentDefense > 0) ShowTextDamage(true, currentDefense);
+            currentDefense -= amountDamage;
+            currentHealt += currentDefense;
+            ShowTextDamage(false, Mathf.Abs(currentDefense));
+            currentDefense = 0;
 
             if (currentHealt <= 0)
             {
                 currentHealt = 0;
+                CancelAllEffects();
                 return true;
             }
         }
@@ -448,7 +454,44 @@ public class Card : MonoBehaviour
         var position = isDefence ? defenceText.transform.position : healtText.transform.position;
         position += Vector3.up;
 
-        var popUp = Instantiate(isDefence ? DefencePopUpPrefab : EnergyPopUpPrefab, position, Quaternion.identity);
+        var popUp = Instantiate(isDefence ? defencePopUpPrefab : energyPopUpPrefab, position, Quaternion.identity);
         popUp.GetComponentInChildren<TextMeshProUGUI>().text = $"-{amountDamage}";
     }
+
+    
+    public void ToggleStunned()
+    {
+        if (stunned == 0) 
+        {
+            stunned = 2;
+            stunEffect.SetActive(true); 
+        }
+        else
+        {
+            stunned -= 1;
+        }
+    }
+
+    public bool HandlingStatusEffects()
+    {
+        if (stunned > 0)
+        {
+            ToggleStunned();
+            if (stunned == 0) 
+            {
+                stunEffect.SetActive(false);
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private void CancelAllEffects()
+    {
+        stunned = 0;
+        stunEffect.SetActive(false);
+    }
 }
+

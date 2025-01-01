@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Battle, None }
@@ -321,7 +320,7 @@ public class DuelManager : NetworkBehaviour
             return;
         }
         SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForCurrentTurnHero());
-        
+        if(!IsHost)heroTurn.HandlingStatusEffects();
     }
 
     private ulong GetClientIdForCurrentTurnHero()
@@ -342,17 +341,24 @@ public class DuelManager : NetworkBehaviour
     [ClientRpc]
     private void SetHeroTurnClientRpc(int fieldPositionIndex, ulong ownerClientId)
     {
+        Card card = null;
         if (NetworkManager.Singleton.LocalClientId == ownerClientId)
         {
-            Card card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
             card.SetTurn(true);
-            heroTurn = card;
         }
         else
         {
-            Card card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
             card.SetTurn(false);
-            heroTurn = card;
+        }
+
+        heroTurn = card;
+
+        if(heroTurn.HandlingStatusEffects())
+        {
+            heroTurn.EndTurn();
+            if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 
@@ -448,6 +454,9 @@ public class DuelManager : NetworkBehaviour
         cardToAttack.DamageAnimation();
         yield return new WaitForSeconds(1);
 
+        //Aplicar afecto de ataque si es necesario.
+        heroTurn.Moves[movementToUseIndex].MoveEffect.ActivateEffect(heroTurn, cardToAttack);
+
         //Aplicar daño al opnente.
         if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].Damage))
         {
@@ -469,7 +478,7 @@ public class DuelManager : NetworkBehaviour
 
         movementToUseIndex = -1;
         heroTurn.EndTurn();
-        if(IsClient)SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     [ClientRpc]
