@@ -2116,6 +2116,7 @@ MonoBehaviour:
   defencePopUpPrefab: {fileID: 8420613145126704882, guid: a9577b953ab201649a62ac17265edfa7, type: 3}
   hitEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
   stunEffect: {fileID: 4839518891904360234}
+  regenerateDefenseEffect: {fileID: 7647375919561907788, guid: 035ce8c9cfc34104991ce416daf8aebe, type: 3}
   cardSO: {fileID: 0}
   isTemporalPosition: 0
   isVisible: 0

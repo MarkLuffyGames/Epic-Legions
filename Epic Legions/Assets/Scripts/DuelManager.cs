@@ -91,6 +91,7 @@ public class DuelManager : NetworkBehaviour
         }
         else if(newPhase == DuelPhase.DrawingCards)
         {
+
             player1Manager.DrawCard();
             player2Manager.DrawCard();
         }
@@ -319,17 +320,17 @@ public class DuelManager : NetworkBehaviour
             NextTurn();
             return;
         }
-        SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForCurrentTurnHero());
+        SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForHero(HeroCardsOnTheField[heroTurnIndex]));
         if(!IsHost)heroTurn.HandlingStatusEffects();
     }
 
-    private ulong GetClientIdForCurrentTurnHero()
+    private ulong GetClientIdForHero(Card heroCard)
     {
-        if (player1Manager.GetFieldPositionList().Contains(HeroCardsOnTheField[heroTurnIndex].FieldPosition))
+        if (player1Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
         {
             return playerId[1];
         }
-        else if (player2Manager.GetFieldPositionList().Contains(HeroCardsOnTheField[heroTurnIndex].FieldPosition))
+        else if (player2Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
         {
             return playerId[2];
         }
@@ -514,14 +515,43 @@ public class DuelManager : NetworkBehaviour
         }
         else
         {
-            RemoveCardsWithoutEnergy();
+            RemoveDestroyedCards();
+            RegenerateDefense();
             duelPhase.Value = DuelPhase.DrawingCards;
         }
     }
 
     // Método para remover las cartas sin vida
-    private void RemoveCardsWithoutEnergy()
+    private void RemoveDestroyedCards()
     {
-        HeroCardsOnTheField.RemoveAll(card => card.CurrentHealtPoints <= 0);
+        HeroCardsOnTheField.RemoveAll(card => card.FieldPosition == null);
+    }
+
+    private void RegenerateDefense()
+    {
+        foreach(var card in HeroCardsOnTheField)
+        {
+            card.RegenerateDefense();
+            RegenerateDefenseClientRpc(card.FieldPosition.PositionIndex, GetClientIdForHero(card));
+
+        }
+    }
+
+    [ClientRpc]
+    private void RegenerateDefenseClientRpc(int fieldPositionIndex, ulong ownerClientId)
+    {
+        if (IsHost) return;
+
+        Card card = null;
+        if (NetworkManager.Singleton.LocalClientId == ownerClientId)
+        {
+            card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+        }
+        else
+        {
+            card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+        }
+
+        card.RegenerateDefense();
     }
 }

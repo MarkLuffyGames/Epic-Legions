@@ -27,6 +27,7 @@ public class Card : MonoBehaviour
     [SerializeField] private GameObject defencePopUpPrefab;
     [SerializeField] private GameObject hitEffect;
     [SerializeField] private GameObject stunEffect;
+    [SerializeField] private GameObject regenerateDefenseEffect;
 
     public CardSO cardSO;
 
@@ -47,7 +48,7 @@ public class Card : MonoBehaviour
     public bool waitForServer;
 
     private int healt;
-    private int defence;
+    private int defense;
     private int speed;
     private int energy;
 
@@ -80,13 +81,13 @@ public class Card : MonoBehaviour
         if(cardSO is HeroCardSO heroCardSO)
         {
             healt = heroCardSO.Healt;
-            defence = heroCardSO.Defence;
+            defense = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
             moves = new List<MoveSO>(heroCardSO.Moves);
 
             currentHealt = healt;
-            currentDefense = defence;
+            currentDefense = defense;
             currentSpeed = speed;
             
             if (moves[1] != null)
@@ -438,7 +439,10 @@ public class Card : MonoBehaviour
 
             if (currentHealt <= 0)
             {
-                currentHealt = 0;
+                currentDefense = defense;
+                currentHealt = healt;
+                currentSpeed = speed;
+                UpdateText();
                 CancelAllEffects();
                 return true;
             }
@@ -492,6 +496,15 @@ public class Card : MonoBehaviour
     {
         stunned = 0;
         stunEffect.SetActive(false);
+    }
+
+    public void RegenerateDefense()
+    {
+        if(currentDefense < defense)
+        {
+            currentDefense = defense;
+            Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
+        }
     }
 }
 
