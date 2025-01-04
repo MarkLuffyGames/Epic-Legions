@@ -7,11 +7,25 @@ public class MoveSO : ScriptableObject
     [SerializeField] private string moveName;
     [SerializeField] private int damage;
     [SerializeField] private CardEffect moveEffect;
+    [SerializeField] private bool needTarget;
+    [SerializeField] private MoveType moveType;
+    [SerializeField] private TargetsType targetsType;
 
     public string MoveName => moveName;
     public int Damage => damage;
     public CardEffect MoveEffect => moveEffect;
+    public bool NeedTarget => needTarget;
+    public MoveType MoveType => moveType;
+    public TargetsType TargetsType => targetsType;
+}
 
+public enum MoveType
+{
+    MeleeAttack, RangedAttack, PositiveEffect, AdverseEffect
+}
 
+public enum TargetsType
+{
+    SingleTarget, TargetLine
 }
 

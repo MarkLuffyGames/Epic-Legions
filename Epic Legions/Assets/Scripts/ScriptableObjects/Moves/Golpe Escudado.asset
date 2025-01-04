@@ -15,3 +15,4 @@ MonoBehaviour:
   moveName: Golpe Escudado
   damage: 5
   moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
+  needTarget: 1

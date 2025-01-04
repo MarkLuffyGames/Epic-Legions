@@ -21,5 +21,3 @@ public class HeroCardSO : CardSO
     public List<MoveSO> Moves => moves;
 
 }
-
-

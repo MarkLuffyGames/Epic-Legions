@@ -315,7 +315,7 @@ public class DuelManager : NetworkBehaviour
 
         heroTurn = HeroCardsOnTheField[heroTurnIndex];
 
-        if (heroTurn.CurrentHealtPoints <= 0)
+        if (heroTurn.FieldPosition == null)
         {
             NextTurn();
             return;
@@ -368,14 +368,27 @@ public class DuelManager : NetworkBehaviour
         return heroTurn;
     }
 
-    public void SelectAttackTarget(int movementToUse)
+    public void UseMovement(int movementToUse)
     {
-        settingAttackTarget = true;
-
         movementToUseIndex = movementToUse;
         SetMovementToUseServerRpc(movementToUse);
 
-        foreach (Card card in ObtainAttackableTargets())
+        if (heroTurn.Moves[movementToUse].NeedTarget)
+        {
+            SelectTarget(movementToUse);
+        }
+        else
+        {
+            HeroAttackServerRpc(heroTurn.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
+        }
+    }
+
+
+    public void SelectTarget(int movementToUse)
+    {
+        settingAttackTarget = true;
+
+        foreach (Card card in ObtainTargets())
         {
             card.ActiveAttackableTarget();
         }
@@ -387,29 +400,24 @@ public class DuelManager : NetworkBehaviour
         movementToUseIndex = movementToUse;
     }
 
-    private List<Card> ObtainAttackableTargets()
+    private List<Card> ObtainTargets() //Ajustar para obtener los objetivos para cada tipo de ataque.
     {
-        if(heroTurn.cardSO is HeroCardSO heroCardSO)
+        List<Card> targets = new List<Card>();
+        for (int i = 0; i < player2Manager.GetFieldPositionList().Count; i++)
         {
-            List<Card> targets = new List<Card>();
-            for (int i = 0; i < player2Manager.GetFieldPositionList().Count; i++)
+            if (player2Manager.GetFieldPositionList()[i].Card != null)
             {
-                if (player2Manager.GetFieldPositionList()[i].Card != null)
-                {
-                    targets.Add(player2Manager.GetFieldPositionList()[i].Card);
-                }
-
-                if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroCardSO.HeroClass == HeroClass.Warrior)
-                {
-                    return targets;
-                }
-
+                targets.Add(player2Manager.GetFieldPositionList()[i].Card);
             }
 
-            return targets;
+            if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroTurn.Moves[movementToUseIndex].MoveType == MoveType.MeleeAttack)
+            {
+                return targets;
+            }
+
         }
 
-        return null;
+        return targets;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -424,8 +432,16 @@ public class DuelManager : NetworkBehaviour
 
         if (playerRoles[clientId] == 1)
         {
-            Card card = player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
-            yield return HeroAttack(card, 1);
+            if (heroTurn.Moves[movementToUseIndex].MoveType != MoveType.PositiveEffect)
+            {
+                Card card = player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+                yield return HeroAttack(card, 1);
+            }
+            else
+            {
+                //////////////////////////////////////////////////////////////////////////
+            }
+            
         }
         else if (playerRoles[clientId] == 2)
         {
@@ -451,35 +467,45 @@ public class DuelManager : NetworkBehaviour
             }
         }
 
+
         //Animacion de daño del oponente
-        cardToAttack.DamageAnimation();
+        cardToAttack.AnimationReceivingMovement();
         yield return new WaitForSeconds(1);
 
         //Aplicar afecto de ataque si es necesario.
         heroTurn.Moves[movementToUseIndex].MoveEffect.ActivateEffect(heroTurn, cardToAttack);
 
-        //Aplicar daño al opnente.
-        if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].Damage))
+        if(heroTurn.Moves[movementToUseIndex].Damage != 0)
         {
-            Transform playerGraveyard = null;
-            bool isPlayer = false;
-            if (player == 1)
+            //Aplicar daño al opnente.
+            if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].Damage))
             {
-                playerGraveyard = player2Manager.GetGraveyard();
-                isPlayer = false;
+                SendCardToGraveyard(cardToAttack, player);
             }
-            else if(player == 2)
-            {
-                playerGraveyard = player1Manager.GetGraveyard();
-                isPlayer = true;
-            }
-
-            cardToAttack.FieldPosition.DestroyCard(playerGraveyard, isPlayer);
         }
+        
 
         movementToUseIndex = -1;
         heroTurn.EndTurn();
         if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+    }
+
+    private void SendCardToGraveyard(Card card, int player)
+    {
+        Transform playerGraveyard = null;
+        bool isPlayer = false;
+        if (player == 1)
+        {
+            playerGraveyard = player2Manager.GetGraveyard();
+            isPlayer = false;
+        }
+        else if (player == 2)
+        {
+            playerGraveyard = player1Manager.GetGraveyard();
+            isPlayer = true;
+        }
+
+        card.FieldPosition.DestroyCard(playerGraveyard, isPlayer);
     }
 
     [ClientRpc]

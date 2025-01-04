@@ -279,7 +279,7 @@ public class Card : MonoBehaviour
         canvasFront.sortingOrder = sortingOrder;
         canvasBack.sortingOrder = sortingOrder;
         cardSelected.sortingOrder = sortingOrder;
-        cardActions.sortingOrder = sortingOrder;
+        cardActions.sortingOrder = sortingOrder + 1;
     }
 
     /// <summary>
@@ -386,9 +386,9 @@ public class Card : MonoBehaviour
         activeActions = false;
     }
 
-    public void SelectAttackTarget(int attackNumber)
+    public void UseMovement(int movementNumber)
     {
-        DuelManager.instance.SelectAttackTarget(attackNumber);
+        DuelManager.instance.UseMovement(movementNumber);
         cardActions.enabled = false;
         ResetSize();
     }
@@ -411,7 +411,7 @@ public class Card : MonoBehaviour
 
     }
 
-    public void DamageAnimation()
+    public void AnimationReceivingMovement()
     {
         //Efecto de daño.
         Instantiate(hitEffect, transform.position, Quaternion.identity);
@@ -504,6 +504,7 @@ public class Card : MonoBehaviour
         {
             currentDefense = defense;
             Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
+            UpdateText();   
         }
     }
 }
