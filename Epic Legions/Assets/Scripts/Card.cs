@@ -52,6 +52,8 @@ public class Card : MonoBehaviour
     private int speed;
     private int energy;
 
+    private int defenseBonus;
+
     private int currentHealt;
     private int currentDefense;
     private int currentSpeed;
@@ -61,7 +63,7 @@ public class Card : MonoBehaviour
     public bool isAttackable;
 
     public int CurrentHealtPoints => currentHealt;
-    public int CurrentDefensePoints => currentDefense;
+    public int CurrentDefensePoints => currentDefense + defenseBonus;
     public int CurrentSpeedPoints => currentSpeed;
     public List<MoveSO> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
@@ -113,7 +115,7 @@ public class Card : MonoBehaviour
     private void UpdateText()
     {
         healtText.text = currentHealt.ToString();
-        defenceText.text = currentDefense.ToString();
+        defenceText.text = CurrentDefensePoints.ToString();
         speedText.text = currentSpeed.ToString();
         energyText.text = energy.ToString();
     }
@@ -424,18 +426,18 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
-        if (currentDefense >= amountDamage)
+        if (CurrentDefensePoints >= amountDamage)
         {
             currentDefense -= amountDamage;
             ShowTextDamage(true, amountDamage);
         }
-        else if(currentDefense < amountDamage)
+        else if(CurrentDefensePoints < amountDamage)
         {
-            if (currentDefense > 0) ShowTextDamage(true, currentDefense);
+            if (CurrentDefensePoints > 0) ShowTextDamage(true, CurrentDefensePoints);
             currentDefense -= amountDamage;
-            currentHealt += currentDefense;
-            ShowTextDamage(false, Mathf.Abs(currentDefense));
-            currentDefense = 0;
+            currentHealt += CurrentDefensePoints;
+            ShowTextDamage(false, Mathf.Abs(CurrentDefensePoints));
+            currentDefense = 0 - defenseBonus;
 
             if (currentHealt <= 0)
             {
@@ -506,6 +508,11 @@ public class Card : MonoBehaviour
             Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
             UpdateText();   
         }
+    }
+
+    public void ApplyDefenseBonus(int amount, int NumberTurns)
+    {
+        defenseBonus += amount;
     }
 }
 
