@@ -158,4 +158,35 @@ public class PlayerManager : MonoBehaviour
     {
         return graveyardPosition;
     }
+
+    public List<Card> GetLineForCard(Card card)
+    {
+        if (card.FieldPosition.PositionIndex < 5)
+        {
+            return GetLineForIndex(0, 5);
+        }
+        else if(card.FieldPosition.PositionIndex < 5)
+        {
+            return GetLineForIndex(5, 10);
+        }
+        else
+        {
+            return GetLineForIndex(10, 15);
+        }
+    }
+
+    private List<Card> GetLineForIndex(int startLine, int endLine)
+    {
+        List<Card> cards = new List<Card>();
+
+        for (int i = startLine; i < endLine; i++)
+        {
+            if (fieldPositionList[i].Card != null)
+            {
+                cards.Add(fieldPositionList[i].Card);
+            }
+        }
+
+        return cards;
+    }
 }

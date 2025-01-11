@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectDescription: Crea un muro de escudos que aumenta la defensa de todos los
     aliados en 10 en la misma fila durante 2 turnos.
+  amount: 10
+  numberTurns: 2

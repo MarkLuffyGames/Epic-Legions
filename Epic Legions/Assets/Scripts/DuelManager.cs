@@ -477,10 +477,6 @@ public class DuelManager : NetworkBehaviour
         }
 
 
-        //Animacion de daño del oponente
-        cardToAttack.AnimationReceivingMovement();
-        yield return new WaitForSeconds(1);
-
         //Aplicar afecto de ataque si es necesario.
         if(heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.SingleTarget)
         {
@@ -490,17 +486,31 @@ public class DuelManager : NetworkBehaviour
         {
             heroTurn.Moves[movementToUseIndex].MoveEffect.ActivateEffect(heroTurn, GetTargetsForMove(cardToAttack));
         }
-        
 
-        if(heroTurn.Moves[movementToUseIndex].Damage != 0)
+
+        if (heroTurn.Moves[movementToUseIndex].Damage != 0)
         {
+
+            //Animacion de daño del oponente
+            cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].VisualEffect);
+            yield return new WaitForSeconds(1);
+
             //Aplicar daño al opnente.
             if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].Damage))
             {
                 SendCardToGraveyard(cardToAttack, player);
             }
         }
-        
+
+        //Animacion de efecto
+        if (heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.TargetLine)
+        {
+            foreach(var card in GetTargetsForMove(cardToAttack))
+            {
+                card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].VisualEffect);
+            }
+        }
+
 
         movementToUseIndex = -1;
         heroTurn.EndTurn();
@@ -511,15 +521,18 @@ public class DuelManager : NetworkBehaviour
     {
         if(heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.TargetLine)
         {
-            List<Card> targets = new List<Card>();
 
-            //////////////////////////////////////////////////
-
-            return targets;
+            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            {
+                return player1Manager.GetLineForCard(cardToAttack);
+            }
+            else
+            {
+                return player2Manager.GetLineForCard(cardToAttack);
+            }
         }
 
         return null;
-
     }
 
     private void SendCardToGraveyard(Card card, int player)

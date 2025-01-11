@@ -268,12 +268,15 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ResetSize()
     {
-        MoveToLastPosition();
-        RotateToAngle(lastRotation, 20);
-        ChangedSortingOrder(sortingOrder);
-        if(isMyTurn) cardSelected.enabled = true;
-        cardActions.enabled = false;
-        isFocused = false;
+        if (isFocused)
+        {
+            MoveToLastPosition();
+            RotateToAngle(lastRotation, 20);
+            ChangedSortingOrder(sortingOrder);
+            if (isMyTurn) cardSelected.enabled = true;
+            cardActions.enabled = false;
+            isFocused = false;
+        }
     }
 
     private void ChangedSortingOrder(int sortingOrder)
@@ -413,10 +416,10 @@ public class Card : MonoBehaviour
 
     }
 
-    public void AnimationReceivingMovement()
+    public void AnimationReceivingMovement(GameObject visualEffect)
     {
         //Efecto de daño.
-        Instantiate(hitEffect, transform.position, Quaternion.identity);
+        Instantiate(visualEffect, transform.position, Quaternion.identity);
     }
 
     /// <summary>
@@ -513,6 +516,7 @@ public class Card : MonoBehaviour
     public void ApplyDefenseBonus(int amount, int NumberTurns)
     {
         defenseBonus += amount;
+        UpdateText();
     }
 }
 

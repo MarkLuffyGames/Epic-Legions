@@ -18,3 +18,4 @@ MonoBehaviour:
   needTarget: 0
   moveType: 2
   targetsType: 1
+  visualEffect: {fileID: 8420613145126704882, guid: a9577b953ab201649a62ac17265edfa7, type: 3}
