@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Embate Sagrado
   m_EditorClassIdentifier: 
   moveName: Embate Sagrado
-  damage: 5
+  damage: 20
   moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
   needTarget: 0
   moveType: 0
   targetsType: 0
   visualEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  effectDescription: "Un ataque cuerpo a cuerpo que inflige da\xF1o adicional contra
+    enemigos oscuros."

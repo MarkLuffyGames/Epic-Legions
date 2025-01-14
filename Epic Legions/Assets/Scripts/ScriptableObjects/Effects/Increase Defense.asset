@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088db273ef596f1479b1e86f8635e955, type: 3}
   m_Name: Increase Defense
   m_EditorClassIdentifier: 
-  effectDescription: Crea un muro de escudos que aumenta la defensa de todos los
-    aliados en 10 en la misma fila durante 2 turnos.
   amount: 10
   numberTurns: 2

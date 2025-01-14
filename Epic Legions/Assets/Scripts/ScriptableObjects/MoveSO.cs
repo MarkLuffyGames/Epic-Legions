@@ -10,7 +10,8 @@ public class MoveSO : ScriptableObject
     [SerializeField] private bool needTarget;
     [SerializeField] private MoveType moveType;
     [SerializeField] private TargetsType targetsType;
-    [SerializeField] private GameObject visualEffect;
+    [SerializeField] private GameObject visualEffect; 
+    [SerializeField][TextArea] private string effectDescription;
 
     public string MoveName => moveName;
     public int Damage => damage;
@@ -19,6 +20,7 @@ public class MoveSO : ScriptableObject
     public MoveType MoveType => moveType;
     public TargetsType TargetsType => targetsType;
     public GameObject VisualEffect => visualEffect;
+    public string EffectDescription => effectDescription;
 }
 
 public enum MoveType

@@ -9,14 +9,16 @@ public class IncreaseDefense : CardEffect
 
     public override void ActivateEffect(Card caster, Card target)
     {
-        target.ApplyDefenseBonus(amount, numberTurns);
+        var modifier = new StatModifier(amount, numberTurns);
+        target.AddModifier(modifier);
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
+        var modifier = new StatModifier(amount, numberTurns);
         foreach (Card card in target)
         {
-            card.ApplyDefenseBonus(amount, numberTurns);
+            card.AddModifier(modifier);
         }
     }
 }

@@ -52,7 +52,7 @@ public class Card : MonoBehaviour
     private int speed;
     private int energy;
 
-    private int defenseBonus;
+    private List<StatModifier> statModifier;
 
     private int currentHealt;
     private int currentDefense;
@@ -63,7 +63,7 @@ public class Card : MonoBehaviour
     public bool isAttackable;
 
     public int CurrentHealtPoints => currentHealt;
-    public int CurrentDefensePoints => currentDefense + defenseBonus;
+    public int CurrentDefensePoints => currentDefense + GetDefenseModifier();
     public int CurrentSpeedPoints => currentSpeed;
     public List<MoveSO> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
@@ -91,16 +91,19 @@ public class Card : MonoBehaviour
             currentHealt = healt;
             currentDefense = defense;
             currentSpeed = speed;
-            
+
+            statModifier = new List<StatModifier>();
+
+
             if (moves[1] != null)
             {
                 move1NameText.text = moves[0].MoveName;
-                move1DescriptionText.text = moves[0].MoveEffect.EffectDescription;
+                move1DescriptionText.text = moves[0].EffectDescription;
             }
             if (moves[1] != null)
             {
                 move2NameText.text = moves[1].MoveName;
-                move2DescriptionText.text = moves[1].MoveEffect.EffectDescription;
+                move2DescriptionText.text = moves[1].EffectDescription;
             }
 
             UpdateText();
@@ -419,7 +422,7 @@ public class Card : MonoBehaviour
     public void AnimationReceivingMovement(GameObject visualEffect)
     {
         //Efecto de daño.
-        Instantiate(visualEffect, transform.position, Quaternion.identity);
+        Instantiate(visualEffect, fieldPosition.transform.position, Quaternion.identity);
     }
 
     /// <summary>
@@ -429,18 +432,12 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
-        if (CurrentDefensePoints >= amountDamage)
+        int remainingDamage = ReceiveDamageToShield(amountDamage);
+        
+        if(remainingDamage > 0)
         {
-            currentDefense -= amountDamage;
-            ShowTextDamage(true, amountDamage);
-        }
-        else if(CurrentDefensePoints < amountDamage)
-        {
-            if (CurrentDefensePoints > 0) ShowTextDamage(true, CurrentDefensePoints);
-            currentDefense -= amountDamage;
-            currentHealt += CurrentDefensePoints;
-            ShowTextDamage(false, Mathf.Abs(CurrentDefensePoints));
-            currentDefense = 0 - defenseBonus;
+            ShowTextDamage(false, currentHealt > remainingDamage ? remainingDamage : currentHealt);
+            currentHealt -= remainingDamage;
 
             if (currentHealt <= 0)
             {
@@ -501,6 +498,7 @@ public class Card : MonoBehaviour
     {
         stunned = 0;
         stunEffect.SetActive(false);
+        statModifier.Clear();
     }
 
     public void RegenerateDefense()
@@ -508,15 +506,79 @@ public class Card : MonoBehaviour
         if(currentDefense < defense)
         {
             currentDefense = defense;
+            foreach (StatModifier statModifier in statModifier)
+            {
+                statModifier.currentDefense = statModifier.defense;
+            }
             Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
             UpdateText();   
         }
     }
 
-    public void ApplyDefenseBonus(int amount, int NumberTurns)
+    public void AddModifier(StatModifier statModifier)
     {
-        defenseBonus += amount;
+        this.statModifier.Add(statModifier);
         UpdateText();
+    }
+
+    private int GetDefenseModifier()
+    {
+        int defenceModifier = 0;
+        foreach(StatModifier statModifier in statModifier)
+        {
+            defenceModifier += statModifier.currentDefense;
+        }
+
+        return defenceModifier;
+    }
+
+    private int ReceiveDamageToShield(int damage)
+    {
+        if(CurrentDefensePoints <= damage)
+        {
+            if(CurrentDefensePoints != 0)ShowTextDamage(true, CurrentDefensePoints);
+
+            var remainingDamage = CurrentDefensePoints - damage;
+            currentDefense = 0;
+            foreach (StatModifier statModifier in statModifier)
+            {
+                if(statModifier.currentDefense > 0)
+                {
+                    statModifier.currentDefense = 0;
+                }
+            }
+            return Mathf.Abs(remainingDamage);
+        }
+        else
+        {
+            ShowTextDamage(true, damage);
+            var remainingDamage = damage - currentDefense;
+            currentDefense -= damage;
+            if(currentDefense < 0) currentDefense = 0;
+            damage = remainingDamage;
+
+            if (damage <= 0) 
+            {
+                return 0; 
+            }
+            else
+            {
+                foreach (StatModifier statModifier in statModifier)
+                {
+                    if(statModifier.currentDefense > 0)
+                    {
+                        remainingDamage = damage - statModifier.currentDefense;
+                        statModifier.currentDefense -= damage;
+                        if (statModifier.currentDefense < 0) statModifier.currentDefense = 0;
+                        damage = remainingDamage;
+                        if (damage <= 0) return 0;
+                    }
+                }
+            }
+
+        }
+
+        return 0;   
     }
 }
 

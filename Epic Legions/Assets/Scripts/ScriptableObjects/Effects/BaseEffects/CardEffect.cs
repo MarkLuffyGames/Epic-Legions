@@ -4,10 +4,6 @@ using UnityEngine;
 
 public abstract class CardEffect : ScriptableObject
 {
-
-    [SerializeField][TextArea] private string effectDescription;
-
-    public string EffectDescription => effectDescription;
     public abstract void ActivateEffect(Card caster, Card target);
     public abstract void ActivateEffect(Card caster, List<Card> target);
 }

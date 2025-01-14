@@ -165,7 +165,7 @@ public class PlayerManager : MonoBehaviour
         {
             return GetLineForIndex(0, 5);
         }
-        else if(card.FieldPosition.PositionIndex < 5)
+        else if(card.FieldPosition.PositionIndex < 10)
         {
             return GetLineForIndex(5, 10);
         }
