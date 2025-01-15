@@ -52,20 +52,18 @@ public class Card : MonoBehaviour
     private int speed;
     private int energy;
 
-    private List<StatModifier> statModifier;
-
     private int currentHealt;
     private int currentDefense;
     private int currentSpeed;
 
-    private List<MoveSO> moves;
+    private List<Movement> moves;
     private FieldPosition fieldPosition;
     public bool isAttackable;
 
     public int CurrentHealtPoints => currentHealt;
     public int CurrentDefensePoints => currentDefense + GetDefenseModifier();
     public int CurrentSpeedPoints => currentSpeed;
-    public List<MoveSO> Moves => moves;
+    public List<Movement> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
     public int stunned { get; private set; }
@@ -86,24 +84,26 @@ public class Card : MonoBehaviour
             defense = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
-            moves = new List<MoveSO>(heroCardSO.Moves);
+            
+            moves = new List<Movement>();
+            foreach(var move in heroCardSO.Moves)
+            {
+                moves.Add(new Movement(move));
+            }
 
             currentHealt = healt;
             currentDefense = defense;
             currentSpeed = speed;
 
-            statModifier = new List<StatModifier>();
-
-
             if (moves[1] != null)
             {
-                move1NameText.text = moves[0].MoveName;
-                move1DescriptionText.text = moves[0].EffectDescription;
+                move1NameText.text = moves[0].MoveSO.MoveName;
+                move1DescriptionText.text = moves[0].MoveSO.EffectDescription;
             }
             if (moves[1] != null)
             {
-                move2NameText.text = moves[1].MoveName;
-                move2DescriptionText.text = moves[1].EffectDescription;
+                move2NameText.text = moves[1].MoveSO.MoveName;
+                move2DescriptionText.text = moves[1].MoveSO.EffectDescription;
             }
 
             UpdateText();
@@ -115,7 +115,7 @@ public class Card : MonoBehaviour
         this.fieldPosition = fieldPosition;
     }
 
-    private void UpdateText()
+    public void UpdateText()
     {
         healtText.text = currentHealt.ToString();
         defenceText.text = CurrentDefensePoints.ToString();
@@ -478,6 +478,10 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Maneja los efectos que tenga activo la carta y debuelve true si el heroe pierde el turno por algun efecto.
+    /// </summary>
+    /// <returns></returns>
     public bool HandlingStatusEffects()
     {
         if (stunned > 0)
@@ -494,11 +498,22 @@ public class Card : MonoBehaviour
         return false;
     }
 
+    public void ManageEffects()
+    {
+        foreach (var move in moves)
+        {
+            if (move.EffectIsActive())
+            {
+                var modifier = move.UpdateEffect();
+            }
+        }
+    }
+
     private void CancelAllEffects()
     {
         stunned = 0;
         stunEffect.SetActive(false);
-        statModifier.Clear();
+        fieldPosition.statModifier.Clear();
     }
 
     public void RegenerateDefense()
@@ -506,7 +521,7 @@ public class Card : MonoBehaviour
         if(currentDefense < defense)
         {
             currentDefense = defense;
-            foreach (StatModifier statModifier in statModifier)
+            foreach (StatModifier statModifier in fieldPosition.statModifier)
             {
                 statModifier.currentDefense = statModifier.defense;
             }
@@ -517,14 +532,16 @@ public class Card : MonoBehaviour
 
     public void AddModifier(StatModifier statModifier)
     {
-        this.statModifier.Add(statModifier);
+        fieldPosition.statModifier.Add(statModifier);
         UpdateText();
     }
 
     private int GetDefenseModifier()
     {
         int defenceModifier = 0;
-        foreach(StatModifier statModifier in statModifier)
+        if(fieldPosition == null) return defenceModifier;
+
+        foreach(StatModifier statModifier in fieldPosition.statModifier)
         {
             defenceModifier += statModifier.currentDefense;
         }
@@ -540,7 +557,7 @@ public class Card : MonoBehaviour
 
             var remainingDamage = CurrentDefensePoints - damage;
             currentDefense = 0;
-            foreach (StatModifier statModifier in statModifier)
+            foreach (StatModifier statModifier in fieldPosition.statModifier)
             {
                 if(statModifier.currentDefense > 0)
                 {
@@ -563,7 +580,7 @@ public class Card : MonoBehaviour
             }
             else
             {
-                foreach (StatModifier statModifier in statModifier)
+                foreach (StatModifier statModifier in fieldPosition.statModifier)
                 {
                     if(statModifier.currentDefense > 0)
                     {

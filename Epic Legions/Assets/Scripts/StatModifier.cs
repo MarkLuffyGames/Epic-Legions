@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class StatModifier
@@ -14,4 +15,6 @@ public class StatModifier
 
         this.durability = durability;
     }
+
+
 }

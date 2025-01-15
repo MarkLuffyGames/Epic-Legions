@@ -321,7 +321,11 @@ public class DuelManager : NetworkBehaviour
             return;
         }
         SetHeroTurnClientRpc(HeroCardsOnTheField[heroTurnIndex].FieldPosition.PositionIndex, GetClientIdForHero(HeroCardsOnTheField[heroTurnIndex]));
-        if(!IsHost)heroTurn.HandlingStatusEffects();
+        if (!IsHost)
+        {
+            heroTurn.HandlingStatusEffects();
+            ManageEffects();
+        }
     }
 
     private ulong GetClientIdForHero(Card heroCard)
@@ -356,11 +360,29 @@ public class DuelManager : NetworkBehaviour
 
         heroTurn = card;
 
-        if(heroTurn.HandlingStatusEffects())
+        ManageEffects();
+        if (heroTurn.HandlingStatusEffects())
         {
             heroTurn.EndTurn();
             if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         }
+    }
+
+    private void ManageEffects()
+    {
+        heroTurn.ManageEffects();
+
+        foreach (var fieldPosition in player1Manager.GetFieldPositionList())
+        {
+            fieldPosition.statModifier.RemoveAll(stat => stat.durability <= 0);
+        }
+
+        foreach (var fieldPosition in player2Manager.GetFieldPositionList())
+        {
+            fieldPosition.statModifier.RemoveAll(stat => stat.durability <= 0);
+        }
+
+        heroTurn.UpdateText();
     }
 
     public Card GetHeroTurn()
@@ -373,7 +395,7 @@ public class DuelManager : NetworkBehaviour
         movementToUseIndex = movementToUse;
         SetMovementToUseServerRpc(movementToUse);
 
-        if (heroTurn.Moves[movementToUse].NeedTarget)
+        if (heroTurn.Moves[movementToUse].MoveSO.NeedTarget)
         {
             SelectTarget(movementToUse);
         }
@@ -410,7 +432,7 @@ public class DuelManager : NetworkBehaviour
                 targets.Add(player2Manager.GetFieldPositionList()[i].Card);
             }
 
-            if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroTurn.Moves[movementToUseIndex].MoveType == MoveType.MeleeAttack)
+            if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroTurn.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
             {
                 return targets;
             }
@@ -432,7 +454,7 @@ public class DuelManager : NetworkBehaviour
 
         if (playerRoles[clientId] == 1)
         {
-            if (heroTurn.Moves[movementToUseIndex].MoveType != MoveType.PositiveEffect)
+            if (heroTurn.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
             {
                 Card card = player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
                 yield return HeroAttack(card, 1);
@@ -446,7 +468,7 @@ public class DuelManager : NetworkBehaviour
         }
         else if (playerRoles[clientId] == 2)
         {
-            if (heroTurn.Moves[movementToUseIndex].MoveType != MoveType.PositiveEffect)
+            if (heroTurn.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
             {
                 Card card = player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
                 yield return HeroAttack(card, 2);
@@ -478,36 +500,36 @@ public class DuelManager : NetworkBehaviour
 
 
         //Aplicar afecto de ataque si es necesario.
-        if(heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.SingleTarget)
+        if(heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
         {
-            heroTurn.Moves[movementToUseIndex].MoveEffect.ActivateEffect(heroTurn, cardToAttack);
+            heroTurn.Moves[movementToUseIndex].ActivateEffect(heroTurn, cardToAttack);
         }
-        else if(heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.TargetLine)
+        else if(heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
         {
-            heroTurn.Moves[movementToUseIndex].MoveEffect.ActivateEffect(heroTurn, GetTargetsForMove(cardToAttack));
+            heroTurn.Moves[movementToUseIndex].ActivateEffect(heroTurn, GetTargetsForMovement(cardToAttack));
         }
 
 
-        if (heroTurn.Moves[movementToUseIndex].Damage != 0)
+        if (heroTurn.Moves[movementToUseIndex].MoveSO.Damage != 0)
         {
 
             //Animacion de daño del oponente
-            cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].VisualEffect);
+            cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
             yield return new WaitForSeconds(1);
 
             //Aplicar daño al opnente.
-            if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].Damage))
+            if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))
             {
                 SendCardToGraveyard(cardToAttack, player);
             }
         }
 
         //Animacion de efecto
-        if (heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.TargetLine)
+        if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
         {
-            foreach(var card in GetTargetsForMove(cardToAttack))
+            foreach(var card in GetTargetsForMovement(cardToAttack))
             {
-                card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].VisualEffect);
+                card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
             }
         }
 
@@ -517,9 +539,9 @@ public class DuelManager : NetworkBehaviour
         if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
-    private List<Card> GetTargetsForMove(Card cardToAttack)
+    private List<Card> GetTargetsForMovement(Card cardToAttack)
     {
-        if(heroTurn.Moves[movementToUseIndex].TargetsType == TargetsType.TargetLine)
+        if(heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
         {
 
             if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
@@ -566,7 +588,7 @@ public class DuelManager : NetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId == attackerClientId)
         {
 
-            if (heroTurn.Moves[movementToUseIndex].MoveType != MoveType.PositiveEffect)
+            if (heroTurn.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
             {
                 Card card = player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
                 yield return HeroAttack(card, 1);
@@ -579,7 +601,7 @@ public class DuelManager : NetworkBehaviour
         }
         else
         {
-            if (heroTurn.Moves[movementToUseIndex].MoveType != MoveType.PositiveEffect)
+            if (heroTurn.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
             {
                 Card card = player1Manager.GetFieldPositionList()[fieldPositionIndex].Card;
                 yield return HeroAttack(card, 2);

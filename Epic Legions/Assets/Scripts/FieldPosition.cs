@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldPosition : MonoBehaviour
@@ -7,6 +8,7 @@ public class FieldPosition : MonoBehaviour
     private Color originalColor;
     [SerializeField] private Color isFreeColor;
     [SerializeField] private int positionIndex;
+    public List<StatModifier> statModifier;
 
     public Card Card => card;
     public int PositionIndex => positionIndex;
@@ -15,6 +17,7 @@ public class FieldPosition : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
+        statModifier = new List<StatModifier>();
     }
 
     /// <summary>
