@@ -243,6 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 7
+  statModifier: []
 --- !u!1 &62251279
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 5
+  statModifier: []
 --- !u!1 &107312401
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,6 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 6
+  statModifier: []
 --- !u!1 &185299982
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,6 +755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 9
+  statModifier: []
 --- !u!1 &185332043
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,6 +911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 10
+  statModifier: []
 --- !u!1 &238012930
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 9
+  statModifier: []
 --- !u!1 &239649237
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,6 +1210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 13
+  statModifier: []
 --- !u!1 &310397388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1601,6 +1608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 7
+  statModifier: []
 --- !u!1 &346859191
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,6 +1981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 13
+  statModifier: []
 --- !u!1 &432821377
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,6 +2106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 6
+  statModifier: []
 --- !u!1 &524639325
 GameObject:
   m_ObjectHideFlags: 0
@@ -2221,6 +2231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 3
+  statModifier: []
 --- !u!1 &530183223
 GameObject:
   m_ObjectHideFlags: 0
@@ -2424,6 +2435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 14
+  statModifier: []
 --- !u!1 &549059841
 GameObject:
   m_ObjectHideFlags: 0
@@ -2548,6 +2560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 11
+  statModifier: []
 --- !u!1 &599998950
 GameObject:
   m_ObjectHideFlags: 0
@@ -2672,6 +2685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 3
+  statModifier: []
 --- !u!1 &632953887
 GameObject:
   m_ObjectHideFlags: 0
@@ -2796,6 +2810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 4
+  statModifier: []
 --- !u!1 &654837888
 GameObject:
   m_ObjectHideFlags: 0
@@ -3056,6 +3071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 10
+  statModifier: []
 --- !u!1 &739325800
 GameObject:
   m_ObjectHideFlags: 0
@@ -3390,6 +3406,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 8
+  statModifier: []
 --- !u!1 &773092068
 GameObject:
   m_ObjectHideFlags: 0
@@ -3469,7 +3486,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   player1Manager: {fileID: 1302324177}
   player2Manager: {fileID: 739325801}
-  deckCardIds: 000000000000000000000000000000000000000000000000010000000100000001000000010000000100000001000000020000000200000002000000020000000200000002000000030000000300000003000000030000000300000003000000040000000400000004000000040000000400000004000000050000000500000005000000050000000500000005000000060000000600000006000000060000000600000006000000
+  deckCardIds: 0000000000000000000000000000000000000000000000000000000000000000000000000000000005000000050000000500000005000000050000000500000005000000050000000500000005000000
   duelPhaseText: {fileID: 1502091619}
   heroTurn: {fileID: 0}
   movementToUseIndex: 0
@@ -3720,6 +3737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 2
+  statModifier: []
 --- !u!1 &952224446
 GameObject:
   m_ObjectHideFlags: 0
@@ -3965,6 +3983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 4
+  statModifier: []
 --- !u!1 &979212335
 GameObject:
   m_ObjectHideFlags: 0
@@ -4089,6 +4108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 8
+  statModifier: []
 --- !u!1 &980378220
 GameObject:
   m_ObjectHideFlags: 0
@@ -4259,6 +4279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 1
+  statModifier: []
 --- !u!1 &1185561293
 GameObject:
   m_ObjectHideFlags: 0
@@ -4710,6 +4731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 12
+  statModifier: []
 --- !u!1 &1458365888
 GameObject:
   m_ObjectHideFlags: 0
@@ -4834,6 +4856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 0
+  statModifier: []
 --- !u!1 &1479318184
 GameObject:
   m_ObjectHideFlags: 0
@@ -5569,6 +5592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 5
+  statModifier: []
 --- !u!1 &1813710116
 GameObject:
   m_ObjectHideFlags: 0
@@ -5693,6 +5717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 0
+  statModifier: []
 --- !u!1 &1864424657
 GameObject:
   m_ObjectHideFlags: 0
@@ -5817,6 +5842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 14
+  statModifier: []
 --- !u!1 &1866308401
 GameObject:
   m_ObjectHideFlags: 0
@@ -5941,6 +5967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 2
+  statModifier: []
 --- !u!1 &1870913489
 GameObject:
   m_ObjectHideFlags: 0
@@ -6327,6 +6354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 11
+  statModifier: []
 --- !u!1 &1952202792
 GameObject:
   m_ObjectHideFlags: 0
@@ -6526,6 +6554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0}
   positionIndex: 1
+  statModifier: []
 --- !u!1 &2008372520
 GameObject:
   m_ObjectHideFlags: 0
@@ -6702,6 +6731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   positionIndex: 12
+  statModifier: []
 --- !u!1 &2117549895
 GameObject:
   m_ObjectHideFlags: 0
@@ -6968,6 +6998,10 @@ PrefabInstance:
     - target: {fileID: 4297292225833600563, guid: c3267af3c00828f43b7aceee65680e6a, type: 3}
       propertyPath: m_Name
       value: CardTable
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794227955876819923, guid: c3267af3c00828f43b7aceee65680e6a, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

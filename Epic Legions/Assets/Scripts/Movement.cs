@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Movement
 {
     private MoveSO moveSO;
-    public StatModifier statModifier;
+    public Effect effect;
     public MoveSO MoveSO => moveSO;
 
     public Movement(MoveSO moveSO)
@@ -15,17 +15,23 @@ public class Movement
 
     public void ActivateEffect(Card caster, Card target)
     {
-        moveSO.MoveEffect.ActivateEffect(caster, target, this);
+        if (moveSO.MoveEffect != null)
+        {
+            moveSO.MoveEffect.ActivateEffect(caster, target, this);
+        }
     }
 
     public void ActivateEffect(Card caster, List<Card> target)
     {
-        moveSO.MoveEffect.ActivateEffect(caster, target, this);
+        if (moveSO.MoveEffect != null)
+        {
+            moveSO.MoveEffect.ActivateEffect(caster, target, this);
+        }
     }
 
     public bool EffectIsActive()
     {
-        if (statModifier == null || statModifier.durability == 0)
+        if (effect == null || effect.durability == 0)
         {
             return false;
         }
@@ -33,8 +39,11 @@ public class Movement
         return true;
     }
 
-    public StatModifier UpdateEffect()
+    public void UpdateEffect()
     {
-        return moveSO.MoveEffect.UpdateEffect(this);
+        if (moveSO.MoveEffect != null)
+        {
+            moveSO.MoveEffect.UpdateEffect(this);
+        }
     }
 }

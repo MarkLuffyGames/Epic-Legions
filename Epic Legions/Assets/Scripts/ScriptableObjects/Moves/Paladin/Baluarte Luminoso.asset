@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Baluarte Luminoso
   damage: 0
-  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
+  moveEffect: {fileID: 11400000, guid: a0c818b7459fb6d48a80fa52ab970b9e, type: 2}
   needTarget: 0
-  moveType: 0
+  moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffect: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
+  effectDescription: "Genera un escudo sagrado que absorbe una cantidad fija de da\xF1o
+    recibido durante 3 turnos.\t"

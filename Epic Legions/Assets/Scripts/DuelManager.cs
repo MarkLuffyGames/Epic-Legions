@@ -523,16 +523,21 @@ public class DuelManager : NetworkBehaviour
                 SendCardToGraveyard(cardToAttack, player);
             }
         }
-
-        //Animacion de efecto
-        if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
+        else
         {
-            foreach(var card in GetTargetsForMovement(cardToAttack))
+            //Animacion de efecto
+            if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
-                card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+            }
+            else if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
+            {
+                foreach (var card in GetTargetsForMovement(cardToAttack))
+                {
+                    card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                }
             }
         }
-
 
         movementToUseIndex = -1;
         heroTurn.EndTurn();

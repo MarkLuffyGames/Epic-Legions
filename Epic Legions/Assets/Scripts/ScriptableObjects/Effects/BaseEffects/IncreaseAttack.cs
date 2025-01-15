@@ -1,20 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Stun", menuName = "Epic Legions/Card Effects/ Stun")]
-public class Stun : CardEffect
+[CreateAssetMenu(fileName = "Increase Attack", menuName = "Epic Legions/Card Effects/ Increase Attack")]
+public class IncreaseAttack : CardEffect
 {
     public override void ActivateEffect(Card caster, Card target, Movement movement)
     {
-        if (target.CurrentDefensePoints == 0)
-        {
-            if (target.stunned == 0) target.ToggleStunned();
-        }
+        throw new System.NotImplementedException();
     }
 
     public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
     {
-        Debug.LogWarning("Accediendo a un metodo no implemantado");
+        throw new System.NotImplementedException();
     }
 
     public override void UpdateEffect(Movement movement)

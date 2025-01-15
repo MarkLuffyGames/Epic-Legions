@@ -8,7 +8,7 @@ public class FieldPosition : MonoBehaviour
     private Color originalColor;
     [SerializeField] private Color isFreeColor;
     [SerializeField] private int positionIndex;
-    public List<StatModifier> statModifier;
+    public List<Effect> statModifier;
 
     public Card Card => card;
     public int PositionIndex => positionIndex;
@@ -17,7 +17,7 @@ public class FieldPosition : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
-        statModifier = new List<StatModifier>();
+        statModifier = new List<Effect>();
     }
 
     /// <summary>

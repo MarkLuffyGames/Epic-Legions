@@ -432,6 +432,9 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
+        amountDamage -= GetDamageAbsorbed();
+        if(amountDamage < 0) amountDamage = 0;
+
         int remainingDamage = ReceiveDamageToShield(amountDamage);
         
         if(remainingDamage > 0)
@@ -504,7 +507,7 @@ public class Card : MonoBehaviour
         {
             if (move.EffectIsActive())
             {
-                var modifier = move.UpdateEffect();
+                move.UpdateEffect();
             }
         }
     }
@@ -521,7 +524,7 @@ public class Card : MonoBehaviour
         if(currentDefense < defense)
         {
             currentDefense = defense;
-            foreach (StatModifier statModifier in fieldPosition.statModifier)
+            foreach (Effect statModifier in fieldPosition.statModifier)
             {
                 statModifier.currentDefense = statModifier.defense;
             }
@@ -530,7 +533,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void AddModifier(StatModifier statModifier)
+    public void AddModifier(Effect statModifier)
     {
         fieldPosition.statModifier.Add(statModifier);
         UpdateText();
@@ -541,12 +544,25 @@ public class Card : MonoBehaviour
         int defenceModifier = 0;
         if(fieldPosition == null) return defenceModifier;
 
-        foreach(StatModifier statModifier in fieldPosition.statModifier)
+        foreach(Effect effect in fieldPosition.statModifier)
         {
-            defenceModifier += statModifier.currentDefense;
+            defenceModifier += effect.currentDefense;
         }
 
         return defenceModifier;
+    }
+
+    private int GetDamageAbsorbed()
+    {
+        int damageAbsorbed = 0;
+        if (fieldPosition == null) return damageAbsorbed;
+
+        foreach (Effect effect in fieldPosition.statModifier)
+        {
+            damageAbsorbed += effect.absorbDamage;
+        }
+
+        return damageAbsorbed;
     }
 
     private int ReceiveDamageToShield(int damage)
@@ -557,7 +573,7 @@ public class Card : MonoBehaviour
 
             var remainingDamage = CurrentDefensePoints - damage;
             currentDefense = 0;
-            foreach (StatModifier statModifier in fieldPosition.statModifier)
+            foreach (Effect statModifier in fieldPosition.statModifier)
             {
                 if(statModifier.currentDefense > 0)
                 {
@@ -580,7 +596,7 @@ public class Card : MonoBehaviour
             }
             else
             {
-                foreach (StatModifier statModifier in fieldPosition.statModifier)
+                foreach (Effect statModifier in fieldPosition.statModifier)
                 {
                     if(statModifier.currentDefense > 0)
                     {
