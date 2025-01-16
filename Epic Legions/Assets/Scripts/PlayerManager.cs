@@ -189,4 +189,19 @@ public class PlayerManager : MonoBehaviour
 
         return cards;
     }
+
+    public List<Card> GetAllCardInField(Card card)
+    {
+        List<Card> cards = new List<Card>();
+
+        foreach(var field in fieldPositionList)
+        {
+            if(field.Card != null)
+            {
+                cards.Add(field.Card);
+            }
+        }
+
+        return cards;
+    }
 }

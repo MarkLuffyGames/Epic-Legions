@@ -60,6 +60,7 @@ public class Card : MonoBehaviour
     private FieldPosition fieldPosition;
     public bool isAttackable;
 
+    public int HealtPoint => healt;
     public int CurrentHealtPoints => currentHealt;
     public int CurrentDefensePoints => currentDefense + GetDefenseModifier();
     public int CurrentSpeedPoints => currentSpeed;
@@ -612,6 +613,26 @@ public class Card : MonoBehaviour
         }
 
         return 0;   
+    }
+
+    public void ToHeal(int amount)
+    {
+        ShowTextToHeal(healt - currentHealt < amount ? healt - currentHealt : amount);
+        currentHealt += amount;
+        if(currentHealt > healt)currentHealt = healt;
+    }
+
+    private void ShowTextToHeal(int amount)
+    {
+        Debug.Log($"ShowTextToHeal +{amount}");
+        var position = healtText.transform.position;
+        position += Vector3.up;
+
+        var popUp = Instantiate(energyPopUpPrefab, healtText.transform.position, Quaternion.identity);
+        var text = popUp.GetComponentInChildren<TextMeshProUGUI>();
+        text.color = Color.green;
+        text.text = $"+{amount}";
+        text.color = Color.red;
     }
 }
 

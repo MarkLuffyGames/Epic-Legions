@@ -18,6 +18,6 @@ MonoBehaviour:
   needTarget: 0
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
+  visualEffect: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
   effectDescription: "Genera un escudo sagrado que absorbe una cantidad fija de da\xF1o
     recibido durante 3 turnos.\t"

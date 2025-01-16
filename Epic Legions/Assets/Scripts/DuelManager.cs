@@ -504,7 +504,7 @@ public class DuelManager : NetworkBehaviour
         {
             heroTurn.Moves[movementToUseIndex].ActivateEffect(heroTurn, cardToAttack);
         }
-        else if(heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
+        else
         {
             heroTurn.Moves[movementToUseIndex].ActivateEffect(heroTurn, GetTargetsForMovement(cardToAttack));
         }
@@ -530,7 +530,7 @@ public class DuelManager : NetworkBehaviour
             {
                 cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
             }
-            else if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
+            else
             {
                 foreach (var card in GetTargetsForMovement(cardToAttack))
                 {
@@ -556,6 +556,17 @@ public class DuelManager : NetworkBehaviour
             else
             {
                 return player2Manager.GetLineForCard(cardToAttack);
+            }
+        }
+        else if(heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Midfield)
+        {
+            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            {
+                return player1Manager.GetAllCardInField(cardToAttack);
+            }
+            else
+            {
+                return player2Manager.GetAllCardInField(cardToAttack);
             }
         }
 

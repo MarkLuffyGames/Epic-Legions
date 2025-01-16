@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Luz de Esperanza
   damage: 0
-  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
+  moveEffect: {fileID: 11400000, guid: cd6f61260300ae44189ee71d4a629011, type: 2}
   needTarget: 0
-  moveType: 0
-  targetsType: 0
-  visualEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  moveType: 2
+  targetsType: 2
+  visualEffect: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
+  effectDescription: Cura ligeramente a todos los aliados.

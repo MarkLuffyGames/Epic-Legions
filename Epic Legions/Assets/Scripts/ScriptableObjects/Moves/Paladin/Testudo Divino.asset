@@ -18,6 +18,6 @@ MonoBehaviour:
   needTarget: 0
   moveType: 2
   targetsType: 1
-  visualEffect: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
+  visualEffect: {fileID: 7155335147208632822, guid: 97c43495f80a3244fad1301dfafbe252, type: 3}
   effectDescription: Crea un muro de escudos que aumenta su defensa y la de los aliados
     en la misma fila en 10 durante 2 turnos.
