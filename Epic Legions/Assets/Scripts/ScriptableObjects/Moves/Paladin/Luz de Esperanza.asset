@@ -19,4 +19,4 @@ MonoBehaviour:
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  effectDescription: Cura ligeramente a todos los aliados.
+  effectDescription: Cura ligeramente a todos los aliados en el campo.

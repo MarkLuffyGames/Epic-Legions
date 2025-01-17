@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Embate Sagrado
   m_EditorClassIdentifier: 
   moveName: Embate Sagrado
-  damage: 20
+  damage: 30
   moveEffect: {fileID: 0}
   needTarget: 1
   moveType: 0

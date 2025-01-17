@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Golpe Escudado
   m_EditorClassIdentifier: 
   moveName: Golpe Escudado
-  damage: 5
+  damage: 10
   moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
   needTarget: 1
   moveType: 0

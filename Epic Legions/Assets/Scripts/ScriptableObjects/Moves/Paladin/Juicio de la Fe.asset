@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Juicio de la Fe
   m_EditorClassIdentifier: 
   moveName: Juicio de la Fe
-  damage: 0
-  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
-  needTarget: 0
+  damage: 20
+  moveEffect: {fileID: 0}
+  needTarget: 1
   moveType: 0
-  targetsType: 0
+  targetsType: 1
   visualEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  effectDescription: "Un ataque masivo que da\xF1a a todos los enemigos en una l\xEDnea"

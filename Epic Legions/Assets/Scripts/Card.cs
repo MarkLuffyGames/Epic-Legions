@@ -624,7 +624,6 @@ public class Card : MonoBehaviour
 
     private void ShowTextToHeal(int amount)
     {
-        Debug.Log($"ShowTextToHeal +{amount}");
         var position = healtText.transform.position;
         position += Vector3.up;
 

@@ -510,20 +510,45 @@ public class DuelManager : NetworkBehaviour
         }
 
 
-        if (heroTurn.Moves[movementToUseIndex].MoveSO.Damage != 0)
+        if (heroTurn.Moves[movementToUseIndex].MoveSO.Damage != 0) //Ataque de daño.
         {
 
             //Animacion de daño del oponente
-            cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
-            yield return new WaitForSeconds(1);
-
-            //Aplicar daño al opnente.
-            if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))
+            if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
-                SendCardToGraveyard(cardToAttack, player);
+                cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+
+                yield return new WaitForSeconds(1);
+
+                //Aplicar daño al opnente.
+                if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))
+                {
+                    SendCardToGraveyard(cardToAttack, player);
+                }
             }
+            else
+            {
+                var targets = GetTargetsForMovement(cardToAttack);
+                foreach (var card in targets)
+                {
+                    Debug.Log(card.FieldPosition);
+                    card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                }
+
+                yield return new WaitForSeconds(1);
+
+                foreach (var card in targets) 
+                {
+                    //Aplicar daño al opnente.
+                    if (card.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))
+                    {
+                        SendCardToGraveyard(card, player);
+                    }
+                }
+            }
+            
         }
-        else
+        else //Ataque de efecto
         {
             //Animacion de efecto
             if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
