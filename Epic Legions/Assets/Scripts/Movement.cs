@@ -46,4 +46,12 @@ public class Movement
             moveSO.MoveEffect.UpdateEffect(this);
         }
     }
+
+    public void CancelEffect()
+    {
+        if (moveSO.MoveEffect != null)
+        {
+            moveSO.MoveEffect.UpdateEffect(this);
+        }
+    }
 }

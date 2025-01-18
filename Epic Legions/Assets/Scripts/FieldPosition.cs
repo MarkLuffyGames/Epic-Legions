@@ -53,6 +53,7 @@ public class FieldPosition : MonoBehaviour
         card.MoveToPosition(Vector3.up * 0.01f, 20, false, true);
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 180), 20);
         card.SetSortingOrder(0);
+        card.ToGraveyard();
         card.SetFieldPosition(null);
         card = null;
     }

@@ -17,6 +17,11 @@ public class Stun : CardEffect
         Debug.LogWarning("Accediendo a un metodo no implemantado");
     }
 
+    public override void DeactivateEffect(Movement movement)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void UpdateEffect(Movement movement)
     {
         throw new System.NotImplementedException();

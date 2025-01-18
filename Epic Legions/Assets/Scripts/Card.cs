@@ -402,10 +402,10 @@ public class Card : MonoBehaviour
         ResetSize();
     }
 
-    public void ActiveAttackableTarget()
+    public void ActiveAttackableTarget(Color color)
     {
         cardSelected.enabled = true;
-        cardSelectedImage.color = Color.red;
+        cardSelectedImage.color = color;
         isAttackable = true;
     }
 
@@ -420,10 +420,16 @@ public class Card : MonoBehaviour
 
     }
 
-    public void AnimationReceivingMovement(GameObject visualEffect)
+    public void AnimationReceivingMovement(Movement movement)
     {
         //Efecto de daño.
-        Instantiate(visualEffect, fieldPosition.transform.position, Quaternion.identity);
+        Instantiate(movement.MoveSO.VisualEffect, fieldPosition.transform.position, Quaternion.identity);
+
+        var protector = HasProtector();
+        if (protector != null && protector.hasProtector && movement.MoveSO.Damage > 0)
+        {
+            protector.damageReceiver.ProtectAlly(fieldPosition);
+        }
     }
 
     /// <summary>
@@ -433,6 +439,12 @@ public class Card : MonoBehaviour
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
     public bool ReceiveDamage(int amountDamage)
     {
+        var protector = HasProtector();
+        if (protector != null && protector.hasProtector)
+        {
+            return protector.damageReceiver.ReceiveDamage(amountDamage);
+        }
+
         amountDamage -= GetDamageAbsorbed();
         if(amountDamage < 0) amountDamage = 0;
 
@@ -445,18 +457,28 @@ public class Card : MonoBehaviour
 
             if (currentHealt <= 0)
             {
-                currentDefense = defense;
-                currentHealt = healt;
-                currentSpeed = speed;
-                UpdateText();
-                CancelAllEffects();
                 return true;
             }
         }
 
+        MoveToLastPosition();
+
         UpdateText();
 
         return false;
+    }
+
+    public void ProtectAlly(FieldPosition position)
+    {
+        MoveToPosition(position.transform.position + Vector3.up * 0.1f, speed, true,false);
+    }
+    public void ToGraveyard()
+    {
+        currentDefense = defense;
+        currentHealt = healt;
+        currentSpeed = speed;
+        UpdateText();
+        CancelAllEffects();
     }
 
     private void ShowTextDamage(bool isDefence, int amountDamage)
@@ -518,6 +540,10 @@ public class Card : MonoBehaviour
         stunned = 0;
         stunEffect.SetActive(false);
         fieldPosition.statModifier.Clear();
+        foreach (var move in moves)
+        {
+            if(move.effect != null) move.CancelEffect();
+        }
     }
 
     public void RegenerateDefense()
@@ -534,7 +560,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void AddModifier(Effect statModifier)
+    public void AddEffect(Effect statModifier)
     {
         fieldPosition.statModifier.Add(statModifier);
         UpdateText();
@@ -564,6 +590,16 @@ public class Card : MonoBehaviour
         }
 
         return damageAbsorbed;
+    }
+
+    private Effect HasProtector()
+    {
+        foreach (Effect effect in fieldPosition.statModifier)
+        {
+            if(effect.hasProtector) return effect;
+        }
+
+        return null;
     }
 
     private int ReceiveDamageToShield(int damage)

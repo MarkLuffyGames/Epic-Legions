@@ -412,7 +412,14 @@ public class DuelManager : NetworkBehaviour
 
         foreach (Card card in ObtainTargets())
         {
-            card.ActiveAttackableTarget();
+            if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
+            {
+                card.ActiveAttackableTarget(Color.green);
+            }
+            else
+            {
+                card.ActiveAttackableTarget(Color.red);
+            }
         }
     }
 
@@ -425,19 +432,33 @@ public class DuelManager : NetworkBehaviour
     private List<Card> ObtainTargets() //Ajustar para obtener los objetivos para cada tipo de ataque.
     {
         List<Card> targets = new List<Card>();
-        for (int i = 0; i < player2Manager.GetFieldPositionList().Count; i++)
+
+        if(heroTurn.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
-            if (player2Manager.GetFieldPositionList()[i].Card != null)
+            for (int i = 0; i < player2Manager.GetFieldPositionList().Count; i++)
             {
-                targets.Add(player2Manager.GetFieldPositionList()[i].Card);
-            }
+                if (player2Manager.GetFieldPositionList()[i].Card != null)
+                {
+                    targets.Add(player2Manager.GetFieldPositionList()[i].Card);
+                }
 
-            if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroTurn.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
-            {
-                return targets;
+                if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && heroTurn.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+                {
+                    return targets;
+                }
             }
-
         }
+        else
+        {
+            foreach (var position in player1Manager.GetFieldPositionList())
+            {
+                if (position.Card != null && position.Card != heroTurn)
+                {
+                    targets.Add(position.Card);
+                }
+            }
+        }
+        
 
         return targets;
     }
@@ -497,6 +518,13 @@ public class DuelManager : NetworkBehaviour
                 fieldPosition.Card.DesactiveAttackableTarget();
             }
         }
+        foreach (var fieldPosition in player1Manager.GetFieldPositionList())
+        {
+            if (fieldPosition.Card != null)
+            {
+                fieldPosition.Card.DesactiveAttackableTarget();
+            }
+        }
 
 
         //Aplicar afecto de ataque si es necesario.
@@ -516,14 +544,14 @@ public class DuelManager : NetworkBehaviour
             //Animacion de daño del oponente
             if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
-                cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex]);
 
                 yield return new WaitForSeconds(1);
 
                 //Aplicar daño al opnente.
                 if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))
                 {
-                    SendCardToGraveyard(cardToAttack, player);
+                    SendCardToGraveyard();
                 }
             }
             else
@@ -532,7 +560,7 @@ public class DuelManager : NetworkBehaviour
                 foreach (var card in targets)
                 {
                     Debug.Log(card.FieldPosition);
-                    card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                    card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex]);
                 }
 
                 yield return new WaitForSeconds(1);
@@ -542,7 +570,7 @@ public class DuelManager : NetworkBehaviour
                     //Aplicar daño al opnente.
                     if (card.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))
                     {
-                        SendCardToGraveyard(card, player);
+                        SendCardToGraveyard();
                     }
                 }
             }
@@ -553,13 +581,13 @@ public class DuelManager : NetworkBehaviour
             //Animacion de efecto
             if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
-                cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex]);
             }
             else
             {
                 foreach (var card in GetTargetsForMovement(cardToAttack))
                 {
-                    card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex].MoveSO.VisualEffect);
+                    card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex]);
                 }
             }
         }
@@ -598,22 +626,22 @@ public class DuelManager : NetworkBehaviour
         return null;
     }
 
-    private void SendCardToGraveyard(Card card, int player)
+    private void SendCardToGraveyard()
     {
-        Transform playerGraveyard = null;
-        bool isPlayer = false;
-        if (player == 1)
+        foreach(var target in player1Manager.GetFieldPositionList())
         {
-            playerGraveyard = player2Manager.GetGraveyard();
-            isPlayer = false;
+            if(target.Card != null && target.Card.CurrentHealtPoints <= 0)
+            {
+                target.DestroyCard(player1Manager.GetGraveyard(), true);
+            }
         }
-        else if (player == 2)
+        foreach (var target in player2Manager.GetFieldPositionList())
         {
-            playerGraveyard = player1Manager.GetGraveyard();
-            isPlayer = true;
+            if (target.Card != null && target.Card.CurrentHealtPoints <= 0)
+            {
+                target.DestroyCard(player2Manager.GetGraveyard(), false);
+            }
         }
-
-        card.FieldPosition.DestroyCard(playerGraveyard, isPlayer);
     }
 
     [ClientRpc]

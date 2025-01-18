@@ -6,19 +6,27 @@ public class AbsorbDamage : CardEffect
 {
     [SerializeField] private int amount;
     [SerializeField] private int numberTurns;
+
+    public int Amount => amount;
+    public int NumberTurns => numberTurns;
     public override void ActivateEffect(Card caster, Card target, Movement movement)
     {
-        movement.effect = new Effect(0, amount, numberTurns);
-        target.AddModifier(movement.effect);
+        movement.effect = new Effect(this);
+        target.AddEffect(movement.effect);
     }
 
     public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
     {
-        movement.effect = new Effect(0, amount, numberTurns);
+        movement.effect = new Effect(this);
         foreach (Card card in target)
         {
-            card.AddModifier(movement.effect);
+            card.AddEffect(movement.effect);
         }
+    }
+
+    public override void DeactivateEffect(Movement movement)
+    {
+        throw new System.NotImplementedException();
     }
 
     public override void UpdateEffect(Movement movement)

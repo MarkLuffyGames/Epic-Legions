@@ -7,16 +7,29 @@ public class Effect
     public int defense;
     public int currentDefense;
     public int absorbDamage;
+    public Card damageReceiver;
+    public bool hasProtector;
 
     public int durability;
-    public Effect (int defense, int absorbDamage, int durability)
+
+    public Effect(CardEffect cardEffect)
     {
-        this.defense = defense;
-        currentDefense = defense;
-        this.absorbDamage = absorbDamage;
-
-        this.durability = durability;
+        if(cardEffect is AbsorbDamage absorbDamage)
+        {
+            this.absorbDamage = absorbDamage.Amount;
+            durability = absorbDamage.NumberTurns;
+        }
+        else if(cardEffect is IncreaseDefense increaseDefense)
+        {
+            defense = increaseDefense.Amount;
+            currentDefense = increaseDefense.Amount;
+        }
+        else if(cardEffect is TransferDamage transferDamage)
+        {
+            damageReceiver = transferDamage.Caster;
+            durability = transferDamage.NumberTurns;
+            hasProtector = true;
+        }
     }
-
 
 }

@@ -18,6 +18,11 @@ public class Heal : CardEffect
         }
     }
 
+    public override void DeactivateEffect(Movement movement)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void UpdateEffect(Movement movement)
     {
         throw new System.NotImplementedException();

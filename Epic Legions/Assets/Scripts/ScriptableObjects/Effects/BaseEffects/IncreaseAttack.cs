@@ -14,6 +14,11 @@ public class IncreaseAttack : CardEffect
         throw new System.NotImplementedException();
     }
 
+    public override void DeactivateEffect(Movement movement)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void UpdateEffect(Movement movement)
     {
         throw new System.NotImplementedException();
