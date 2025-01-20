@@ -18,6 +18,7 @@ MonoBehaviour:
   needTarget: 1
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffect: {fileID: 3153472991145048103, guid: 3407e378c048bb5438424b28c7740b48, type: 3}
+  visualEffectHit: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
   effectDescription: "Aturde al objetivo si no le queda defensa cuando este ataque
     impacta, dej\xE1ndolo inm\xF3vil durante un turno."

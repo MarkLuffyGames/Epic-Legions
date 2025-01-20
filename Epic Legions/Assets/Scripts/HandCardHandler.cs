@@ -34,7 +34,7 @@ public class HandCardHandler : MonoBehaviour
 
                 var x = ((i + 1) * distance) - distance;
                 x -= (distance * (cardsList.Count - 1)) / 2f;
-                cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, 0), 20, false, true);
+                StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, 0), 20, false, true));
 
                 var rotationX = IsPlayer ? 70 : -90;
                 cardsList[i].RotateToAngle(new Vector3(rotationX, 0, 0), 20);
@@ -101,7 +101,7 @@ public class HandCardHandler : MonoBehaviour
             {
                 if (!card.IsDragging())
                 {
-                    card.MoveToPosition(card.transform.localPosition + Vector3.back * 1.3f, 20, true, true);
+                    StartCoroutine(card.MoveToPosition(card.transform.localPosition + Vector3.back * 1.3f, 20, true, true));
                     if(card.IsHighlight())card.RemoveHighlight();
                 }
             }

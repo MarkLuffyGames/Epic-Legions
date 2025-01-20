@@ -23,6 +23,7 @@ public class Effect
         {
             defense = increaseDefense.Amount;
             currentDefense = increaseDefense.Amount;
+            durability = increaseDefense.NumberTurns;
         }
         else if(cardEffect is TransferDamage transferDamage)
         {

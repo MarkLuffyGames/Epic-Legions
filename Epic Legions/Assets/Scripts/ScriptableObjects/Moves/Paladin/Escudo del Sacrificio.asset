@@ -19,5 +19,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
+  visualEffectHit: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
   effectDescription: "Transfiere el da\xF1o recibido por un aliado hacia el Palad\xEDn
     durante 2 turnos"

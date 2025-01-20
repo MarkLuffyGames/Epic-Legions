@@ -306,7 +306,7 @@ public class CardSelector : MonoBehaviour
     {
         if (fieldPosition.IsFree())
         {
-            currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false);
+            StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
             currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
         }
     }

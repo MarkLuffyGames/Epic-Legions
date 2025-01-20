@@ -22,5 +22,5 @@ MonoBehaviour:
   speed: 10
   energy: 10
   moves:
-  - {fileID: 11400000, guid: b3868733cb94889449eb0dcd256b50ee, type: 2}
+  - {fileID: 11400000, guid: 67c2132140600a048963086b1000915b, type: 2}
   - {fileID: 11400000, guid: 7311d374826a64e4496417012c6bf10a, type: 2}

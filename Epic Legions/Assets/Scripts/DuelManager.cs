@@ -505,11 +505,6 @@ public class DuelManager : NetworkBehaviour
 
     private IEnumerator HeroAttack(Card cardToAttack, int player)
     {
-
-        //Aqui va el metodo para iniciar la animacion de ataque.
-
-
-
         //Desactivar los objetivos atacables.
         foreach (var fieldPosition in player2Manager.GetFieldPositionList())
         {
@@ -526,9 +521,22 @@ public class DuelManager : NetworkBehaviour
             }
         }
 
+        //Aqui va el metodo para iniciar la animacion de ataque.
+        if (heroTurn.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+        {
+            yield return heroTurn.MeleeAttackAnimation(player, cardToAttack, heroTurn.Moves[movementToUseIndex]);
+        }
+        else //if(heroTurn.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
+        {
+            heroTurn.RangedMovementAnimation();
+        }
+
+        yield return new WaitForSeconds(0.3f);
+
+        heroTurn.MoveToLastPosition();
 
         //Aplicar afecto de ataque si es necesario.
-        if(heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
+        if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
         {
             heroTurn.Moves[movementToUseIndex].ActivateEffect(heroTurn, cardToAttack);
         }
@@ -545,8 +553,6 @@ public class DuelManager : NetworkBehaviour
             if (heroTurn.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
                 cardToAttack.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex]);
-
-                yield return new WaitForSeconds(1);
 
                 //Aplicar daño al opnente.
                 if (cardToAttack.ReceiveDamage(heroTurn.Moves[movementToUseIndex].MoveSO.Damage))

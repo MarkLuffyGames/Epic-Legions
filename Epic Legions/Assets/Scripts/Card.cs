@@ -114,6 +114,7 @@ public class Card : MonoBehaviour
     public void SetFieldPosition(FieldPosition fieldPosition)
     {
         this.fieldPosition = fieldPosition;
+        AdjustUIcons();
     }
 
     public void UpdateText()
@@ -131,10 +132,10 @@ public class Card : MonoBehaviour
     /// <param name="speed">Velocidad a la que se va a mover la carta</param>
     /// <param name="temporalPosition">La posicion a la que se va a mover la carta es temporal?</param>
     /// <param name="isLocal">La posicion que se desea mover es la posicion local?</param>
-    public void MoveToPosition(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
+    public IEnumerator MoveToPosition(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
     {
         StopAllCoroutines();
-        StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
+        yield return StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
     }
     /// <summary>
     /// Corrutina para mover la carta suavemente a la posición objetivo
@@ -180,7 +181,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void MoveToLastPosition()
     {
-        MoveToPosition(lastPosition, 20, false, true);
+        StartCoroutine(MoveToPosition(lastPosition, 20, false, true));
     }
 
     /// <summary>
@@ -255,12 +256,13 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            MoveToPosition(new Vector3(0, 9.18f, -4.3f), 20, true, false);
+            StartCoroutine(MoveToPosition(new Vector3(0, 9.18f, -4.3f), 20, true, false));
             RotateToAngle(Vector3.right * 70, 20);
             ChangedSortingOrder(110);
             cardSelected.enabled = false;
             cardActions.enabled = activeActions;
             isFocused = true;
+            AdjustUIcons();
             return true;
         }
 
@@ -280,13 +282,30 @@ public class Card : MonoBehaviour
             if (isMyTurn) cardSelected.enabled = true;
             cardActions.enabled = false;
             isFocused = false;
+            AdjustUIcons();
+        }
+    }
+
+    private void AdjustUIcons()
+    {
+        if (isFocused)
+        {
+            healtText.gameObject.transform.localScale = Vector3.one;
+            defenceText.gameObject.transform.localScale = Vector3.one;
+            speedText.gameObject.transform.localScale = Vector3.one;
+        }
+        else if(!isFocused && fieldPosition != null)
+        {
+            healtText.gameObject.transform.localScale = Vector3.one * 5;
+            defenceText.gameObject.transform.localScale = Vector3.one * 5;
+            speedText.gameObject.transform.localScale = Vector3.one * 5;
         }
     }
 
     private void ChangedSortingOrder(int sortingOrder)
     {
         canvasFront.sortingOrder = sortingOrder;
-        canvasBack.sortingOrder = sortingOrder;
+        canvasBack.sortingOrder = sortingOrder - 1;
         cardSelected.sortingOrder = sortingOrder;
         cardActions.sortingOrder = sortingOrder + 1;
     }
@@ -415,15 +434,34 @@ public class Card : MonoBehaviour
         isAttackable = false;
     }
 
-    public void AttackAnimation()
+    public IEnumerator MeleeAttackAnimation(int player, Card cardToAttak, Movement movement)
     {
+        Debug.Log("Animacion de ataque");
+        if(player == 1)
+        {
+            Debug.Log("Moviendose al objetivo 1");
+            yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), 20, true, false);
+            Debug.Log("Istanciando efecto");
+            Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("Moviendose al objetivo 2");
+            yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), 20, true, false);
+            Debug.Log("Istanciando efecto");
+            Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
+        }
+    }
 
+    public void RangedMovementAnimation()
+    {
+        StartCoroutine(MoveToPosition(transform.localPosition + Vector3.back, 20, true, true));
     }
 
     public void AnimationReceivingMovement(Movement movement)
     {
         //Efecto de daño.
-        Instantiate(movement.MoveSO.VisualEffect, fieldPosition.transform.position, Quaternion.identity);
+        Instantiate(movement.MoveSO.VisualEffectHit, isFocused ? lastPosition : transform.position, Quaternion.identity);
 
         var protector = HasProtector();
         if (protector != null && protector.hasProtector && movement.MoveSO.Damage > 0)
@@ -470,10 +508,11 @@ public class Card : MonoBehaviour
 
     public void ProtectAlly(FieldPosition position)
     {
-        MoveToPosition(position.transform.position + Vector3.up * 0.1f, speed, true,false);
+        StartCoroutine(MoveToPosition(position.transform.position + Vector3.up * 0.1f, 20, true,false));
     }
     public void ToGraveyard()
     {
+        AdjustUIcons();
         currentDefense = defense;
         currentHealt = healt;
         currentSpeed = speed;
