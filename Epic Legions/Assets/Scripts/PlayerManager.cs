@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform deckPosition;
     [SerializeField] private Transform graveyardPosition;
     [SerializeField] private List<FieldPosition> fieldPositionList;
+    [SerializeField] private FieldPosition spellFieldPosition;
     [SerializeField] private HandCardHandler handCardHandler;
     [SerializeField] private DuelManager duelManager;
     [SerializeField] private PlayerManager rivalPlayerManager;
@@ -20,6 +21,8 @@ public class PlayerManager : MonoBehaviour
     private List<Card> card = new List<Card>();
 
     public bool isReady;
+
+    public FieldPosition SpellFieldPosition => spellFieldPosition;
 
     public void AddCardToPlayerDeck(CardSO cardSO, int numberOfCards)
     {
@@ -125,12 +128,24 @@ public class PlayerManager : MonoBehaviour
     /// <summary>
     /// Muestra las posiciones disponibles en el campo
     /// </summary>
-    public void ShowAvailablePositions()
+    public void ShowAvailablePositions(Card card)
     {
-        foreach (var item in fieldPositionList)
+        if(card.cardSO is HeroCardSO)
         {
-            item.Highlight();
+            foreach (var position in fieldPositionList)
+            {
+                if(position.Card == null)
+                {
+                    position.Highlight();
+                }
+            }
         }
+        else if (card.cardSO is SpellCardSO)
+        {
+            spellFieldPosition.Highlight();
+        }
+
+
     }
 
     /// <summary>
@@ -142,6 +157,7 @@ public class PlayerManager : MonoBehaviour
         {
             item.RemoveHighlight();
         }
+        spellFieldPosition.RemoveHighlight();
     }
 
     public List<FieldPosition> GetFieldPositionList()

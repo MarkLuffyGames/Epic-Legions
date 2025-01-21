@@ -168,7 +168,22 @@ public class CardSelector : MonoBehaviour
             && currentFieldPosition.IsFree() && DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation
             && !playerManager.isReady)
         {
-            PlaceCardOnTheField(card);
+            if (card.cardSO is HeroCardSO && currentFieldPosition.PositionIndex != -1)
+            {
+                PlaceCardOnTheField(card);
+            }
+            else if(card.cardSO is SpellCardSO && currentFieldPosition.PositionIndex == -1)
+            {
+                PlaceCardOnTheField(card);
+            }
+            else if(currentCard != null && isHoldingCard)
+            {
+                isHoldingCard = false;
+                if (handCardHandler.CardInThePlayerHand(card))
+                {
+                    card.StopDragging(true);
+                }
+            }
         }
         //Si se suelta la carta pero no se puede colocar en el campo dejar de arrastrar.
         else if (currentCard != null && isHoldingCard)
@@ -232,7 +247,7 @@ public class CardSelector : MonoBehaviour
 
             if(heldTime > clickHoldTime)
             {
-                playerManager.ShowAvailablePositions();
+                playerManager.ShowAvailablePositions(card);
                 handCardHandler.HideHandCard();
                 DetectPositionForPlaceCard();
             }
@@ -306,8 +321,16 @@ public class CardSelector : MonoBehaviour
     {
         if (fieldPosition.IsFree())
         {
-            StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
-            currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
+            if (currentCard.cardSO is HeroCardSO && fieldPosition.PositionIndex != -1)
+            {
+                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
+                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
+            }
+            else if(currentCard.cardSO is SpellCardSO && fieldPosition.PositionIndex == -1)
+            {
+                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
+                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
+            }
         }
     }
 
@@ -337,7 +360,7 @@ public class CardSelector : MonoBehaviour
 
         DuelManager.instance.PlaceCardOnTheFieldServerRpc(
             handCardHandler.GetIdexOfCard(currentCard),
-            currentFieldPosition.GetPositionIndex(),
+            currentFieldPosition.PositionIndex,
             NetworkManager.Singleton.LocalClientId);
 
         currentFieldPosition = null;

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 2
   cardName: "Seraf\xEDn"
+  cardLastName: 
   cardSprite: {fileID: 21300000, guid: 0a06f46b88f2e494eb82b9a0b9b9edcc, type: 3}
-  cardElemnt: 6
+  cardElemnt: 7
   heroClass: 0
   healt: 20
   defence: 15

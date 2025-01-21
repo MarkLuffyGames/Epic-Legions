@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 3
   cardName: Druida
+  cardLastName: 
   cardSprite: {fileID: 21300000, guid: 2de0d75e44f1b4843a2a41d4d6400b61, type: 3}
-  cardElemnt: 2
+  cardElemnt: 3
   heroClass: 3
   healt: 20
   defence: 10

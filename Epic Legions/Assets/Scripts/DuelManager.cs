@@ -249,22 +249,33 @@ public class DuelManager : NetworkBehaviour
 
         if (playerRoles[clientId] == 1)
         {
-            Card card = player1Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
-            player1Manager.GetHandCardHandler().QuitCard(card);
-            player1Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, true);
-            card.waitForServer = false;
-            InsertCardInOrder(HeroCardsOnTheField, card);
+            SetCard(player1Manager, true, cardIndex, fieldPositionIdex);
         }
         else if (playerRoles[clientId] == 2)
         {
-            Card card = player2Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
-            player2Manager.GetHandCardHandler().QuitCard(card);
-            player2Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, false);
-            card.waitForServer = false;
-            InsertCardInOrder(HeroCardsOnTheField, card);
+            SetCard(player2Manager, false, cardIndex, fieldPositionIdex);
         }
 
         PlaceCardOnTheFieldClientRpc(cardIndex, fieldPositionIdex, clientId);
+    }
+
+    private void SetCard(PlayerManager playerManager, bool isPlayer, int cardIndex, int fieldPositionIdex)
+    {
+        Card card = playerManager.GetHandCardHandler().GetCardInHandList()[cardIndex];
+        playerManager.GetHandCardHandler().QuitCard(card);
+        if(fieldPositionIdex == -1)
+        {
+            playerManager.SpellFieldPosition.SetCard(card, isPlayer);
+            UseSpellCard(card);
+        }
+        else
+        {
+            playerManager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, isPlayer);
+            if (IsServer) InsertCardInOrder(HeroCardsOnTheField, card);
+        }
+        
+        card.waitForServer = false;
+        
     }
 
     private void InsertCardInOrder(List<Card> heroCards, Card newCard)
@@ -291,17 +302,11 @@ public class DuelManager : NetworkBehaviour
 
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            Card card = player1Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
-            player1Manager.GetHandCardHandler().QuitCard(card);
-            player1Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, true);
-            card.waitForServer = false;
+            SetCard(player1Manager, true, cardIndex, fieldPositionIdex);
         }
         else
         {
-            Card card = player2Manager.GetHandCardHandler().GetCardInHandList()[cardIndex];
-            player2Manager.GetHandCardHandler().QuitCard(card);
-            player2Manager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, false);
-            card.waitForServer = false;
+            SetCard(player2Manager, false, cardIndex, fieldPositionIdex);
         }
     }
 
@@ -398,6 +403,18 @@ public class DuelManager : NetworkBehaviour
         if (heroTurn.Moves[movementToUse].MoveSO.NeedTarget)
         {
             SelectTarget(movementToUse);
+        }
+        else
+        {
+            HeroAttackServerRpc(heroTurn.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
+        }
+    }
+
+    private void UseSpellCard(Card spellCard)
+    {
+        if (spellCard.Moves[0].MoveSO.NeedTarget)
+        {
+            SelectTarget(0);
         }
         else
         {
@@ -568,8 +585,6 @@ public class DuelManager : NetworkBehaviour
                     Debug.Log(card.FieldPosition);
                     card.AnimationReceivingMovement(heroTurn.Moves[movementToUseIndex]);
                 }
-
-                yield return new WaitForSeconds(1);
 
                 foreach (var card in targets) 
                 {

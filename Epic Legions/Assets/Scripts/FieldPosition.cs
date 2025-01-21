@@ -76,9 +76,4 @@ public class FieldPosition : MonoBehaviour
     {
         spriteRenderer.color = originalColor;
     }
-
-    public int GetPositionIndex()
-    {
-        return positionIndex;
-    }
 }

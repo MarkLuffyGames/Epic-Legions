@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 1
   cardName: YANSSO
+  cardLastName: 
   cardSprite: {fileID: 21300000, guid: c72e3b9f50b186743bf734458d243c9b, type: 3}
-  cardElemnt: 3
+  cardElemnt: 4
   heroClass: 2
   healt: 20
   defence: 10

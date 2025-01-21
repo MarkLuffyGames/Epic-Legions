@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 4
   cardName: Feerico
+  cardLastName: 
   cardSprite: {fileID: 21300000, guid: 039051e1c3512e84faf6a5b6a754e542, type: 3}
-  cardElemnt: 1
+  cardElemnt: 2
   heroClass: 2
   healt: 20
   defence: 10

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -15,6 +14,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Image cardImage;
     [SerializeField] private Image cardSelectedImage;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI lastNameText;
     [SerializeField] private TextMeshProUGUI healtText;
     [SerializeField] private TextMeshProUGUI defenceText;
     [SerializeField] private TextMeshProUGUI speedText;
@@ -23,6 +23,7 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI move1DescriptionText;
     [SerializeField] private TextMeshProUGUI move2NameText;
     [SerializeField] private TextMeshProUGUI move2DescriptionText;
+    [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private GameObject energyPopUpPrefab;
     [SerializeField] private GameObject defencePopUpPrefab;
     [SerializeField] private GameObject hitEffect;
@@ -78,6 +79,7 @@ public class Card : MonoBehaviour
         this.cardSO = cardSO;
 
         nameText.text = cardSO.CardName;
+        lastNameText.text = cardSO.CardLastName;
         cardImage.sprite = cardSO.CardSprite;
         if(cardSO is HeroCardSO heroCardSO)
         {
@@ -108,6 +110,11 @@ public class Card : MonoBehaviour
             }
 
             UpdateText();
+        }
+        else if (cardSO is SpellCardSO spellCardSO)
+        {
+            moves.Add(new Movement(spellCardSO.Move));
+            description.text = spellCardSO.EffectDescription;
         }
     }
 
@@ -288,24 +295,27 @@ public class Card : MonoBehaviour
 
     private void AdjustUIcons()
     {
-        if (isFocused)
+        if (cardSO is HeroCardSO)
         {
-            healtText.gameObject.transform.localScale = Vector3.one;
-            defenceText.gameObject.transform.localScale = Vector3.one;
-            speedText.gameObject.transform.localScale = Vector3.one;
-        }
-        else if(!isFocused && fieldPosition != null)
-        {
-            healtText.gameObject.transform.localScale = Vector3.one * 5;
-            defenceText.gameObject.transform.localScale = Vector3.one * 5;
-            speedText.gameObject.transform.localScale = Vector3.one * 5;
+            if (isFocused)
+            {
+                healtText.gameObject.transform.localScale = Vector3.one;
+                defenceText.gameObject.transform.localScale = Vector3.one;
+                speedText.gameObject.transform.localScale = Vector3.one;
+            }
+            else if (!isFocused && fieldPosition != null)
+            {
+                healtText.gameObject.transform.localScale = Vector3.one * 5;
+                defenceText.gameObject.transform.localScale = Vector3.one * 5;
+                speedText.gameObject.transform.localScale = Vector3.one * 5;
+            }
         }
     }
 
     private void ChangedSortingOrder(int sortingOrder)
     {
         canvasFront.sortingOrder = sortingOrder;
-        canvasBack.sortingOrder = sortingOrder - 1;
+        canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
         cardSelected.sortingOrder = sortingOrder;
         cardActions.sortingOrder = sortingOrder + 1;
     }
@@ -436,19 +446,14 @@ public class Card : MonoBehaviour
 
     public IEnumerator MeleeAttackAnimation(int player, Card cardToAttak, Movement movement)
     {
-        Debug.Log("Animacion de ataque");
         if(player == 1)
         {
-            Debug.Log("Moviendose al objetivo 1");
             yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), 20, true, false);
-            Debug.Log("Istanciando efecto");
             Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
         }
         else
         {
-            Debug.Log("Moviendose al objetivo 2");
             yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), 20, true, false);
-            Debug.Log("Istanciando efecto");
             Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
         }
     }
