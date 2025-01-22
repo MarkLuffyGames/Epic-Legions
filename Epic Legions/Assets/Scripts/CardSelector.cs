@@ -212,9 +212,9 @@ public class CardSelector : MonoBehaviour
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
         if (DuelManager.instance.settingAttackTarget)
         {
-            if (card.isAttackable && DuelManager.instance.GetDuelPhase() == DuelPhase.Battle)
+            if (card.isAttackable)
             {
-                DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId);
+                DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, DuelManager.instance.cardSelectingTarget.cardSO is HeroCardSO);
             }
         }
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.

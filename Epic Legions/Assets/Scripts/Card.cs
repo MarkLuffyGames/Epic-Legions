@@ -57,7 +57,7 @@ public class Card : MonoBehaviour
     private int currentDefense;
     private int currentSpeed;
 
-    private List<Movement> moves;
+    private List<Movement> moves = new List<Movement>();
     private FieldPosition fieldPosition;
     public bool isAttackable;
 
@@ -88,7 +88,6 @@ public class Card : MonoBehaviour
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
             
-            moves = new List<Movement>();
             foreach(var move in heroCardSO.Moves)
             {
                 moves.Add(new Movement(move));
@@ -114,7 +113,7 @@ public class Card : MonoBehaviour
         else if (cardSO is SpellCardSO spellCardSO)
         {
             moves.Add(new Movement(spellCardSO.Move));
-            description.text = spellCardSO.EffectDescription;
+            description.text = spellCardSO.Move.EffectDescription;
         }
     }
 
@@ -426,7 +425,7 @@ public class Card : MonoBehaviour
 
     public void UseMovement(int movementNumber)
     {
-        DuelManager.instance.UseMovement(movementNumber);
+        DuelManager.instance.UseMovement(movementNumber, null);
         cardActions.enabled = false;
         ResetSize();
     }

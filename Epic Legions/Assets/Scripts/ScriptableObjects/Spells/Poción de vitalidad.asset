@@ -19,7 +19,4 @@ MonoBehaviour:
   cardElemnt: 0
   effectDescription: "Un poderoso brebaje extra\xEDdo del aliento de un drag\xF3n
     moribundo. Restaura en su totalidad la vida de un h\xE9roe en el campo de batalla."
-  moveEffect: {fileID: 11400000, guid: 730a7991269a7fa45a0167faa5d4b1c2, type: 2}
-  needTarget: 1
-  moveType: 2
-  targetsType: 0
+  move: {fileID: 11400000, guid: a569d554e9bd5cb4a9741ec90c25bdeb, type: 2}
