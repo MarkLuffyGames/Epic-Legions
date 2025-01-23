@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Battle, None }
+public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, None }
 public class DuelManager : NetworkBehaviour
 {
     public static DuelManager instance;
@@ -35,6 +35,8 @@ public class DuelManager : NetworkBehaviour
     public bool settingAttackTarget;
     public Card cardSelectingTarget;
 
+    private DuelPhase oldDuelPhase;
+
     private void Awake()
     {
         instance = this;
@@ -59,8 +61,11 @@ public class DuelManager : NetworkBehaviour
     {
         UpdateDuelPhaseText();
 
-        player1Manager.isReady = false;
-        player2Manager.isReady = false;
+        if (oldPhase != DuelPhase.PlayingSpellCard && newPhase != DuelPhase.PlayingSpellCard)
+        {
+            player1Manager.isReady = false;
+            player2Manager.isReady = false;
+        }
 
         if (newPhase == DuelPhase.PreparingDuel)
         {
@@ -73,22 +78,28 @@ public class DuelManager : NetworkBehaviour
         }
         else if (newPhase == DuelPhase.Preparation)
         {
-            player1Manager.ShowNextPhaseButton();
+            if (oldPhase != DuelPhase.PlayingSpellCard)
+            {
+                player1Manager.ShowNextPhaseButton();
+            }
         }
         else if(newPhase == DuelPhase.Battle)
         {
-            player1Manager.HideWaitTextGameObject();
-
-            if (IsServer)
+            if (oldPhase != DuelPhase.PlayingSpellCard)
             {
-                heroTurnIndex = 0;
+                player1Manager.HideWaitTextGameObject();
 
-                StartHeroTurn();
-            }
+                if (IsServer)
+                {
+                    heroTurnIndex = 0;
 
-            if(IsClient)
-            {
-                player1Manager.GetHandCardHandler().HideHandCard();
+                    StartHeroTurn();
+                }
+
+                if (IsClient)
+                {
+                    player1Manager.GetHandCardHandler().HideHandCard();
+                }
             }
         }
         else if(newPhase == DuelPhase.DrawingCards)
@@ -96,6 +107,10 @@ public class DuelManager : NetworkBehaviour
 
             player1Manager.DrawCard();
             player2Manager.DrawCard();
+        }
+        else if(newPhase == DuelPhase.PlayingSpellCard)
+        {
+            oldDuelPhase = oldPhase;
         }
 
 
@@ -219,6 +234,10 @@ public class DuelManager : NetworkBehaviour
             {
                 NextTurn();
             }
+            else if(duelPhase.Value == DuelPhase.PlayingSpellCard)
+            {
+                duelPhase.Value = oldDuelPhase;
+            }
         }
         
     }
@@ -268,7 +287,8 @@ public class DuelManager : NetworkBehaviour
         if(fieldPositionIdex == -1)
         {
             playerManager.SpellFieldPosition.SetCard(card, isPlayer);
-            UseMovement(0, card);
+            if (IsServer) duelPhase.Value = DuelPhase.PlayingSpellCard;
+            if(isPlayer)UseMovement(0, card);       
         }
         else
         {
@@ -608,6 +628,18 @@ public class DuelManager : NetworkBehaviour
 
         movementToUseIndex = -1;
         if(attackerCard.cardSO is HeroCardSO) attackerCard.EndTurn();
+        if (attackerCard.cardSO is SpellCardSO)
+        {
+            if(player1Manager.SpellFieldPosition.Card == attackerCard)
+            {
+                attackerCard.FieldPosition.DestroyCard(player1Manager.GetGraveyard(), true);
+            }
+            else
+            {
+                attackerCard.FieldPosition.DestroyCard(player2Manager.GetGraveyard(), false);
+            }
+            
+        }
         if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
