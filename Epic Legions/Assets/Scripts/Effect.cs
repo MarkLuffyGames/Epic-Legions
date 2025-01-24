@@ -9,6 +9,7 @@ public class Effect
     public int absorbDamage;
     public Card damageReceiver;
     public bool hasProtector;
+    public int speed;
 
     public int durability;
 
@@ -30,6 +31,11 @@ public class Effect
             damageReceiver = transferDamage.Caster;
             durability = transferDamage.NumberTurns;
             hasProtector = true;
+        }
+        else if(cardEffect is ReduceSpeed reduceSpeed)
+        {
+            speed = -reduceSpeed.Amount;
+            durability = reduceSpeed.NumberTurns;
         }
     }
 

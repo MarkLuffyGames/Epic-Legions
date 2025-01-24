@@ -55,7 +55,6 @@ public class Card : MonoBehaviour
 
     private int currentHealt;
     private int currentDefense;
-    private int currentSpeed;
 
     private List<Movement> moves = new List<Movement>();
     private FieldPosition fieldPosition;
@@ -64,7 +63,7 @@ public class Card : MonoBehaviour
     public int HealtPoint => healt;
     public int CurrentHealtPoints => currentHealt;
     public int CurrentDefensePoints => currentDefense + GetDefenseModifier();
-    public int CurrentSpeedPoints => currentSpeed;
+    public int CurrentSpeedPoints => speed + GetSpeedModifier();
     public List<Movement> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
@@ -95,7 +94,6 @@ public class Card : MonoBehaviour
 
             currentHealt = healt;
             currentDefense = defense;
-            currentSpeed = speed;
 
             if (moves[1] != null)
             {
@@ -127,7 +125,7 @@ public class Card : MonoBehaviour
     {
         healtText.text = currentHealt.ToString();
         defenceText.text = CurrentDefensePoints.ToString();
-        speedText.text = currentSpeed.ToString();
+        speedText.text = CurrentSpeedPoints.ToString();
         energyText.text = energy.ToString();
     }
 
@@ -516,12 +514,12 @@ public class Card : MonoBehaviour
     }
     public void ToGraveyard()
     {
+
+        CancelAllEffects();
         AdjustUIcons();
         currentDefense = defense;
         currentHealt = healt;
-        currentSpeed = speed;
         UpdateText();
-        CancelAllEffects();
     }
 
     private void ShowTextDamage(bool isDefence, int amountDamage)
@@ -620,6 +618,19 @@ public class Card : MonoBehaviour
         }
 
         return defenceModifier;
+    }
+
+    private int GetSpeedModifier()
+    {
+        int speedModifier = 0;
+        if (fieldPosition == null) return speedModifier;
+
+        foreach (Effect effect in fieldPosition.statModifier)
+        {
+            speedModifier += effect.speed;
+        }
+
+        return speedModifier;
     }
 
     private int GetDamageAbsorbed()

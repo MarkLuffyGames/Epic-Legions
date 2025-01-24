@@ -6,6 +6,7 @@ public class MoveSO : ScriptableObject
 {
     [SerializeField] private string moveName;
     [SerializeField] private int damage;
+    [SerializeField] private int energyCost;
     [SerializeField] private CardEffect moveEffect;
     [SerializeField] private bool needTarget;
     [SerializeField] private MoveType moveType;
