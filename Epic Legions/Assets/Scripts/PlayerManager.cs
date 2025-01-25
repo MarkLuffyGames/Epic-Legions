@@ -85,8 +85,8 @@ public class PlayerManager : MonoBehaviour
 
     public void SetPlayerReady()
     {
-        DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         isReady = true;
+        DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     public void ShowNextPhaseButton()

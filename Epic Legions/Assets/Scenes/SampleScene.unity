@@ -3493,6 +3493,7 @@ MonoBehaviour:
   heroTurn: {fileID: 0}
   movementToUseIndex: 0
   settingAttackTarget: 0
+  cardSelectingTarget: {fileID: 0}
 --- !u!4 &797659817
 Transform:
   m_ObjectHideFlags: 0

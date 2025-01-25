@@ -428,17 +428,18 @@ public class Card : MonoBehaviour
         ResetSize();
     }
 
-    public void ActiveAttackableTarget(Color color)
+    public void ActiveSelectableTargets(Color color)
     {
         cardSelected.enabled = true;
         cardSelectedImage.color = color;
         isAttackable = true;
     }
 
-    public void DesactiveAttackableTarget()
+    public void DesactiveSelectableTargets()
     {
         cardSelected.enabled = false;
         isAttackable = false;
+        if (isMyTurn) ActiveSelectableTargets(Color.yellow);
     }
 
     public IEnumerator MeleeAttackAnimation(int player, Card cardToAttak, Movement movement)
@@ -710,6 +711,7 @@ public class Card : MonoBehaviour
         ShowTextToHeal(healt - currentHealt < amount ? healt - currentHealt : amount);
         currentHealt += amount;
         if(currentHealt > healt)currentHealt = healt;
+        UpdateText();
     }
 
     private void ShowTextToHeal(int amount)

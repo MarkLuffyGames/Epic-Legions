@@ -443,11 +443,11 @@ public class DuelManager : NetworkBehaviour
         {
             if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
             {
-                card.ActiveAttackableTarget(Color.green);
+                card.ActiveSelectableTargets(Color.green);
             }
             else
             {
-                card.ActiveAttackableTarget(Color.red);
+                card.ActiveSelectableTargets(Color.red);
             }
         }
     }
@@ -540,14 +540,14 @@ public class DuelManager : NetworkBehaviour
         {
             if (fieldPosition.Card != null)
             {
-                fieldPosition.Card.DesactiveAttackableTarget();
+                fieldPosition.Card.DesactiveSelectableTargets();
             }
         }
         foreach (var fieldPosition in player1Manager.GetFieldPositionList())
         {
             if (fieldPosition.Card != null)
             {
-                fieldPosition.Card.DesactiveAttackableTarget();
+                fieldPosition.Card.DesactiveSelectableTargets();
             }
         }
 
@@ -562,8 +562,6 @@ public class DuelManager : NetworkBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
-
-        attackerCard.MoveToLastPosition();
 
         //Aplicar afecto de ataque si es necesario.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
@@ -595,7 +593,6 @@ public class DuelManager : NetworkBehaviour
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard);
                 foreach (var card in targets)
                 {
-                    Debug.Log(card.FieldPosition);
                     card.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
                 }
 
@@ -624,7 +621,12 @@ public class DuelManager : NetworkBehaviour
                     card.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
                 }
             }
+
+            yield return new WaitForSeconds(1);
         }
+
+
+        attackerCard.MoveToLastPosition();
 
         movementToUseIndex = -1;
         if(attackerCard.cardSO is HeroCardSO) attackerCard.EndTurn();

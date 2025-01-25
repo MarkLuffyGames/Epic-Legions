@@ -31,6 +31,11 @@ public class ReduceSpeed : CardEffect
 
     public override void UpdateEffect(Movement movement)
     {
-        throw new System.NotImplementedException();
+        movement.effect.durability--;
+
+        if (movement.effect.durability <= 0)
+        {
+            movement.effect = null;
+        }
     }
 }
