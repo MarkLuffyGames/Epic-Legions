@@ -10,6 +10,7 @@ public class Effect
     public Card damageReceiver;
     public bool hasProtector;
     public int speed;
+    public int attack;
 
     public int durability;
 
@@ -20,11 +21,11 @@ public class Effect
             this.absorbDamage = absorbDamage.Amount;
             durability = absorbDamage.NumberTurns;
         }
-        else if(cardEffect is IncreaseDefense increaseDefense)
+        else if(cardEffect is ModifyDefense modifyDefense)
         {
-            defense = increaseDefense.Amount;
-            currentDefense = increaseDefense.Amount;
-            durability = increaseDefense.NumberTurns;
+            defense = modifyDefense.IsIncrease ? modifyDefense.Amount : -modifyDefense.Amount;
+            currentDefense = defense;
+            durability = modifyDefense.NumberTurns;
         }
         else if(cardEffect is TransferDamage transferDamage)
         {
@@ -32,10 +33,15 @@ public class Effect
             durability = transferDamage.NumberTurns;
             hasProtector = true;
         }
-        else if(cardEffect is ReduceSpeed reduceSpeed)
+        else if(cardEffect is ModifySpeed modifySpeed)
         {
-            speed = -reduceSpeed.Amount;
-            durability = reduceSpeed.NumberTurns;
+            speed = modifySpeed.IsIncrease ? modifySpeed.Amount : -modifySpeed.Amount;
+            durability = modifySpeed.NumberTurns;
+        }
+        else if(cardEffect is ModifyAttack modifyAttack)
+        {
+            attack = modifyAttack.IsIncrease ? modifyAttack.Amount : -modifyAttack.Amount;
+            durability = modifyAttack.NumberTurns;
         }
     }
 

@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Reduce Speed", menuName = "Epic Legions/Card Effects/ Reduce Speed")]
-public class ReduceSpeed : CardEffect
+[CreateAssetMenu(fileName = "Modify Speed", menuName = "Epic Legions/Card Effects/ Modify Speed")]
+public class ModifySpeed : CardEffect
 {
     [SerializeField] private int amount;
     [SerializeField] private int numberTurns;
+    [SerializeField] private bool isIncrease;
 
     public int Amount => amount;
     public int NumberTurns => numberTurns;
+    public bool IsIncrease => isIncrease;
     public override void ActivateEffect(Card caster, Card target, Movement movement)
     {
         movement.effect = new Effect(this);

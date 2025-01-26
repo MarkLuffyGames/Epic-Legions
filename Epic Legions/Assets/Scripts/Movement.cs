@@ -15,17 +15,29 @@ public class Movement
 
     public void ActivateEffect(Card caster, Card target)
     {
-        if (moveSO.MoveEffect != null)
+        if (moveSO.EffectCondition.ActivateEffect(caster, target))
         {
-            moveSO.MoveEffect.ActivateEffect(caster, target, this);
+            if (moveSO.MoveEffect != null)
+            {
+                moveSO.MoveEffect.ActivateEffect(caster, target, this);
+            }
         }
     }
 
     public void ActivateEffect(Card caster, List<Card> target)
     {
+        List<Card> targets = new List<Card>();
+        foreach (Card card in target)
+        {
+            if (moveSO.EffectCondition.ActivateEffect(caster, card))
+            {
+                targets.Add(card);
+            }
+        }
+
         if (moveSO.MoveEffect != null)
         {
-            moveSO.MoveEffect.ActivateEffect(caster, target, this);
+            moveSO.MoveEffect.ActivateEffect(caster, targets, this);
         }
     }
 

@@ -1,9 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Increase Attack", menuName = "Epic Legions/Card Effects/ Increase Attack")]
-public class IncreaseAttack : CardEffect
+[CreateAssetMenu(fileName = "Modify Attack", menuName = "Epic Legions/Card Effects/ Modify Attack")]
+public class ModifyAttack : CardEffect
 {
+    [SerializeField] private int amount;
+    [SerializeField] private int numberTurns;
+    [SerializeField] private bool isIncrease;
+
+    public int Amount => amount;
+    public int NumberTurns => numberTurns;
+    public bool IsIncrease => isIncrease;
     public override void ActivateEffect(Card caster, Card target, Movement movement)
     {
         throw new System.NotImplementedException();

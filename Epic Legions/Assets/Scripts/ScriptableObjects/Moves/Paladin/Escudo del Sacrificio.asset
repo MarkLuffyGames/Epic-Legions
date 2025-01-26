@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Escudo del Sacrificio
   damage: 0
+  energyCost: 0
   moveEffect: {fileID: 11400000, guid: e43f8867efd1c5b4dbe50af85ce7e592, type: 2}
+  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 1
   moveType: 2
   targetsType: 0

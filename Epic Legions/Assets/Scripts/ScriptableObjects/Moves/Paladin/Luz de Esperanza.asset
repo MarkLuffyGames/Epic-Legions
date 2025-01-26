@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Luz de Esperanza
   damage: 0
+  energyCost: 0
   moveEffect: {fileID: 11400000, guid: cd6f61260300ae44189ee71d4a629011, type: 2}
+  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 0
   moveType: 2
   targetsType: 2
