@@ -18,7 +18,6 @@ public class DuelManager : NetworkBehaviour
 
     private Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
     private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
-    private int connectedPlayerCount = 0;
 
     private Dictionary<ulong, List<int>> playerDecks = new Dictionary<ulong, List<int>>();
     private Dictionary<ulong, bool> playerReady = new Dictionary<ulong, bool>();
@@ -41,20 +40,9 @@ public class DuelManager : NetworkBehaviour
     {
         instance = this;
         Application.targetFrameRate = 60;
-    }
 
-    private void Start()
-    {
         duelPhase.OnValueChanged += OnDuelPhaseChanged;
-        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
-    }
-
-    private void NetworkManager_OnClientConnectedCallback(ulong ClientId)
-    {
-        if (IsServer)
-        {
-            RegisterPlayer(ClientId);
-        }
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
@@ -116,20 +104,18 @@ public class DuelManager : NetworkBehaviour
 
     }
 
-    public void RegisterPlayer(ulong clientId)
+    public void RegisterPlayer(ulong clientId1, ulong clientId2)
     {
-        if (!playerRoles.ContainsKey(clientId))
-        {
-            connectedPlayerCount++;
-            playerRoles[clientId] = connectedPlayerCount;
-            playerId[connectedPlayerCount] = clientId;
-            playerReady[clientId] = false;
-        }
+        playerRoles[clientId1] = 1;
+        playerRoles[clientId2] = 2;
 
-        if (connectedPlayerCount == 2)
-        {
-            StartDuel();
-        }
+        playerId[1] = clientId1;
+        playerId[2] = clientId2;
+
+        playerReady[clientId1] = false;
+        playerReady[clientId2] = false;
+
+        StartDuel();
     }
 
     [ServerRpc(RequireOwnership = false)]
