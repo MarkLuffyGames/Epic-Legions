@@ -2,16 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using Unity.Networking.Transport.Relay;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameLobby : NetworkBehaviour
 {
@@ -24,6 +27,7 @@ public class GameLobby : NetworkBehaviour
     public event EventHandler OnJoinStarted;
     public event EventHandler OnQuickJoinFailed;
     public event EventHandler OnJoinFailed;
+    public event EventHandler OnPlayerDataNetworkListChanged;
     public event EventHandler<OnLobbyListChangedEventArgs> OnLobbyListChanged;
     public class OnLobbyListChangedEventArgs : EventArgs
     {
@@ -39,6 +43,8 @@ public class GameLobby : NetworkBehaviour
     private Dictionary<int, ulong> playerID = new Dictionary<int, ulong>();
     private string playerName;
 
+    private NetworkList<PlayerData> playerDataNetworkList;
+
     private void Awake()
     {
         if (Instance == null) 
@@ -52,8 +58,9 @@ public class GameLobby : NetworkBehaviour
 
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
-        NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnectCallback;
+
+        playerDataNetworkList = new NetworkList<PlayerData>();
+        playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
 
         GetPlayerNameMultiplayer();
 
@@ -61,9 +68,14 @@ public class GameLobby : NetworkBehaviour
         StartCoroutine(HandlePeriodicListLobbies());
     }
 
-    private async void GetPlayerNameMultiplayer()
+    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
     {
-        playerName = PlayerPrefs.GetString("PlayerName", await AuthenticationService.Instance.GetPlayerNameAsync());
+        OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void GetPlayerNameMultiplayer()
+    {
+        playerName = PlayerPrefs.GetString("PlayerName", "Player" + Random.Range(10000,99999));
     }
 
     public string GetPlayerName()
@@ -149,6 +161,53 @@ public class GameLobby : NetworkBehaviour
 
                 DeleteLobby();
             }
+            else if (scene.name == "DuelPreparationLobby")
+            {
+            }
+        }
+    }
+
+
+    private async Task<Allocation> AllocateRelay()
+    {
+        try
+        {
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(100);
+            return allocation;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            return default;
+        }
+    }
+
+    private async Task<string> GetRelayJoinCode(Allocation allocation)
+    {
+        try
+        {
+            string relayJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
+            return relayJoinCode;
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.Log(e);
+            return default;
+        }
+    }
+
+    private async Task<JoinAllocation> JoinRelay(string joinCode)
+    {
+        try
+        {
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            return joinAllocation;
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.Log(e);
+            return default;
         }
     }
 
@@ -158,6 +217,22 @@ public class GameLobby : NetworkBehaviour
         try
         {
             joinedLobby = await LobbyService.Instance.CreateLobbyAsync(roomName, 2, new CreateLobbyOptions { IsPrivate = isPrivate });
+
+            Allocation allocation = await AllocateRelay();
+
+            string relayJoinCode = await GetRelayJoinCode(allocation);
+
+            await LobbyService.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject> {
+                     { "RelayJoinCode" , new DataObject(DataObject.VisibilityOptions.Member, relayJoinCode) }
+                 }
+            });
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(allocation.ToRelayServerData("dtls"));
+
+            NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Server_OnClientDisconnectCallback;
             NetworkManager.Singleton.StartHost();
         }
         catch(LobbyServiceException ex) 
@@ -167,6 +242,88 @@ public class GameLobby : NetworkBehaviour
         }
     }
 
+    private void NetworkManager_Server_OnClientDisconnectCallback(ulong clientId)
+    {
+        for (int i = 0; i < playerDataNetworkList.Count; i++)
+        {
+            PlayerData playerData = playerDataNetworkList[i];
+            if (playerData.clientId == clientId)
+            {
+                // Disconnected!
+                playerDataNetworkList.RemoveAt(i);
+            }
+        }
+
+        OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong clientId)
+    {
+        playerDataNetworkList.Add(new PlayerData
+        {
+            clientId = clientId
+        });
+        SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+
+        SceneManager.LoadScene("DuelPreparationLobby");
+    }
+
+    private void StartClient()
+    {
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
+        NetworkManager.Singleton.StartClient();
+    }
+
+    private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId)
+    {
+        OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void NetworkManager_Client_OnClientConnectedCallback(ulong clientId)
+    {
+        SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+
+        SceneManager.LoadScene("DuelPreparationLobby");
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerNameServerRpc(string playerName, ServerRpcParams serverRpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerName = playerName;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerIdServerRpc(string playerId, ServerRpcParams serverRpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerId = playerId;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+    public int GetPlayerDataIndexFromClientId(ulong clientId)
+    {
+        for (int i = 0; i < playerDataNetworkList.Count; i++)
+        {
+            if (playerDataNetworkList[i].clientId == clientId)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
     public async void QuickJoin()
     {
         OnJoinStarted?.Invoke(this, EventArgs.Empty);
@@ -174,7 +331,14 @@ public class GameLobby : NetworkBehaviour
         {
             OnTryingToJoinGame?.Invoke(this, EventArgs.Empty);
             joinedLobby = await LobbyService.Instance.QuickJoinLobbyAsync();
-            NetworkManager.Singleton.StartClient();
+
+            string relayJoinCode = joinedLobby.Data["RelayJoinCode"].Value;
+
+            JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(joinAllocation.ToRelayServerData("dtls"));
+
+            StartClient();
         }
         catch (LobbyServiceException ex)
         {
@@ -190,7 +354,14 @@ public class GameLobby : NetworkBehaviour
         try
         {
             joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
-            NetworkManager.Singleton.StartClient();
+
+            string relayJoinCode = joinedLobby.Data["RelayJoinCode"].Value;
+
+            JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(joinAllocation.ToRelayServerData("dtls"));
+
+            StartClient();
         }
         catch (LobbyServiceException e)
         {
@@ -205,7 +376,14 @@ public class GameLobby : NetworkBehaviour
         try
         {
             joinedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode);
-            NetworkManager.Singleton.StartClient();
+
+            string relayJoinCode = joinedLobby.Data["RelayJoinCode"].Value;
+
+            JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(joinAllocation.ToRelayServerData("dtls"));
+
+            StartClient();
         }
         catch (LobbyServiceException ex)
         {
@@ -215,16 +393,7 @@ public class GameLobby : NetworkBehaviour
         
     }
 
-    private void Singleton_OnClientConnectedCallback(ulong clientID)
-    {
-        if(clientID == NetworkManager.Singleton.LocalClientId) SceneManager.LoadScene("DuelPreparationLobby");
-    }
 
-    private void Singleton_OnClientDisconnectCallback(ulong obj)
-    {
-        OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
-        Debug.Log(NetworkManager.Singleton.DisconnectReason);
-    }
 
     public Lobby GetLobby()
     {
@@ -284,6 +453,21 @@ public class GameLobby : NetworkBehaviour
         }
     }
 
+    public bool IsPlayerIndexConnected(int playerIndex)
+    {
+        return playerIndex < playerDataNetworkList.Count;
+    }
+
+    public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex)
+    {
+        return playerDataNetworkList[playerIndex];
+    }
+
+    public bool IsPlayerReady(ulong clientId)
+    {
+        return playerReady.ContainsKey(clientId) && playerReady[clientId];
+    }
+
     public bool AreAllTrue(Dictionary<ulong, bool> clientStatus)
     {
         // Verificar si todos los valores son true
@@ -293,19 +477,22 @@ public class GameLobby : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ulong clientID)
     {
-        playerReady[clientID] = true;
-        if (clientID == NetworkManager.Singleton.LocalClientId)
+        if (!playerReady[clientID])
         {
-            playerID[1] = clientID;
-        }
-        else 
-        {
-            playerID[2] = clientID;
-        }
+            playerReady[clientID] = true;
+            if (clientID == NetworkManager.Singleton.LocalClientId)
+            {
+                playerID[1] = clientID;
+            }
+            else
+            {
+                playerID[2] = clientID;
+            }
 
-        if (playerReady.Count == 2 && AreAllTrue(playerReady))
-        {
-            StartDuelClientRpc();
+            if (playerReady.Count == 2 && AreAllTrue(playerReady))
+            {
+                StartDuelClientRpc();
+            }
         }
     }
 

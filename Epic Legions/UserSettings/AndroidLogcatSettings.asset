@@ -13,6 +13,24 @@
             "name": "com.mi.android.globallauncher",
             "processId": 10760,
             "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 29647,
+            "exited": true
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 23012,
+            "exited": true
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 2048,
+            "exited": false
         }
     ],
     "m_Tags": {

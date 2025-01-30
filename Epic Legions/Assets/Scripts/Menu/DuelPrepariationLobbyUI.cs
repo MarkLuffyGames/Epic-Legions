@@ -76,4 +76,5 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
     {
         if(NetworkManager.Singleton != null)NetworkManager.Singleton.OnClientDisconnectCallback -= Singleton_OnClientDisconnectCallback;
     }
+
 }

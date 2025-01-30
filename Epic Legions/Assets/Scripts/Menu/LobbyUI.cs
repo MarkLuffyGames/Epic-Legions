@@ -47,7 +47,6 @@ public class LobbyUI : MonoBehaviour
         GameLobby.Instance.OnJoinFailed += GameLobby_OnJoinFailed;
         GameLobby.Instance.OnQuickJoinFailed += GameLobby_OnQuickJoinFailed;
         GameLobby.Instance.OnLobbyListChanged += GameLobby_OnLobbyListChanged;
-        Debug.Log(GameLobby.Instance);
 
         UpdateLobbyList(new List<Lobby>());
 
@@ -58,7 +57,6 @@ public class LobbyUI : MonoBehaviour
 
     private void GameLobby_OnLobbyListChanged(object sender, GameLobby.OnLobbyListChangedEventArgs e)
     {
-        Debug.Log("Actualizando Lobbies");
         UpdateLobbyList(e.lobbyList);
     }
 
@@ -157,6 +155,5 @@ public class LobbyUI : MonoBehaviour
         GameLobby.Instance.OnJoinFailed -= GameLobby_OnJoinFailed;
         GameLobby.Instance.OnQuickJoinFailed -= GameLobby_OnQuickJoinFailed;
         GameLobby.Instance.OnLobbyListChanged -= GameLobby_OnLobbyListChanged;
-        Debug.Log("Destroy");
     }
 }

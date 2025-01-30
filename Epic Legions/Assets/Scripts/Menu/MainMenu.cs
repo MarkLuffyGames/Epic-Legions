@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
@@ -15,6 +16,15 @@ public class MainMenu : MonoBehaviour
         {
             SceneManager.LoadScene("LobbyScene");
         });
+        NetworkManager.OnInstantiated += NetworkManager_OnInstantiated;
+    }
+
+    private void NetworkManager_OnInstantiated(NetworkManager obj)
+    {
+        if(NetworkManager.Singleton != null)
+        {
+            Destroy(obj.gameObject);
+        }
     }
 
     private async void InitializeUnityAuthentication()
