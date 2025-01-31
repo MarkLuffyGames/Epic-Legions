@@ -28,6 +28,8 @@ public class GameLobby : NetworkBehaviour
     public event EventHandler OnQuickJoinFailed;
     public event EventHandler OnJoinFailed;
     public event EventHandler OnPlayerDataNetworkListChanged;
+    public event EventHandler OnReadyChanged;
+    public event EventHandler OnReadyToStart;
     public event EventHandler<OnLobbyListChangedEventArgs> OnLobbyListChanged;
     public class OnLobbyListChangedEventArgs : EventArgs
     {
@@ -161,9 +163,6 @@ public class GameLobby : NetworkBehaviour
 
                 DeleteLobby();
             }
-            else if (scene.name == "DuelPreparationLobby")
-            {
-            }
         }
     }
 
@@ -233,6 +232,7 @@ public class GameLobby : NetworkBehaviour
 
             NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Server_OnClientDisconnectCallback;
+            NetworkManager.Singleton.OnServerStarted += Singleton_OnServerStarted;
             NetworkManager.Singleton.StartHost();
         }
         catch(LobbyServiceException ex) 
@@ -240,6 +240,11 @@ public class GameLobby : NetworkBehaviour
             OnCreateLobbyFailed?.Invoke(this, EventArgs.Empty);
             Debug.LogException(ex);
         }
+    }
+
+    private void Singleton_OnServerStarted()
+    {
+        SceneManager.LoadScene("DuelPreparationLobby");
     }
 
     private void NetworkManager_Server_OnClientDisconnectCallback(ulong clientId)
@@ -265,15 +270,19 @@ public class GameLobby : NetworkBehaviour
         });
         SetPlayerNameServerRpc(GetPlayerName());
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
-
-        SceneManager.LoadScene("DuelPreparationLobby");
     }
 
     private void StartClient()
     {
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientStarted += Singleton_OnClientStarted;
         NetworkManager.Singleton.StartClient();
+    }
+
+    private void Singleton_OnClientStarted()
+    {
+        SceneManager.LoadScene("DuelPreparationLobby");
     }
 
     private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId)
@@ -285,8 +294,6 @@ public class GameLobby : NetworkBehaviour
     {
         SetPlayerNameServerRpc(GetPlayerName());
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
-
-        SceneManager.LoadScene("DuelPreparationLobby");
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -477,28 +484,36 @@ public class GameLobby : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ulong clientID)
     {
-        if (!playerReady[clientID])
-        {
-            playerReady[clientID] = true;
-            if (clientID == NetworkManager.Singleton.LocalClientId)
-            {
-                playerID[1] = clientID;
-            }
-            else
-            {
-                playerID[2] = clientID;
-            }
+        SetPlayerReadyClientRpc(clientID);
 
-            if (playerReady.Count == 2 && AreAllTrue(playerReady))
-            {
-                StartDuelClientRpc();
-            }
+        playerReady[clientID] = true;
+
+        if (clientID == NetworkManager.Singleton.LocalClientId)
+        {
+            playerID[1] = clientID;
         }
+        else
+        {
+            playerID[2] = clientID;
+        }
+
+        if (playerReady.Count == 2 && AreAllTrue(playerReady))
+        {
+            StartDuelClientRpc();
+        }
+    }
+
+    [ClientRpc]
+    private void SetPlayerReadyClientRpc(ulong clientId)
+    {
+        playerReady[clientId] = true;
+
+        OnReadyChanged?.Invoke(this, EventArgs.Empty);
     }
 
     [ClientRpc]
     public void StartDuelClientRpc()
     {
-        SceneManager.LoadScene("GameScene");
+        OnReadyToStart?.Invoke(this, EventArgs.Empty);
     }
 }

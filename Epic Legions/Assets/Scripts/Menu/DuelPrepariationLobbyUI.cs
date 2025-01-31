@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Lobbies;
@@ -13,6 +14,7 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
     [SerializeField] private Button returnButton;
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private TextMeshProUGUI lobbyCodeText;
+    [SerializeField] private TextMeshProUGUI countdown;
 
     [SerializeField] private GameObject lobbyMessageUI;
     [SerializeField] private TextMeshProUGUI lobbyMessageUIText;
@@ -39,8 +41,28 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
         });
 
         lobbyMessageUI.SetActive(false);
+        countdown.enabled = false;
 
         NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnectCallback;
+        GameLobby.Instance.OnReadyToStart += Instance_OnReadyToStart;
+    }
+
+    private void Instance_OnReadyToStart(object sender, EventArgs e)
+    {
+        countdown.enabled = true;
+        StartCoroutine(CountDown());
+    }
+
+    IEnumerator CountDown()
+    {
+        int count = 5;
+        for (int i = 0; i < count; i++)
+        {
+            countdown.text = (count - i).ToString();
+            yield return new WaitForSeconds(1);
+        }
+        countdown.text = "Loading...";
+        SceneManager.LoadScene("GameScene");
     }
 
     private void Singleton_OnClientDisconnectCallback(ulong clientID)
