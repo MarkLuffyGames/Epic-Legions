@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MultiplayerTest : MonoBehaviour
 {
 
+    [SerializeField] private GameObject duelManagerPrefab;
     public GameObject multiplayerUI;
     public Button startHost;
     public Button startClient;
@@ -27,6 +28,18 @@ public class MultiplayerTest : MonoBehaviour
         startClient.onClick.AddListener(() => StartClient());
 
         startServer.onClick.AddListener(() => StartServer());
+
+        NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
+    }
+
+    private void Singleton_OnClientConnectedCallback(ulong obj)
+    {
+        if (NetworkManager.Singleton.IsServer && NetworkManager.Singleton.ConnectedClientsList.Count == 2)
+        {
+            var duelManagerInstance = Instantiate(duelManagerPrefab);
+            duelManagerInstance.GetComponent<NetworkObject>().Spawn();
+            duelManagerInstance.GetComponent<DuelManager>().RegisterPlayer(NetworkManager.Singleton.ConnectedClientsList[0].ClientId, NetworkManager.Singleton.ConnectedClientsList[1].ClientId);
+        }
     }
 
     private void StartHost()
@@ -50,4 +63,5 @@ public class MultiplayerTest : MonoBehaviour
     {
         multiplayerUI.SetActive(false);
     }
+
 }
