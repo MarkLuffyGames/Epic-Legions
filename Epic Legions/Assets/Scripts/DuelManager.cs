@@ -114,6 +114,9 @@ public class DuelManager : NetworkBehaviour
         playerReady[clientId1] = false;
         playerReady[clientId2] = false;
 
+        player1Manager.SetPlayerHealt(20);
+        player2Manager.SetPlayerHealt(20);
+
         StartDuel();
     }
 
@@ -424,16 +427,38 @@ public class DuelManager : NetworkBehaviour
         settingAttackTarget = true;
         cardSelectingTarget = attackingCard;
 
-        foreach (Card card in ObtainTargets(attackingCard))
+        var targets = ObtainTargets(attackingCard);
+
+        if (targets.Count > 0)
         {
-            if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
+            foreach (Card card in ObtainTargets(attackingCard))
             {
-                card.ActiveSelectableTargets(Color.green);
+                if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
+                {
+                    card.ActiveSelectableTargets(Color.green);
+                }
+                else
+                {
+                    card.ActiveSelectableTargets(Color.red);
+                }
             }
-            else
-            {
-                card.ActiveSelectableTargets(Color.red);
-            }
+        }
+        else
+        {
+            settingAttackTarget = false;
+            DirectAttack(attackingCard, NetworkManager.Singleton.LocalClientId);
+        }
+    }
+
+    private void DirectAttack(Card attackingCard, ulong clientID)
+    {
+        if(playerRoles[clientID] == 1)
+        {
+            player2Manager.ReceiveDamage(attackingCard.Moves[movementToUseIndex].MoveSO.Damage);
+        }
+        else if( playerRoles[clientID] == 2)
+        {
+            player1Manager.ReceiveDamage(attackingCard.Moves[movementToUseIndex].MoveSO.Damage);
         }
     }
 

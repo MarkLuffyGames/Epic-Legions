@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Golem
   m_EditorClassIdentifier: 
   cardId: 4
-  cardName: Feerico
+  cardName: Golem
   cardLastName: 
   cardSprite: {fileID: 21300000, guid: 84838479923b7f34da07b080e5f426e8, type: 3}
   cardElemnt: 4
@@ -21,7 +21,7 @@ MonoBehaviour:
   healt: 20
   defence: 10
   speed: 10
-  energy: 10
+  energy: 20
   moves:
   - {fileID: 11400000, guid: b3868733cb94889449eb0dcd256b50ee, type: 2}
   - {fileID: 11400000, guid: 7311d374826a64e4496417012c6bf10a, type: 2}

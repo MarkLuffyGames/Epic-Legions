@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,6 +16,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerManager rivalPlayerManager;
     [SerializeField] private GameObject nextPhaseButton;
     [SerializeField] private GameObject waitTextGameObject;
+    [SerializeField] private TextMeshProUGUI playerHealtText;
+
+    private int playerHealt;
 
     public GameObject cardPrafab;
 
@@ -219,5 +223,22 @@ public class PlayerManager : MonoBehaviour
         }
 
         return cards;
+    }
+
+    public void SetPlayerHealt(int playerHealt)
+    {
+        this.playerHealt = playerHealt;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        playerHealtText.text = $"Vida: {playerHealt}";
+    }
+
+    public void ReceiveDamage(int damage)
+    {
+        playerHealt -= damage;
+        UpdateUI();
     }
 }
