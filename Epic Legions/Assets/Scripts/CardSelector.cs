@@ -64,7 +64,7 @@ public class CardSelector : MonoBehaviour
 
         if (isHoldingCard || isAnyFocusedCard)
         {
-            if (DuelManager.instance.settingAttackTarget)
+            if (DuelManager.Instance.settingAttackTarget)
             {
                 isAnyFocusedCard = false;
             }
@@ -165,7 +165,7 @@ public class CardSelector : MonoBehaviour
         
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
         if(currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard) 
-            && currentFieldPosition.IsFree() && (DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation || card.cardSO is SpellCardSO)
+            && currentFieldPosition.IsFree() && (DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation || card.cardSO is SpellCardSO)
             && !playerManager.isReady)
         {
             if (card.cardSO is HeroCardSO && currentFieldPosition.PositionIndex != -1)
@@ -210,11 +210,11 @@ public class CardSelector : MonoBehaviour
     private void OnQuickClick(Card card)
     {
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
-        if (DuelManager.instance.settingAttackTarget)
+        if (DuelManager.Instance.settingAttackTarget)
         {
             if (card.isAttackable)
             {
-                DuelManager.instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, DuelManager.instance.cardSelectingTarget.cardSO is HeroCardSO);
+                DuelManager.Instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, DuelManager.Instance.cardSelectingTarget.cardSO is HeroCardSO);
             }
         }
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
@@ -240,8 +240,8 @@ public class CardSelector : MonoBehaviour
         float heldTime = Time.time - mouseDownTime;
 
         if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard//La carta esta en la mano del jugador y no esta enfocada
-            && (DuelManager.instance.GetDuelPhase() == DuelPhase.Preparation || //La carta debe ser jugada en la fase de preparacion
-            (card.cardSO is SpellCardSO && !DuelManager.instance.settingAttackTarget)) //Si es SpellCard se puede jugar en otra fase si no se esta seleccionando un objetivo de ataque.
+            && (DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation || //La carta debe ser jugada en la fase de preparacion
+            (card.cardSO is SpellCardSO && !DuelManager.Instance.settingAttackTarget)) //Si es SpellCard se puede jugar en otra fase si no se esta seleccionando un objetivo de ataque.
             && !playerManager.isReady && !card.waitForServer) //El jugador no puede estar listo para avanzar a la siguinte fase ni la carta estar esperando respuesta del servidor.
         {
             card.StartDragging();
@@ -325,12 +325,12 @@ public class CardSelector : MonoBehaviour
             if (currentCard.cardSO is HeroCardSO && fieldPosition.PositionIndex != -1)
             {
                 StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
-                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
+                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20, true);
             }
             else if(currentCard.cardSO is SpellCardSO && fieldPosition.PositionIndex == -1)
             {
                 StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
-                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20);
+                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20, true);
             }
         }
     }
@@ -359,7 +359,7 @@ public class CardSelector : MonoBehaviour
         isHoldingCard = false;
         card.StopDragging(false);
 
-        DuelManager.instance.PlaceCardOnTheFieldServerRpc(
+        DuelManager.Instance.PlaceCardOnTheFieldServerRpc(
             handCardHandler.GetIdexOfCard(currentCard),
             currentFieldPosition.PositionIndex,
             NetworkManager.Singleton.LocalClientId);

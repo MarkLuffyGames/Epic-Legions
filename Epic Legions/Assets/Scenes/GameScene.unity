@@ -1598,6 +1598,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1fa951a73121dc143ae786585053d27d, type: 2}
   - {fileID: 11400000, guid: 3a9012e5cf73919449e0fe8288e412b5, type: 2}
   - {fileID: 11400000, guid: 433db9a177d5c10409ae88e8feff7b31, type: 2}
+  - {fileID: 11400000, guid: a7970ffe428b9e94987124acb613b552, type: 2}
 --- !u!4 &2008372522
 Transform:
   m_ObjectHideFlags: 0
@@ -1761,7 +1762,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 8116693837434703019}
   - {fileID: 62251283}
-  - {fileID: 530183226}
   - {fileID: 349084754}
   - {fileID: 1918686028}
   - {fileID: 2008372522}
+  - {fileID: 530183226}

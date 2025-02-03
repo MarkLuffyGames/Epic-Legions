@@ -1021,7 +1021,6 @@ MonoBehaviour:
   playerNameText: {fileID: 1219774709}
   isReady: {fileID: 1372983725}
   visualGameObject:
-  - {fileID: 345520265}
   - {fileID: 1973556457}
   - {fileID: 71640898}
   - {fileID: 1219774707}
@@ -1232,7 +1231,7 @@ GameObject:
   - component: {fileID: 751476038}
   - component: {fileID: 751476037}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

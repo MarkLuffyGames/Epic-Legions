@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, None }
 public class DuelManager : NetworkBehaviour
 {
-    public static DuelManager instance;
+    public static DuelManager Instance;
 
     [SerializeField] private PlayerManager player1Manager;
     [SerializeField] private PlayerManager player2Manager;
+    [SerializeField] private EndDuelUI endDuelUI;
 
     public List<int> deckCardIds;
 
@@ -37,7 +39,7 @@ public class DuelManager : NetworkBehaviour
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
         Application.targetFrameRate = 60;
 
         duelPhase.OnValueChanged += OnDuelPhaseChanged;
@@ -113,9 +115,6 @@ public class DuelManager : NetworkBehaviour
 
         playerReady[clientId1] = false;
         playerReady[clientId2] = false;
-
-        player1Manager.SetPlayerHealt(20);
-        player2Manager.SetPlayerHealt(20);
 
         StartDuel();
     }
@@ -445,20 +444,7 @@ public class DuelManager : NetworkBehaviour
         }
         else
         {
-            settingAttackTarget = false;
-            DirectAttack(attackingCard, NetworkManager.Singleton.LocalClientId);
-        }
-    }
-
-    private void DirectAttack(Card attackingCard, ulong clientID)
-    {
-        if(playerRoles[clientID] == 1)
-        {
-            player2Manager.ReceiveDamage(attackingCard.Moves[movementToUseIndex].MoveSO.Damage);
-        }
-        else if( playerRoles[clientID] == 2)
-        {
-            player1Manager.ReceiveDamage(attackingCard.Moves[movementToUseIndex].MoveSO.Damage);
+            DirectAttackServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 
@@ -503,10 +489,73 @@ public class DuelManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
+    private void DirectAttackServerRpc(ulong clientID)
+    {
+        HeroDirectAttackClientRpc(movementToUseIndex, clientID);
+        StartCoroutine(HeroAttackServer(playerRoles[clientID]));
+    }
+
+    private IEnumerator HeroAttackServer(int player)
+    {
+        yield return HeroDirectAttack(player);
+
+        settingAttackTarget = false;
+        cardSelectingTarget = null;
+    }
+
+    private IEnumerator HeroDirectAttack(int player)
+    {
+        //Iniciar la animacion de ataque.
+        if (heroTurn.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+        {
+            yield return heroTurn.MeleeAttackAnimation(player, null, heroTurn.Moves[movementToUseIndex]);
+        }
+        else //if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
+        {
+            yield return heroTurn.RangedMovementAnimation();
+        }
+
+        yield return new WaitForSeconds(0.3f);
+
+        if(player == 1)
+        {
+            if (player2Manager.ReceiveDamage(heroTurn.Moves[movementToUseIndex]))
+            {
+                EndDuel(true);
+            }
+        }
+        else
+        {
+            if (player1Manager.ReceiveDamage(heroTurn.Moves[movementToUseIndex]))
+            {
+                EndDuel(false);
+            }
+        }
+
+        heroTurn.MoveToLastPosition();
+
+        movementToUseIndex = -1;
+
+        heroTurn.EndTurn();
+        if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+
+    }
+
+    [ClientRpc]
+    private void HeroDirectAttackClientRpc(int movementToUseIndex, ulong clientID)
+    {
+        if (IsHost) return;
+        this.movementToUseIndex = movementToUseIndex;
+
+        StartCoroutine(HeroDirectAttack(clientID == NetworkManager.Singleton.LocalClientId ? 1 : 2));
+    }
+
+    [ServerRpc(RequireOwnership = false)]
     public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId, bool isHero)
     {
         StartCoroutine(HeroAttackServer(heroToAttackPositionIndex, clientId, isHero));
     }
+
     IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero)
     {
         Card attackerCard = isHero ? heroTurn : (playerRoles[clientId] == 1 ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
@@ -561,14 +610,14 @@ public class DuelManager : NetworkBehaviour
             }
         }
 
-        //Aqui va el metodo para iniciar la animacion de ataque.
+        //Iniciar la animacion de ataque.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
         {
             yield return attackerCard.MeleeAttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
         }
         else //if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
         {
-            attackerCard.RangedMovementAnimation();
+            yield return attackerCard.RangedMovementAnimation();
         }
 
         yield return new WaitForSeconds(0.3f);
@@ -792,5 +841,10 @@ public class DuelManager : NetworkBehaviour
         }
 
         card.RegenerateDefense();
+    }
+
+    private void EndDuel(bool playerVictory)
+    {
+        endDuelUI.Show(playerVictory);
     }
 }

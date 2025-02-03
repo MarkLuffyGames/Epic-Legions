@@ -37,6 +37,7 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
         });
         closeButton.onClick.AddListener(() =>
         {
+            NetworkManager.Singleton.Shutdown();
             SceneManager.LoadScene("MainMenu");
         });
 

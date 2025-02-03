@@ -37,7 +37,7 @@ public class HandCardHandler : MonoBehaviour
                 StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, 0), 20, false, true));
 
                 var rotationX = IsPlayer ? 70 : -90;
-                cardsList[i].RotateToAngle(new Vector3(rotationX, 0, 0), 20);
+                cardsList[i].RotateToAngle(new Vector3(rotationX, 0, 0), 20, false);
 
                 cardsList[i].SetSortingOrder(i + 100);
             }

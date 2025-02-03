@@ -28,6 +28,11 @@ public class PlayerManager : MonoBehaviour
 
     public FieldPosition SpellFieldPosition => spellFieldPosition;
 
+
+    private void Start()
+    {
+        SetPlayerHealt(100);
+    }
     public void AddCardToPlayerDeck(CardSO cardSO, int numberOfCards)
     {
         deck.Add(cardSO);
@@ -83,14 +88,14 @@ public class PlayerManager : MonoBehaviour
     {
         if (isReady && rivalPlayerManager.isReady && NetworkManager.Singleton.IsClient)
         {
-            DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+            DuelManager.Instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 
     public void SetPlayerReady()
     {
         isReady = true;
-        DuelManager.instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        DuelManager.Instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     public void ShowNextPhaseButton()
@@ -233,12 +238,16 @@ public class PlayerManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        playerHealtText.text = $"Vida: {playerHealt}";
+        playerHealtText.text = $"{playerHealt}";
     }
 
-    public void ReceiveDamage(int damage)
+    public bool ReceiveDamage(Movement movement)
     {
-        playerHealt -= damage;
+        //TODO: Ejecutar animacion de daño del jugador.
+        playerHealt -= movement.MoveSO.Damage;
+        if(playerHealt < 0) playerHealt = 0;
         UpdateUI();
+
+        return playerHealt == 0;
     }
 }

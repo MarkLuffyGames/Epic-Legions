@@ -36,6 +36,7 @@ public class Card : MonoBehaviour
     private bool isDragging = false;
     private bool isMyTurn;
     private bool activeActions;
+    private bool isMoving;
     private int sortingOrder;
 
     private Vector3 lastPosition;
@@ -146,6 +147,7 @@ public class Card : MonoBehaviour
     /// </summary>
     private IEnumerator MoveSmoothly(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
     {
+        isMoving = true;
         isTemporalPosition = temporalPosition;
 
         if (!isDragging || isTemporalPosition)
@@ -177,6 +179,8 @@ public class Card : MonoBehaviour
                 transform.position = targetPosition;
             }
         }
+
+        isMoving = false;
         
     }
 
@@ -193,18 +197,18 @@ public class Card : MonoBehaviour
     /// </summary>
     /// <param name="targetRotation">Angulo al que se quiere rotar la carta</param>
     /// <param name="speed">Velocidad a la que se quiere rotar la carta</param>
-    public void RotateToAngle(Vector3 targetRotation, float speed)
+    public void RotateToAngle(Vector3 targetRotation, float speed, bool temporalRotation)
     {
-        StartCoroutine(RotateSmoothly(targetRotation, speed));
+        StartCoroutine(RotateSmoothly(targetRotation, speed, temporalRotation));
     }
 
     /// <summary>
     /// Corrutina para rotar la carta suavemente al ángulo objetivo
     /// </summary>
-    private IEnumerator RotateSmoothly(Vector3 targetRotation, float speed)
+    private IEnumerator RotateSmoothly(Vector3 targetRotation, float speed, bool temporalRotation)
     {
 
-        lastRotation = transform.eulerAngles;
+        if(temporalRotation) lastRotation = transform.eulerAngles;
 
         Quaternion targetQuaternion = Quaternion.Euler(targetRotation);
         while (Quaternion.Angle(transform.rotation, targetQuaternion) > 0.1f)
@@ -261,7 +265,7 @@ public class Card : MonoBehaviour
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
             StartCoroutine(MoveToPosition(new Vector3(0, 9.18f, -4.3f), 20, true, false));
-            RotateToAngle(Vector3.right * 70, 20);
+            RotateToAngle(Vector3.right * 70, 20, true);
             ChangedSortingOrder(110);
             cardSelected.enabled = false;
             cardActions.enabled = activeActions;
@@ -281,7 +285,7 @@ public class Card : MonoBehaviour
         if (isFocused)
         {
             MoveToLastPosition();
-            RotateToAngle(lastRotation, 20);
+            RotateToAngle(lastRotation, 20, false);
             ChangedSortingOrder(sortingOrder);
             if (isMyTurn) cardSelected.enabled = true;
             cardActions.enabled = false;
@@ -347,7 +351,7 @@ public class Card : MonoBehaviour
     {
         if (isDragging && !isTemporalPosition)
         {
-            RotateToAngle(new Vector3(70, 0, 0), 20);
+            RotateToAngle(new Vector3(70, 0, 0), 20, true);
             Vector3 newPosition = GetMouseWorldPosition() + offset;
             newPosition = new Vector3(newPosition.x, 3.7f, newPosition.z);
 
@@ -423,7 +427,7 @@ public class Card : MonoBehaviour
 
     public void UseMovement(int movementNumber)
     {
-        DuelManager.instance.UseMovement(movementNumber, null);
+        DuelManager.Instance.UseMovement(movementNumber, null);
         cardActions.enabled = false;
         ResetSize();
     }
@@ -444,21 +448,42 @@ public class Card : MonoBehaviour
 
     public IEnumerator MeleeAttackAnimation(int player, Card cardToAttak, Movement movement)
     {
-        if(player == 1)
+        yield return new WaitWhile(() => isMoving);
+
+        if (cardToAttak != null)
         {
-            yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), 20, true, false);
-            Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
+            if (player == 1)
+            {
+                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), 20, true, false);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
+            }
+            else
+            {
+                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), 20, true, false);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
+            }
         }
         else
         {
-            yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), 20, true, false);
-            Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
+            if (player == 1)
+            {
+                yield return MoveToPosition(new Vector3(0, 0.5f, 5), 20, true, false);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
+            }
+            else
+            {
+                yield return MoveToPosition(new Vector3(0, 0.5f, -5), 20, true, false);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
+            }
         }
     }
 
-    public void RangedMovementAnimation()
+    public IEnumerator RangedMovementAnimation()
     {
-        StartCoroutine(MoveToPosition(transform.localPosition + Vector3.back, 20, true, true));
+        yield return new WaitWhile(() => isMoving);
+        Debug.Log(transform.position);
+        yield return MoveToPosition(lastPosition + Vector3.back, 20, true, true);
+        Debug.Log(transform.position);
     }
 
     public void AnimationReceivingMovement(Movement movement)
