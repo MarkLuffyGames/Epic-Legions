@@ -116,12 +116,19 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Establece la posicion en el campo de la carta.
+    /// </summary>
+    /// <param name="fieldPosition">Posicion del campo donde estara la carta.</param>
     public void SetFieldPosition(FieldPosition fieldPosition)
     {
         this.fieldPosition = fieldPosition;
         AdjustUIcons();
     }
 
+    /// <summary>
+    /// Actualiza los datos de la carta.
+    /// </summary>
     public void UpdateText()
     {
         healtText.text = currentHealt.ToString();
@@ -142,6 +149,7 @@ public class Card : MonoBehaviour
         StopAllCoroutines();
         yield return StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
     }
+
     /// <summary>
     /// Corrutina para mover la carta suavemente a la posición objetivo
     /// </summary>
@@ -257,7 +265,7 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Agranda la carta para verla mejor
+    /// Posiciona la carta en un punto delante de la pantalla para verla detalladamente.
     /// </summary>
     /// <returns>Retorna true si la carta fue agrandada correctamente.</returns>
     public bool Enlarge()
@@ -278,7 +286,7 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Devuelve la carta a su tamaño y posicion original
+    /// Devuelve la carta a su posicion.
     /// </summary>
     public void ResetSize()
     {
@@ -294,6 +302,9 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ajusta el tamaño de los iconos, agrandandolos si esta en el campo o su tamaño original si no lo está.
+    /// </summary>
     private void AdjustUIcons()
     {
         if (cardSO is HeroCardSO)
@@ -313,6 +324,10 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Cambia el Sort Order de la carta.
+    /// </summary>
+    /// <param name="sortingOrder"></param>
     private void ChangedSortingOrder(int sortingOrder)
     {
         canvasFront.sortingOrder = sortingOrder;
@@ -368,7 +383,7 @@ public class Card : MonoBehaviour
     /// <summary>
     /// Obtiene la posición del mouse en el espacio del mundo
     /// </summary>
-    /// <returns>Devuelve la posicion del mouse en pantalla</returns>
+    /// <returns>La posicion del mouse en pantalla</returns>
     private Vector3 GetMouseWorldPosition()
     {
 
@@ -391,20 +406,28 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Metodo para consultar si la carta esta siendo arrastrada
+    /// Metodo para consultar si la carta está siendo arrastrada.
     /// </summary>
-    /// <returns>Devuelve true si la carta esta siendo arrastrada</returns>
+    /// <returns>True si la carta está siendo arrastrada.</returns>
     public bool IsDragging()
     {
         return isDragging;
     }
 
+    /// <summary>
+    /// Metodo para consultar si la carta está enfocada.
+    /// </summary>
+    /// <returns>True si la carta está enfocada.</returns>
     public bool IsHighlight()
     {
         return isHighlight;
     }
 
-    public bool SetTurn(bool isPlayer)
+    /// <summary>
+    /// Prepara la carta para realizar las acciones de su turno.
+    /// </summary>
+    /// <param name="isPlayer">Bool esta carta es propiedad del jugador.</param>
+    public void SetTurn(bool isPlayer)
     {
         isMyTurn = true;
         cardSelected.enabled = true;
@@ -414,10 +437,11 @@ public class Card : MonoBehaviour
         {
             activeActions = true;
         }
-
-        return true;
     }
 
+    /// <summary>
+    /// Finaliza el turno de esta carta.
+    /// </summary>
     public void EndTurn()
     {
         isMyTurn = false;
@@ -425,6 +449,10 @@ public class Card : MonoBehaviour
         activeActions = false;
     }
 
+    /// <summary>
+    /// Indica al DuelManager que movimiento va a usar esta carta.
+    /// </summary>
+    /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
         DuelManager.Instance.UseMovement(movementNumber, null);
@@ -432,6 +460,10 @@ public class Card : MonoBehaviour
         ResetSize();
     }
 
+    /// <summary>
+    /// Establece la carta como seleccionable para objetivo de un movimiento.
+    /// </summary>
+    /// <param name="color">Color del marcador de seleccion.</param>
     public void ActiveSelectableTargets(Color color)
     {
         cardSelected.enabled = true;
@@ -439,6 +471,10 @@ public class Card : MonoBehaviour
         isAttackable = true;
     }
 
+
+    /// <summary>
+    /// Desmarca esta como seleccionable para objetivo de movimiento.
+    /// </summary>
     public void DesactiveSelectableTargets()
     {
         cardSelected.enabled = false;
@@ -446,6 +482,13 @@ public class Card : MonoBehaviour
         if (isMyTurn) ActiveSelectableTargets(Color.yellow);
     }
 
+    /// <summary>
+    /// Realiza la animacion de ataque cuerpo acuerpo.
+    /// </summary>
+    /// <param name="player">Numero del jugador que utiliza el atque.</param>
+    /// <param name="cardToAttak">Carta a la que se dirige el atque.</param>
+    /// <param name="movement">Movimiento utilizado.</param>
+    /// <returns></returns>
     public IEnumerator MeleeAttackAnimation(int player, Card cardToAttak, Movement movement)
     {
         yield return new WaitWhile(() => isMoving);
@@ -478,6 +521,10 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Realiza la animacion de movimiento a distancia.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator RangedMovementAnimation()
     {
         yield return new WaitWhile(() => isMoving);
@@ -486,6 +533,10 @@ public class Card : MonoBehaviour
         Debug.Log(transform.position);
     }
 
+    /// <summary>
+    /// Realiza la animacion de recibir Movimiento.
+    /// </summary>
+    /// <param name="movement"></param>
     public void AnimationReceivingMovement(Movement movement)
     {
         //Efecto de daño.
@@ -534,13 +585,21 @@ public class Card : MonoBehaviour
         return false;
     }
 
+
+    /// <summary>
+    /// Realiza la animacion de proteger a un aliado.
+    /// </summary>
+    /// <param name="position"></param>
     public void ProtectAlly(FieldPosition position)
     {
         StartCoroutine(MoveToPosition(position.transform.position + Vector3.up * 0.1f, 20, true,false));
     }
+
+    /// <summary>
+    /// Atualiza los datos de la carta para cuando esta en el cementerio.
+    /// </summary>
     public void ToGraveyard()
     {
-
         CancelAllEffects();
         AdjustUIcons();
         currentDefense = defense;
@@ -548,6 +607,11 @@ public class Card : MonoBehaviour
         UpdateText();
     }
 
+    /// <summary>
+    /// Muestra el contador de daño sobre la carta.
+    /// </summary>
+    /// <param name="isDefence"></param>
+    /// <param name="amountDamage"></param>
     private void ShowTextDamage(bool isDefence, int amountDamage)
     {
         var position = isDefence ? defenceText.transform.position : healtText.transform.position;
@@ -557,7 +621,9 @@ public class Card : MonoBehaviour
         popUp.GetComponentInChildren<TextMeshProUGUI>().text = $"-{amountDamage}";
     }
 
-    
+    /// <summary>
+    /// Maneja el efecto de aturdir.
+    /// </summary>
     public void ToggleStunned()
     {
         if (stunned == 0) 
@@ -591,6 +657,9 @@ public class Card : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Actualiza el estado de los efectos activos por movimientos de esta carta.
+    /// </summary>
     public void ManageEffects()
     {
         foreach (var move in moves)
@@ -602,6 +671,9 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Cancela todos los efectos con relacion a esta carta.
+    /// </summary>
     private void CancelAllEffects()
     {
         stunned = 0;
@@ -613,6 +685,9 @@ public class Card : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Regenera la defensa de esta carta.
+    /// </summary>
     public void RegenerateDefense()
     {
         if(currentDefense < defense)
@@ -627,12 +702,20 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void AddEffect(Effect statModifier)
+    /// <summary>
+    /// Añade un efcto a esta carta.
+    /// </summary>
+    /// <param name="effect">Efecto que se añade a la carta.</param>
+    public void AddEffect(Effect effect)
     {
-        fieldPosition.statModifier.Add(statModifier);
+        fieldPosition.statModifier.Add(effect);
         UpdateText();
     }
 
+    /// <summary>
+    /// Verifica los modificadores de defensa que tenga activo esta carta.
+    /// </summary>
+    /// <returns>Cantidad modificada.</returns>
     private int GetDefenseModifier()
     {
         int defenceModifier = 0;
@@ -646,6 +729,10 @@ public class Card : MonoBehaviour
         return defenceModifier;
     }
 
+    /// <summary>
+    /// Verifica los modificadores de velocidad que tenga activo esta carta.
+    /// </summary>
+    /// <returns>Cantidad modificada.</returns>
     private int GetSpeedModifier()
     {
         int speedModifier = 0;
@@ -659,6 +746,10 @@ public class Card : MonoBehaviour
         return speedModifier;
     }
 
+    /// <summary>
+    /// Verifica cuanto daño debe absorber esta carta segun los efectos activos.
+    /// </summary>
+    /// <returns>Cantidad absorbida.</returns>
     private int GetDamageAbsorbed()
     {
         int damageAbsorbed = 0;
@@ -672,6 +763,10 @@ public class Card : MonoBehaviour
         return damageAbsorbed;
     }
 
+    /// <summary>
+    /// Verifica si esta carta esta protegida por otra.
+    /// </summary>
+    /// <returns>True si tiene un protector.</returns>
     private Effect HasProtector()
     {
         foreach (Effect effect in fieldPosition.statModifier)
@@ -682,6 +777,11 @@ public class Card : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Recibe el daño del escudo.
+    /// </summary>
+    /// <param name="damage">Daño aplicado a esta carta.</param>
+    /// <returns>Cantidad de daño que no pudo proteger el escudo.</returns>
     private int ReceiveDamageToShield(int damage)
     {
         if(CurrentDefensePoints <= damage)
@@ -731,6 +831,10 @@ public class Card : MonoBehaviour
         return 0;   
     }
 
+    /// <summary>
+    /// Sana la vida de esta carta.
+    /// </summary>
+    /// <param name="amount">Cantidad a sanar.</param>
     public void ToHeal(int amount)
     {
         ShowTextToHeal(healt - currentHealt < amount ? healt - currentHealt : amount);
@@ -739,6 +843,10 @@ public class Card : MonoBehaviour
         UpdateText();
     }
 
+    /// <summary>
+    /// Muestra en pantalla el numero de cuanta vida recupero esta carta.
+    /// </summary>
+    /// <param name="amount"></param>
     private void ShowTextToHeal(int amount)
     {
         var position = healtText.transform.position;
