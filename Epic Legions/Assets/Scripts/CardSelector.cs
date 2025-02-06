@@ -214,7 +214,7 @@ public class CardSelector : MonoBehaviour
         {
             if (card.isAttackable)
             {
-                DuelManager.Instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, DuelManager.Instance.cardSelectingTarget.cardSO is HeroCardSO);
+                DuelManager.Instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, DuelManager.Instance.cardSelectingTarget.cardSO is HeroCardSO, DuelManager.Instance.cardSelectingTarget.FieldPosition.PositionIndex);
             }
         }
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.

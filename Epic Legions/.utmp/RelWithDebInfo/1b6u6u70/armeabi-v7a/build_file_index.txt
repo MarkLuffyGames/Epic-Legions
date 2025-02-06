@@ -1,0 +1,2 @@
+D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

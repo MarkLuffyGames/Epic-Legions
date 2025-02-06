@@ -455,7 +455,7 @@ public class Card : MonoBehaviour
     /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
-        DuelManager.Instance.UseMovement(movementNumber, null);
+        DuelManager.Instance.UseMovement(movementNumber, this);
         cardActions.enabled = false;
         ResetSize();
     }
