@@ -31,6 +31,12 @@
             "name": "com.MarkLuffyGames.HemeraLegions",
             "processId": 2048,
             "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 11209,
+            "exited": false
         }
     ],
     "m_Tags": {

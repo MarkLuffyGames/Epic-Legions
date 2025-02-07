@@ -257,7 +257,9 @@ public class GameLobby : NetworkBehaviour
                 playerDataNetworkList.RemoveAt(i);
             }
         }
+        playerReady.Remove(clientId);
 
+        OnReadyChanged?.Invoke(this, EventArgs.Empty);
         OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
     }
 

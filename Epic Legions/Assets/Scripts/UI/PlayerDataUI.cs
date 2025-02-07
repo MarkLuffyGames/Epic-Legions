@@ -43,6 +43,7 @@ public class PlayerDataUI : MonoBehaviour
         else
         {
             Hide();
+            isReady.SetActive(false);
         }
     }
 

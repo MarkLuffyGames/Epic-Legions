@@ -17,7 +17,21 @@ public class MainMenu : MonoBehaviour
         {
             SceneManager.LoadScene("LobbyScene");
         });
-        NetworkManager.OnInstantiated += NetworkManager_OnInstantiated;
+
+        if (NetworkManager.Singleton != null)
+        {
+            Destroy(NetworkManager.Singleton.gameObject);
+        }
+
+        if (GameLobby.Instance != null)
+        {
+            Destroy(GameLobby.Instance.gameObject);
+        }
+
+        if (DuelManager.Instance != null)
+        {
+            Destroy(DuelManager.Instance.gameObject);
+        }
     }
 
     private void NetworkManager_OnInstantiated(NetworkManager obj)
