@@ -48,6 +48,7 @@ public class Card : MonoBehaviour
 
     public bool isVisible;
     public bool waitForServer;
+    public bool actionIsReady;
 
     private int healt;
     private int defense;
@@ -430,12 +431,13 @@ public class Card : MonoBehaviour
     public void SetTurn(bool isPlayer)
     {
         isMyTurn = true;
-        cardSelected.enabled = true;
-        cardSelectedImage.color = Color.yellow;
 
         if (isPlayer)
         {
             activeActions = true;
+
+            cardSelected.enabled = true;
+            cardSelectedImage.color = Color.yellow;
         }
     }
 
