@@ -556,12 +556,13 @@ public class Card : MonoBehaviour
     /// </summary>
     /// <param name="amountDamage"></param>
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
-    public bool ReceiveDamage(int amountDamage)
+    public void ReceiveDamage(int amountDamage)
     {
         var protector = HasProtector();
         if (protector != null && protector.hasProtector)
         {
-            return protector.damageReceiver.ReceiveDamage(amountDamage);
+            protector.damageReceiver.ReceiveDamage(amountDamage);
+            return;
         }
 
         amountDamage -= GetDamageAbsorbed();
@@ -573,18 +574,12 @@ public class Card : MonoBehaviour
         {
             ShowTextDamage(false, currentHealt > remainingDamage ? remainingDamage : currentHealt);
             currentHealt -= remainingDamage;
-
-            if (currentHealt <= 0)
-            {
-                return true;
-            }
+            if (currentHealt < 0) currentHealt = 0;
         }
 
         MoveToLastPosition();
 
         UpdateText();
-
-        return false;
     }
 
 
