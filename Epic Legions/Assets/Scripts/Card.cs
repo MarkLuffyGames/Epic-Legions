@@ -50,7 +50,7 @@ public class Card : MonoBehaviour
     public bool waitForServer;
     public bool actionIsReady;
 
-    private int healt;
+    private int maxHealt;
     private int defense;
     private int speed;
     private int energy;
@@ -62,10 +62,10 @@ public class Card : MonoBehaviour
     private FieldPosition fieldPosition;
     public bool isAttackable;
 
-    public int HealtPoint => healt;
+    public int HealtPoint => maxHealt;
     public int CurrentHealtPoints => currentHealt;
-    public int CurrentDefensePoints => currentDefense + GetDefenseModifier();
-    public int CurrentSpeedPoints => speed + GetSpeedModifier();
+    public int CurrentDefensePoints => Mathf.Max(currentDefense + GetDefenseModifier(), 0);
+    public int CurrentSpeedPoints => Mathf.Max(speed + GetSpeedModifier(), 1);
     public List<Movement> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
@@ -84,7 +84,7 @@ public class Card : MonoBehaviour
         cardImage.sprite = cardSO.CardSprite;
         if(cardSO is HeroCardSO heroCardSO)
         {
-            healt = heroCardSO.Healt;
+            maxHealt = heroCardSO.Healt;
             defense = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
@@ -94,7 +94,7 @@ public class Card : MonoBehaviour
                 moves.Add(new Movement(move));
             }
 
-            currentHealt = healt;
+            currentHealt = maxHealt;
             currentDefense = defense;
 
             if (moves[1] != null)
@@ -132,6 +132,10 @@ public class Card : MonoBehaviour
     /// </summary>
     public void UpdateText()
     {
+        healtText.color = currentHealt < maxHealt ?  Color.red : Color.yellow;
+        defenceText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
+        speedText.color = CurrentSpeedPoints < speed ? Color.red : CurrentSpeedPoints > speed ? Color.green : Color.yellow;
+
         healtText.text = currentHealt.ToString();
         defenceText.text = CurrentDefensePoints.ToString();
         speedText.text = CurrentSpeedPoints.ToString();
@@ -479,9 +483,11 @@ public class Card : MonoBehaviour
     /// </summary>
     public void DesactiveSelectableTargets()
     {
-        cardSelected.enabled = false;
-        isAttackable = false;
-        if (isMyTurn) ActiveSelectableTargets(Color.yellow);
+        if (isAttackable)
+        {
+            cardSelected.enabled = false;
+            isAttackable = false;
+        }
     }
 
     /// <summary>
@@ -530,9 +536,7 @@ public class Card : MonoBehaviour
     public IEnumerator RangedMovementAnimation()
     {
         yield return new WaitWhile(() => isMoving);
-        Debug.Log(transform.position);
         yield return MoveToPosition(lastPosition + Vector3.back, 20, true, true);
-        Debug.Log(transform.position);
     }
 
     /// <summary>
@@ -600,7 +604,7 @@ public class Card : MonoBehaviour
         CancelAllEffects();
         AdjustUIcons();
         currentDefense = defense;
-        currentHealt = healt;
+        currentHealt = maxHealt;
         UpdateText();
     }
 
@@ -834,9 +838,9 @@ public class Card : MonoBehaviour
     /// <param name="amount">Cantidad a sanar.</param>
     public void ToHeal(int amount)
     {
-        ShowTextToHeal(healt - currentHealt < amount ? healt - currentHealt : amount);
+        ShowTextToHeal(maxHealt - currentHealt < amount ? maxHealt - currentHealt : amount);
         currentHealt += amount;
-        if(currentHealt > healt)currentHealt = healt;
+        if(currentHealt > maxHealt)currentHealt = maxHealt;
         UpdateText();
     }
 

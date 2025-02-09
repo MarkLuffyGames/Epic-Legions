@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, None }
 public class DuelManager : NetworkBehaviour
@@ -193,6 +190,71 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
+    private void SetBattleTurns()
+    {
+        turns.Clear();
+
+        if (HeroCardsOnTheField.Count > 0)
+        {
+            turns = new List<List<Card>>();
+
+            foreach (var card in HeroCardsOnTheField)
+            {
+                if (turns.Count > 0)
+                {
+                    if (turns[turns.Count - 1][0].CurrentSpeedPoints != card.CurrentSpeedPoints)
+                    {
+                        turns.Add(new List<Card>());
+                    }
+
+                    turns[turns.Count - 1].Add(card);
+                }
+                else
+                {
+                    turns.Add(new List<Card>());
+                    turns[0].Add(card);
+                }
+
+            }
+        }
+    }
+    private void StartHeroTurn(int turnIndex)
+    {
+        if (turns.Count == 0)
+        {
+            NextTurn();
+            return;
+        }
+
+        heroTurn.Clear();
+        foreach (var card in turns[turnIndex])
+        {
+            if (card.stunned == 0 && card.FieldPosition != null) heroTurn.Add(card);
+        }
+
+        if(heroTurn.Count == 0)
+        {
+            NextTurn();
+            return;
+        }
+
+        foreach (var hero in heroTurn)
+        {
+            if (player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
+            {
+                hero.SetTurn(true);
+            }
+            else
+            {
+                hero.SetTurn(false);
+            }
+
+            hero.HandlingStatusEffects();
+        }
+
+        ManageEffects();
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ulong clientId)
     {
@@ -242,7 +304,7 @@ public class DuelManager : NetworkBehaviour
 
     private void UpdateDuelPhaseText()
     {
-        duelPhaseText.text = duelPhase.Value.ToString();
+        duelPhaseText.text = $"{duelPhase.Value.ToString()}{(duelPhase.Value == DuelPhase.Battle ? $" {heroesInTurnIndex}" : "")}";
     }
 
     public DuelPhase GetDuelPhase()
@@ -312,34 +374,6 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    private void SetBattleTurns()
-    {
-        turns.Clear();
-
-        if(HeroCardsOnTheField.Count > 0)
-        {
-            turns = new List<List<Card>>();
-
-            foreach (var card in HeroCardsOnTheField)
-            {
-                if(turns.Count > 0)
-                {
-                    if (turns[turns.Count - 1][0].CurrentSpeedPoints != card.CurrentSpeedPoints)
-                    {
-                        turns.Add(new List<Card>());
-                    }
-
-                    turns[turns.Count - 1].Add(card);
-                }
-                else
-                {
-                    turns.Add(new List<Card>());
-                    turns[0].Add(card);
-                }
-                
-            }
-        }
-    }
 
     [ClientRpc]
     private void PlaceCardOnTheFieldClientRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
@@ -354,43 +388,6 @@ public class DuelManager : NetworkBehaviour
         {
             SetCard(player2Manager, false, cardIndex, fieldPositionIdex);
         }
-    }
-
-    private void StartHeroTurn(int turnIndex)
-    {
-        if (turns.Count == 0)
-        {
-            NextTurn();
-            return;
-        }
-
-        heroTurn.Clear();
-        foreach (var card in turns[turnIndex])
-        {
-            if(card.stunned == 0 && card.FieldPosition != null) heroTurn.Add(card);
-        }
-
-        /*if (heroTurn.FieldPosition == null)
-        {
-            NextTurn();
-            return;
-        }*/
-
-        foreach (var hero in heroTurn)
-        {
-            if(player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
-            {
-                hero.SetTurn(true);
-            }
-            else
-            {
-                hero.SetTurn(false);
-            }
-            
-            hero.HandlingStatusEffects();
-        }
-        
-        ManageEffects();
     }
 
     private ulong GetClientIdForHero(Card heroCard)
@@ -473,10 +470,11 @@ public class DuelManager : NetworkBehaviour
         else
         {
             HeroAttackServerRpc(-1, NetworkManager.Singleton.LocalClientId, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex);
-            DisableAttackableTargets();
-
+            
             cardSelectingTarget.actionIsReady = true;
             cardSelectingTarget.EndTurn();
+            DisableAttackableTargets();
+
             DisableAttackableTargets();
         }
     }
@@ -574,7 +572,7 @@ public class DuelManager : NetworkBehaviour
         settingAttackTarget = false;
         cardSelectingTarget = null;
 
-        if (lastMove) FinishActions();
+        if (lastMove) yield return FinishActions();
     }
 
     List<HeroAction> actions = new List<HeroAction>();
@@ -605,17 +603,15 @@ public class DuelManager : NetworkBehaviour
     {
         for (int i = 0; i < actions.Count; i++)
         {
-            yield return new WaitForSeconds(1);
-            StartCoroutine(HeroAttackServer(actions[i].heroToAttackPositionIndex, actions[i].clientId, true, actions[i].heroUsesTheAttack, actions[i].movementToUseIndex,
-                i == actions.Count - 1));
+            yield return HeroAttackServer(actions[i].heroToAttackPositionIndex, actions[i].clientId, true, actions[i].heroUsesTheAttack, actions[i].movementToUseIndex,
+                i == actions.Count - 1);
         }
         actions.Clear();
-        
     }
 
     private IEnumerator FinishActions()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         SendCardsToGraveyard();
 
@@ -689,6 +685,7 @@ public class DuelManager : NetworkBehaviour
         }
         else //if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
         {
+            Debug.Log("Animacion de ataque");
             yield return attackerCard.RangedMovementAnimation();
         }
 
@@ -835,7 +832,7 @@ public class DuelManager : NetworkBehaviour
             {
                 if (fieldPositionIndex == -1)
                 {
-                    HeroDirectAttack(1, attackerCard, movementToUseIndex, lastMove);
+                    yield return HeroDirectAttack(1, attackerCard, movementToUseIndex, lastMove);
                 }
                 else
                 {
@@ -855,7 +852,7 @@ public class DuelManager : NetworkBehaviour
             {
                 if (fieldPositionIndex == -1)
                 {
-                    HeroDirectAttack(1, attackerCard, movementToUseIndex, lastMove);
+                    yield return HeroDirectAttack(2, attackerCard, movementToUseIndex, lastMove);
                 }
                 else
                 {
@@ -895,12 +892,21 @@ public class DuelManager : NetworkBehaviour
     [ClientRpc]
     private void StartHeroTurnClientRpc(int heroesInTurnIndex)
     {
+        if (IsHost) return;
         StartHeroTurn(heroesInTurnIndex);
     }
 
     // Método para remover las cartas sin vida
     private void RemoveDestroyedCards()
     {
+        HeroCardsOnTheField.RemoveAll(card => card.FieldPosition == null);
+        RemoveDestroyedCardsClientRpc();
+    }
+
+    [ClientRpc]
+    private void RemoveDestroyedCardsClientRpc()
+    {
+        if(IsHost)return;
         HeroCardsOnTheField.RemoveAll(card => card.FieldPosition == null);
     }
 
