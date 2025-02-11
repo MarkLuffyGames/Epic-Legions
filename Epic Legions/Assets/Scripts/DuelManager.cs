@@ -374,6 +374,23 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
+    private void InsertActionInOrder(List<HeroAction> heroActions, HeroAction newHeroAction)
+    {
+        // Encuentra la posición donde insertar la nueva carta
+        int insertIndex = heroActions.FindLastIndex(heroAction => heroAction.hasPriority == true);
+
+        // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
+        if (insertIndex == -1)
+        {
+            heroActions.Insert(0, newHeroAction);
+        }
+        else
+        {
+            // Inserta después de la última carta con la misma velocidad o mayor
+            heroActions.Insert(insertIndex + 1, newHeroAction);
+        }
+    }
+
 
     [ClientRpc]
     private void PlaceCardOnTheFieldClientRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
@@ -581,15 +598,18 @@ public class DuelManager : NetworkBehaviour
     {
         if (isHero)
         {
-            if(playerRoles[clientId] == 1)
+            bool hasPriority = false;
+            if (playerRoles[clientId] == 1)
             {
                 player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
+                hasPriority = player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
             }
             else
             {
                 player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
+                hasPriority = player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
             }
-            actions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex));
+            InsertActionInOrder(actions, new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex, hasPriority));
         }
         else
         {
@@ -685,7 +705,6 @@ public class DuelManager : NetworkBehaviour
         }
         else //if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
         {
-            Debug.Log("Animacion de ataque");
             yield return attackerCard.RangedMovementAnimation();
         }
 
@@ -704,7 +723,6 @@ public class DuelManager : NetworkBehaviour
 
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0) //Ataque de daño.
         {
-
             //Animacion de daño del oponente
             if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
@@ -750,6 +768,7 @@ public class DuelManager : NetworkBehaviour
 
         attackerCard.MoveToLastPosition();
 
+
         movementToUseIndex = -1;
         if (attackerCard.cardSO is SpellCardSO)
         {
@@ -763,6 +782,7 @@ public class DuelManager : NetworkBehaviour
             }
             
         }
+        yield return new WaitForSeconds(1); 
 
         if (lastMove) yield return FinishActions();
     }
@@ -822,6 +842,7 @@ public class DuelManager : NetworkBehaviour
     private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
         if (IsHost) yield break;
+        Debug.Log("HeroAttackClient");
         Card attackerCard = isHero ? (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
             : (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
 
@@ -951,11 +972,14 @@ public class HeroAction
     public ulong clientId;
     public int heroUsesTheAttack;
     public int movementToUseIndex;
-    public HeroAction(int heroToAttackPositionIndex, ulong clientId, int heroUsesTheAttack, int movementToUseIndex)
+    public bool hasPriority;
+    public HeroAction(int heroToAttackPositionIndex, ulong clientId, int heroUsesTheAttack, int movementToUseIndex, bool hasPriority)
     {
         this.heroToAttackPositionIndex = heroToAttackPositionIndex;
         this.clientId = clientId;
         this.heroUsesTheAttack = heroUsesTheAttack;
         this.movementToUseIndex = movementToUseIndex;
+        this.hasPriority = hasPriority;
+        this.hasPriority = hasPriority;
     }
 }

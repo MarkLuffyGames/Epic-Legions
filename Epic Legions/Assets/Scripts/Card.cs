@@ -501,6 +501,14 @@ public class Card : MonoBehaviour
     {
         yield return new WaitWhile(() => isMoving);
 
+        if (isFocused)
+        {
+            ResetSize();
+            yield return null;
+        }
+
+        yield return new WaitWhile(() => isMoving);
+
         if (cardToAttak != null)
         {
             if (player == 1)
@@ -536,6 +544,15 @@ public class Card : MonoBehaviour
     public IEnumerator RangedMovementAnimation()
     {
         yield return new WaitWhile(() => isMoving);
+
+        if (isFocused)
+        {
+            ResetSize();
+            yield return null;
+        }
+
+        yield return new WaitWhile(() => isMoving);
+
         yield return MoveToPosition(lastPosition + Vector3.back, 20, true, true);
     }
 
