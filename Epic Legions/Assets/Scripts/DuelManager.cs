@@ -710,17 +710,6 @@ public class DuelManager : NetworkBehaviour
 
         yield return new WaitForSeconds(0.3f);
 
-        //Aplicar afecto de ataque si es necesario.
-        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
-        {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
-        }
-        else
-        {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
-        }
-
-
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0) //Ataque de daño.
         {
             //Animacion de daño del oponente
@@ -767,6 +756,16 @@ public class DuelManager : NetworkBehaviour
 
 
         attackerCard.MoveToLastPosition();
+
+        //Aplicar afecto de ataque si es necesario.
+        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
+        {
+            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
+        }
+        else
+        {
+            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
+        }
 
 
         movementToUseIndex = -1;
