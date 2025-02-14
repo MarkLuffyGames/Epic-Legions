@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Golpe Celeste
+  m_Name: Ritual de la No Muerte
   m_EditorClassIdentifier: 
-  moveName: Golpe Celeste
-  damage: 10
-  energyCost: 5
+  moveName: Ritual de la No Muerte
+  damage: 0
+  energyCost: 35
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  needTarget: 1
-  moveType: 0
+  needTarget: 0
+  moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
-  effectDescription: "Un golpe \xE1gil sin efectos adicionales."
+  visualEffectHit: {fileID: 7155335147208632822, guid: 97c43495f80a3244fad1301dfafbe252, type: 3}
+  effectDescription: Si es derrotado en este turno, resucita con la vida maxima al
+    final de la fase de batalla.

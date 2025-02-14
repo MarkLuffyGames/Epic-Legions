@@ -22,5 +22,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
   visualEffectHit: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
-  effectDescription: "Genera un escudo sagrado que absorbe una cantidad fija de da\xF1o
-    recibido durante 3 turnos.\t"
+  effectDescription: "Genera un escudo sagrado que absorbe 20 del da\xF1o recibido
+    durante 3 turnos."

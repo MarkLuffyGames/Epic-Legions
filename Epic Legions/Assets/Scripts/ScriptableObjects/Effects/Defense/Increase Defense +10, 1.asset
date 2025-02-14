@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Increase Defense +10, 1
   m_EditorClassIdentifier: 
   amount: 10
-  numberTurns: 2
+  numberTurns: 1
   isIncrease: 1

@@ -802,13 +802,27 @@ public class DuelManager : NetworkBehaviour
         }
         else if(attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Midfield)
         {
-            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            if (player1Manager.GetFieldPositionList().Contains(attackerCard.FieldPosition))
             {
-                return player1Manager.GetAllCardInField(cardToAttack);
+                if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
+                {
+                    return player1Manager.GetAllCardInField(cardToAttack);
+                }
+                else
+                {
+                    return player2Manager.GetAllCardInField(cardToAttack);
+                }
             }
             else
             {
-                return player2Manager.GetAllCardInField(cardToAttack);
+                if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
+                {
+                    return player2Manager.GetAllCardInField(cardToAttack);
+                }
+                else
+                {
+                    return player1Manager.GetAllCardInField(cardToAttack);
+                }
             }
         }
 

@@ -21,7 +21,7 @@ MonoBehaviour:
   healt: 50
   defence: 20
   speed: 25
-  energy: 20
+  energy: 30
   moves:
-  - {fileID: 11400000, guid: 01f41961c66bed94e8df2bbd7c058154, type: 2}
-  - {fileID: 11400000, guid: 47306c09ca9ce284695974589e88419b, type: 2}
+  - {fileID: 11400000, guid: 376cb7b08bf95f4498cc1dc4b43eb66d, type: 2}
+  - {fileID: 11400000, guid: 1b0cbdb9db8e8044dabbf1fe00b5b6f6, type: 2}

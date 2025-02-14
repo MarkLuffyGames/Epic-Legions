@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Golpe Celeste
+  m_Name: Llamado de las Almas
   m_EditorClassIdentifier: 
-  moveName: Golpe Celeste
-  damage: 10
-  energyCost: 5
-  moveEffect: {fileID: 0}
+  moveName: Llamado de las Almas
+  damage: 20
+  energyCost: 25
+  moveEffect: {fileID: 11400000, guid: cd6f61260300ae44189ee71d4a629011, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 1
-  moveType: 0
+  moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Un golpe \xE1gil sin efectos adicionales."
+  effectDescription: "invoca las almas de los ca\xEDdos para devorar la esencia de
+    su enemigo, restaurando 20 puntos de vida."
