@@ -20,8 +20,16 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI speedText;
     [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI move1NameText;
+    [SerializeField] private Image move1EnergyImage;
+    [SerializeField] private TextMeshProUGUI move1EnergyCostText;
+    [SerializeField] private Image move1DamageImage;
+    [SerializeField] private TextMeshProUGUI move1DamageText;
     [SerializeField] private TextMeshProUGUI move1DescriptionText;
     [SerializeField] private TextMeshProUGUI move2NameText;
+    [SerializeField] private Image move2EnergyImage;
+    [SerializeField] private TextMeshProUGUI move2EnergyCostText;
+    [SerializeField] private Image move2DamageImage;
+    [SerializeField] private TextMeshProUGUI move2DamageText;
     [SerializeField] private TextMeshProUGUI move2DescriptionText;
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private GameObject energyPopUpPrefab;
@@ -97,15 +105,29 @@ public class Card : MonoBehaviour
             currentHealt = maxHealt;
             currentDefense = defense;
 
-            if (moves[1] != null)
+            if (moves[0] != null)
             {
                 move1NameText.text = moves[0].MoveSO.MoveName;
+                move1EnergyCostText.text = moves[0].MoveSO.EnergyCost.ToString();
+                move1DamageText.text = moves[0].MoveSO.Damage.ToString();
                 move1DescriptionText.text = moves[0].MoveSO.EffectDescription;
+                if(moves[0].MoveSO.Damage == 0)
+                {
+                    move1DamageText.enabled = false;
+                    move1DamageImage.enabled = false;
+                }
             }
             if (moves[1] != null)
             {
                 move2NameText.text = moves[1].MoveSO.MoveName;
+                move2EnergyCostText.text = moves[1].MoveSO.EnergyCost.ToString();
+                move2DamageText.text = moves[1].MoveSO.Damage.ToString();
                 move2DescriptionText.text = moves[1].MoveSO.EffectDescription;
+                if (moves[1].MoveSO.Damage == 0)
+                {
+                    move2DamageText.enabled = false;
+                    move2DamageImage.enabled = false;
+                }
             }
 
             UpdateText();
@@ -114,8 +136,26 @@ public class Card : MonoBehaviour
         {
             moves.Add(new Movement(spellCardSO.Move));
             description.text = spellCardSO.Move.EffectDescription;
+
+            move1NameText.enabled = false;
+            move1EnergyImage.enabled = false;
+            move1EnergyCostText.enabled = false;
+            move1DamageImage.enabled = false;
+            move1DamageText.enabled = false;
+            move1DescriptionText.enabled = false;
+            move2NameText.enabled = false;
+            move2EnergyImage.enabled = false;
+            move2EnergyCostText.enabled = false;
+            move2DamageImage.enabled = false;
+            move2DamageText.enabled = false;
+            move2DescriptionText.enabled = false;
+            healtText.enabled = false;
+            defenceText.enabled = false;
+            speedText.enabled = false;
+            energyText.enabled = false;
         }
     }
+
 
     /// <summary>
     /// Establece la posicion en el campo de la carta.
@@ -364,6 +404,8 @@ public class Card : MonoBehaviour
         }
     }
 
+
+    public GameObject listo;
     /// <summary>
     /// Actualiza la posición de la carta mientras se arrastra
     /// </summary>
@@ -383,6 +425,8 @@ public class Card : MonoBehaviour
 
             transform.position = newPosition;
         }
+
+        listo.SetActive(actionIsReady);
     }
 
     /// <summary>

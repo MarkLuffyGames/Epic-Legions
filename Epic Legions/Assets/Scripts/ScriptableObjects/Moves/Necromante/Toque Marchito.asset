@@ -22,5 +22,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 3153472991145048103, guid: 3407e378c048bb5438424b28c7740b48, type: 3}
   visualEffectHit: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
-  effectDescription: "Con un toque maldito, Lord Final drena la energ\xEDa vital
-    del enemigo, debilitando su defensa en 10 durante un turno."
+  effectDescription: "Con un toque maldito, drena la energ\xEDa vital del enemigo,
+    debilitando su defensa en 10 durante un turno."

@@ -18,6 +18,7 @@ public class MoveSO : ScriptableObject
 
     public string MoveName => moveName;
     public int Damage => damage;
+    public int EnergyCost => energyCost;
     public CardEffect MoveEffect => moveEffect;
     public Condition EffectCondition => effectCondition;
     public bool NeedTarget => needTarget;

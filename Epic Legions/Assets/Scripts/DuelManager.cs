@@ -21,7 +21,7 @@ public class DuelManager : NetworkBehaviour
     private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
 
     private Dictionary<ulong, List<int>> playerDecks = new Dictionary<ulong, List<int>>();
-    private Dictionary<ulong, bool> playerReady = new Dictionary<ulong, bool>();
+    public Dictionary<ulong, bool> playerReady = new Dictionary<ulong, bool>(); //Poner privado despues de la prueba.
 
 
     private NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
@@ -554,7 +554,9 @@ public class DuelManager : NetworkBehaviour
 
     private IEnumerator HeroDirectAttack(int player, Card heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
-        
+        settingAttackTarget = false;
+        cardSelectingTarget = null;
+
         //Iniciar la animacion de ataque.
         if (heroUsesTheAttack.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
         {
@@ -586,9 +588,6 @@ public class DuelManager : NetworkBehaviour
 
         movementToUseIndex = -1;
 
-        settingAttackTarget = false;
-        cardSelectingTarget = null;
-
         if (lastMove) yield return FinishActions();
     }
 
@@ -616,7 +615,16 @@ public class DuelManager : NetworkBehaviour
             StartCoroutine(HeroAttackServer(heroToAttackPositionIndex, clientId, isHero, heroUsesTheAttack, movementToUseIndex, true));
         }
 
-        if (heroTurn.All(hero => hero.actionIsReady)) StartCoroutine(StartActions());
+        if (heroTurn.All(hero => hero.actionIsReady)) 
+        { 
+            StartCoroutine(StartActions());
+
+            foreach (var hero in HeroCardsOnTheField)
+            {
+                hero.actionIsReady = false;
+            }
+        }
+        
     }
 
     private IEnumerator StartActions()
@@ -642,6 +650,9 @@ public class DuelManager : NetworkBehaviour
 
     IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
+        settingAttackTarget = false;
+        cardSelectingTarget = null;
+
         Card attackerCard = isHero ? 
             (playerRoles[clientId] == 1 ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
             : (playerRoles[clientId] == 1 ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
@@ -689,8 +700,6 @@ public class DuelManager : NetworkBehaviour
                 yield return HeroAttack(card, 2, attackerCard, movementToUseIndex, lastMove);
             }
         }
-        settingAttackTarget = false;
-        cardSelectingTarget = null;
     }
 
     private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
@@ -855,6 +864,9 @@ public class DuelManager : NetworkBehaviour
     private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
         if (IsHost) yield break;
+
+        settingAttackTarget = false;
+        cardSelectingTarget = null;
         Debug.Log("HeroAttackClient");
         Card attackerCard = isHero ? (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
             : (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
@@ -902,8 +914,6 @@ public class DuelManager : NetworkBehaviour
             }
         }
 
-        settingAttackTarget = false;
-        cardSelectingTarget = null;
     }
 
     private void NextTurn()
