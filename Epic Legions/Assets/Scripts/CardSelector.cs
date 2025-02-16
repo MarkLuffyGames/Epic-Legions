@@ -214,14 +214,17 @@ public class CardSelector : MonoBehaviour
         {
             if (card.isAttackable)
             {
+
                 var duelManager = DuelManager.Instance;
+
+                duelManager.cardSelectingTarget.actionIsReady = true;
+
                 DuelManager.Instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, 
                     NetworkManager.Singleton.LocalClientId,
                     duelManager.cardSelectingTarget.cardSO is HeroCardSO,
                     duelManager.cardSelectingTarget.FieldPosition.PositionIndex,
                     duelManager.movementToUse);
 
-                duelManager.cardSelectingTarget.actionIsReady = true;
                 duelManager.cardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
             }
@@ -336,7 +339,7 @@ public class CardSelector : MonoBehaviour
                 StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
                 currentCard.RotateToAngle(new Vector3(90, 0, 0), 20, true);
             }
-            else if(currentCard.cardSO is SpellCardSO && fieldPosition.PositionIndex == -1)
+            else if(currentCard.cardSO is SpellCardSO && fieldPosition == playerManager.SpellFieldPosition)
             {
                 StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
                 currentCard.RotateToAngle(new Vector3(90, 0, 0), 20, true);

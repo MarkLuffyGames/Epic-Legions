@@ -404,8 +404,6 @@ public class Card : MonoBehaviour
         }
     }
 
-
-    public GameObject listo;
     /// <summary>
     /// Actualiza la posición de la carta mientras se arrastra
     /// </summary>
@@ -426,7 +424,6 @@ public class Card : MonoBehaviour
             transform.position = newPosition;
         }
 
-        listo.SetActive(actionIsReady);
     }
 
     /// <summary>
