@@ -460,6 +460,24 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
+    private void ActiveEffect()
+    {
+        foreach (var fieldPosition in player1Manager.GetFieldPositionList())
+        {
+            fieldPosition.statModifier.ForEach(effect => effect.ActivateEffect());
+        }
+
+        foreach (var fieldPosition in player2Manager.GetFieldPositionList())
+        {
+            fieldPosition.statModifier.ForEach(effect => effect.ActivateEffect());
+        }
+
+        foreach (var hero in HeroCardsOnTheField)
+        {
+            hero.UpdateText();
+        }
+    }
+
 
     public void UseMovement(int movementToUseIndex, Card card)
     {
@@ -652,21 +670,21 @@ public class DuelManager : NetworkBehaviour
 
     private IEnumerator FinishActions()
     {
+
+        ActiveEffect();
+
         if (duelPhase.Value == DuelPhase.PlayingSpellCard)
         {
             SendCardsToGraveyard();
-            if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         else
         {
             yield return new WaitForSeconds(1);
 
             SendCardsToGraveyard();
-
-            yield return new WaitForSeconds(1);
-
-            if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
         }
+
+        if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)

@@ -634,7 +634,7 @@ public class Card : MonoBehaviour
         Instantiate(movement.MoveSO.VisualEffectHit, isFocused ? lastPosition : transform.position, Quaternion.identity);
 
         var protector = HasProtector();
-        if (protector != null && protector.hasProtector && movement.MoveSO.Damage > 0)
+        if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)
         {
             protector.damageReceiver.ProtectAlly(fieldPosition);
         }
@@ -648,7 +648,7 @@ public class Card : MonoBehaviour
     public void ReceiveDamage(int amountDamage)
     {
         var protector = HasProtector();
-        if (protector != null && protector.hasProtector)
+        if (protector != null && protector.HasProtector())
         {
             protector.damageReceiver.ReceiveDamage(amountDamage);
             return;
@@ -781,7 +781,7 @@ public class Card : MonoBehaviour
             currentDefense = defense;
             foreach (Effect statModifier in fieldPosition.statModifier)
             {
-                statModifier.currentDefense = statModifier.defense;
+                statModifier.RegenerateDefense();
             }
             Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
             UpdateText();   
@@ -809,7 +809,7 @@ public class Card : MonoBehaviour
 
         foreach(Effect effect in fieldPosition.statModifier)
         {
-            defenceModifier += effect.currentDefense;
+            defenceModifier += effect.GetCurrentDefence();
         }
 
         return defenceModifier;
@@ -826,7 +826,7 @@ public class Card : MonoBehaviour
 
         foreach (Effect effect in fieldPosition.statModifier)
         {
-            speedModifier += effect.speed;
+            speedModifier += effect.GetSpeed();
         }
 
         return speedModifier;
@@ -843,7 +843,7 @@ public class Card : MonoBehaviour
 
         foreach (Effect effect in fieldPosition.statModifier)
         {
-            damageAbsorbed += effect.absorbDamage;
+            damageAbsorbed += effect.GetDamageAbsorbed();
         }
 
         return damageAbsorbed;
@@ -857,7 +857,7 @@ public class Card : MonoBehaviour
     {
         foreach (Effect effect in fieldPosition.statModifier)
         {
-            if(effect.hasProtector) return effect;
+            if(effect.HasProtector()) return effect;
         }
 
         return null;
@@ -878,9 +878,9 @@ public class Card : MonoBehaviour
             currentDefense = 0;
             foreach (Effect statModifier in fieldPosition.statModifier)
             {
-                if(statModifier.currentDefense > 0)
+                if(statModifier.GetCurrentDefence() > 0)
                 {
-                    statModifier.currentDefense = 0;
+                    statModifier.SetCurrentDefence(0);
                 }
             }
             return Mathf.Abs(remainingDamage);
@@ -901,11 +901,11 @@ public class Card : MonoBehaviour
             {
                 foreach (Effect statModifier in fieldPosition.statModifier)
                 {
-                    if(statModifier.currentDefense > 0)
+                    if(statModifier.GetCurrentDefence() > 0)
                     {
-                        remainingDamage = damage - statModifier.currentDefense;
-                        statModifier.currentDefense -= damage;
-                        if (statModifier.currentDefense < 0) statModifier.currentDefense = 0;
+                        remainingDamage = damage - statModifier.GetCurrentDefence();
+                        statModifier.SetCurrentDefence(statModifier.GetCurrentDefence() - damage);
+                        if (statModifier.GetCurrentDefence() < 0) statModifier.SetCurrentDefence(0);
                         damage = remainingDamage;
                         if (damage <= 0) return 0;
                     }

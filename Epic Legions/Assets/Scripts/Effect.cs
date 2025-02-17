@@ -4,13 +4,14 @@ using UnityEngine;
 [Serializable]
 public class Effect
 {
-    public int defense;
-    public int currentDefense;
-    public int absorbDamage;
+    private bool isActive;
+    private int defense;
+    private int currentDefense;
+    private int absorbDamage;
     public Card damageReceiver;
-    public bool hasProtector;
-    public int speed;
-    public int attack;
+    private bool hasProtector;
+    private int speed;
+    private int attack;
 
     public int durability;
 
@@ -45,4 +46,45 @@ public class Effect
         }
     }
 
+    public void ActivateEffect()
+    {
+        isActive = true;
+    }
+    public void SetCurrentDefence(int newCurrentDefence)
+    {
+        currentDefense = newCurrentDefence;
+    }
+    public int GetCurrentDefence()
+    {
+        if (isActive) return currentDefense;
+        return 0;
+    }
+    public void RegenerateDefense()
+    {
+        currentDefense = defense;
+    }
+
+    public int GetDamageAbsorbed()
+    {
+        if (isActive) return absorbDamage;
+        return 0;
+    }
+
+    public bool HasProtector()
+    {
+        if (isActive) return hasProtector;
+        return false;
+    }
+
+    public int GetSpeed()
+    {
+        if (isActive) return speed;
+        return 0;
+    }
+
+    public int GetAttack()
+    {
+        if (isActive) return attack;
+        return 0;
+    }
 }
