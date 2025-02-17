@@ -426,6 +426,33 @@ public class Card : MonoBehaviour
 
     }
 
+    public bool UsableCard()
+    {
+        if (cardSO is HeroCardSO heroCardSO)
+        {
+            if(DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        else if( cardSO is SpellCardSO spellCardSO)
+        {
+            if ((DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation ||
+                DuelManager.Instance.GetDuelPhase() == DuelPhase.Battle) &&
+                !DuelManager.Instance.settingAttackTarget &&
+                DuelManager.Instance.ObtainTargets(this, 0).Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Obtiene la posición del mouse en el espacio del mundo
     /// </summary>

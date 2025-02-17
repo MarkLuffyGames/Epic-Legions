@@ -9,6 +9,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.Services.Matchmaker.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
@@ -93,16 +94,15 @@ public class GameLobby : NetworkBehaviour
 
     private IEnumerator HandlePeriodicListLobbies()
     {
-        while (true)
+        while (joinedLobby == null)
         {
-            yield return new WaitForSeconds(3);
-            if (joinedLobby == null &&
-            UnityServices.State == ServicesInitializationState.Initialized &&
+            if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn &&
             SceneManager.GetActiveScene().name == "LobbyScene")
             {
                 ListLobbies();
             }
+            yield return new WaitForSeconds(3);
         }
     }
 
@@ -214,11 +214,11 @@ public class GameLobby : NetworkBehaviour
         OnCreateLobbyStarted?.Invoke(this, EventArgs.Empty);
         try
         {
-            joinedLobby = await LobbyService.Instance.CreateLobbyAsync(roomName, 2, new CreateLobbyOptions { IsPrivate = isPrivate });
-
             Allocation allocation = await AllocateRelay();
 
             string relayJoinCode = await GetRelayJoinCode(allocation);
+
+            joinedLobby = await LobbyService.Instance.CreateLobbyAsync(roomName, 2, new CreateLobbyOptions { IsPrivate = isPrivate });
 
             await LobbyService.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions
             {
@@ -255,9 +255,15 @@ public class GameLobby : NetworkBehaviour
             {
                 // Disconnected!
                 playerDataNetworkList.RemoveAt(i);
+                break;
             }
         }
         playerReady.Remove(clientId);
+        foreach (var key in playerReady.Keys.ToList())
+        {
+            playerReady[key] = false;
+        }
+        playerID.Clear();
 
         OnReadyChanged?.Invoke(this, EventArgs.Empty);
         OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
@@ -483,6 +489,9 @@ public class GameLobby : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ulong clientID)
     {
+        Debug.Log(playerDataNetworkList.Count);
+        if (playerDataNetworkList.Count != 2) return;
+
         SetPlayerReadyClientRpc(clientID);
 
         playerReady[clientID] = true;

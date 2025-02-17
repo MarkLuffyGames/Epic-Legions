@@ -165,7 +165,7 @@ public class CardSelector : MonoBehaviour
         
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
         if(currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard) 
-            && currentFieldPosition.IsFree() && (DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation || card.cardSO is SpellCardSO)
+            && currentFieldPosition.IsFree() && card.UsableCard()
             && !playerManager.isReady)
         {
             if (card.cardSO is HeroCardSO && currentFieldPosition.PositionIndex != -1)
@@ -252,9 +252,8 @@ public class CardSelector : MonoBehaviour
         float heldTime = Time.time - mouseDownTime;
 
         if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard//La carta esta en la mano del jugador y no esta enfocada
-            && (DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation || //La carta debe ser jugada en la fase de preparacion
-            (card.cardSO is SpellCardSO && !DuelManager.Instance.settingAttackTarget)) //Si es SpellCard se puede jugar en otra fase si no se esta seleccionando un objetivo de ataque.
-            && !playerManager.isReady && !card.waitForServer) //El jugador no puede estar listo para avanzar a la siguinte fase ni la carta estar esperando respuesta del servidor.
+            && !playerManager.isReady && !card.waitForServer //El jugador no puede estar listo para avanzar a la siguinte fase ni la carta estar esperando respuesta del servidor.
+            && card.UsableCard()) //La carta puede ser usada. 
         {
             card.StartDragging();
 
@@ -377,6 +376,15 @@ public class CardSelector : MonoBehaviour
             NetworkManager.Singleton.LocalClientId);
 
         currentFieldPosition = null;
+
+        if(card.cardSO is HeroCardSO)
+        {
+            handCardHandler.ShowHandCard();
+        }
+        else if(card.cardSO is SpellCardSO)
+        {
+            handCardHandler.HideHandCard();
+        }
     }
 }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,9 +25,10 @@ public class HandCardHandler : MonoBehaviour
         }
         else
         {
-            if(IsPlayer)hideCardButton.SetActive(true);
+            if(IsPlayer)hideCardButton.SetActive(!isHideCards);
             for (int i = 0; i < cardsList.Count; i++)
             {
+                if(cardsList[i].IsDragging())continue;
                 if(cardsList[i].waitForServer)continue;
 
                 float distance = 6.0f / (cardsList.Count - 1);
@@ -34,7 +36,7 @@ public class HandCardHandler : MonoBehaviour
 
                 var x = ((i + 1) * distance) - distance;
                 x -= (distance * (cardsList.Count - 1)) / 2f;
-                StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, 0), 20, false, true));
+                StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, isHideCards ? -1.3f : 0), 20, isHideCards ? true : false, true));
 
                 var rotationX = IsPlayer ? 70 : -90;
                 cardsList[i].RotateToAngle(new Vector3(rotationX, 0, 0), 20, false);
@@ -42,8 +44,6 @@ public class HandCardHandler : MonoBehaviour
                 cardsList[i].SetSortingOrder(i + 100);
             }
         }
-
-        isHideCards = false;
     }
 
     /// <summary>
@@ -85,8 +85,20 @@ public class HandCardHandler : MonoBehaviour
     {
         if (isHideCards)
         {
-            SetCardsPosition();
+            /*foreach (Card card in cardsList)
+            {
+                if (!card.IsDragging())
+                {
+                    StartCoroutine(card.MoveToPosition(new Vector3(
+                        card.transform.localPosition.x, card.transform.localPosition.y, 0), 20, false, true));
+                    if (card.IsHighlight()) card.RemoveHighlight();
+                }
+            }*/
+
             hideCardButton.SetActive(true);
+            isHideCards = false;
+
+            SetCardsPosition();
         }
     }
     
@@ -97,18 +109,20 @@ public class HandCardHandler : MonoBehaviour
     {
         if (!isHideCards)
         {
-            foreach (Card card in cardsList)
+            /*foreach (Card card in cardsList)
             {
                 if (!card.IsDragging())
                 {
-                    StartCoroutine(card.MoveToPosition(card.transform.localPosition + Vector3.back * 1.3f, 20, true, true));
+                    StartCoroutine(card.MoveToPosition(new Vector3(
+                        card.transform.localPosition.x, card.transform.localPosition.y, -1.3f), 20, true, true));
                     if(card.IsHighlight())card.RemoveHighlight();
                 }
-            }
+            }*/
 
             hideCardButton.SetActive(false);
             isHideCards = true;
 
+            SetCardsPosition();
         }
     }
 

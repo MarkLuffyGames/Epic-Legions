@@ -24,7 +24,6 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
     {
         readyButton.onClick.AddListener(() => { 
             GameLobby.Instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
-            readyButton.onClick.RemoveAllListeners();
         });
         returnButton.onClick.AddListener(() => {
             if (NetworkManager.Singleton.IsServer) 

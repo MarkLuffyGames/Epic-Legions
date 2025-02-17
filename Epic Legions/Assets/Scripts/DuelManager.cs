@@ -72,6 +72,10 @@ public class DuelManager : NetworkBehaviour
             {
                 player1Manager.ShowNextPhaseButton();
             }
+            else
+            {
+                player1Manager.GetHandCardHandler().ShowHandCard();
+            }
         }
         else if(newPhase == DuelPhase.Battle)
         {
@@ -526,7 +530,7 @@ public class DuelManager : NetworkBehaviour
         cardSelectingTarget = null;
     }
 
-    private List<Card> ObtainTargets(Card card, int movementToUseIndex) //Ajustar para obtener los objetivos para cada tipo de ataque.
+    public List<Card> ObtainTargets(Card card, int movementToUseIndex) //Ajustar para obtener los objetivos para cada tipo de ataque.
     {
         List<Card> targets = new List<Card>();
 
@@ -638,8 +642,6 @@ public class DuelManager : NetworkBehaviour
 
     private IEnumerator StartActions()
     {
-        
-
         for (int i = 0; i < actions.Count; i++)
         {
             yield return HeroAttackServer(actions[i].heroToAttackPositionIndex, actions[i].clientId, true, actions[i].heroUsesTheAttack, actions[i].movementToUseIndex,
@@ -650,13 +652,21 @@ public class DuelManager : NetworkBehaviour
 
     private IEnumerator FinishActions()
     {
-        yield return new WaitForSeconds(1);
+        if (duelPhase.Value == DuelPhase.PlayingSpellCard)
+        {
+            SendCardsToGraveyard();
+            if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1);
 
-        SendCardsToGraveyard();
+            SendCardsToGraveyard();
 
-        yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1);
 
-        if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+            if (IsClient) SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
     }
 
     IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
