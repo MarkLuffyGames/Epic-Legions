@@ -384,6 +384,7 @@ public class CardSelector : MonoBehaviour
         else if(card.cardSO is SpellCardSO)
         {
             handCardHandler.HideHandCard();
+            Debug.Log("Ocultar Cartas de la mano.");
         }
     }
 }

@@ -11,6 +11,12 @@ public class DuelManager : NetworkBehaviour
 {
     public static DuelManager Instance;
 
+    public event EventHandler<OnPlayerReadyEventArgs> OnPlayerReady;
+    public class OnPlayerReadyEventArgs : EventArgs
+    {
+        public ulong clientIdReady;
+    }
+
     [SerializeField] private PlayerManager player1Manager;
     [SerializeField] private PlayerManager player2Manager;
     [SerializeField] private EndDuelUI endDuelUI;
@@ -51,11 +57,8 @@ public class DuelManager : NetworkBehaviour
     {
         UpdateDuelPhaseText();
 
-        if (oldPhase != DuelPhase.PlayingSpellCard && newPhase != DuelPhase.PlayingSpellCard)
-        {
-            player1Manager.isReady = false;
-            player2Manager.isReady = false;
-        }
+        player1Manager.isReady = false;
+        player2Manager.isReady = false;
 
         if (newPhase == DuelPhase.PreparingDuel)
         {
@@ -68,11 +71,9 @@ public class DuelManager : NetworkBehaviour
         }
         else if (newPhase == DuelPhase.Preparation)
         {
-            if (oldPhase != DuelPhase.PlayingSpellCard)
-            {
-                player1Manager.ShowNextPhaseButton();
-            }
-            else
+            player1Manager.HideWaitTextGameObject();
+            player1Manager.ShowNextPhaseButton();
+            if (oldPhase == DuelPhase.DrawingCards)
             {
                 player1Manager.GetHandCardHandler().ShowHandCard();
             }
@@ -99,13 +100,13 @@ public class DuelManager : NetworkBehaviour
         }
         else if(newPhase == DuelPhase.DrawingCards)
         {
-
             player1Manager.DrawCard();
             player2Manager.DrawCard();
         }
         else if(newPhase == DuelPhase.PlayingSpellCard)
         {
             oldDuelPhase = oldPhase;
+            player1Manager.GetHandCardHandler().HideHandCard();
         }
 
 
@@ -302,12 +303,21 @@ public class DuelManager : NetworkBehaviour
                 duelPhase.Value = oldDuelPhase;
             }
         }
-        
+        SetPlayerReadyClientRpc(clientId);
     }
     public bool AreAllTrue(Dictionary<ulong, bool> clientStatus)
     {
         // Verificar si todos los valores son true
         return clientStatus.Values.All(status => status);
+    }
+
+    [ClientRpc]
+    public void SetPlayerReadyClientRpc(ulong clientId)
+    {
+        OnPlayerReady?.Invoke(this, new OnPlayerReadyEventArgs
+        {
+            clientIdReady = clientId
+        });
     }
 
     private void StartDuel()

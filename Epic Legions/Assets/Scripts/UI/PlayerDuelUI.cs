@@ -10,19 +10,20 @@ public class PlayerDuelUI : MonoBehaviour
     [SerializeField] private bool isPlayer;
     void Start()
     {
-        
+        duelManager.OnPlayerReady += DuelManager_OnPlayerReady;
     }
 
-    void Update()
+    private void DuelManager_OnPlayerReady(object sender, DuelManager.OnPlayerReadyEventArgs e)
     {
-        if(!NetworkManager.Singleton.IsServer) return;
-        if (isPlayer)
+        if(e.clientIdReady == NetworkManager.Singleton.LocalClientId && isPlayer)
         {
-            isReady.SetActive(duelManager.playerReady.ElementAt(0).Value);
+            isReady.SetActive(true);
         }
-        else
+        else if(e.clientIdReady != NetworkManager.Singleton.LocalClientId && !isPlayer)
         {
-            isReady.SetActive(duelManager.playerReady.ElementAt(1).Value);
+            isReady.SetActive(true);
         }
+
+
     }
 }
