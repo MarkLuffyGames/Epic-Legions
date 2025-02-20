@@ -11,6 +11,14 @@ public class PlayerDuelUI : MonoBehaviour
     void Start()
     {
         duelManager.OnPlayerReady += DuelManager_OnPlayerReady;
+        duelManager.OnPlayerNotReady += DuelManager_OnPlayerNotReady;
+
+        isReady.SetActive(false);
+    }
+
+    private void DuelManager_OnPlayerNotReady(object sender, System.EventArgs e)
+    {
+        isReady.SetActive(false);
     }
 
     private void DuelManager_OnPlayerReady(object sender, DuelManager.OnPlayerReadyEventArgs e)

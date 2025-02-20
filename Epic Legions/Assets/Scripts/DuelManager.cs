@@ -6,11 +6,12 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
-public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, None }
+public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
 public class DuelManager : NetworkBehaviour
 {
     public static DuelManager Instance;
 
+    public event EventHandler OnPlayerNotReady;
     public event EventHandler<OnPlayerReadyEventArgs> OnPlayerReady;
     public class OnPlayerReadyEventArgs : EventArgs
     {
@@ -272,11 +273,14 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ulong clientId)
     {
+
+        if (duelPhase.Value == DuelPhase.Preparation) SetPlayerReadyClientRpc(clientId);
         playerReady[clientId] = true;
 
         if (AreAllTrue(playerReady))
         {
             playerReady = playerReady.ToDictionary(kvp => kvp.Key, kvp => false);
+            SetPlayerNotReadyClientRpc();
 
             if (duelPhase.Value == DuelPhase.PreparingDuel)
             {
@@ -303,7 +307,6 @@ public class DuelManager : NetworkBehaviour
                 duelPhase.Value = oldDuelPhase;
             }
         }
-        SetPlayerReadyClientRpc(clientId);
     }
     public bool AreAllTrue(Dictionary<ulong, bool> clientStatus)
     {
@@ -318,6 +321,11 @@ public class DuelManager : NetworkBehaviour
         {
             clientIdReady = clientId
         });
+    }
+    [ClientRpc]
+    public void SetPlayerNotReadyClientRpc()
+    {
+        OnPlayerNotReady?.Invoke(this, EventArgs.Empty);
     }
 
     private void StartDuel()
@@ -399,18 +407,25 @@ public class DuelManager : NetworkBehaviour
 
     private void InsertActionInOrder(List<HeroAction> heroActions, HeroAction newHeroAction)
     {
-        // Encuentra la posición donde insertar la nueva carta
-        int insertIndex = heroActions.FindLastIndex(heroAction => heroAction.hasPriority == true);
-
-        // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
-        if (insertIndex == -1)
+        if (newHeroAction.hasPriority)
         {
-            heroActions.Insert(0, newHeroAction);
+            // Encuentra la posición donde insertar la nueva carta
+            int insertIndex = heroActions.FindLastIndex(heroAction => heroAction.hasPriority == true);
+
+            // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
+            if (insertIndex == -1)
+            {
+                heroActions.Insert(0, newHeroAction);
+            }
+            else
+            {
+                // Inserta después de la última carta con la misma velocidad o mayor
+                heroActions.Insert(insertIndex + 1, newHeroAction);
+            }
         }
         else
         {
-            // Inserta después de la última carta con la misma velocidad o mayor
-            heroActions.Insert(insertIndex + 1, newHeroAction);
+            heroActions.Add(newHeroAction);
         }
     }
 
