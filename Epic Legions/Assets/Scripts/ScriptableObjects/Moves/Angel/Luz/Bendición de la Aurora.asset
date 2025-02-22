@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
+  m_Name: "Bendici\xF3n de la Aurora"
+  m_EditorClassIdentifier: 
+  moveName: "Bendici\xF3n de la Aurora"
+  damage: 0
+  energyCost: 30
+  moveEffect: {fileID: 11400000, guid: 24113024280d2cf4cbf3f290ba560621, type: 2}
+  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  needTarget: 1
+  moveType: 2
+  targetsType: 0
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
+  effectDescription: Envuelve a un aliado en una barrera de luz, aumentando su defensa
+    en 30 durante 3 turnos.
