@@ -23,5 +23,5 @@ MonoBehaviour:
   speed: 60
   energy: 25
   moves:
-  - {fileID: 11400000, guid: b3868733cb94889449eb0dcd256b50ee, type: 2}
-  - {fileID: 11400000, guid: 7311d374826a64e4496417012c6bf10a, type: 2}
+  - {fileID: 11400000, guid: e85f0869664e48d44af293862fbf770a, type: 2}
+  - {fileID: 11400000, guid: a49e3fe05d00119499f077f4c3445ba6, type: 2}

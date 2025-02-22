@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 167
+  controlID: 126
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -1214,7 +1214,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/ScriptableObjects/Moves/Druida/Planta/Incompletos
+    - Assets/Scripts/ScriptableObjects/Moves/Angel/Luz/Incompletos
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1224,16 +1224,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/ScriptableObjects/Moves/Druida/Planta/Incompletos
+  - Assets/Scripts/ScriptableObjects/Moves/Angel/Luz/Incompletos
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 354}
-    m_SelectedIDs: 94ec0000
-    m_LastClickedID: 60564
-    m_ExpandedIDs: 000000000eeb000010eb000012eb000014eb000016eb000018eb00001aeb00001ceb00001eeb000020eb000022eb000024eb000026eb000028eb00002aeb00002ceb00002eeb000030eb000032eb0000
+    scrollPos: {x: 0, y: 287}
+    m_SelectedIDs: d8ec0000
+    m_LastClickedID: 60632
+    m_ExpandedIDs: 0000000024eb000026eb000028eb00002aeb00002ceb00002eeb000030eb000032eb000034eb000036eb000038eb00003aeb00003ceb00003eeb000040eb000042eb000044eb000046eb000048eb0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1262,7 +1262,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000000eeb000010eb000012eb000014eb000016eb000018eb00001aeb00001ceb00001eeb000020eb000022eb000024eb000026eb000028eb00002aeb00002ceb00002eeb000030eb000032eb0000
+    m_ExpandedIDs: 0000000024eb000026eb000028eb00002aeb00002ceb00002eeb000030eb000032eb000034eb000036eb000038eb00003aeb00003ceb00003eeb000040eb000042eb000044eb000046eb000048eb0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1431,7 +1431,7 @@ MonoBehaviour:
   m_ObjectsLockedBeforeSerialization: []
   m_InstanceIDsLockedBeforeSerialization: 
   m_PreviewResizer:
-    m_CachedPref: 201.6
+    m_CachedPref: 424.80002
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
