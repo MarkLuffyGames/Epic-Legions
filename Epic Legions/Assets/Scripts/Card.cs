@@ -100,6 +100,7 @@ public class Card : MonoBehaviour
             foreach(var move in heroCardSO.Moves)
             {
                 moves.Add(new Movement(move));
+                if(move.IsPassiveEffect) moves[moves.Count -1].ActivateEffect(this, this);
             }
 
             currentHealt = maxHealt;
@@ -645,20 +646,20 @@ public class Card : MonoBehaviour
     /// </summary>
     /// <param name="amountDamage"></param>
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
-    public void ReceiveDamage(int amountDamage)
+    public void ReceiveDamage(int amountDamage, int ignoredDefense)
     {
         var protector = HasProtector();
         if (protector != null && protector.HasProtector())
         {
-            protector.damageReceiver.ReceiveDamage(amountDamage);
+            protector.damageReceiver.ReceiveDamage(amountDamage, ignoredDefense);
             return;
         }
 
         amountDamage -= GetDamageAbsorbed();
         if(amountDamage < 0) amountDamage = 0;
 
-        int remainingDamage = ReceiveDamageToShield(amountDamage);
-        
+        int remainingDamage = ReceiveDamageToShield(amountDamage - ignoredDefense) + ignoredDefense;
+
         if(remainingDamage > 0)
         {
             ShowTextDamage(false, currentHealt > remainingDamage ? remainingDamage : currentHealt);

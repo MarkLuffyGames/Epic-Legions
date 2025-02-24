@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Stun", menuName = "Epic Legions/Card Effects/ Stun")]
+[CreateAssetMenu(fileName = "Stun", menuName = "Hemera Legions/Card Effects/ Stun")]
 public class Stun : CardEffect
 {
     public override void ActivateEffect(Card caster, Card target, Movement movement)

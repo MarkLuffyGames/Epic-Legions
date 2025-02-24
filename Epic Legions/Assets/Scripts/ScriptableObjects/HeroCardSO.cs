@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum HeroClass { Warrior, Archer, Wizard, Druid, Necromancer }
 
-[CreateAssetMenu(fileName = "New Hero Card", menuName = "Epic Legions/Hero Card")]
+[CreateAssetMenu(fileName = "New Hero Card", menuName = "Hemera Legions/Hero Card")]
 public class HeroCardSO : CardSO
 {
     [SerializeField] private HeroClass heroClass;

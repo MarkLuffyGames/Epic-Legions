@@ -790,7 +790,8 @@ public class DuelManager : NetworkBehaviour
                 cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
                 //Aplicar daño al opnente.
-                cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage);
+                cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
+                    attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense());
             }
             else
             {
@@ -803,7 +804,8 @@ public class DuelManager : NetworkBehaviour
                 foreach (var card in targets) 
                 {
                     //Aplicar daño al opnente.
-                    card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage);
+                    card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
+                        attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense());
                 }
             }
             
@@ -832,11 +834,13 @@ public class DuelManager : NetworkBehaviour
         //Aplicar afecto de ataque si es necesario.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
         {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
+            if(!attackerCard.Moves[movementToUseIndex].MoveSO.IsPassiveEffect) 
+                attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
         }
         else
         {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
+            if (!attackerCard.Moves[movementToUseIndex].MoveSO.IsPassiveEffect) 
+                attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
         }
 
 

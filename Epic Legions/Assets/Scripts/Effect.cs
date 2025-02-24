@@ -12,6 +12,7 @@ public class Effect
     private bool hasProtector;
     private int speed;
     private int attack;
+    private int ignoredDefense;
 
     public int durability;
 
@@ -43,6 +44,10 @@ public class Effect
         {
             attack = modifyAttack.IsIncrease ? modifyAttack.Amount : -modifyAttack.Amount;
             durability = modifyAttack.NumberTurns;
+        }
+        else if(cardEffect is IgnoredDefense ignoredDefense)
+        {
+            this.ignoredDefense = ignoredDefense.Amount;
         }
     }
 
@@ -86,5 +91,10 @@ public class Effect
     {
         if (isActive) return attack;
         return 0;
+    }
+
+    public int GetIgnoredDefense()
+    {
+        return ignoredDefense;
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Move", menuName = "Epic Legions/Move")]
+[CreateAssetMenu(fileName = "New Move", menuName = "Hemera Legions/Move")]
 public class MoveSO : ScriptableObject
 {
     [SerializeField] private string moveName;
@@ -9,6 +9,7 @@ public class MoveSO : ScriptableObject
     [SerializeField] private int energyCost;
     [SerializeField] private CardEffect moveEffect;
     [SerializeField] private Condition effectCondition;
+    [SerializeField] private bool isPassiveEffect;
     [SerializeField] private bool needTarget;
     [SerializeField] private MoveType moveType;
     [SerializeField] private TargetsType targetsType;
@@ -21,6 +22,7 @@ public class MoveSO : ScriptableObject
     public int EnergyCost => energyCost;
     public CardEffect MoveEffect => moveEffect;
     public Condition EffectCondition => effectCondition;
+    public bool IsPassiveEffect => isPassiveEffect;
     public bool NeedTarget => needTarget;
     public MoveType MoveType => moveType;
     public TargetsType TargetsType => targetsType;

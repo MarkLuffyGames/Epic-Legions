@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Modify Speed", menuName = "Epic Legions/Card Effects/ Modify Speed")]
+[CreateAssetMenu(fileName = "Modify Speed", menuName = "Hemera Legions/Card Effects/ Modify Speed")]
 public class ModifySpeed : CardEffect
 {
     [SerializeField] private int amount;

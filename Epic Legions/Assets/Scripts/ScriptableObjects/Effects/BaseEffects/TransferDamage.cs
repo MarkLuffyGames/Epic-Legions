@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Transfer Damage", menuName = "Epic Legions/Card Effects/ Transfer Damage")]
+[CreateAssetMenu(fileName = "Transfer Damage", menuName = "Hemera Legions/Card Effects/ Transfer Damage")]
 public class TransferDamage : CardEffect
 {
 
