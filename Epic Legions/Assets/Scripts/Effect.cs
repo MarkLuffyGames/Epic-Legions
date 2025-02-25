@@ -5,6 +5,7 @@ using UnityEngine;
 public class Effect
 {
     private bool isActive;
+    private bool isStunned;
     private int defense;
     private int currentDefense;
     private int absorbDamage;
@@ -49,11 +50,21 @@ public class Effect
         {
             this.ignoredDefense = ignoredDefense.Amount;
         }
+        else if(cardEffect is Stun stun)
+        {
+            isStunned = true;
+            durability = 1;
+        }
     }
 
     public void ActivateEffect()
     {
         isActive = true;
+    }
+    public bool IsStunned()
+    {
+        if (isActive) return isStunned;
+        return false;
     }
     public void SetCurrentDefence(int newCurrentDefence)
     {

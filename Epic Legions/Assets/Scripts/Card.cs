@@ -47,6 +47,8 @@ public class Card : MonoBehaviour
     private bool isMoving;
     private int sortingOrder;
 
+    public List<Effect> statModifier;
+
     private Vector3 lastPosition;
     private Vector3 lastRotation;
 
@@ -76,8 +78,6 @@ public class Card : MonoBehaviour
     public int CurrentSpeedPoints => Mathf.Max(speed + GetSpeedModifier(), 1);
     public List<Movement> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
-
-    public int stunned { get; private set; }
 
     /// <summary>
     /// Establece todos los datos de la carta.
@@ -131,6 +131,7 @@ public class Card : MonoBehaviour
                 }
             }
 
+            statModifier = new List<Effect>();
             UpdateText();
         }
         else if (cardSO is SpellCardSO spellCardSO)
@@ -514,6 +515,11 @@ public class Card : MonoBehaviour
         }
     }
 
+    public void PassTurn()
+    {
+        statModifier.RemoveAll(stat => stat.IsStunned());
+    }
+
     /// <summary>
     /// Finaliza el turno de esta carta.
     /// </summary>
@@ -709,39 +715,19 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Maneja el efecto de aturdir.
-    /// </summary>
-    public void ToggleStunned()
-    {
-        if (stunned == 0) 
-        {
-            stunned = 2;
-            stunEffect.SetActive(true); 
-        }
-        else
-        {
-            stunned -= 1;
-        }
-    }
-
-    /// <summary>
-    /// Maneja los efectos que tenga activo la carta y debuelve true si el heroe pierde el turno por algun efecto.
+    /// Comprueba si el heroe esta aturdido.
     /// </summary>
     /// <returns></returns>
-    public bool HandlingStatusEffects()
+    public bool IsStunned()
     {
-        if (stunned > 0)
+        bool isStunned = false;
+
+        foreach (Effect effect in statModifier)
         {
-            ToggleStunned();
-            if (stunned == 0) 
-            {
-                stunEffect.SetActive(false);
-                return false;
-            }
-            return true;
+            if(effect.IsStunned()) isStunned = true; break;
         }
 
-        return false;
+        return isStunned;
     }
 
     /// <summary>
@@ -763,9 +749,8 @@ public class Card : MonoBehaviour
     /// </summary>
     private void CancelAllEffects()
     {
-        stunned = 0;
         stunEffect.SetActive(false);
-        fieldPosition.statModifier.Clear();
+        statModifier.Clear();
         foreach (var move in moves)
         {
             if(move.effect != null) move.CancelEffect();
@@ -780,7 +765,7 @@ public class Card : MonoBehaviour
         if(currentDefense < defense)
         {
             currentDefense = defense;
-            foreach (Effect statModifier in fieldPosition.statModifier)
+            foreach (Effect statModifier in statModifier)
             {
                 statModifier.RegenerateDefense();
             }
@@ -795,8 +780,13 @@ public class Card : MonoBehaviour
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)
     {
-        fieldPosition.statModifier.Add(effect);
+        statModifier.Add(effect);
         UpdateText();
+    }
+
+    public void ActivateVisualEffects()
+    {
+        stunEffect.SetActive(IsStunned());
     }
 
     /// <summary>
@@ -806,9 +796,8 @@ public class Card : MonoBehaviour
     private int GetDefenseModifier()
     {
         int defenceModifier = 0;
-        if(fieldPosition == null) return defenceModifier;
 
-        foreach(Effect effect in fieldPosition.statModifier)
+        foreach(Effect effect in statModifier)
         {
             defenceModifier += effect.GetCurrentDefence();
         }
@@ -823,9 +812,8 @@ public class Card : MonoBehaviour
     private int GetSpeedModifier()
     {
         int speedModifier = 0;
-        if (fieldPosition == null) return speedModifier;
 
-        foreach (Effect effect in fieldPosition.statModifier)
+        foreach (Effect effect in statModifier)
         {
             speedModifier += effect.GetSpeed();
         }
@@ -840,9 +828,8 @@ public class Card : MonoBehaviour
     private int GetDamageAbsorbed()
     {
         int damageAbsorbed = 0;
-        if (fieldPosition == null) return damageAbsorbed;
 
-        foreach (Effect effect in fieldPosition.statModifier)
+        foreach (Effect effect in statModifier)
         {
             damageAbsorbed += effect.GetDamageAbsorbed();
         }
@@ -856,7 +843,7 @@ public class Card : MonoBehaviour
     /// <returns>True si tiene un protector.</returns>
     private Effect HasProtector()
     {
-        foreach (Effect effect in fieldPosition.statModifier)
+        foreach (Effect effect in statModifier)
         {
             if(effect.HasProtector()) return effect;
         }
@@ -877,7 +864,7 @@ public class Card : MonoBehaviour
 
             var remainingDamage = CurrentDefensePoints - damage;
             currentDefense = 0;
-            foreach (Effect statModifier in fieldPosition.statModifier)
+            foreach (Effect statModifier in statModifier)
             {
                 if(statModifier.GetCurrentDefence() > 0)
                 {
@@ -900,7 +887,7 @@ public class Card : MonoBehaviour
             }
             else
             {
-                foreach (Effect statModifier in fieldPosition.statModifier)
+                foreach (Effect statModifier in statModifier)
                 {
                     if(statModifier.GetCurrentDefence() > 0)
                     {

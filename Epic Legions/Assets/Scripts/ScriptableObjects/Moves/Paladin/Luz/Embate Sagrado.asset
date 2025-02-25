@@ -15,8 +15,9 @@ MonoBehaviour:
   moveName: Embate Sagrado
   damage: 30
   energyCost: 20
-  moveEffect: {fileID: 0}
+  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  isPassiveEffect: 0
   needTarget: 1
   moveType: 0
   targetsType: 0

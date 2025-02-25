@@ -239,18 +239,23 @@ public class DuelManager : NetworkBehaviour
         heroTurn.Clear();
         foreach (var card in turns[turnIndex])
         {
-            if (card.stunned == 0 && card.FieldPosition != null) heroTurn.Add(card);
+            if (card.IsStunned())
+            {
+                card.PassTurn();
+            }
+            else if (card.FieldPosition != null) heroTurn.Add(card);
         }
-
-        if(heroTurn.Count == 0)
-        {
-            NextTurn();
-            return;
-        }
-
-        SetHeroTurn();
 
         ManageEffects();
+
+        if (heroTurn.Count == 0)
+        {
+            StartCoroutine(FinishActions());
+        }
+        else
+        {
+            SetHeroTurn();
+        }
     }
 
     private void SetHeroTurn()
@@ -265,8 +270,6 @@ public class DuelManager : NetworkBehaviour
             {
                 hero.SetTurn(false);
             }
-
-            hero.HandlingStatusEffects();
         }
     }
 
@@ -471,12 +474,14 @@ public class DuelManager : NetworkBehaviour
 
         foreach (var fieldPosition in player1Manager.GetFieldPositionList())
         {
-            fieldPosition.statModifier.RemoveAll(stat => stat.durability <= 0);
+            if(fieldPosition.Card != null)
+                fieldPosition.Card.statModifier.RemoveAll(stat => stat.durability <= 0);
         }
 
         foreach (var fieldPosition in player2Manager.GetFieldPositionList())
         {
-            fieldPosition.statModifier.RemoveAll(stat => stat.durability <= 0);
+            if (fieldPosition.Card != null)
+                fieldPosition.Card.statModifier.RemoveAll(stat => stat.durability <= 0);
         }
 
         foreach (var hero in heroTurn)
@@ -487,14 +492,16 @@ public class DuelManager : NetworkBehaviour
 
     private void ActiveEffect()
     {
-        foreach (var fieldPosition in player1Manager.GetFieldPositionList())
-        {
-            fieldPosition.statModifier.ForEach(effect => effect.ActivateEffect());
-        }
+        var fieldPositions = 
+            player1Manager.GetFieldPositionList().Concat(player2Manager.GetFieldPositionList());
 
-        foreach (var fieldPosition in player2Manager.GetFieldPositionList())
+        foreach (var fieldPosition in fieldPositions)
         {
-            fieldPosition.statModifier.ForEach(effect => effect.ActivateEffect());
+            if (fieldPosition.Card != null)
+            {
+                fieldPosition.Card.statModifier.ForEach(effect => effect.ActivateEffect());
+                fieldPosition.Card.ActivateVisualEffects();
+            }
         }
 
         foreach (var hero in HeroCardsOnTheField)
@@ -791,7 +798,7 @@ public class DuelManager : NetworkBehaviour
 
                 //Aplicar daño al opnente.
                 cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
-                    attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense());
+                    attackerCard.Moves[movementToUseIndex].effect != null ? attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense() : 0);
             }
             else
             {
@@ -805,7 +812,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     //Aplicar daño al opnente.
                     card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
-                        attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense());
+                        attackerCard.Moves[movementToUseIndex].effect != null ? attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense() : 0);
                 }
             }
             

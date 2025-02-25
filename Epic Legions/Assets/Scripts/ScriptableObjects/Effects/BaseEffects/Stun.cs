@@ -6,10 +6,7 @@ public class Stun : CardEffect
 {
     public override void ActivateEffect(Card caster, Card target, Movement movement)
     {
-        if (target.CurrentDefensePoints == 0)
-        {
-            if (target.stunned == 0) target.ToggleStunned();
-        }
+        target.AddEffect(new Effect(this));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
