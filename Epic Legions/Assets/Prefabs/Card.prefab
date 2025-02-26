@@ -2635,12 +2635,12 @@ MonoBehaviour:
   stunEffect: {fileID: 4839518891904360234}
   regenerateDefenseEffect: {fileID: 7647375919561907788, guid: 035ce8c9cfc34104991ce416daf8aebe, type: 3}
   cardSO: {fileID: 0}
+  statModifier: []
   isTemporalPosition: 0
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
   isAttackable: 0
-  listo: {fileID: 0}
 --- !u!1 &6193242297218912138
 GameObject:
   m_ObjectHideFlags: 0

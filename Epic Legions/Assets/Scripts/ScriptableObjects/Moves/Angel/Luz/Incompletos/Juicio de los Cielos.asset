@@ -17,6 +17,7 @@ MonoBehaviour:
   energyCost: 50
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 0}
+  isPassiveEffect: 0
   needTarget: 0
   moveType: 1
   targetsType: 0
