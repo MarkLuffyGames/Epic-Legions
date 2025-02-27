@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: "Bendici\xF3n de los Cielos"
   damage: 0
-  energyCost: 20
+  energyCost: 10
   moveEffect: {fileID: 11400000, guid: f8c8cc14b89489f4888966d3efec0bd2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  isPassiveEffect: 0
   needTarget: 0
   moveType: 2
   targetsType: 2

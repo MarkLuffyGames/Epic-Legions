@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Golpe Ascendente
   damage: 30
-  energyCost: 25
+  energyCost: 15
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 0}
+  isPassiveEffect: 0
   needTarget: 1
   moveType: 0
   targetsType: 0

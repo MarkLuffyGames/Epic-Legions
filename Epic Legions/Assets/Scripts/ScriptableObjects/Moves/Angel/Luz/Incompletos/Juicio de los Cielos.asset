@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Juicio de los Cielos
   damage: 40
-  energyCost: 50
+  energyCost: 20
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 0}
   isPassiveEffect: 0
