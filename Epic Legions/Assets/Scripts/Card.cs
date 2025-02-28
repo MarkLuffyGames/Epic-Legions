@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,7 +48,7 @@ public class Card : MonoBehaviour
     private bool isMoving;
     private int sortingOrder;
 
-    public List<Effect> statModifier;
+    private List<Effect> statModifier;
 
     private Vector3 lastPosition;
     private Vector3 lastRotation;
@@ -729,19 +730,32 @@ public class Card : MonoBehaviour
 
         return isStunned;
     }
+    /// <summary>
+    /// Activa los efectos asignados a esta carta.
+    /// </summary>
+    public void ActivateEffect()
+    {
+        statModifier.ForEach(effect => effect.ActivateEffect());
+
+        ActivateVisualEffects();
+
+        UpdateText();
+    }
 
     /// <summary>
-    /// Actualiza el estado de los efectos activos por movimientos de esta carta.
+    /// Actualiza el estado de los efectos activos en esta carta.
     /// </summary>
     public void ManageEffects()
     {
-        foreach (var move in moves)
+        foreach (var effect in statModifier)
         {
-            if (move.EffectIsActive())
+            if (effect.durability > 0)
             {
-                move.UpdateEffect();
+                effect.MoveEffect.UpdateEffect(effect);
             }
         }
+
+        statModifier.RemoveAll(stat => stat.durability <= 0);
     }
 
     /// <summary>
@@ -751,10 +765,6 @@ public class Card : MonoBehaviour
     {
         stunEffect.SetActive(false);
         statModifier.Clear();
-        foreach (var move in moves)
-        {
-            if(move.effect != null) move.CancelEffect();
-        }
     }
 
     /// <summary>

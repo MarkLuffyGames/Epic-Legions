@@ -4,22 +4,22 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Stun", menuName = "Hemera Legions/Card Effects/ Stun")]
 public class Stun : CardEffect
 {
-    public override void ActivateEffect(Card caster, Card target, Movement movement)
+    public override void ActivateEffect(Card caster, Card target)
     {
         target.AddEffect(new Effect(this));
     }
 
-    public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
-    {
-        Debug.LogWarning("Accediendo a un metodo no implemantado");
-    }
-
-    public override void DeactivateEffect(Movement movement)
+    public override void ActivateEffect(Card caster, List<Card> target)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Movement movement)
+    public override void DeactivateEffect(Effect effect)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void UpdateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }

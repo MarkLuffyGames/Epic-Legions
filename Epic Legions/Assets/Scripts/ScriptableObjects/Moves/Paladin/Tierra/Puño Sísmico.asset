@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: "Pu\xF1o S\xEDsmico"
   m_EditorClassIdentifier: 
   moveName: "Pu\xF1o S\xEDsmico"
-  damage: 25
+  damage: 30
   energyCost: 15
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  isPassiveEffect: 0
   needTarget: 1
   moveType: 0
   targetsType: 0

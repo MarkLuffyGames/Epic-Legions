@@ -11,22 +11,22 @@ public class ModifyAttack : CardEffect
     public int Amount => amount;
     public int NumberTurns => numberTurns;
     public bool IsIncrease => isIncrease;
-    public override void ActivateEffect(Card caster, Card target, Movement movement)
+    public override void ActivateEffect(Card caster, Card target)
+    {
+        numberTurns *= 20;
+    }
+
+    public override void ActivateEffect(Card caster, List<Card> target)
+    {
+        numberTurns *= 20;
+    }
+
+    public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void DeactivateEffect(Movement movement)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void UpdateEffect(Movement movement)
+    public override void UpdateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }

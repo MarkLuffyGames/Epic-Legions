@@ -4,6 +4,10 @@ using UnityEngine;
 [Serializable]
 public class Effect
 {
+
+    private CardEffect moveEffect;
+    public CardEffect MoveEffect => moveEffect;
+
     private bool isActive;
     private bool isStunned;
     private int defense;
@@ -19,7 +23,9 @@ public class Effect
 
     public Effect(CardEffect cardEffect)
     {
-        if(cardEffect is AbsorbDamage absorbDamage)
+        moveEffect = cardEffect;
+
+        if (cardEffect is AbsorbDamage absorbDamage)
         {
             this.absorbDamage = absorbDamage.Amount;
             durability = absorbDamage.NumberTurns;

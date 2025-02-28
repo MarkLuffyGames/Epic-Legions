@@ -5,12 +5,12 @@ using UnityEngine;
 public class Heal : CardEffect
 {
     [SerializeField] private int amount;
-    public override void ActivateEffect(Card caster, Card target, Movement movement)
+    public override void ActivateEffect(Card caster, Card target)
     {
         target.ToHeal(amount);
     }
 
-    public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
+    public override void ActivateEffect(Card caster, List<Card> target)
     {
         foreach(Card card in target)
         {
@@ -18,12 +18,12 @@ public class Heal : CardEffect
         }
     }
 
-    public override void DeactivateEffect(Movement movement)
+    public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Movement movement)
+    public override void UpdateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }

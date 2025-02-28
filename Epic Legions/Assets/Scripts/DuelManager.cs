@@ -34,11 +34,11 @@ public class DuelManager : NetworkBehaviour
     private NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
 
     private List<Card> HeroCardsOnTheField = new List<Card>();
-    private List<List<Card>> turns = new List<List<Card>>();
+    private List<Card>[] turns = new List<Card>[20];
     private int heroesInTurnIndex;
 
     public TextMeshProUGUI duelPhaseText;
-    public List<Card> heroTurn;
+    public List<Card> heroInTurn;
     public int movementToUse;
     public bool settingAttackTarget;
     public Card cardSelectingTarget;
@@ -52,6 +52,11 @@ public class DuelManager : NetworkBehaviour
 
         duelPhase.OnValueChanged += OnDuelPhaseChanged;
         DontDestroyOnLoad(gameObject);
+
+        for (int i = 0; i < turns.Length; i++)
+        {
+            turns[i] = new List<Card>();
+        }
     }
 
     private void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
@@ -202,53 +207,41 @@ public class DuelManager : NetworkBehaviour
 
     private void SetBattleTurns()
     {
-        turns.Clear();
+        foreach (var list in turns)
+        {
+            list.Clear();
+        }
 
         if (HeroCardsOnTheField.Count > 0)
         {
-            turns = new List<List<Card>>();
-
             foreach (var card in HeroCardsOnTheField)
             {
-                if (turns.Count > 0)
-                {
-                    if (turns[turns.Count - 1][0].CurrentSpeedPoints != card.CurrentSpeedPoints)
-                    {
-                        turns.Add(new List<Card>());
-                    }
-
-                    turns[turns.Count - 1].Add(card);
-                }
-                else
-                {
-                    turns.Add(new List<Card>());
-                    turns[0].Add(card);
-                }
-
+                int turn = (100 - card.CurrentSpeedPoints) / 5;
+                turns[turn].Add(card);
             }
         }
     }
     private void StartHeroTurn(int turnIndex)
     {
-        if (turns.Count == 0)
+
+        ManageEffects();
+
+        if (turns[turnIndex].Count == 0)
         {
-            NextTurn();
+            if(IsServer)NextTurn();
             return;
         }
-
-        heroTurn.Clear();
+        heroInTurn.Clear();
         foreach (var card in turns[turnIndex])
         {
             if (card.IsStunned())
             {
                 card.PassTurn();
             }
-            else if (card.FieldPosition != null) heroTurn.Add(card);
+            else if (card.FieldPosition != null) heroInTurn.Add(card);
         }
 
-        ManageEffects();
-
-        if (heroTurn.Count == 0)
+        if (heroInTurn.Count == 0)
         {
             StartCoroutine(FinishActions());
         }
@@ -260,7 +253,7 @@ public class DuelManager : NetworkBehaviour
 
     private void SetHeroTurn()
     {
-        foreach (var hero in heroTurn)
+        foreach (var hero in heroInTurn)
         {
             if (player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
             {
@@ -467,46 +460,18 @@ public class DuelManager : NetworkBehaviour
 
     private void ManageEffects()
     {
-        foreach (var hero in heroTurn)
+        foreach (var hero in HeroCardsOnTheField)
         {
             hero.ManageEffects();
-        }
-
-        foreach (var fieldPosition in player1Manager.GetFieldPositionList())
-        {
-            if(fieldPosition.Card != null)
-                fieldPosition.Card.statModifier.RemoveAll(stat => stat.durability <= 0);
-        }
-
-        foreach (var fieldPosition in player2Manager.GetFieldPositionList())
-        {
-            if (fieldPosition.Card != null)
-                fieldPosition.Card.statModifier.RemoveAll(stat => stat.durability <= 0);
-        }
-
-        foreach (var hero in heroTurn)
-        {
             hero.UpdateText();
         }
     }
 
     private void ActiveEffect()
     {
-        var fieldPositions = 
-            player1Manager.GetFieldPositionList().Concat(player2Manager.GetFieldPositionList());
-
-        foreach (var fieldPosition in fieldPositions)
-        {
-            if (fieldPosition.Card != null)
-            {
-                fieldPosition.Card.statModifier.ForEach(effect => effect.ActivateEffect());
-                fieldPosition.Card.ActivateVisualEffects();
-            }
-        }
-
         foreach (var hero in HeroCardsOnTheField)
         {
-            hero.UpdateText();
+            hero.ActivateEffect();
         }
     }
 
@@ -678,7 +643,7 @@ public class DuelManager : NetworkBehaviour
             StartCoroutine(HeroAttackServer(heroToAttackPositionIndex, clientId, isHero, heroUsesTheAttack, movementToUseIndex, true));
         }
 
-        if (heroTurn.All(hero => hero.actionIsReady)) 
+        if (heroInTurn.All(hero => hero.actionIsReady)) 
         { 
             StartCoroutine(StartActions());
 
@@ -798,7 +763,7 @@ public class DuelManager : NetworkBehaviour
 
                 //Aplicar daño al opnente.
                 cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
-                    attackerCard.Moves[movementToUseIndex].effect != null ? attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense() : 0);
+                    attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
             }
             else
             {
@@ -812,7 +777,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     //Aplicar daño al opnente.
                     card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
-                        attackerCard.Moves[movementToUseIndex].effect != null ? attackerCard.Moves[movementToUseIndex].effect.GetIgnoredDefense() : 0);
+                        attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
                 }
             }
             
@@ -991,7 +956,7 @@ public class DuelManager : NetworkBehaviour
 
     private void NextTurn()
     {
-        if(heroesInTurnIndex < turns.Count - 1)
+        if(heroesInTurnIndex < turns.Length - 1)
         {
             heroesInTurnIndex++;
             StartHeroTurn(heroesInTurnIndex);
@@ -1033,7 +998,6 @@ public class DuelManager : NetworkBehaviour
         {
             card.RegenerateDefense();
             RegenerateDefenseClientRpc(card.FieldPosition.PositionIndex, GetClientIdForHero(card));
-
         }
     }
 

@@ -11,33 +11,33 @@ public class ModifySpeed : CardEffect
     public int Amount => amount;
     public int NumberTurns => numberTurns;
     public bool IsIncrease => isIncrease;
-    public override void ActivateEffect(Card caster, Card target, Movement movement)
+    public override void ActivateEffect(Card caster, Card target)
     {
-        movement.effect = new Effect(this);
-        target.AddEffect(movement.effect);
+        numberTurns *= 20;
+        target.AddEffect(new Effect(this));
     }
 
-    public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
+    public override void ActivateEffect(Card caster, List<Card> target)
     {
-        movement.effect = new Effect(this);
+        numberTurns *= 20;
         foreach (Card card in target)
         {
-            card.AddEffect(movement.effect);
+            card.AddEffect(new Effect(this));
         }
     }
 
-    public override void DeactivateEffect(Movement movement)
+    public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Movement movement)
+    public override void UpdateEffect(Effect effect)
     {
-        movement.effect.durability--;
+        effect.durability--;
 
-        if (movement.effect.durability <= 0)
+        if (effect.durability <= 0)
         {
-            movement.effect = null;
+            effect = null;
         }
     }
 }

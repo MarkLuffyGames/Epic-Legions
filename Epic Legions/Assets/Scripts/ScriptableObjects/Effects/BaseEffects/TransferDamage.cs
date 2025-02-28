@@ -10,35 +10,29 @@ public class TransferDamage : CardEffect
 
     public int NumberTurns => numberTurns;
     public Card Caster => caster;
-    public override void ActivateEffect(Card caster, Card target, Movement movement)
+    public override void ActivateEffect(Card caster, Card target)
     {
+        numberTurns *= 20;
         this.caster = caster;
-        movement.effect = new Effect(this);
-        target.AddEffect(movement.effect);
+        target.AddEffect(new Effect(this));
     }
 
-    public override void ActivateEffect(Card caster, List<Card> target, Movement movement)
+    public override void ActivateEffect(Card caster, List<Card> target)
     {
-        movement.effect = new Effect(this);
+        numberTurns *= 20;
         foreach (Card card in target)
         {
-            card.AddEffect(movement.effect);
+            card.AddEffect(new Effect(this));
         }
     }
 
-    public override void UpdateEffect(Movement movement)
+    public override void UpdateEffect(Effect effect)
     {
-        movement.effect.durability--;
-
-        if (movement.effect.durability <= 0)
-        {
-            movement.effect = null;
-        }
+        effect.durability--;
     }
 
-    public override void DeactivateEffect(Movement movement)
+    public override void DeactivateEffect(Effect effect)
     {
-        movement.effect.durability = 0;
-        movement.effect = null;
+        effect.durability = 0;
     }
 }

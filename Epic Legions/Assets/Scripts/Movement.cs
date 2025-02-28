@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class Movement
 {
     private MoveSO moveSO;
-    public Effect effect;
     public MoveSO MoveSO => moveSO;
 
     public Movement(MoveSO moveSO)
@@ -19,7 +18,7 @@ public class Movement
         {
             if (moveSO.MoveEffect != null)
             {
-                moveSO.MoveEffect.ActivateEffect(caster, target, this);
+                moveSO.MoveEffect.ActivateEffect(caster, target);
             }
         }
     }
@@ -37,33 +36,7 @@ public class Movement
 
         if (moveSO.MoveEffect != null)
         {
-            moveSO.MoveEffect.ActivateEffect(caster, targets, this);
-        }
-    }
-
-    public bool EffectIsActive()
-    {
-        if (effect == null || effect.durability == 0)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public void UpdateEffect()
-    {
-        if (moveSO.MoveEffect != null)
-        {
-            moveSO.MoveEffect.UpdateEffect(this);
-        }
-    }
-
-    public void CancelEffect()
-    {
-        if (moveSO.MoveEffect != null)
-        {
-            moveSO.MoveEffect.UpdateEffect(this);
+            moveSO.MoveEffect.ActivateEffect(caster, targets);
         }
     }
 }
