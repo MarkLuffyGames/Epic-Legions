@@ -9,16 +9,14 @@ public class ModifyAttack : CardEffect
     [SerializeField] private bool isIncrease;
 
     public int Amount => amount;
-    public int NumberTurns => numberTurns;
+    public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
     public bool IsIncrease => isIncrease;
     public override void ActivateEffect(Card caster, Card target)
     {
-        numberTurns *= 20;
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
-        numberTurns *= 20;
     }
 
     public override void DeactivateEffect(Effect effect)

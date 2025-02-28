@@ -11,6 +11,8 @@ public class DuelManager : NetworkBehaviour
 {
     public static DuelManager Instance;
 
+    public static int NumberOfTurns = 21;
+
     public event EventHandler OnPlayerNotReady;
     public event EventHandler<OnPlayerReadyEventArgs> OnPlayerReady;
     public class OnPlayerReadyEventArgs : EventArgs
@@ -34,7 +36,7 @@ public class DuelManager : NetworkBehaviour
     private NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
 
     private List<Card> HeroCardsOnTheField = new List<Card>();
-    private List<Card>[] turns = new List<Card>[20];
+    private List<Card>[] turns = new List<Card>[NumberOfTurns];
     private int heroesInTurnIndex;
 
     public TextMeshProUGUI duelPhaseText;
@@ -92,7 +94,7 @@ public class DuelManager : NetworkBehaviour
 
                 SetBattleTurns();
 
-                StartHeroTurn(heroesInTurnIndex);
+                StartHeroTurn();
 
                 if (IsClient)
                 {
@@ -221,18 +223,18 @@ public class DuelManager : NetworkBehaviour
             }
         }
     }
-    private void StartHeroTurn(int turnIndex)
+    private void StartHeroTurn()
     {
-
+        UpdateDuelPhaseText();
         ManageEffects();
 
-        if (turns[turnIndex].Count == 0)
+        if (turns[heroesInTurnIndex].Count == 0)
         {
             if(IsServer)NextTurn();
             return;
         }
         heroInTurn.Clear();
-        foreach (var card in turns[turnIndex])
+        foreach (var card in turns[heroesInTurnIndex])
         {
             if (card.IsStunned())
             {
@@ -331,7 +333,7 @@ public class DuelManager : NetworkBehaviour
 
     private void UpdateDuelPhaseText()
     {
-        duelPhaseText.text = $"{duelPhase.Value.ToString()}{(duelPhase.Value == DuelPhase.Battle ? $" {heroesInTurnIndex}" : "")}";
+        duelPhaseText.text = $"{duelPhase.Value.ToString()}{(duelPhase.Value == DuelPhase.Battle ? $" {heroesInTurnIndex + 1}" : "")}";
     }
 
     public DuelPhase GetDuelPhase()
@@ -460,6 +462,7 @@ public class DuelManager : NetworkBehaviour
 
     private void ManageEffects()
     {
+        Debug.Log("ManageEffects");
         foreach (var hero in HeroCardsOnTheField)
         {
             hero.ManageEffects();
@@ -903,7 +906,6 @@ public class DuelManager : NetworkBehaviour
     private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
         if (IsHost) yield break;
-        Debug.Log("HeroAttackClient");
         Card attackerCard = isHero ? (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
             : (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
 
@@ -959,8 +961,8 @@ public class DuelManager : NetworkBehaviour
         if(heroesInTurnIndex < turns.Length - 1)
         {
             heroesInTurnIndex++;
-            StartHeroTurn(heroesInTurnIndex);
             StartHeroTurnClientRpc(heroesInTurnIndex);
+            StartHeroTurn();
         }
         else
         {
@@ -975,7 +977,9 @@ public class DuelManager : NetworkBehaviour
     private void StartHeroTurnClientRpc(int heroesInTurnIndex)
     {
         if (IsHost) return;
-        StartHeroTurn(heroesInTurnIndex);
+        this.heroesInTurnIndex = heroesInTurnIndex;
+        StartHeroTurn();
+        Debug.Log(heroesInTurnIndex);
     }
 
     // Método para remover las cartas sin vida

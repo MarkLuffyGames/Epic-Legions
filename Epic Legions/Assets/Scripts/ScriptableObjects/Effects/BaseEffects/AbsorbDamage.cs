@@ -8,16 +8,14 @@ public class AbsorbDamage : CardEffect
     [SerializeField] private int numberTurns;
 
     public int Amount => amount;
-    public int NumberTurns => numberTurns;
+    public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
-        numberTurns *= 20;
         target.AddEffect(new Effect(this));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
-        numberTurns *= 20;
         foreach (Card card in target)
         {
             card.AddEffect(new Effect(this));

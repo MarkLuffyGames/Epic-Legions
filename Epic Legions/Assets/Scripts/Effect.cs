@@ -59,8 +59,10 @@ public class Effect
         else if(cardEffect is Stun stun)
         {
             isStunned = true;
-            durability = 1;
+            durability = 21;
         }
+
+        Debug.Log(durability);
     }
 
     public void ActivateEffect()

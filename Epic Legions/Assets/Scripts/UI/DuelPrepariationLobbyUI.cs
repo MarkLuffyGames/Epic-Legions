@@ -52,6 +52,7 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
 
     private void Instance_OnReadyToStart(object sender, EventArgs e)
     {
+        readyButton.onClick.RemoveAllListeners();
         countdown.enabled = true;
         StartCoroutine(CountDown());
     }
