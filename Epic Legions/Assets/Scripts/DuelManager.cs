@@ -403,31 +403,6 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    private void InsertActionInOrder(List<HeroAction> heroActions, HeroAction newHeroAction)
-    {
-        if (newHeroAction.hasPriority)
-        {
-            // Encuentra la posición donde insertar la nueva carta
-            int insertIndex = heroActions.FindLastIndex(heroAction => heroAction.hasPriority == true);
-
-            // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
-            if (insertIndex == -1)
-            {
-                heroActions.Insert(0, newHeroAction);
-            }
-            else
-            {
-                // Inserta después de la última carta con la misma velocidad o mayor
-                heroActions.Insert(insertIndex + 1, newHeroAction);
-            }
-        }
-        else
-        {
-            heroActions.Add(newHeroAction);
-        }
-    }
-
-
     [ClientRpc]
     private void PlaceCardOnTheFieldClientRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
     {
@@ -462,7 +437,6 @@ public class DuelManager : NetworkBehaviour
 
     private void ManageEffects()
     {
-        Debug.Log("ManageEffects");
         foreach (var hero in HeroCardsOnTheField)
         {
             hero.ManageEffects();
@@ -622,7 +596,8 @@ public class DuelManager : NetworkBehaviour
         if (lastMove) yield return FinishActions();
     }
 
-    List<HeroAction> actions = new List<HeroAction>();
+    List<HeroAction> attackActions = new List<HeroAction>();
+    List<HeroAction> effectActions = new List<HeroAction>();
     [ServerRpc(RequireOwnership = false)]
     public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack,int movementToUseIndex)
     {
@@ -639,7 +614,14 @@ public class DuelManager : NetworkBehaviour
                 player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
                 hasPriority = player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
             }
-            InsertActionInOrder(actions, new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex, hasPriority));
+            if (hasPriority)
+            {
+                effectActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex));
+            }
+            else
+            {
+                attackActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex));
+            }
         }
         else
         {
@@ -660,12 +642,20 @@ public class DuelManager : NetworkBehaviour
 
     private IEnumerator StartActions()
     {
-        for (int i = 0; i < actions.Count; i++)
+        for (int i = 0; i < effectActions.Count; i++)
         {
-            yield return HeroAttackServer(actions[i].heroToAttackPositionIndex, actions[i].clientId, true, actions[i].heroUsesTheAttack, actions[i].movementToUseIndex,
-                i == actions.Count - 1);
+            yield return HeroAttackServer(effectActions[i].heroToAttackPositionIndex, effectActions[i].clientId, true, effectActions[i].heroUsesTheAttack, effectActions[i].movementToUseIndex,
+                i == effectActions.Count - 1 && attackActions.Count == 0);
+            ActiveEffect();
         }
-        actions.Clear();
+        effectActions.Clear();
+
+        for (int i = 0; i < attackActions.Count; i++)
+        {
+            yield return HeroAttackServer(attackActions[i].heroToAttackPositionIndex, attackActions[i].clientId, true, attackActions[i].heroUsesTheAttack, attackActions[i].movementToUseIndex,
+                i == attackActions.Count - 1);
+        }
+        attackActions.Clear();
     }
 
     private IEnumerator FinishActions()
@@ -1036,14 +1026,11 @@ public class HeroAction
     public ulong clientId;
     public int heroUsesTheAttack;
     public int movementToUseIndex;
-    public bool hasPriority;
-    public HeroAction(int heroToAttackPositionIndex, ulong clientId, int heroUsesTheAttack, int movementToUseIndex, bool hasPriority)
+    public HeroAction(int heroToAttackPositionIndex, ulong clientId, int heroUsesTheAttack, int movementToUseIndex)
     {
         this.heroToAttackPositionIndex = heroToAttackPositionIndex;
         this.clientId = clientId;
         this.heroUsesTheAttack = heroUsesTheAttack;
         this.movementToUseIndex = movementToUseIndex;
-        this.hasPriority = hasPriority;
-        this.hasPriority = hasPriority;
     }
 }
