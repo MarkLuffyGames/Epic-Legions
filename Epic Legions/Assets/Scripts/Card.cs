@@ -320,8 +320,8 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            StartCoroutine(MoveToPosition(new Vector3(0, 9.18f, -4.3f), 20, true, false));
-            RotateToAngle(Vector3.right * 70, 20, true);
+            StartCoroutine(MoveToPosition(new Vector3(0, 7.05f, -6.4f), 20, true, false));
+            RotateToAngle(Vector3.right * 53, 20, true);
             ChangedSortingOrder(110);
             cardSelected.enabled = false;
             cardActions.enabled = activeActions;
@@ -416,7 +416,7 @@ public class Card : MonoBehaviour
         {
             RotateToAngle(new Vector3(70, 0, 0), 20, true);
             Vector3 newPosition = GetMouseWorldPosition() + offset;
-            newPosition = new Vector3(newPosition.x, 3.7f, newPosition.z);
+            newPosition = new Vector3(newPosition.x, 2.75f, newPosition.z);
 
             while (Vector3.Distance(transform.position, newPosition) > 0.01f)
             {
@@ -763,8 +763,11 @@ public class Card : MonoBehaviour
     /// </summary>
     private void CancelAllEffects()
     {
-        stunEffect.SetActive(false);
-        statModifier.Clear();
+        if(cardSO is HeroCardSO)
+        {
+            stunEffect.SetActive(false);
+            statModifier.Clear();
+        }
     }
 
     /// <summary>

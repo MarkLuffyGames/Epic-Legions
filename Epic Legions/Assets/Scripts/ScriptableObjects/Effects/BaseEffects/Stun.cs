@@ -11,16 +11,16 @@ public class Stun : CardEffect
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void DeactivateEffect(Effect effect)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void UpdateEffect(Effect effect)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }

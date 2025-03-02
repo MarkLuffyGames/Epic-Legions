@@ -35,9 +35,9 @@ public class HandCardHandler : MonoBehaviour
 
                 var x = ((i + 1) * distance) - distance;
                 x -= (distance * (cardsList.Count - 1)) / 2f;
-                StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, isHideCards ? -1.3f : 0), 20, isHideCards ? true : false, true));
+                StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, isHideCards ? -1.1f : 0), 20, isHideCards ? true : false, true));
 
-                var rotationX = IsPlayer ? 70 : -90;
+                var rotationX = IsPlayer ? 53 : -90;
                 cardsList[i].RotateToAngle(new Vector3(rotationX, 0, 0), 20, false);
 
                 cardsList[i].SetSortingOrder(i + 100);

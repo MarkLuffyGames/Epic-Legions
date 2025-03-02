@@ -61,8 +61,6 @@ public class Effect
             isStunned = true;
             durability = 21;
         }
-
-        Debug.Log(durability);
     }
 
     public void ActivateEffect()
