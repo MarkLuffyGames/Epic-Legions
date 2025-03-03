@@ -2608,6 +2608,8 @@ MonoBehaviour:
   canvasBack: {fileID: 3031764172891635044}
   cardSelected: {fileID: 5637825164746040741}
   cardActions: {fileID: 4191007347987392996}
+  move1Button: {fileID: 2651439469424710317}
+  move2Button: {fileID: 8855211243749122795}
   cardImage: {fileID: 8462960837391840768}
   cardSelectedImage: {fileID: 3586479339192117371}
   nameText: {fileID: 8397680356145545021}

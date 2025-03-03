@@ -12,6 +12,8 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas canvasBack;
     [SerializeField] private Canvas cardSelected;
     [SerializeField] private Canvas cardActions;
+    [SerializeField] private Button move1Button;
+    [SerializeField] private Button move2Button;
     [SerializeField] private Image cardImage;
     [SerializeField] private Image cardSelectedImage;
     [SerializeField] private TextMeshProUGUI nameText;
@@ -324,13 +326,28 @@ public class Card : MonoBehaviour
             RotateToAngle(Vector3.right * 53, 20, true);
             ChangedSortingOrder(110);
             cardSelected.enabled = false;
-            cardActions.enabled = activeActions;
+            EnableActions(activeActions);
             isFocused = true;
             AdjustUIcons();
             return true;
         }
 
         return false;
+    }
+
+    private void EnableActions(bool enable)
+    {
+        cardActions.enabled = enable;
+        if (cardActions.isActiveAndEnabled)
+        {
+            move1Button.gameObject.SetActive(moves[0].MoveSO.EnergyCost <= DuelManager.Instance.Player1Manager.PlayerEnergy 
+                && DuelManager.Instance.ObtainTargets(this, 0).Count > 0 || (moves[0].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[0].MoveSO.NeedTarget :
+                DuelManager.Instance.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
+
+            move2Button.gameObject.SetActive(moves[1].MoveSO.EnergyCost <= DuelManager.Instance.Player1Manager.PlayerEnergy
+                && DuelManager.Instance.ObtainTargets(this, 1).Count > 0 || (moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[1].MoveSO.NeedTarget :
+                DuelManager.Instance.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
+        }
     }
 
     /// <summary>

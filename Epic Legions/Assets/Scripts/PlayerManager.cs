@@ -17,8 +17,10 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject nextPhaseButton;
     [SerializeField] private GameObject waitTextGameObject;
     [SerializeField] private TextMeshProUGUI playerHealtText;
+    [SerializeField] private TextMeshProUGUI playerEnergyText;
 
     private int playerHealt;
+    private int playerEnergy;
 
     public GameObject cardPrafab;
 
@@ -27,11 +29,13 @@ public class PlayerManager : MonoBehaviour
     public bool isReady;
 
     public FieldPosition SpellFieldPosition => spellFieldPosition;
+    public int PlayerEnergy => playerEnergy;
 
 
     private void Start()
     {
         SetPlayerHealt(100);
+        SetPlayerEnergy(100);
     }
     public void AddCardToPlayerDeck(CardSO cardSO, int numberOfCards)
     {
@@ -236,9 +240,16 @@ public class PlayerManager : MonoBehaviour
         UpdateUI();
     }
 
+    public void SetPlayerEnergy(int playerEnergy)
+    {
+        this.playerEnergy = playerEnergy;
+        UpdateUI();
+    }
+
     private void UpdateUI()
     {
         playerHealtText.text = $"{playerHealt}";
+        playerEnergyText.text = $"{playerEnergy}";
     }
 
     public bool ReceiveDamage(Movement movement)

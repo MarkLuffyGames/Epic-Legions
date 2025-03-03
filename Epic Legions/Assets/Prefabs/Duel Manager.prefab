@@ -1075,7 +1075,7 @@ GameObject:
   - component: {fileID: 2026338196622674472}
   - component: {fileID: 636671341881954379}
   m_Layer: 5
-  m_Name: PlayerUI (1)
+  m_Name: 'Player 2 UI '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4060,6 +4060,7 @@ MonoBehaviour:
   nextPhaseButton: {fileID: 0}
   waitTextGameObject: {fileID: 0}
   playerHealtText: {fileID: 9097073174477908043}
+  playerEnergyText: {fileID: 926718695717193241}
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
   isReady: 0
 --- !u!1 &4336813898532854497
@@ -4276,6 +4277,7 @@ MonoBehaviour:
   nextPhaseButton: {fileID: 1810634410124334763}
   waitTextGameObject: {fileID: 4114043887252851380}
   playerHealtText: {fileID: 6559516330479722163}
+  playerEnergyText: {fileID: 3737172893370178585}
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
   isReady: 0
 --- !u!114 &8055258763400123612
@@ -6884,7 +6886,7 @@ GameObject:
   - component: {fileID: 7840039388459788418}
   - component: {fileID: 1072447034699925666}
   m_Layer: 5
-  m_Name: PlayerUI
+  m_Name: Player 1 UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

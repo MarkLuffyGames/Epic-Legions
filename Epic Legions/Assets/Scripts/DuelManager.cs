@@ -47,6 +47,9 @@ public class DuelManager : NetworkBehaviour
 
     private DuelPhase oldDuelPhase;
 
+    public PlayerManager Player1Manager => player1Manager;
+    public PlayerManager Player2Manager => player2Manager;
+
     private void Awake()
     {
         Instance = this;
