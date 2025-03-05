@@ -246,6 +246,12 @@ public class PlayerManager : MonoBehaviour
         UpdateUI();
     }
 
+    public void ConsumeEnergy(int amount)
+    {
+        playerEnergy -= amount;
+        UpdateUI();
+    }
+
     private void UpdateUI()
     {
         playerHealtText.text = $"{playerHealt}";

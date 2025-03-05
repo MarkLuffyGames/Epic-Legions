@@ -450,7 +450,8 @@ public class Card : MonoBehaviour
     {
         if (cardSO is HeroCardSO heroCardSO)
         {
-            if(DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation)
+            if(DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation &&
+                heroCardSO.Energy <= DuelManager.Instance.Player1Manager.PlayerEnergy)
             {
                 return true;
             }

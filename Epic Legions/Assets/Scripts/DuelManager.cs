@@ -383,10 +383,13 @@ public class DuelManager : NetworkBehaviour
         {
             playerManager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, isPlayer);
             InsertCardInOrder(HeroCardsOnTheField, card);
+
         }
         
         card.waitForServer = false;
-        
+
+        playerManager.ConsumeEnergy(card.cardSO is HeroCardSO hero ? hero.Energy : 0);
+
     }
 
     private void InsertCardInOrder(List<Card> heroCards, Card newCard)
@@ -611,12 +614,18 @@ public class DuelManager : NetworkBehaviour
             {
                 player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
                 hasPriority = player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
+                player1Manager.ConsumeEnergy(player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                ConsumeEnergyClientRpc(clientId, player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+
             }
             else
             {
                 player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
                 hasPriority = player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
+                player2Manager.ConsumeEnergy(player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                ConsumeEnergyClientRpc(clientId, player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
             }
+
             if (hasPriority)
             {
                 effectActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex));
@@ -641,6 +650,21 @@ public class DuelManager : NetworkBehaviour
             }
         }
         
+    }
+
+    [ClientRpc]
+    private void ConsumeEnergyClientRpc(ulong clientId, int amount)
+    {
+        if(IsHost) return;
+
+        if(clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            player1Manager.ConsumeEnergy(amount);
+        }
+        else
+        {
+            player2Manager.ConsumeEnergy(amount);
+        }
     }
 
     private IEnumerator StartActions()
