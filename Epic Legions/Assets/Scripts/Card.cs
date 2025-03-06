@@ -963,5 +963,18 @@ public class Card : MonoBehaviour
         text.text = $"+{amount}";
         text.color = Color.red;
     }
+
+    public void RechargeEnergy(int amount)
+    {
+        var player = DuelManager.Instance.GetMyPlayerManager(this);
+        if (player != null)
+        {
+            player.RechargeEnergy(amount); 
+        }
+        else
+        {
+            Debug.LogError("Jugador no encontrado"); 
+        }
+    }
 }
 

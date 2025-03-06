@@ -25,3 +25,4 @@ MonoBehaviour:
   moves:
   - {fileID: 11400000, guid: 84912e3f256195642aa9fc7299427159, type: 2}
   - {fileID: 0}
+  - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

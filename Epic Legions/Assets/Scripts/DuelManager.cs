@@ -1044,6 +1044,20 @@ public class DuelManager : NetworkBehaviour
     {
         endDuelUI.Show(playerVictory);
     }
+
+    public PlayerManager GetMyPlayerManager(Card hero)
+    {
+        if (player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
+        {
+            return player1Manager;
+        }
+        else if (player2Manager.GetFieldPositionList().Contains(hero.FieldPosition))
+        {
+            return player2Manager;
+        }
+         
+        return null;
+    }
 }
 
 [Serializable]
