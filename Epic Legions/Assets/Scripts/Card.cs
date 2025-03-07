@@ -40,6 +40,10 @@ public class Card : MonoBehaviour
     [SerializeField] private GameObject hitEffect;
     [SerializeField] private GameObject stunEffect;
     [SerializeField] private GameObject regenerateDefenseEffect;
+    [SerializeField] private Vector3 focusPosition = new Vector3(0, 7.05f, -6.4f);
+    [SerializeField] private float highlighterHeight = 0.2f;
+    [SerializeField] private int angleHeldCard = 70;
+    [SerializeField] private float heldCardHeight = 2.75f;
 
     public CardSO cardSO;
 
@@ -49,6 +53,7 @@ public class Card : MonoBehaviour
     private bool activeActions;
     private bool isMoving;
     private int sortingOrder;
+    public static int cardMovementSpeed = 20;
 
     private List<Effect> statModifier;
 
@@ -73,12 +78,13 @@ public class Card : MonoBehaviour
 
     private List<Movement> moves = new List<Movement>();
     private FieldPosition fieldPosition;
+    private DuelManager duelManager;
     public bool isAttackable;
 
     public int HealtPoint => maxHealt;
     public int CurrentHealtPoints => currentHealt;
-    public int CurrentDefensePoints => Mathf.Max(currentDefense + GetDefenseModifier(), 0);
-    public int CurrentSpeedPoints => Mathf.Max(speed + GetSpeedModifier(), 1);
+    public int CurrentDefensePoints => Mathf.Clamp(currentDefense + GetDefenseModifier(), 0, 99);
+    public int CurrentSpeedPoints => Mathf.Clamp(speed + GetSpeedModifier(), 1, 99);
     public List<Movement> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
@@ -86,9 +92,10 @@ public class Card : MonoBehaviour
     /// Establece todos los datos de la carta.
     /// </summary>
     /// <param name="cardSO">Scriptable Object que contiene los datos de la carta que se desea establecer</param>
-    public void SetCard(CardSO cardSO)
+    public void SetCard(CardSO cardSO, DuelManager duelManager)
     {
         this.cardSO = cardSO;
+        this.duelManager = duelManager;
 
         nameText.text = cardSO.CardName;
         lastNameText.text = cardSO.CardLastName;
@@ -247,7 +254,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void MoveToLastPosition()
     {
-        StartCoroutine(MoveToPosition(lastPosition, 20, false, true));
+        StartCoroutine(MoveToPosition(lastPosition, cardMovementSpeed, false, true));
     }
 
     /// <summary>
@@ -285,7 +292,7 @@ public class Card : MonoBehaviour
         // Aumenta ligeramente el tamaño de la carta.
         isHighlight = true;
         transform.localScale = new Vector3(1.05f, 1.05f, 1.05f); // Ejemplo: agrandar
-        transform.localPosition += Vector3.up * 0.1f;
+        transform.localPosition += Vector3.up * highlighterHeight;
         ChangedSortingOrder(110);
     }
 
@@ -299,7 +306,7 @@ public class Card : MonoBehaviour
         {
             isHighlight = false;
             transform.localScale = new Vector3(1, 1, 1); // Ejemplo: volver al tamaño original
-            transform.localPosition -= Vector3.up * 0.1f;
+            transform.localPosition -= Vector3.up * highlighterHeight;
             ChangedSortingOrder(sortingOrder);
         }
     }
@@ -322,8 +329,8 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            StartCoroutine(MoveToPosition(new Vector3(0, 7.05f, -6.4f), 20, true, false));
-            RotateToAngle(Vector3.right * 53, 20, true);
+            StartCoroutine(MoveToPosition(focusPosition, cardMovementSpeed, true, false));
+            RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
             cardSelected.enabled = false;
             EnableActions(activeActions);
@@ -340,13 +347,13 @@ public class Card : MonoBehaviour
         cardActions.enabled = enable;
         if (cardActions.isActiveAndEnabled)
         {
-            move1Button.gameObject.SetActive(moves[0].MoveSO.EnergyCost <= DuelManager.Instance.Player1Manager.PlayerEnergy 
-                && DuelManager.Instance.ObtainTargets(this, 0).Count > 0 || (moves[0].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[0].MoveSO.NeedTarget :
-                DuelManager.Instance.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
+            move1Button.gameObject.SetActive(moves[0].MoveSO.EnergyCost <= duelManager.Player1Manager.PlayerEnergy 
+                && duelManager.ObtainTargets(this, 0).Count > 0 || (moves[0].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[0].MoveSO.NeedTarget :
+                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
 
-            move2Button.gameObject.SetActive(moves[1].MoveSO.EnergyCost <= DuelManager.Instance.Player1Manager.PlayerEnergy
-                && DuelManager.Instance.ObtainTargets(this, 1).Count > 0 || (moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[1].MoveSO.NeedTarget :
-                DuelManager.Instance.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
+            move2Button.gameObject.SetActive(moves[1].MoveSO.EnergyCost <= duelManager.Player1Manager.PlayerEnergy
+                && duelManager.ObtainTargets(this, 1).Count > 0 || (moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[1].MoveSO.NeedTarget :
+                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
         }
     }
 
@@ -358,7 +365,7 @@ public class Card : MonoBehaviour
         if (isFocused)
         {
             MoveToLastPosition();
-            RotateToAngle(lastRotation, 20, false);
+            RotateToAngle(lastRotation, cardMovementSpeed, false);
             ChangedSortingOrder(sortingOrder);
             if (isMyTurn) cardSelected.enabled = true;
             cardActions.enabled = false;
@@ -431,13 +438,13 @@ public class Card : MonoBehaviour
     {
         if (isDragging && !isTemporalPosition)
         {
-            RotateToAngle(new Vector3(70, 0, 0), 20, true);
+            RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed, true);
             Vector3 newPosition = GetMouseWorldPosition() + offset;
-            newPosition = new Vector3(newPosition.x, 2.75f, newPosition.z);
+            newPosition = new Vector3(newPosition.x, heldCardHeight, newPosition.z);
 
             while (Vector3.Distance(transform.position, newPosition) > 0.01f)
             {
-                transform.position = Vector3.Lerp(transform.position, newPosition, 20 * Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position, newPosition, cardMovementSpeed * Time.deltaTime);
                 return;
             }
 
@@ -450,8 +457,8 @@ public class Card : MonoBehaviour
     {
         if (cardSO is HeroCardSO heroCardSO)
         {
-            if(DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation &&
-                heroCardSO.Energy <= DuelManager.Instance.Player1Manager.PlayerEnergy)
+            if(duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation &&
+                heroCardSO.Energy <= duelManager.Player1Manager.PlayerEnergy)
             {
                 return true;
             }
@@ -460,10 +467,10 @@ public class Card : MonoBehaviour
         }
         else if( cardSO is SpellCardSO spellCardSO)
         {
-            if ((DuelManager.Instance.GetDuelPhase() == DuelPhase.Preparation ||
-                DuelManager.Instance.GetDuelPhase() == DuelPhase.Battle) &&
-                !DuelManager.Instance.settingAttackTarget &&
-                DuelManager.Instance.ObtainTargets(this, 0).Count > 0)
+            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation ||
+                duelManager.GetCurrentDuelPhase() == DuelPhase.Battle) &&
+                !duelManager.SettingAttackTarget &&
+                duelManager.ObtainTargets(this, 0).Count > 0)
             {
                 return true;
             }
@@ -555,7 +562,7 @@ public class Card : MonoBehaviour
     /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
-        DuelManager.Instance.UseMovement(movementNumber, this);
+        duelManager.UseMovement(movementNumber, this);
         cardActions.enabled = false;
         ResetSize();
     }
@@ -607,12 +614,12 @@ public class Card : MonoBehaviour
         {
             if (player == 1)
             {
-                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), 20, true, false);
+                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), cardMovementSpeed, true, false);
                 Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
             }
             else
             {
-                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), 20, true, false);
+                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), cardMovementSpeed, true, false);
                 Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
             }
         }
@@ -620,12 +627,12 @@ public class Card : MonoBehaviour
         {
             if (player == 1)
             {
-                yield return MoveToPosition(new Vector3(0, 0.5f, 5), 20, true, false);
+                yield return MoveToPosition(new Vector3(0, 0.5f, 5), cardMovementSpeed, true, false);
                 Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
             }
             else
             {
-                yield return MoveToPosition(new Vector3(0, 0.5f, -5), 20, true, false);
+                yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
                 Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
             }
         }
@@ -647,7 +654,7 @@ public class Card : MonoBehaviour
 
         yield return new WaitWhile(() => isMoving);
 
-        yield return MoveToPosition(lastPosition + Vector3.back, 20, true, true);
+        yield return MoveToPosition(lastPosition + Vector3.back, cardMovementSpeed, true, true);
     }
 
     /// <summary>
@@ -704,7 +711,7 @@ public class Card : MonoBehaviour
     /// <param name="position"></param>
     public void ProtectAlly(FieldPosition position)
     {
-        StartCoroutine(MoveToPosition(position.transform.position + Vector3.up * 0.1f, 20, true,false));
+        StartCoroutine(MoveToPosition(position.transform.position + Vector3.up * 0.1f, cardMovementSpeed, true,false));
     }
 
     /// <summary>
@@ -966,7 +973,7 @@ public class Card : MonoBehaviour
 
     public void RechargeEnergy(int amount)
     {
-        var player = DuelManager.Instance.GetMyPlayerManager(this);
+        var player = duelManager.GetMyPlayerManager(this);
         if (player != null)
         {
             player.RechargeEnergy(amount); 

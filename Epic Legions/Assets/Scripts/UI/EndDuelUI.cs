@@ -9,11 +9,12 @@ public class EndDuelUI : MonoBehaviour
     [SerializeField] private GameObject endDuelUI;
     [SerializeField] private TextMeshProUGUI resultText;
     [SerializeField] private Button mainMenuButton;
+    [SerializeField] private DuelManager duelManager;
 
     private void Start()
     {
         mainMenuButton.onClick.AddListener(() => {
-            Destroy(DuelManager.Instance.gameObject);
+            Destroy(duelManager.gameObject);
             NetworkManager.Singleton.Shutdown();
             SceneManager.LoadScene("MainMenu");
         });

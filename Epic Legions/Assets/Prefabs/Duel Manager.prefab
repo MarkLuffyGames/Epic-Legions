@@ -704,6 +704,7 @@ MonoBehaviour:
   endDuelUI: {fileID: 5121328473592501548}
   resultText: {fileID: 1466625000130477336}
   mainMenuButton: {fileID: 7439524001764620850}
+  duelManager: {fileID: 1328336599689875757}
 --- !u!1 &639733797546444056
 GameObject:
   m_ObjectHideFlags: 0
@@ -4294,6 +4295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handCardHandler: {fileID: 5679681744472100564}
   playerManager: {fileID: 7240668214990470102}
+  duelManager: {fileID: 1328336599689875757}
   cardLayer:
     serializedVersion: 2
     m_Bits: 8

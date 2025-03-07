@@ -6,6 +6,7 @@ public class CardSelector : MonoBehaviour
 {
     [SerializeField] private HandCardHandler handCardHandler;
     [SerializeField] private PlayerManager playerManager;
+    [SerializeField] private DuelManager duelManager;
 
     // LayerMask para filtrar las cartas
     public LayerMask cardLayer;
@@ -64,7 +65,7 @@ public class CardSelector : MonoBehaviour
 
         if (isHoldingCard || isAnyFocusedCard)
         {
-            if (DuelManager.Instance.settingAttackTarget)
+            if (duelManager.SettingAttackTarget)
             {
                 isAnyFocusedCard = false;
             }
@@ -210,22 +211,19 @@ public class CardSelector : MonoBehaviour
     private void OnQuickClick(Card card)
     {
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
-        if (DuelManager.Instance.settingAttackTarget)
+        if (duelManager.SettingAttackTarget)
         {
             if (card.isAttackable)
             {
+                duelManager.CardSelectingTarget.actionIsReady = true;
 
-                var duelManager = DuelManager.Instance;
-
-                duelManager.cardSelectingTarget.actionIsReady = true;
-
-                DuelManager.Instance.HeroAttackServerRpc(card.FieldPosition.PositionIndex, 
+                duelManager.HeroAttackServerRpc(card.FieldPosition.PositionIndex, 
                     NetworkManager.Singleton.LocalClientId,
-                    duelManager.cardSelectingTarget.cardSO is HeroCardSO,
-                    duelManager.cardSelectingTarget.FieldPosition.PositionIndex,
-                    duelManager.movementToUse);
+                    duelManager.CardSelectingTarget.cardSO is HeroCardSO,
+                    duelManager.CardSelectingTarget.FieldPosition.PositionIndex,
+                    duelManager.MovementToUse);
 
-                duelManager.cardSelectingTarget.EndTurn();
+                duelManager.CardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
             }
         }
@@ -335,13 +333,13 @@ public class CardSelector : MonoBehaviour
         {
             if (currentCard.cardSO is HeroCardSO && fieldPosition.PositionIndex != -1)
             {
-                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
-                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20, true);
+                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, Card.cardMovementSpeed, true, false));
+                currentCard.RotateToAngle(new Vector3(90, 0, 0), Card.cardMovementSpeed, true);
             }
             else if(currentCard.cardSO is SpellCardSO && fieldPosition == playerManager.SpellFieldPosition)
             {
-                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, 20, true, false));
-                currentCard.RotateToAngle(new Vector3(90, 0, 0), 20, true);
+                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, Card.cardMovementSpeed, true, false));
+                currentCard.RotateToAngle(new Vector3(90, 0, 0), Card.cardMovementSpeed, true);
             }
         }
     }
@@ -370,7 +368,7 @@ public class CardSelector : MonoBehaviour
         isHoldingCard = false;
         card.StopDragging(false);
 
-        DuelManager.Instance.PlaceCardOnTheFieldServerRpc(
+        duelManager.PlaceCardOnFieldServerRpc(
             handCardHandler.GetIdexOfCard(currentCard),
             currentFieldPosition.PositionIndex,
             NetworkManager.Singleton.LocalClientId);

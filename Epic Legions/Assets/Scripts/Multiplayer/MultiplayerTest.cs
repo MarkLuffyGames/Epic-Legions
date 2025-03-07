@@ -38,7 +38,7 @@ public class MultiplayerTest : MonoBehaviour
         {
             var duelManagerInstance = Instantiate(duelManagerPrefab);
             duelManagerInstance.GetComponent<NetworkObject>().Spawn();
-            duelManagerInstance.GetComponent<DuelManager>().RegisterPlayer(NetworkManager.Singleton.ConnectedClientsList[0].ClientId, NetworkManager.Singleton.ConnectedClientsList[1].ClientId);
+            duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(NetworkManager.Singleton.ConnectedClientsList[0].ClientId, NetworkManager.Singleton.ConnectedClientsList[1].ClientId);
         }
     }
 

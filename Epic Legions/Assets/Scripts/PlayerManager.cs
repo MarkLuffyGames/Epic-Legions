@@ -58,7 +58,7 @@ public class PlayerManager : MonoBehaviour
             newCard.transform.rotation = Quaternion.Euler(-90, 0, 0);
             newCard.transform.localPosition = new Vector3(0, i * 0.02f, 0);
             card.Add(newCard.GetComponent<Card>());
-            card[i].SetCard(deck[i]);
+            card[i].SetCard(deck[i], duelManager);
         }
 
         isReady = true;
@@ -92,14 +92,14 @@ public class PlayerManager : MonoBehaviour
     {
         if (isReady && rivalPlayerManager.isReady && NetworkManager.Singleton.IsClient)
         {
-            DuelManager.Instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+            duelManager.SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 
     public void SetPlayerReady()
     {
         isReady = true;
-        DuelManager.Instance.SetPlayerReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        duelManager.SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 
     public void ShowNextPhaseButton()
@@ -130,7 +130,7 @@ public class PlayerManager : MonoBehaviour
         handCardHandler.GetNewCard(card[card.Count - 1]);
         card.RemoveAt(card.Count - 1);
 
-        if(duelManager.GetDuelPhase() == DuelPhase.DrawingCards)
+        if(duelManager.GetCurrentDuelPhase() == DuelPhase.DrawingCards)
         {
             isReady = true;
             IsReady();

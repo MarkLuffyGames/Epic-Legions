@@ -31,7 +31,5 @@ public class PlayerDuelUI : MonoBehaviour
         {
             isReady.SetActive(true);
         }
-
-
     }
 }

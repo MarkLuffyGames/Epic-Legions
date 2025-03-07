@@ -37,8 +37,8 @@ public class FieldPosition : MonoBehaviour
         card.isVisible = true;
         card.transform.parent = transform;
         card.transform.localScale = Vector3.one;
-        StartCoroutine(card.MoveToPosition(Vector3.back * 0.01f, 20, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), 20, false);
+        StartCoroutine(card.MoveToPosition(Vector3.back * 0.01f, Card.cardMovementSpeed, false, true));
+        card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.SetFieldPosition(this);
     }
@@ -48,8 +48,8 @@ public class FieldPosition : MonoBehaviour
         card.isVisible = true;
         card.transform.parent = graveyard;
         card.transform.localScale = Vector3.one;
-        StartCoroutine(card.MoveToPosition(Vector3.up * 0.01f, 20, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 180), 20, false);
+        StartCoroutine(card.MoveToPosition(Vector3.up * 0.01f, Card.cardMovementSpeed, false, true));
+        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 180), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.ToGraveyard();
         card.SetFieldPosition(null);

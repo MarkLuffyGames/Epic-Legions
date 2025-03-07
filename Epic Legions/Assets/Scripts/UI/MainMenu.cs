@@ -12,6 +12,8 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+
         InitializeUnityAuthentication();
         playButton.onClick.AddListener(() =>
         {
@@ -26,19 +28,6 @@ public class MainMenu : MonoBehaviour
         if (GameLobby.Instance != null)
         {
             Destroy(GameLobby.Instance.gameObject);
-        }
-
-        if (DuelManager.Instance != null)
-        {
-            Destroy(DuelManager.Instance.gameObject);
-        }
-    }
-
-    private void NetworkManager_OnInstantiated(NetworkManager obj)
-    {
-        if(NetworkManager.Singleton != null)
-        {
-            Destroy(obj.gameObject);
         }
     }
 

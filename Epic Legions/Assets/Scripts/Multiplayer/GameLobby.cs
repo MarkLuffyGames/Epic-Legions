@@ -158,7 +158,7 @@ public class GameLobby : NetworkBehaviour
             {
                 var duelManagerInstance = Instantiate(duelManagerPrefab);
                 duelManagerInstance.GetComponent<NetworkObject>().Spawn();
-                duelManagerInstance.GetComponent<DuelManager>().RegisterPlayer(playerID[1], playerID[2]);
+                duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(playerID[1], playerID[2]);
 
                 DeleteLobby();
             }
@@ -489,7 +489,6 @@ public class GameLobby : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ulong clientID)
     {
-        Debug.Log(playerDataNetworkList.Count);
         if (playerDataNetworkList.Count != 2) return;
 
         SetPlayerReadyClientRpc(clientID);
