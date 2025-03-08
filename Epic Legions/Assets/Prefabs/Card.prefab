@@ -2454,6 +2454,10 @@ MonoBehaviour:
   hitEffect: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
   stunEffect: {fileID: 4839518891904360234}
   regenerateDefenseEffect: {fileID: 7647375919561907788, guid: 035ce8c9cfc34104991ce416daf8aebe, type: 3}
+  focusPosition: {x: 0, y: 7.05, z: -6.4}
+  highlighterHeight: 0.1
+  angleHeldCard: 70
+  heldCardHeight: 2.75
   cardSO: {fileID: 0}
   isTemporalPosition: 0
   isVisible: 0

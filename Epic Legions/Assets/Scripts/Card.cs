@@ -41,7 +41,7 @@ public class Card : MonoBehaviour
     [SerializeField] private GameObject stunEffect;
     [SerializeField] private GameObject regenerateDefenseEffect;
     [SerializeField] private Vector3 focusPosition = new Vector3(0, 7.05f, -6.4f);
-    [SerializeField] private float highlighterHeight = 0.2f;
+    [SerializeField] private float highlighterHeight = 0.1f;
     [SerializeField] private int angleHeldCard = 70;
     [SerializeField] private float heldCardHeight = 2.75f;
 
@@ -50,7 +50,6 @@ public class Card : MonoBehaviour
     private Vector3 offset;
     private bool isDragging = false;
     private bool isMyTurn;
-    private bool activeActions;
     private bool isMoving;
     private int sortingOrder;
     public static int cardMovementSpeed = 20;
@@ -304,8 +303,9 @@ public class Card : MonoBehaviour
         // Vuelve la carta al tamaño original.
         if (isHighlight)
         {
+            Debug.Log("RemoveHighlight");
             isHighlight = false;
-            transform.localScale = new Vector3(1, 1, 1); // Ejemplo: volver al tamaño original
+            transform.localScale = Vector3.one;
             transform.localPosition -= Vector3.up * highlighterHeight;
             ChangedSortingOrder(sortingOrder);
         }
@@ -333,7 +333,7 @@ public class Card : MonoBehaviour
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
             cardSelected.enabled = false;
-            EnableActions(activeActions);
+            EnableActions(isMyTurn && !actionIsReady);
             isFocused = true;
             AdjustUIcons();
             return true;
@@ -348,12 +348,12 @@ public class Card : MonoBehaviour
         if (cardActions.isActiveAndEnabled)
         {
             move1Button.gameObject.SetActive(moves[0].MoveSO.EnergyCost <= duelManager.Player1Manager.PlayerEnergy 
-                && duelManager.ObtainTargets(this, 0).Count > 0 || (moves[0].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[0].MoveSO.NeedTarget :
-                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
+                && (duelManager.ObtainTargets(this, 0).Count > 0 || (moves[0].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[0].MoveSO.NeedTarget :
+                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null))));
 
             move2Button.gameObject.SetActive(moves[1].MoveSO.EnergyCost <= duelManager.Player1Manager.PlayerEnergy
-                && duelManager.ObtainTargets(this, 1).Count > 0 || (moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[1].MoveSO.NeedTarget :
-                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null)));
+                && (duelManager.ObtainTargets(this, 1).Count > 0 || (moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[1].MoveSO.NeedTarget :
+                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null))));
         }
     }
 
@@ -534,8 +534,6 @@ public class Card : MonoBehaviour
 
         if (isPlayer)
         {
-            activeActions = true;
-
             cardSelected.enabled = true;
             cardSelectedImage.color = Color.yellow;
         }
@@ -553,7 +551,6 @@ public class Card : MonoBehaviour
     {
         isMyTurn = false;
         cardSelected.enabled = false;
-        activeActions = false;
     }
 
     /// <summary>

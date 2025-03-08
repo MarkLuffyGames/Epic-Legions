@@ -66,5 +66,6 @@ public class PlayerDataUI : MonoBehaviour
     private void OnDestroy()
     {
         GameLobby.Instance.OnPlayerDataNetworkListChanged -= Instance_OnPlayerDataNetworkListChanged;
+        GameLobby.Instance.OnReadyChanged -= PlayerReady_OnReadyChanged;
     }
 }

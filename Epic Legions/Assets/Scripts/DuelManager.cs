@@ -40,7 +40,7 @@ public class DuelManager : NetworkBehaviour
     private int heroesInTurnIndex;
 
     [SerializeField] private TextMeshProUGUI duelPhaseText;
-    private List<Card> heroInTurn;
+    private List<Card> heroInTurn = new List<Card>();
     private int movementToUse;
     private bool settingAttackTarget;
     private Card cardSelectingTarget;
@@ -1225,7 +1225,7 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
         // Si el tipo de objetivo es una línea (TargetLine).
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
         {
-            // Si la carta atacante pertenece a la primera línea, devuelve la línea de cartas asociada a la carta objetivo.
+            // Devuelve la línea de cartas asociada a la carta objetivo.
             if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
                 return player1Manager.GetLineForCard(cardToAttack);
