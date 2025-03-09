@@ -807,6 +807,10 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
     /// <returns>Una enumeración de la corrutina.</returns>
     private IEnumerator HeroDirectAttack(int player, Card heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
+        // Marca la carta atacante como lista para la acción y termina su turno.
+        heroUsesTheAttack.actionIsReady = false;
+        heroUsesTheAttack.EndTurn();
+
         // Iniciar la animación del ataque dependiendo del tipo de movimiento (cuerpo a cuerpo o a distancia)
         if (heroUsesTheAttack.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
         {
@@ -923,7 +927,7 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
             // Comienza el procesamiento de las acciones
             StartCoroutine(StartActions());
 
-            // Resetear el estado de todos los héroes, indicando que no están listos para una nueva acción
+            // Resetear el estado de todos los héroes, indicando que están listos para una nueva acción
             foreach (var hero in HeroCardsOnTheField)
             {
                 hero.actionIsReady = false;
@@ -1107,7 +1111,7 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
     /// <returns>Un IEnumerator para controlar el flujo del ataque de manera asíncrona.</returns>
     private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
     {
-        // Marca la carta atacante como no lista para la acción y termina su turno.
+        // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.actionIsReady = false;
         attackerCard.EndTurn();
 

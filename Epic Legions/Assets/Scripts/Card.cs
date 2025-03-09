@@ -303,7 +303,6 @@ public class Card : MonoBehaviour
         // Vuelve la carta al tamaño original.
         if (isHighlight)
         {
-            Debug.Log("RemoveHighlight");
             isHighlight = false;
             transform.localScale = Vector3.one;
             transform.localPosition -= Vector3.up * highlighterHeight;

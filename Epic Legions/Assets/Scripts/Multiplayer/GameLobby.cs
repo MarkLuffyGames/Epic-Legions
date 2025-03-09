@@ -70,15 +70,6 @@ public class GameLobby : NetworkBehaviour
         StartCoroutine(HandlePeriodicListLobbies());
     }
 
-    private void Update()
-    {
-        foreach (var kvp in playerID.Keys)
-        {
-            Debug.Log(kvp);
-        }
-        
-    }
-
     private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
     {
         OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
@@ -507,12 +498,10 @@ public class GameLobby : NetworkBehaviour
         if (clientID == NetworkManager.Singleton.LocalClientId)
         {
             playerID[1] = clientID;
-            Debug.Log($"Jugador 1 listo ClientID: {playerID[1]}");
         }
         else
         {
             playerID[2] = clientID;
-            Debug.Log($"Jugador 2 listo ClientID: {playerID[2]}");
         }
 
         if (playerReady.Count == 2 && AreAllTrue(playerReady))
