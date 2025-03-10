@@ -1184,12 +1184,12 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
         // Aplica efectos adicionales del ataque si no es un efecto pasivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
         {
-            if (!attackerCard.Moves[movementToUseIndex].MoveSO.IsPassiveEffect)
+            if (!attackerCard.Moves[movementToUseIndex].MoveSO.AlwaysActive)
                 attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
         }
         else
         {
-            if (!attackerCard.Moves[movementToUseIndex].MoveSO.IsPassiveEffect)
+            if (!attackerCard.Moves[movementToUseIndex].MoveSO.AlwaysActive)
                 attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
         }
 

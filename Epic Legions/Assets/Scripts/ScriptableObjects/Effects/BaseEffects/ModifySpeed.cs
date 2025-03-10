@@ -13,14 +13,14 @@ public class ModifySpeed : CardEffect
     public bool IsIncrease => isIncrease;
     public override void ActivateEffect(Card caster, Card target)
     {
-        target.AddEffect(new Effect(this));
+        target.AddEffect(new Effect(this, target));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
         foreach (Card card in target)
         {
-            card.AddEffect(new Effect(this));
+            card.AddEffect(new Effect(this, card));
         }
     }
 
@@ -32,10 +32,5 @@ public class ModifySpeed : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         effect.durability--;
-
-        if (effect.durability <= 0)
-        {
-            effect = null;
-        }
     }
 }

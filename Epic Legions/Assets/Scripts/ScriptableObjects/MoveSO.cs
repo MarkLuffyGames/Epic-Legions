@@ -9,7 +9,7 @@ public class MoveSO : ScriptableObject
     [SerializeField] private int energyCost;
     [SerializeField] private CardEffect moveEffect;
     [SerializeField] private Condition effectCondition;
-    [SerializeField] private bool isPassiveEffect;
+    [SerializeField] private bool alwaysActive;
     [SerializeField] private bool needTarget;
     [SerializeField] private MoveType moveType;
     [SerializeField] private TargetsType targetsType;
@@ -22,7 +22,7 @@ public class MoveSO : ScriptableObject
     public int EnergyCost => energyCost;
     public CardEffect MoveEffect => moveEffect;
     public Condition EffectCondition => effectCondition;
-    public bool IsPassiveEffect => isPassiveEffect;
+    public bool AlwaysActive => alwaysActive;
     public bool NeedTarget => needTarget;
     public MoveType MoveType => moveType;
     public TargetsType TargetsType => targetsType;

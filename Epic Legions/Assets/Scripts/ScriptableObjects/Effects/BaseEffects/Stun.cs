@@ -6,7 +6,7 @@ public class Stun : CardEffect
 {
     public override void ActivateEffect(Card caster, Card target)
     {
-        target.AddEffect(new Effect(this));
+        target.AddEffect(new Effect(this, target));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)

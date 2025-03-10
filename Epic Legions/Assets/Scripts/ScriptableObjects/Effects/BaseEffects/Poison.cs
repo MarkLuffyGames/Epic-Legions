@@ -1,17 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Modify Defense", menuName = "Hemera Legions/Card Effects/ Modify Defense")]
-public class ModifyDefense : CardEffect
+[CreateAssetMenu(fileName = "Poison", menuName = "Hemera Legions/Card Effects/ Poison")]
+public class Poison : CardEffect
 {
     [SerializeField] private int amount;
-    [SerializeField] private int numberTurns;
-    [SerializeField] private bool isIncrease;
-
+    [SerializeField] private float numberTurns = Mathf.Infinity;
     public int Amount => amount;
-    public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
-    public bool IsIncrease => isIncrease;
-
+    public int NumberTurns => (int)numberTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
         target.AddEffect(new Effect(this, target));
@@ -27,11 +23,11 @@ public class ModifyDefense : CardEffect
 
     public override void DeactivateEffect(Effect effect)
     {
-        throw new System.NotImplementedException();
+        effect.durability = 0;
     }
 
     public override void UpdateEffect(Effect effect)
     {
-        effect.durability--;
+        effect.ApplyPoisonDamage(amount);
     }
 }

@@ -13,14 +13,14 @@ public class TransferDamage : CardEffect
     public override void ActivateEffect(Card caster, Card target)
     {
         this.caster = caster;
-        target.AddEffect(new Effect(this));
+        target.AddEffect(new Effect(this, target));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
         foreach (Card card in target)
         {
-            card.AddEffect(new Effect(this));
+            card.AddEffect(new Effect(this, card));
         }
     }
 

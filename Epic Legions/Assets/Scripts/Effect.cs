@@ -8,6 +8,7 @@ public class Effect
     private CardEffect moveEffect;
     public CardEffect MoveEffect => moveEffect;
 
+    private Card affectedHero;
     private bool isActive;
     private bool isStunned;
     private int defense;
@@ -21,9 +22,10 @@ public class Effect
 
     public int durability;
 
-    public Effect(CardEffect cardEffect)
+    public Effect(CardEffect cardEffect, Card hero)
     {
         moveEffect = cardEffect;
+        affectedHero = hero;
 
         if (cardEffect is AbsorbDamage absorbDamage)
         {
@@ -60,6 +62,10 @@ public class Effect
         {
             isStunned = true;
             durability = 21;
+        }
+        else if(cardEffect is Poison poison)
+        {
+            durability = poison.NumberTurns;
         }
     }
 
@@ -113,5 +119,10 @@ public class Effect
     public int GetIgnoredDefense()
     {
         return ignoredDefense;
+    }
+
+    public void ApplyPoisonDamage(int damage)
+    {
+        affectedHero.ApplyPoisonDamage(damage);
     }
 }

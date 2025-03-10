@@ -11,14 +11,14 @@ public class AbsorbDamage : CardEffect
     public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
-        target.AddEffect(new Effect(this));
+        target.AddEffect(new Effect(this, target));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
         foreach (Card card in target)
         {
-            card.AddEffect(new Effect(this));
+            card.AddEffect(new Effect(this, card));
         }
     }
 

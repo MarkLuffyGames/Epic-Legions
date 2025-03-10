@@ -109,7 +109,7 @@ public class Card : MonoBehaviour
             foreach(var move in heroCardSO.Moves)
             {
                 moves.Add(new Movement(move));
-                if(move.IsPassiveEffect) moves[moves.Count -1].ActivateEffect(this, this);
+                if(move.AlwaysActive) moves[moves.Count -1].ActivateEffect(this, this);
             }
 
             currentHealt = maxHealt;
@@ -821,6 +821,7 @@ public class Card : MonoBehaviour
     public void ActivateVisualEffects()
     {
         stunEffect.SetActive(IsStunned());
+        //TODO: Activar efecto visual de envenenamiento.
     }
 
     /// <summary>
@@ -978,6 +979,12 @@ public class Card : MonoBehaviour
         {
             Debug.LogError("Jugador no encontrado"); 
         }
+    }
+
+    public void ApplyPoisonDamage(int amount)
+    {
+        ReceiveDamage(amount, amount);
+        ActivateVisualEffects();
     }
 }
 
