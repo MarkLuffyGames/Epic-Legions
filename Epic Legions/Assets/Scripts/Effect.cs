@@ -21,6 +21,7 @@ public class Effect
     private int ignoredDefense;
 
     public int durability;
+    public int elapsedTurns;
 
     public Effect(CardEffect cardEffect, Card hero)
     {

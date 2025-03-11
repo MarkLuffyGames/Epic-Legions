@@ -28,6 +28,9 @@ public class Poison : CardEffect
 
     public override void UpdateEffect(Effect effect)
     {
-        effect.ApplyPoisonDamage(amount);
+        effect.elapsedTurns++;
+
+        if (DuelManager.NumberOfTurns % effect.elapsedTurns == 0)
+            effect.ApplyPoisonDamage(amount);
     }
 }
