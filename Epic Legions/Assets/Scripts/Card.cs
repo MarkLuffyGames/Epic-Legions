@@ -78,6 +78,7 @@ public class Card : MonoBehaviour
     private List<Movement> moves = new List<Movement>();
     private FieldPosition fieldPosition;
     private DuelManager duelManager;
+    private DuelManagerAI duelManagerAI;
     public bool isAttackable;
 
     public int HealtPoint => maxHealt;
@@ -91,10 +92,11 @@ public class Card : MonoBehaviour
     /// Establece todos los datos de la carta.
     /// </summary>
     /// <param name="cardSO">Scriptable Object que contiene los datos de la carta que se desea establecer</param>
-    public void SetCard(CardSO cardSO, DuelManager duelManager)
+    public void SetCard(CardSO cardSO, DuelManager duelManager, DuelManagerAI duelManagerAI)
     {
         this.cardSO = cardSO;
         this.duelManager = duelManager;
+        this.duelManagerAI = duelManagerAI;
 
         nameText.text = cardSO.CardName;
         lastNameText.text = cardSO.CardLastName;

@@ -8,14 +8,20 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private Button playButton;
+    [SerializeField] private Button singlePlayerButton;
+    [SerializeField] private Button multiplayerButton;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
 
         InitializeUnityAuthentication();
-        playButton.onClick.AddListener(() =>
+        singlePlayerButton.onClick.AddListener(() =>
+        {
+            StartSinglePlayer();
+        });
+
+        multiplayerButton.onClick.AddListener(() =>
         {
             SceneManager.LoadScene("LobbyScene");
         });
@@ -68,4 +74,14 @@ public class MainMenu : MonoBehaviour
             Debug.LogException(ex);
         }
     }
+
+    [SerializeField] private GameObject duelManagerPrefab;
+    private void StartSinglePlayer()
+    {
+        var duelManagerInstance = Instantiate(duelManagerPrefab);
+        duelManagerInstance.GetComponent<DuelManagerAI>().InitializeDuel();
+
+        SceneManager.LoadScene("GameScene");
+    }
+
 }

@@ -22,4 +22,7 @@ MonoBehaviour:
   defence: 30
   speed: 35
   energy: 30
-  moves: []
+  moves:
+  - {fileID: 11400000, guid: a1df5b8bf892b6944b699da08756e8b9, type: 2}
+  - {fileID: 11400000, guid: cac116a403360764496d8bbb1de5833b, type: 2}
+  - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Elixir Revitalizante
+  m_Name: "Ra\xEDces Vinculantes"
   m_EditorClassIdentifier: 
-  moveName: Elixir Revitalizante
-  damage: 0
-  energyCost: 10
-  moveEffect: {fileID: 11400000, guid: cd6f61260300ae44189ee71d4a629011, type: 2}
+  moveName: "Ra\xEDces Vinculantes"
+  damage: 10
+  energyCost: 30
+  moveEffect: {fileID: 11400000, guid: 38e24763263f98649b80229e5f15fabf, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 1
-  moveType: 2
-  targetsType: 0
+  moveType: 1
+  targetsType: 1
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  effectDescription: Un elixir de ingredientes raros que otorga vitalidad a los aliados.
+  visualEffectHit: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  effectDescription: Inmoviliza a los enemigos afectados, reduciendo su velocidad
+    en 20 puntos durante 1 turno.
