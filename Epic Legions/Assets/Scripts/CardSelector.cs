@@ -217,11 +217,22 @@ public class CardSelector : MonoBehaviour
             {
                 duelManager.CardSelectingTarget.actionIsReady = true;
 
-                duelManager.HeroAttackServerRpc(card.FieldPosition.PositionIndex, 
+                if (duelManager.IsSinglePlayer)
+                {
+                    duelManager.ProcessAttack(card.FieldPosition.PositionIndex,
+                        duelManager.CardSelectingTarget.cardSO is HeroCardSO,
+                        duelManager.CardSelectingTarget.FieldPosition.PositionIndex,
+                        duelManager.MovementToUse, 1);
+
+                }
+                else
+                {
+                    duelManager.ProcessAttackServerRpc(card.FieldPosition.PositionIndex,
                     NetworkManager.Singleton.LocalClientId,
                     duelManager.CardSelectingTarget.cardSO is HeroCardSO,
                     duelManager.CardSelectingTarget.FieldPosition.PositionIndex,
                     duelManager.MovementToUse);
+                }
 
                 duelManager.CardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
@@ -368,10 +379,17 @@ public class CardSelector : MonoBehaviour
         isHoldingCard = false;
         card.StopDragging(false);
 
-        duelManager.PlaceCardOnFieldServerRpc(
-            handCardHandler.GetIdexOfCard(currentCard),
-            currentFieldPosition.PositionIndex,
-            NetworkManager.Singleton.LocalClientId);
+        if (duelManager.IsSinglePlayer)
+        {
+            duelManager.PlaceCardInField(duelManager.Player1Manager, true, handCardHandler.GetIdexOfCard(currentCard),currentFieldPosition.PositionIndex);
+        }
+        else
+        {
+            duelManager.PlaceCardOnFieldServerRpc(
+                handCardHandler.GetIdexOfCard(currentCard),
+                currentFieldPosition.PositionIndex,
+                NetworkManager.Singleton.LocalClientId);
+        }
 
         currentFieldPosition = null;
 

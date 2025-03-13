@@ -53,10 +53,11 @@ public class DuelManager : NetworkBehaviour
     public bool SettingAttackTarget => settingAttackTarget;
     public Card CardSelectingTarget => cardSelectingTarget;
 
+    private bool isSinglePlayer;
+    public bool IsSinglePlayer => isSinglePlayer;
+
     private void Awake()
     {
-        Application.targetFrameRate = 60;
-
         duelPhase.OnValueChanged += OnDuelPhaseChanged;
         DontDestroyOnLoad(gameObject);
 
@@ -75,7 +76,7 @@ public class DuelManager : NetworkBehaviour
 
         if (newPhase == DuelPhase.PreparingDuel)
         {
-            ReceiveAndStoreDeckServerRpc(NetworkManager.Singleton.LocalClientId, deckCardIds.ToArray());
+            SetDecks();
         }
         else if (newPhase == DuelPhase.Starting)
         {
@@ -133,6 +134,8 @@ public class DuelManager : NetworkBehaviour
     /// <param name="clientId2">ID del segundo jugador.</param>
     public void AssignPlayersAndStartDuel(ulong clientId1, ulong clientId2)
     {
+        isSinglePlayer = false;
+
         // Asigna roles a los jugadores
         playerRoles[clientId1] = 1;
         playerRoles[clientId2] = 2;
@@ -149,6 +152,38 @@ public class DuelManager : NetworkBehaviour
         InitializeDuel();
     }
 
+    public void AssignPlayersAndStartDuel(int[] player1deckCardIds, int[] player2deckCardIds)
+    {
+        isSinglePlayer = true;
+
+        // Asigna roles a los jugadores
+        playerRoles[1] = 1;
+        playerRoles[2] = 2;
+
+        // Marca a los jugadores como no listos al inicio
+        playerReady[0] = false;
+        playerReady[1] = false;
+
+        playerDecks[0] = CardDatabase.ShuffleArray(player1deckCardIds.ToArray()).ToList(); // Barajar el mazo y guardar en la lista de mazos
+        playerDecks[1] = CardDatabase.ShuffleArray(player2deckCardIds.ToArray()).ToList(); // Barajar el mazo y guardar en la lista de mazos
+
+        // Inicia el duelo después del registro
+        InitializeDuel();
+    }
+
+    private void SetDecks()
+    {
+        if (isSinglePlayer)
+        {
+            ValidateDeck(1, playerDecks[0]);
+            ValidateDeck(2, playerDecks[1]);
+        }
+        else
+        {
+            ReceiveAndStoreDeckServerRpc(NetworkManager.Singleton.LocalClientId, deckCardIds.ToArray());
+        }
+    }
+
 
     /// <summary>
     /// Recibe y almacena el mazo de un jugador en el servidor, lo baraja y lo distribuye a los clientes.
@@ -156,7 +191,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="clientId">ID del jugador que envía el mazo.</param>
     /// <param name="deckCardIds">Lista de IDs de cartas en el mazo del jugador.</param>
     [ServerRpc(RequireOwnership = false)]
-    public void ReceiveAndStoreDeckServerRpc(ulong clientId, int[] deckCardIds)
+    private void ReceiveAndStoreDeckServerRpc(ulong clientId, int[] deckCardIds)
     {
         // Validar si el mazo es válido
         if (deckCardIds == null || deckCardIds.Length == 0)
@@ -176,6 +211,19 @@ public class DuelManager : NetworkBehaviour
 
             AssignDeckToRole(playerRoles[clientId], deckCardIds); // Configurar el mazo en el juego
         }
+    }
+
+    private void ValidateDeck(int player, List<int> deckCardIds)
+    {
+        // Validar si el mazo es válido
+        if (deckCardIds == null || deckCardIds.Count == 0)
+        {
+            Debug.LogWarning($"Player {player} sent an invalid deck.");
+            return;
+        }
+
+        AssignDeckToRole(player1Manager, playerDecks[0]);
+        AssignDeckToRole(player2Manager, playerDecks[1]);
     }
 
 
@@ -262,6 +310,23 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
+    private void AssignDeckToRole(PlayerManager playerManager, List<int> deckCardIds)
+    {
+        foreach (var cardId in deckCardIds)
+        {
+            var card = CardDatabase.GetCardById(cardId);
+
+            if (card != null)
+            {
+                // Asigna las cartas al mazo del jugador correspondiente
+                playerManager.AddCardToPlayerDeck(card, playerDecks[0].Count);
+            }
+            else
+            {
+                Debug.LogWarning($"Player {(playerManager == player1Manager ? 1 : 2)} tried to add an invalid card ID {cardId} to their deck.");
+            }
+        }
+    }
     /// <summary>
     /// Establece el orden de turnos en la batalla basado en la velocidad de los héroes en el campo.
     /// </summary>
@@ -375,31 +440,44 @@ public class DuelManager : NetworkBehaviour
             // Notifica a los jugadores que ya no están listos
             NotifyPlayerNotReadyClientRpc();
 
-            // Transiciones entre las fases del duelo según la fase actual
-            if (duelPhase.Value == DuelPhase.PreparingDuel)
-            {
-                duelPhase.Value = DuelPhase.Starting;
-            }
-            else if (duelPhase.Value == DuelPhase.Starting)
-            {
-                duelPhase.Value = DuelPhase.Preparation;
-            }
-            else if (duelPhase.Value == DuelPhase.Preparation)
-            {
-                duelPhase.Value = DuelPhase.Battle;
-            }
-            else if (duelPhase.Value == DuelPhase.DrawingCards)
-            {
-                duelPhase.Value = DuelPhase.Preparation;
-            }
-            else if (duelPhase.Value == DuelPhase.Battle)
-            {
-                NextTurn(); // Avanza al siguiente turno
-            }
-            else if (duelPhase.Value == DuelPhase.PlayingSpellCard)
-            {
-                duelPhase.Value = oldDuelPhase; // Regresa a la fase anterior
-            }
+            ChangePhase();
+        }
+    }
+
+    public void SetPlayerReadyAndTransitionPhase()
+    {
+        if(player1Manager.isReady && player2Manager.isReady)
+        {
+            ChangePhase();
+        }
+    }
+
+    private void ChangePhase()
+    {
+        // Transiciones entre las fases del duelo según la fase actual
+        if (duelPhase.Value == DuelPhase.PreparingDuel)
+        {
+            duelPhase.Value = DuelPhase.Starting;
+        }
+        else if (duelPhase.Value == DuelPhase.Starting)
+        {
+            duelPhase.Value = DuelPhase.Preparation;
+        }
+        else if (duelPhase.Value == DuelPhase.Preparation)
+        {
+            duelPhase.Value = DuelPhase.Battle;
+        }
+        else if (duelPhase.Value == DuelPhase.DrawingCards)
+        {
+            duelPhase.Value = DuelPhase.Preparation;
+        }
+        else if (duelPhase.Value == DuelPhase.Battle)
+        {
+            NextTurn(); // Avanza al siguiente turno
+        }
+        else if (duelPhase.Value == DuelPhase.PlayingSpellCard)
+        {
+            duelPhase.Value = oldDuelPhase; // Regresa a la fase anterior
         }
     }
 
@@ -476,7 +554,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="fieldPositionIdex">Índice de la posición en el campo donde se colocará la carta.</param>
     /// <param name="clientId">ID del cliente que está realizando la acción.</param>
     [ServerRpc(RequireOwnership = false)]
-    public void PlaceCardOnFieldServerRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
+    public virtual void PlaceCardOnFieldServerRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
     {
         // Verifica el rol del jugador y coloca la carta en el campo del jugador correspondiente
         if (playerRoles[clientId] == 1)
@@ -500,7 +578,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="isPlayer">Indica si la carta es para el jugador o el oponente.</param>
     /// <param name="cardIndex">Índice de la carta en la mano del jugador.</param>
     /// <param name="fieldPositionIdex">Índice de la posición en el campo donde se colocará la carta. Si es -1, la carta va al área de hechizos.</param>
-    private void PlaceCardInField(PlayerManager playerManager, bool isPlayer, int cardIndex, int fieldPositionIdex)
+    public void PlaceCardInField(PlayerManager playerManager, bool isPlayer, int cardIndex, int fieldPositionIdex)
     {
         // Obtiene la carta de la mano del jugador
         Card card = playerManager.GetHandCardHandler().GetCardInHandList()[cardIndex];
@@ -512,7 +590,15 @@ public class DuelManager : NetworkBehaviour
         if (fieldPositionIdex == -1)
         {
             playerManager.SpellFieldPosition.SetCard(card, isPlayer);
-            if (IsServer) duelPhase.Value = DuelPhase.PlayingSpellCard;
+            if (IsSinglePlayer)
+            {
+                duelPhase.Value = DuelPhase.PlayingSpellCard;
+            }
+            else
+            {
+                if (IsServer) duelPhase.Value = DuelPhase.PlayingSpellCard;
+            }
+            
             if (isPlayer) UseMovement(0, card);
         }
         else
@@ -531,26 +617,26 @@ public class DuelManager : NetworkBehaviour
 
 
     /// <summary>
-/// Inserta una carta en la lista de cartas de héroes en orden descendente de puntos de velocidad.
-/// </summary>
-/// <param name="heroCards">La lista de cartas de héroes donde se va a insertar la nueva carta.</param>
-/// <param name="newCard">La nueva carta que se va a insertar en la lista.</param>
-private void InsertCardInOrder(List<Card> heroCards, Card newCard)
-{
-    // Encuentra la posición donde insertar la nueva carta, comparando con la velocidad de las cartas existentes
-    int insertIndex = heroCards.FindLastIndex(card => card.CurrentSpeedPoints >= newCard.CurrentSpeedPoints);
+    /// Inserta una carta en la lista de cartas de héroes en orden descendente de puntos de velocidad.
+    /// </summary>
+    /// <param name="heroCards">La lista de cartas de héroes donde se va a insertar la nueva carta.</param>
+    /// <param name="newCard">La nueva carta que se va a insertar en la lista.</param>
+    private void InsertCardInOrder(List<Card> heroCards, Card newCard)
+    {
+        // Encuentra la posición donde insertar la nueva carta, comparando con la velocidad de las cartas existentes
+        int insertIndex = heroCards.FindLastIndex(card => card.CurrentSpeedPoints >= newCard.CurrentSpeedPoints);
 
-    // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
-    if (insertIndex == -1)
-    {
-        heroCards.Insert(0, newCard);
+        // Si no encontró ninguna carta con igual o mayor velocidad, la coloca al inicio
+        if (insertIndex == -1)
+        {
+            heroCards.Insert(0, newCard);
+        }
+        else
+        {
+            // Inserta la carta después de la última carta con la misma velocidad o mayor
+         heroCards.Insert(insertIndex + 1, newCard);
+        }
     }
-    else
-    {
-        // Inserta la carta después de la última carta con la misma velocidad o mayor
-        heroCards.Insert(insertIndex + 1, newCard);
-    }
-}
 
 
     /// <summary>
@@ -599,6 +685,24 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
         // Si el héroe no se encuentra en el campo de ningún jugador, se muestra un error y se devuelve 0
         Debug.LogError("El héroe no pertenece a ningún jugador");
         return 0;
+    }
+
+    private PlayerManager GetPlayerManagerForHero(Card heroCard)
+    {
+        // Verifica si el héroe está en el campo del jugador 1
+        if (player1Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        {
+            return player1Manager;
+        }
+        // Verifica si el héroe está en el campo del jugador 2
+        else if (player2Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        {
+            return player2Manager;
+        }
+
+        // Si el héroe no se encuentra en el campo de ningún jugador, se muestra un error y se devuelve 0
+        Debug.LogError("El héroe no pertenece a ningún jugador");
+        return null;
     }
 
     /// <summary>
@@ -655,7 +759,15 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
         else
         {
             // Si no necesita objetivo, se ejecuta el ataque
-            HeroAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex);
+            if (isSinglePlayer)
+            {
+                var playerManager = GetPlayerManagerForHero(card);
+                ProcessAttack(card.FieldPosition.PositionIndex, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
+            }
+            else
+            {
+                ProcessAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex);
+            }
 
             // Marca la acción como lista y finaliza el turno del héroe
             card.actionIsReady = true;
@@ -704,7 +816,15 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
             cardSelectingTarget.actionIsReady = true;
 
             // Realiza el ataque directo a los puntos de vida del oponente (sin objetivo específico)
-            HeroAttackServerRpc(-1, NetworkManager.Singleton.LocalClientId, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex);
+            if (isSinglePlayer)
+            {
+                var playerManager = GetPlayerManagerForHero(attackingCard);
+                ProcessAttack(-1, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
+            }
+            else
+            {
+                ProcessAttackServerRpc(-1, NetworkManager.Singleton.LocalClientId, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex);
+            }
 
             // Finaliza el turno del héroe
             cardSelectingTarget.EndTurn();
@@ -861,8 +981,9 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
     }
 
 
-    List<HeroAction> attackActions = new List<HeroAction>();
-    List<HeroAction> effectActions = new List<HeroAction>();
+    private List<HeroAction> attackActions = new List<HeroAction>();
+    private List<HeroAction> effectActions = new List<HeroAction>();
+
     [ServerRpc(RequireOwnership = false)]
     /// <summary>
     /// Realiza un ataque de un héroe en el servidor. El método maneja la prioridad de las acciones, el consumo de energía,
@@ -873,7 +994,11 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
     /// <param name="isHero">Indica si el ataque es realizado por un héroe (verdadero) o por otro tipo de entidad (falso).</param>
     /// <param name="heroUsesTheAttack">El índice de la carta del héroe que está realizando el ataque.</param>
     /// <param name="movementToUseIndex">El índice del movimiento que se va a utilizar para el ataque.</param>
-    public void HeroAttackServerRpc(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex)
+    public void ProcessAttackServerRpc(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex)
+    {
+        ProcessAttack(heroToAttackPositionIndex, isHero, heroUsesTheAttack, movementToUseIndex, clientId);
+    }
+    public void ProcessAttack(int heroToAttackPositionIndex, bool isHero, int heroUsesTheAttack, int movementToUseIndex, ulong clientId)
     {
         // Si el ataque es realizado por un héroe
         if (isHero)
@@ -893,7 +1018,7 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
                 player1Manager.ConsumeEnergy(player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
 
                 // Sincronizar el consumo de energía con el cliente
-                ConsumeEnergyClientRpc(clientId, player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                if (!IsSinglePlayer) ConsumeEnergyClientRpc(clientId, player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
             }
             else
             {
@@ -901,7 +1026,7 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
                 player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
                 hasPriority = player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
                 player2Manager.ConsumeEnergy(player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
-                ConsumeEnergyClientRpc(clientId, player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                if (IsSinglePlayer) ConsumeEnergyClientRpc(clientId, player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
             }
 
             // Si el movimiento tiene prioridad (es un efecto positivo), se añade a las acciones de efecto
@@ -934,7 +1059,6 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
             }
         }
     }
-
 
     /// <summary>
     /// Consume energía en el cliente cuando es llamado desde el servidor.
@@ -1030,9 +1154,15 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
         }
 
         // Si el código se está ejecutando en el cliente, marcar al jugador como listo y avanzar de fase.
-        if (IsClient)
+        if (isSinglePlayer)
         {
-            SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
+            player1Manager.isReady = true;
+            player2Manager.isReady = true;
+            SetPlayerReadyAndTransitionPhase();
+        }
+        else
+        {
+            if (IsClient) SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
 
@@ -1066,8 +1196,9 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
             (playerRoles[clientId] == 1 ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
             : (playerRoles[clientId] == 1 ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
 
+
         // Llama a la función RPC para ejecutar el ataque en los clientes.
-        HeroAttackClientRpc(heroToAttackPositionIndex, clientId, movementToUseIndex, isHero, heroUsesTheAttack, lastMove);
+        if (!isSinglePlayer) HeroAttackClientRpc(heroToAttackPositionIndex, clientId, movementToUseIndex, isHero, heroUsesTheAttack, lastMove);
 
         // Determina el jugador objetivo: si el cliente es 1, el objetivo será el jugador 2, y viceversa.
         int targetPlayer = (playerRoles[clientId] == 1) ? 2 : 1;
@@ -1484,7 +1615,7 @@ private void InsertCardInOrder(List<Card> heroCards, Card newCard)
             card.RegenerateDefense();
 
             // Llama al RPC para actualizar la defensa de la carta en los clientes.
-            RegenerateDefenseClientRpc(card.FieldPosition.PositionIndex, GetClientIdForHero(card));
+            if(!isSinglePlayer) RegenerateDefenseClientRpc(card.FieldPosition.PositionIndex, GetClientIdForHero(card));
         }
     }
 

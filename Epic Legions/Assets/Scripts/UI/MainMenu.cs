@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -76,10 +77,12 @@ public class MainMenu : MonoBehaviour
     }
 
     [SerializeField] private GameObject duelManagerPrefab;
+
+    [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
         var duelManagerInstance = Instantiate(duelManagerPrefab);
-        duelManagerInstance.GetComponent<DuelManagerAI>().InitializeDuel();
+        duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(deckCardIds.ToArray(), deckCardIds.ToArray());
 
         SceneManager.LoadScene("GameScene");
     }

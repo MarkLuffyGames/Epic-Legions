@@ -31,6 +31,9 @@ public class PlayerManager : MonoBehaviour
     public FieldPosition SpellFieldPosition => spellFieldPosition;
     public int PlayerEnergy => playerEnergy;
 
+    public bool isSinglePlayer;
+    public bool isPlayer;
+
 
     private void Start()
     {
@@ -90,7 +93,11 @@ public class PlayerManager : MonoBehaviour
 
     private void IsReady()
     {
-        if (isReady && rivalPlayerManager.isReady && NetworkManager.Singleton.IsClient)
+        if (duelManager.IsSinglePlayer)
+        {
+            duelManager.SetPlayerReadyAndTransitionPhase();
+        }
+        else if (isReady && rivalPlayerManager.isReady && NetworkManager.Singleton.IsClient)
         {
             duelManager.SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
         }
@@ -99,7 +106,7 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerReady()
     {
         isReady = true;
-        duelManager.SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
+        IsReady();
     }
 
     public void ShowNextPhaseButton()

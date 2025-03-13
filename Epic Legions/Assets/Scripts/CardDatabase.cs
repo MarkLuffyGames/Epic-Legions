@@ -15,6 +15,7 @@ public class CardDatabase : MonoBehaviour
     private void Awake()
     {
         allCards = AllCards;
+        DontDestroyOnLoad(gameObject);
     }
 
     public static int[] ShuffleArray(int[] array)

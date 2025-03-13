@@ -78,7 +78,6 @@ public class Card : MonoBehaviour
     private List<Movement> moves = new List<Movement>();
     private FieldPosition fieldPosition;
     private DuelManager duelManager;
-    private DuelManagerAI duelManagerAI;
     public bool isAttackable;
 
     public int HealtPoint => maxHealt;
@@ -92,11 +91,10 @@ public class Card : MonoBehaviour
     /// Establece todos los datos de la carta.
     /// </summary>
     /// <param name="cardSO">Scriptable Object que contiene los datos de la carta que se desea establecer</param>
-    public void SetCard(CardSO cardSO, DuelManager duelManager, DuelManagerAI duelManagerAI)
+    public void SetCard(CardSO cardSO, DuelManager duelManager)
     {
         this.cardSO = cardSO;
         this.duelManager = duelManager;
-        this.duelManagerAI = duelManagerAI;
 
         nameText.text = cardSO.CardName;
         lastNameText.text = cardSO.CardLastName;
@@ -185,14 +183,17 @@ public class Card : MonoBehaviour
     /// </summary>
     public void UpdateText()
     {
-        healtText.color = currentHealt < maxHealt ?  Color.red : Color.yellow;
-        defenceText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
-        speedText.color = CurrentSpeedPoints < speed ? Color.red : CurrentSpeedPoints > speed ? Color.green : Color.yellow;
+        if (cardSO is HeroCardSO) 
+        {
+            healtText.color = currentHealt < maxHealt ? Color.red : Color.yellow;
+            defenceText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
+            speedText.color = CurrentSpeedPoints < speed ? Color.red : CurrentSpeedPoints > speed ? Color.green : Color.yellow;
 
-        healtText.text = currentHealt.ToString();
-        defenceText.text = CurrentDefensePoints.ToString();
-        speedText.text = CurrentSpeedPoints.ToString();
-        energyText.text = energy.ToString();
+            healtText.text = currentHealt.ToString();
+            defenceText.text = CurrentDefensePoints.ToString();
+            speedText.text = CurrentSpeedPoints.ToString();
+            energyText.text = energy.ToString(); 
+        }
     }
 
     /// <summary>
