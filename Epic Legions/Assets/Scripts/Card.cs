@@ -349,14 +349,19 @@ public class Card : MonoBehaviour
         cardActions.enabled = enable;
         if (cardActions.isActiveAndEnabled)
         {
-            move1Button.gameObject.SetActive(moves[0].MoveSO.EnergyCost <= duelManager.Player1Manager.PlayerEnergy 
-                && (duelManager.ObtainTargets(this, 0).Count > 0 || (moves[0].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[0].MoveSO.NeedTarget :
-                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null))));
+            move1Button.gameObject.SetActive(UsableMovement(0, duelManager.Player1Manager));
 
-            move2Button.gameObject.SetActive(moves[1].MoveSO.EnergyCost <= duelManager.Player1Manager.PlayerEnergy
-                && (duelManager.ObtainTargets(this, 1).Count > 0 || (moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[1].MoveSO.NeedTarget :
-                duelManager.Player2Manager.GetFieldPositionList().All(field => field.Card == null))));
+            move2Button.gameObject.SetActive(UsableMovement(1, duelManager.Player1Manager));
         }
+    }
+
+    public bool UsableMovement(int moveIndex, PlayerManager playerManager)
+    {
+        PlayerManager otherPlayerManager = playerManager == duelManager.Player1Manager ? duelManager.Player2Manager : duelManager.Player1Manager;
+
+        return moves[moveIndex].MoveSO.EnergyCost <= playerManager.PlayerEnergy
+                && (duelManager.ObtainTargets(this, moveIndex).Count > 0 || (moves[moveIndex].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[moveIndex].MoveSO.NeedTarget :
+                otherPlayerManager.GetFieldPositionList().All(field => field.Card == null)));
     }
 
     /// <summary>
@@ -455,12 +460,12 @@ public class Card : MonoBehaviour
 
     }
 
-    public bool UsableCard()
+    public bool UsableCard(PlayerManager playerManager)
     {
         if (cardSO is HeroCardSO heroCardSO)
         {
             if(duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation &&
-                heroCardSO.Energy <= duelManager.Player1Manager.PlayerEnergy)
+                heroCardSO.Energy <= playerManager.PlayerEnergy)
             {
                 return true;
             }

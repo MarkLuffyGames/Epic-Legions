@@ -226,7 +226,7 @@ public class PlayerManager : MonoBehaviour
         return cards;
     }
 
-    public List<Card> GetAllCardInField(Card card)
+    public List<Card> GetAllCardInField()
     {
         List<Card> cards = new List<Card>();
 

@@ -166,7 +166,7 @@ public class CardSelector : MonoBehaviour
         
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
         if(currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard) 
-            && currentFieldPosition.IsFree() && card.UsableCard()
+            && currentFieldPosition.IsFree() && card.UsableCard(playerManager)
             && !playerManager.isReady)
         {
             if (card.cardSO is HeroCardSO && currentFieldPosition.PositionIndex != -1)
@@ -262,7 +262,7 @@ public class CardSelector : MonoBehaviour
 
         if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard//La carta esta en la mano del jugador y no esta enfocada
             && !playerManager.isReady && !card.waitForServer //El jugador no puede estar listo para avanzar a la siguinte fase ni la carta estar esperando respuesta del servidor.
-            && card.UsableCard()) //La carta puede ser usada. 
+            && card.UsableCard(playerManager)) //La carta puede ser usada. 
         {
             card.StartDragging();
 

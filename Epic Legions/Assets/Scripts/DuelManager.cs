@@ -19,6 +19,8 @@ public class DuelManager : NetworkBehaviour
         public ulong clientIdReady;
     }
 
+    public event EventHandler OnChangeTurn;
+
     [SerializeField] private PlayerManager player1Manager;
     [SerializeField] private PlayerManager player2Manager;
     [SerializeField] private EndDuelUI endDuelUI;
@@ -33,7 +35,7 @@ public class DuelManager : NetworkBehaviour
     private Dictionary<ulong, bool> playerReady = new Dictionary<ulong, bool>();
 
 
-    private NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
+    public NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
 
     private List<Card> HeroCardsOnTheField = new List<Card>();
     private List<Card>[] turns = new List<Card>[NumberOfTurns];
@@ -49,6 +51,7 @@ public class DuelManager : NetworkBehaviour
 
     public PlayerManager Player1Manager => player1Manager;
     public PlayerManager Player2Manager => player2Manager;
+    public List<Card> HeroInTurn => heroInTurn;
     public int MovementToUse => movementToUse;
     public bool SettingAttackTarget => settingAttackTarget;
     public Card CardSelectingTarget => cardSelectingTarget;
@@ -102,7 +105,7 @@ public class DuelManager : NetworkBehaviour
 
                 BeginHeroTurn();
 
-                if (IsClient)
+                if (IsClient || isSinglePlayer)
                 {
                     player1Manager.GetHandCardHandler().HideHandCard();
                 }
@@ -364,7 +367,7 @@ public class DuelManager : NetworkBehaviour
         // Si no hay héroes en el turno actual, avanza al siguiente turno
         if (turns[heroesInTurnIndex].Count == 0)
         {
-            if (IsServer) NextTurn();
+            if (IsServer || IsSinglePlayer) NextTurn();
             return;
         }
 
@@ -400,6 +403,8 @@ public class DuelManager : NetworkBehaviour
     /// </summary>
     private void InitializeHeroTurn()
     {
+
+        OnChangeTurn?.Invoke(this, EventArgs.Empty);
         // Recorre los héroes en turno y configura su estado
         foreach (var hero in heroInTurn)
         {
@@ -412,7 +417,7 @@ public class DuelManager : NetworkBehaviour
             else
             {
                 // Si el héroe no está en el campo del jugador 1, se desactiva su turno
-                hero.SetTurn(false);
+                hero.EndTurn();
             }
         }
     }
@@ -596,10 +601,10 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                if (IsServer) duelPhase.Value = DuelPhase.PlayingSpellCard;
+                if (IsServer || IsSinglePlayer) duelPhase.Value = DuelPhase.PlayingSpellCard;
             }
             
-            if (isPlayer) UseMovement(0, card);
+            if (isPlayer || IsSinglePlayer) UseMovement(0, card);
         }
         else
         {
@@ -748,13 +753,21 @@ public class DuelManager : NetworkBehaviour
     /// Si el movimiento seleccionado necesita un objetivo, se invoca la función para seleccionar uno. 
     /// Si no es necesario un objetivo, el movimiento se ejecuta inmediatamente y se marca el héroe como listo para finalizar su turno.
     /// </remarks>
-    public void UseMovement(int movementToUseIndex, Card card)
+    public void UseMovement(int movementToUseIndex, Card card, int target = -1)
     {
         // Verifica si el movimiento necesita un objetivo
         if (card.Moves[movementToUseIndex].MoveSO.NeedTarget)
         {
-            // Si necesita un objetivo, se selecciona uno
-            SelectTarget(movementToUseIndex, card);
+            if(target == -1)
+            {
+                // Si necesita un objetivo, se selecciona uno
+                SelectTarget(movementToUseIndex, card);
+            }
+            else
+            {
+                var playerManager = GetPlayerManagerForHero(card);
+                ProcessAttack(target, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
+            }
         }
         else
         {
@@ -1242,6 +1255,7 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Un IEnumerator para controlar el flujo del ataque de manera asíncrona.</returns>
     private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
     {
+        Debug.Log(cardToAttack);
         // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.actionIsReady = false;
         attackerCard.EndTurn();
@@ -1379,11 +1393,11 @@ public class DuelManager : NetworkBehaviour
                 // Si el movimiento es un efecto positivo, devuelve todas las cartas del jugador 1.
                 if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
                 {
-                    return player1Manager.GetAllCardInField(cardToAttack);
+                    return player1Manager.GetAllCardInField();
                 }
                 else
                 {
-                    return player2Manager.GetAllCardInField(cardToAttack);
+                    return player2Manager.GetAllCardInField();
                 }
             }
             else
@@ -1391,11 +1405,11 @@ public class DuelManager : NetworkBehaviour
                 // Si el movimiento es un efecto positivo, devuelve todas las cartas del jugador 2.
                 if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
                 {
-                    return player2Manager.GetAllCardInField(cardToAttack);
+                    return player2Manager.GetAllCardInField();
                 }
                 else
                 {
-                    return player1Manager.GetAllCardInField(cardToAttack);
+                    return player1Manager.GetAllCardInField();
                 }
             }
         }
