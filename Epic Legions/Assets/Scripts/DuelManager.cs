@@ -710,6 +710,24 @@ public class DuelManager : NetworkBehaviour
         return null;
     }
 
+    private PlayerManager GetPlayerManagerRival(Card heroCard)
+    {
+        // Verifica si el héroe está en el campo del jugador 1
+        if (player1Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        {
+            return player2Manager;
+        }
+        // Verifica si el héroe está en el campo del jugador 2
+        else if (player2Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        {
+            return player1Manager;
+        }
+
+        // Si el héroe no se encuentra en el campo de ningún jugador, se muestra un error y se devuelve 0
+        Debug.LogError("El héroe no pertenece a ningún jugador");
+        return null;
+    }
+
     /// <summary>
     /// Gestiona los efectos de los héroes en el campo y actualiza su texto de estado.
     /// </summary>
@@ -765,6 +783,7 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
+                Debug.Log(target);
                 var playerManager = GetPlayerManagerForHero(card);
                 ProcessAttack(target, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
             }
@@ -895,12 +914,12 @@ public class DuelManager : NetworkBehaviour
         if (card.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
             // Itera sobre las posiciones de campo del jugador 2 (enemigo)
-            for (int i = 0; i < player2Manager.GetFieldPositionList().Count; i++)
+            for (int i = 0; i < GetPlayerManagerRival(card).GetFieldPositionList().Count; i++)
             {
                 // Si hay una carta en la posición, la agregamos como objetivo
-                if (player2Manager.GetFieldPositionList()[i].Card != null)
+                if (GetPlayerManagerRival(card).GetFieldPositionList()[i].Card != null)
                 {
-                    targets.Add(player2Manager.GetFieldPositionList()[i].Card);
+                    targets.Add(GetPlayerManagerRival(card).GetFieldPositionList()[i].Card);
                 }
 
                 // Si ya encontramos al menos un objetivo y estamos en las últimas posiciones (en este caso, filas 4, 9 o 14),
@@ -915,7 +934,7 @@ public class DuelManager : NetworkBehaviour
         {
             // Si el movimiento es un efecto positivo, los objetivos serán las cartas del jugador aliado (jugador 1),
             // pero no se puede seleccionar la misma carta que está atacando
-            foreach (var position in player1Manager.GetFieldPositionList())
+            foreach (var position in GetPlayerManagerForHero(card).GetFieldPositionList())
             {
                 if (position.Card != null && position.Card != card)
                 {
