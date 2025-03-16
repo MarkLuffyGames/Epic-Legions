@@ -4,14 +4,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
+using System.Linq;
 using Random = UnityEngine.Random;
+using Unity.Burst.Intrinsics;
 
 public class HemeraLegionAI : MonoBehaviour
 {
     [SerializeField] private DuelManager duelManager;
     [SerializeField] private PlayerManager playerManager;
     [SerializeField] private HandCardHandler handCardHandler;
+
+    private int turn;
 
     private void Awake()
     {
@@ -28,6 +31,7 @@ public class HemeraLegionAI : MonoBehaviour
     {
         if(newValue == DuelPhase.Preparation)
         {
+            turn++;
             StartCoroutine(PlayCard());
         }
     }
@@ -38,23 +42,52 @@ public class HemeraLegionAI : MonoBehaviour
 
         if(handCardHandler.GetCardInHandList().Count > 0)
         {
-            List<Card> usableCards = new List<Card>();
+            List<Card> usableHeroesCards = new List<Card>();
 
             foreach (var card in handCardHandler.GetCardInHandList())
             {
-                if(card.cardSO is HeroCardSO && card.UsableCard(playerManager)) usableCards.Add(card);
+                if(card.cardSO is HeroCardSO && card.UsableCard(playerManager)) usableHeroesCards.Add(card);
+            }
+             
+            if (usableHeroesCards.Count > 0)
+            {
+                ChooseWhetherSummonHero(usableHeroesCards);
             }
 
-            if (usableCards.Count > 0)
-            {
-                duelManager.PlaceCardInField(playerManager, playerManager.isPlayer,
-                    handCardHandler.GetIdexOfCard(usableCards[Random.Range(0, usableCards.Count)]), ChoosePositionFieldIndex());
-            }
             playerManager.SetPlayerReady();
         }
     }
 
-    private int ChoosePositionFieldIndex()
+    private void ChooseWhetherSummonHero(List<Card> usableHeroesCards)
+    {
+        Card heroToPlay = null;
+
+        if (turn == 1)
+        {
+            heroToPlay = usableHeroesCards.OrderByDescending(h => h.CurrentDefensePoints).First();
+        }
+        else
+        {
+
+        }
+
+        int positionToPlay = ChoosePositionFieldIndex(heroToPlay);
+
+        if (heroToPlay != null && positionToPlay != -1)
+        {
+            SummonHero(heroToPlay, positionToPlay);
+        }
+
+        
+    }
+
+    private void SummonHero(Card heroToPlay, int positionIndex)
+    {
+        duelManager.PlaceCardInField(playerManager, playerManager.isPlayer,
+                    handCardHandler.GetIdexOfCard(heroToPlay), positionIndex);
+    }
+
+    private int ChoosePositionFieldIndex(Card heroToPlay)
     {
         List<FieldPosition> availablePositions = new List<FieldPosition>();
 
@@ -63,7 +96,25 @@ public class HemeraLegionAI : MonoBehaviour
             if(field.Card == null) availablePositions.Add(field);
         }
 
-        return availablePositions[Random.Range(0, availablePositions.Count)].PositionIndex;
+        if(heroToPlay.CurrentDefensePoints >= 60)
+        {
+            availablePositions.RemoveAll(p => p.PositionIndex > 4);
+        }
+        else if(heroToPlay.CurrentDefensePoints >= 30 && heroToPlay.CurrentDefensePoints < 60)
+        {
+            availablePositions.RemoveAll(p => p.PositionIndex < 5 && p.PositionIndex > 9);
+        }
+        else
+        {
+            availablePositions.RemoveAll(p => p.PositionIndex < 10);
+        }
+
+        if(availablePositions.Count > 0)
+        {
+            return availablePositions[Random.Range(0, availablePositions.Count)].PositionIndex;
+        }
+
+        return -1;
     }
     public List<Card> heroesInTurn = new List<Card>();
     private IEnumerator DefineActions()

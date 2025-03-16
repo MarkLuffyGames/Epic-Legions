@@ -783,7 +783,6 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                Debug.Log(target);
                 var playerManager = GetPlayerManagerForHero(card);
                 ProcessAttack(target, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
             }
@@ -1274,7 +1273,6 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Un IEnumerator para controlar el flujo del ataque de manera asíncrona.</returns>
     private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
     {
-        Debug.Log(cardToAttack);
         // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.actionIsReady = false;
         attackerCard.EndTurn();
