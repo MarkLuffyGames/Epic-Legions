@@ -24,6 +24,7 @@ public class HemeraLegionAI : MonoBehaviour
 
     private void DuelManager_OnChangeTurn(object sender, EventArgs e)
     {
+        GenerateMoveCombinations();
         StartCoroutine(DefineActions());
     }
 
@@ -116,6 +117,8 @@ public class HemeraLegionAI : MonoBehaviour
 
         return -1;
     }
+
+
     public List<Card> heroesInTurn = new List<Card>();
     private IEnumerator DefineActions()
     {
@@ -159,5 +162,64 @@ public class HemeraLegionAI : MonoBehaviour
         var targets = duelManager.ObtainTargets(card, movementToUse);
 
         return targets[Random.Range(0, targets.Count)].FieldPosition.PositionIndex;
+    }
+
+    /*private bool CanBreakDefense(Hero target)
+    {
+        int availableEnergy = gameController.AIEnergy;
+        var bestCombination = GetBestMoveCombination(availableEnergy);
+        int totalDamage = bestCombination.Sum(m => m.Damage);
+        return totalDamage > target.Defense;
+    }
+
+    private MoveCombinations GetBestMoveCombination(int availableEnergy)
+    {
+        
+    }*/
+
+    private void GenerateMoveCombinations()
+    {
+        var heroes = playerManager.GetAllCardInField();
+        // Generar combinaciones desde 2 hasta el total de héroes
+        for (int r = 1; r <= heroes.Count; r++)
+        {
+            List<List<Card>> combinaciones = ObtenerCombinaciones(heroes, r);
+
+            foreach (var comb in combinaciones)
+            {
+                string x = "";
+                foreach(var card in comb)
+                {
+                    x += card.cardSO.CardName + " ";
+                }
+
+                Debug.Log(x);
+            }
+        }
+    }
+
+    // Función para generar combinaciones de 'r' elementos
+    static List<List<Card>> ObtenerCombinaciones(List<Card> elementos, int r)
+    {
+        List<List<Card>> resultado = new List<List<Card>>();
+        GenerarCombinaciones(elementos, new List<Card>(), 0, r, resultado);
+        return resultado;
+    }
+
+    // Función recursiva para generar combinaciones
+    static void GenerarCombinaciones(List<Card> elementos, List<Card> actual, int indice, int r, List<List<Card>> resultado)
+    {
+        if (actual.Count == r)
+        {
+            resultado.Add(new List<Card>(actual));
+            return;
+        }
+
+        for (int i = indice; i < elementos.Count; i++)
+        {
+            actual.Add(elementos[i]);
+            GenerarCombinaciones(elementos, actual, i + 1, r, resultado);
+            actual.RemoveAt(actual.Count - 1); // Backtracking
+        }
     }
 }
