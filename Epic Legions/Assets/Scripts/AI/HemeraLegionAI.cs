@@ -4,9 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System.Linq;
 using Random = UnityEngine.Random;
-using Unity.Burst.Intrinsics;
 
 public class HemeraLegionAI : MonoBehaviour
 {
@@ -24,7 +22,6 @@ public class HemeraLegionAI : MonoBehaviour
 
     private void DuelManager_OnChangeTurn(object sender, EventArgs e)
     {
-        GenerateMoveCombinations();
         StartCoroutine(DefineActions());
     }
 
@@ -39,7 +36,7 @@ public class HemeraLegionAI : MonoBehaviour
 
     private IEnumerator PlayCard()
     {
-        yield return new WaitForSeconds(Random.Range(3, 6));
+        yield return new WaitForSeconds(Random.Range(1, 3));
 
         if(handCardHandler.GetCardInHandList().Count > 0)
         {
@@ -69,7 +66,7 @@ public class HemeraLegionAI : MonoBehaviour
         }
         else
         {
-
+            heroToPlay = usableHeroesCards.OrderByDescending(h => h.Moves[0].MoveSO.Damage).First();
         }
 
         int positionToPlay = ChoosePositionFieldIndex(heroToPlay);
@@ -122,7 +119,7 @@ public class HemeraLegionAI : MonoBehaviour
     public List<Card> heroesInTurn = new List<Card>();
     private IEnumerator DefineActions()
     {
-        yield return new WaitForSeconds(Random.Range(3, 6));
+        yield return new WaitForEndOfFrame();
         heroesInTurn.Clear();
 
         foreach (var card in duelManager.HeroInTurn)
@@ -130,38 +127,66 @@ public class HemeraLegionAI : MonoBehaviour
             if(playerManager.GetAllCardInField().Contains(card)) heroesInTurn.Add(card);
         }
 
+        var attackingHeroes = ChooseCombinations();
+
         foreach (var card in heroesInTurn)
         {
-            var movementToUse = ChooseMovemetIndex(card);
-            if (card.Moves[movementToUse].MoveSO.NeedTarget)
+            if (attackingHeroes.Contains(card))
             {
-                duelManager.UseMovement(movementToUse, card, ChooseTargetIndex(card, movementToUse));
+                if (card.Moves[0].MoveSO.NeedTarget)
+                {
+                    duelManager.UseMovement(0, card, ChooseTargetIndex(card, 0));
+                }
+                else
+                {
+                    duelManager.UseMovement(0, card);
+                }
             }
             else
             {
-
-                duelManager.UseMovement(movementToUse, card);
+                duelManager.UseMovement(2, card);
             }
+            
         }
     }
 
-    private int ChooseMovemetIndex(Card card)
+    private List<Card> ChooseCombinations()
     {
-        int random = Random.Range(0, 3);
+        var combinations = GenerateMoveCombinations();
+        var totalDamage = 0;
 
-        if (card.UsableMovement(random, playerManager))
+        var combinationIndex = -1;
+
+        for (int i = 0; i < combinations.Count; i++)
         {
-            return random;
+            int damage = 0;
+
+            foreach (var card in combinations[i])
+            {
+                damage += card.Moves[0].MoveSO.Damage;
+            }
+
+            if (damage > totalDamage)
+            {
+                totalDamage = damage;
+                combinationIndex = i;
+            }
         }
-        
-        return ChooseMovemetIndex(card);
+        var combination = new List<Card>();
+
+        foreach (var card in combinations[combinationIndex])
+        {
+            combination.Add(card);
+        }
+
+        return combination;
     }
 
     private int ChooseTargetIndex(Card card, int movementToUse)
     {
         var targets = duelManager.ObtainTargets(card, movementToUse);
 
-        return targets[Random.Range(0, targets.Count)].FieldPosition.PositionIndex;
+        return targets[0].FieldPosition.PositionIndex;
     }
 
     /*private bool CanBreakDefense(Hero target)
@@ -177,25 +202,35 @@ public class HemeraLegionAI : MonoBehaviour
         
     }*/
 
-    private void GenerateMoveCombinations()
+    private List<List<Card>> GenerateMoveCombinations()
     {
         var heroes = playerManager.GetAllCardInField();
-        // Generar combinaciones desde 2 hasta el total de héroes
+        var usableCombinations = new List<List<Card>>();
+
+        // Generar combinaciones desde 1 hasta el total de héroes
         for (int r = 1; r <= heroes.Count; r++)
         {
             List<List<Card>> combinaciones = ObtenerCombinaciones(heroes, r);
 
             foreach (var comb in combinaciones)
             {
-                string x = "";
-                foreach(var card in comb)
+                int damage = 0;
+                int energy = 0;
+
+                foreach (var card in comb)
                 {
-                    x += card.cardSO.CardName + " ";
+                    damage += card.Moves[0].MoveSO.Damage;
+                    energy += card.Moves[0].MoveSO.EnergyCost;
                 }
 
-                Debug.Log(x);
+                if(energy < playerManager.PlayerEnergy)
+                {
+                    usableCombinations.Add(comb);
+                }
             }
         }
+
+        return usableCombinations;
     }
 
     // Función para generar combinaciones de 'r' elementos
