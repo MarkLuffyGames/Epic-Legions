@@ -131,7 +131,7 @@ public class HemeraLegionAI : MonoBehaviour
 
         foreach (var card in heroesInTurn)
         {
-            if (attackingHeroes.Contains(card))
+            if (attackingHeroes.Contains((card, card.Moves[0])) || attackingHeroes.Contains((card, card.Moves[1])))
             {
                 if (card.Moves[0].MoveSO.NeedTarget)
                 {
@@ -150,7 +150,7 @@ public class HemeraLegionAI : MonoBehaviour
         }
     }
 
-    private List<Card> ChooseCombinations()
+    private List<(Card, Movement)> ChooseCombinations()
     {
         var combinations = GenerateMoveCombinations();
         var totalDamage = 0;
@@ -163,7 +163,7 @@ public class HemeraLegionAI : MonoBehaviour
 
             foreach (var card in combinations[i])
             {
-                damage += card.Moves[0].MoveSO.Damage;
+                damage += card.Hero.Moves[0].MoveSO.Damage;
             }
 
             if (damage > totalDamage)
@@ -172,7 +172,7 @@ public class HemeraLegionAI : MonoBehaviour
                 combinationIndex = i;
             }
         }
-        var combination = new List<Card>();
+        var combination = new List<(Card, Movement)>();
 
         foreach (var card in combinations[combinationIndex])
         {
@@ -195,35 +195,28 @@ public class HemeraLegionAI : MonoBehaviour
         var bestCombination = GetBestMoveCombination(availableEnergy);
         int totalDamage = bestCombination.Sum(m => m.Damage);
         return totalDamage > target.Defense;
-    }
-
-    private MoveCombinations GetBestMoveCombination(int availableEnergy)
-    {
-        
     }*/
 
-    private List<List<Card>> GenerateMoveCombinations()
+    private List<List<(Card Hero, Movement Attack)>> GenerateMoveCombinations()
     {
         var heroes = playerManager.GetAllCardInField();
-        var usableCombinations = new List<List<Card>>();
+        var usableCombinations = new List<List<(Card, Movement)>>();
 
         // Generar combinaciones desde 1 hasta el total de héroes
         for (int r = 1; r <= heroes.Count; r++)
         {
-            List<List<Card>> combinaciones = ObtenerCombinaciones(heroes, r);
+            List<List<(Card, Movement)>> combinations = GetHeroAttackCombinations(heroes, r);
 
-            foreach (var comb in combinaciones)
+            foreach (var comb in combinations)
             {
-                int damage = 0;
                 int energy = 0;
 
-                foreach (var card in comb)
+                foreach (var (hero, attack) in comb)
                 {
-                    damage += card.Moves[0].MoveSO.Damage;
-                    energy += card.Moves[0].MoveSO.EnergyCost;
+                    energy += attack.MoveSO.EnergyCost;
                 }
 
-                if(energy < playerManager.PlayerEnergy)
+                if (energy <= playerManager.PlayerEnergy)
                 {
                     usableCombinations.Add(comb);
                 }
@@ -233,28 +226,46 @@ public class HemeraLegionAI : MonoBehaviour
         return usableCombinations;
     }
 
-    // Función para generar combinaciones de 'r' elementos
-    static List<List<Card>> ObtenerCombinaciones(List<Card> elementos, int r)
+    // Generar combinaciones de héroes con ataques
+    static List<List<(Card, Movement)>> GetHeroAttackCombinations(List<Card> heroes, int r)
     {
-        List<List<Card>> resultado = new List<List<Card>>();
-        GenerarCombinaciones(elementos, new List<Card>(), 0, r, resultado);
-        return resultado;
+        List<(Card, Movement)> heroMoves = new List<(Card, Movement)>();
+
+        // Crear lista de héroes con cada una de sus opciones de ataque
+        foreach (var hero in heroes)
+        {
+            foreach (var move in hero.Moves)
+            {
+                heroMoves.Add((hero, move));
+            }
+        }
+
+        return GetCombinations(heroMoves, r);
+    }
+
+    // Función para generar combinaciones de 'r' elementos
+    static List<List<T>> GetCombinations<T>(List<T> elements, int r)
+    {
+        List<List<T>> result = new List<List<T>>();
+        GenerateCombinations(elements, new List<T>(), 0, r, result);
+        return result;
     }
 
     // Función recursiva para generar combinaciones
-    static void GenerarCombinaciones(List<Card> elementos, List<Card> actual, int indice, int r, List<List<Card>> resultado)
+    static void GenerateCombinations<T>(List<T> elements, List<T> current, int index, int r, List<List<T>> result)
     {
-        if (actual.Count == r)
+        if (current.Count == r)
         {
-            resultado.Add(new List<Card>(actual));
+            result.Add(new List<T>(current));
             return;
         }
 
-        for (int i = indice; i < elementos.Count; i++)
+        for (int i = index; i < elements.Count; i++)
         {
-            actual.Add(elementos[i]);
-            GenerarCombinaciones(elementos, actual, i + 1, r, resultado);
-            actual.RemoveAt(actual.Count - 1); // Backtracking
+            current.Add(elements[i]);
+            GenerateCombinations(elements, current, i + 1, r, result);
+            current.RemoveAt(current.Count - 1); // Backtracking
         }
     }
+
 }
