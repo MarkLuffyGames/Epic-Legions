@@ -129,28 +129,32 @@ public class HemeraLegionAI : MonoBehaviour
 
         var attackingHeroes = ChooseCombinations();
 
+
+        foreach (var (hero, attack) in attackingHeroes)
+        {
+            Debug.Log($"Hero: {hero.cardSO.CardName} Attack: {attack}");
+        }
+
         foreach (var card in heroesInTurn)
         {
-            if (attackingHeroes.Contains((card, card.Moves[0])) || attackingHeroes.Contains((card, card.Moves[1])))
+            foreach (var (hero, attack) in attackingHeroes)
             {
-                if (card.Moves[0].MoveSO.NeedTarget)
+                if(hero == card)
                 {
-                    duelManager.UseMovement(0, card, ChooseTargetIndex(card, 0));
+                    if (card.Moves[attack].MoveSO.NeedTarget)
+                    {
+                        duelManager.UseMovement(attack, card, ChooseTargetIndex(card, attack));
+                    }
+                    else
+                    {
+                        duelManager.UseMovement(attack, card);
+                    }
                 }
-                else
-                {
-                    duelManager.UseMovement(0, card);
-                }
-            }
-            else
-            {
-                duelManager.UseMovement(2, card);
-            }
-            
+            } 
         }
     }
 
-    private List<(Card, Movement)> ChooseCombinations()
+    private List<(Card, int)> ChooseCombinations()
     {
         var combinations = GenerateMoveCombinations();
         var totalDamage = 0;
@@ -172,7 +176,7 @@ public class HemeraLegionAI : MonoBehaviour
                 combinationIndex = i;
             }
         }
-        var combination = new List<(Card, Movement)>();
+        var combination = new List<(Card, int)>();
 
         foreach (var card in combinations[combinationIndex])
         {
@@ -197,74 +201,60 @@ public class HemeraLegionAI : MonoBehaviour
         return totalDamage > target.Defense;
     }*/
 
-    private List<List<(Card Hero, Movement Attack)>> GenerateMoveCombinations()
+
+    private List<List<(Card Hero, int Attack)>> GenerateMoveCombinations()
     {
         var heroes = playerManager.GetAllCardInField();
-        var usableCombinations = new List<List<(Card, Movement)>>();
+        var usableCombinations = new List<List<(Card, int)>>();
 
-        // Generar combinaciones desde 1 hasta el total de héroes
-        for (int r = 1; r <= heroes.Count; r++)
+        // Obtener combinaciones asegurando que todos los héroes tienen una acción
+        List<List<(Card, int)>> combinations = GetHeroAttackCombinations(heroes);
+
+        foreach (var comb in combinations)
         {
-            List<List<(Card, Movement)>> combinations = GetHeroAttackCombinations(heroes, r);
+            int energy = 0;
 
-            foreach (var comb in combinations)
+            foreach (var (hero, attack) in comb)
             {
-                int energy = 0;
+                energy += hero.Moves[attack].MoveSO.EnergyCost;
+            }
 
-                foreach (var (hero, attack) in comb)
-                {
-                    energy += attack.MoveSO.EnergyCost;
-                }
-
-                if (energy <= playerManager.PlayerEnergy)
-                {
-                    usableCombinations.Add(comb);
-                }
+            if (energy <= playerManager.PlayerEnergy)
+            {
+                usableCombinations.Add(comb);
             }
         }
 
         return usableCombinations;
     }
 
-    // Generar combinaciones de héroes con ataques
-    static List<List<(Card, Movement)>> GetHeroAttackCombinations(List<Card> heroes, int r)
+    // Generar combinaciones asegurando que cada héroe tenga una acción (ataque o recargar)
+    static List<List<(Card, int)>> GetHeroAttackCombinations(List<Card> heroes)
     {
-        List<(Card, Movement)> heroMoves = new List<(Card, Movement)>();
+        List<List<(Card, int)>> allCombinations = new List<List<(Card, int)>>();
 
-        // Crear lista de héroes con cada una de sus opciones de ataque
-        foreach (var hero in heroes)
-        {
-            foreach (var move in hero.Moves)
-            {
-                heroMoves.Add((hero, move));
-            }
-        }
+        GenerateHeroMoveCombinations(heroes, new List<(Card, int)>(), 0, allCombinations);
 
-        return GetCombinations(heroMoves, r);
+        return allCombinations;
     }
 
-    // Función para generar combinaciones de 'r' elementos
-    static List<List<T>> GetCombinations<T>(List<T> elements, int r)
-    {
-        List<List<T>> result = new List<List<T>>();
-        GenerateCombinations(elements, new List<T>(), 0, r, result);
-        return result;
-    }
 
-    // Función recursiva para generar combinaciones
-    static void GenerateCombinations<T>(List<T> elements, List<T> current, int index, int r, List<List<T>> result)
+    // Función recursiva para generar combinaciones de ataques
+    static void GenerateHeroMoveCombinations(List<Card> heroes, List<(Card, int)> currentCombination, int index, List<List<(Card, int)>> result)
     {
-        if (current.Count == r)
+        if (index == heroes.Count)
         {
-            result.Add(new List<T>(current));
+            result.Add(new List<(Card, int)>(currentCombination));
             return;
         }
 
-        for (int i = index; i < elements.Count; i++)
+        var hero = heroes[index];
+
+        for (int i = 0; i < hero.Moves.Count; i++)
         {
-            current.Add(elements[i]);
-            GenerateCombinations(elements, current, i + 1, r, result);
-            current.RemoveAt(current.Count - 1); // Backtracking
+            currentCombination.Add((hero, i));
+            GenerateHeroMoveCombinations(heroes, currentCombination, index + 1, result);
+            currentCombination.RemoveAt(currentCombination.Count - 1);
         }
     }
 
