@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum GameStrategy { Defensive, Offensive, Balanced }
 public class HemeraLegionAI : MonoBehaviour
 {
     [SerializeField] private DuelManager duelManager;
@@ -30,53 +31,49 @@ public class HemeraLegionAI : MonoBehaviour
         if(newValue == DuelPhase.Preparation)
         {
             turn++;
-            StartCoroutine(PlayCard());
+            PlanPlay();
         }
-    }
-
-    private IEnumerator PlayCard()
-    {
-        yield return new WaitForSeconds(Random.Range(1, 3));
-
-        if(handCardHandler.GetCardInHandList().Count > 0)
+        else if(newValue == DuelPhase.Battle)
         {
-            List<Card> usableHeroesCards = new List<Card>();
 
-            foreach (var card in handCardHandler.GetCardInHandList())
-            {
-                if(card.cardSO is HeroCardSO && card.UsableCard(playerManager)) usableHeroesCards.Add(card);
-            }
-             
-            if (usableHeroesCards.Count > 0)
-            {
-                ChooseWhetherSummonHero(usableHeroesCards);
-            }
-
-            playerManager.SetPlayerReady();
         }
     }
 
-    private void ChooseWhetherSummonHero(List<Card> usableHeroesCards)
+    private void PlanPlay()
+    {
+        if(turn == 1)
+        {
+            //Invocar Heroes.
+            Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
+            SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
+        }
+    }
+
+    private List<Card> GetPlayableHeroes()
+    {
+        List<Card> usableHeroesCards = new List<Card>();
+
+        foreach (var card in handCardHandler.GetCardInHandList())
+        {
+            if (card.cardSO is HeroCardSO && card.UsableCard(playerManager)) usableHeroesCards.Add(card);
+        }
+
+        return usableHeroesCards;
+    }
+
+    private Card ChoosingHeroToSummon(List<Card> usableHeroesCards, GameStrategy strategy)
     {
         Card heroToPlay = null;
 
-        if (turn == 1)
+        if(usableHeroesCards.Count != 0)
         {
-            heroToPlay = usableHeroesCards.OrderByDescending(h => h.CurrentDefensePoints).First();
-        }
-        else
-        {
-            heroToPlay = usableHeroesCards.OrderByDescending(h => h.Moves[0].MoveSO.Damage).First();
-        }
-
-        int positionToPlay = ChoosePositionFieldIndex(heroToPlay);
-
-        if (heroToPlay != null && positionToPlay != -1)
-        {
-            SummonHero(heroToPlay, positionToPlay);
+            if(strategy == GameStrategy.Defensive)
+            {
+                heroToPlay = usableHeroesCards.OrderByDescending(h => h.CurrentDefensePoints).First();
+            }
         }
 
-        
+        return heroToPlay;
     }
 
     private void SummonHero(Card heroToPlay, int positionIndex)
