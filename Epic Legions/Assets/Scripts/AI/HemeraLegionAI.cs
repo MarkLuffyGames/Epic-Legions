@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -47,6 +48,12 @@ public class HemeraLegionAI : MonoBehaviour
             Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
             SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
         }
+        else
+        {
+
+        }
+
+        playerManager.SetPlayerReady();
     }
 
     private List<Card> GetPlayableHeroes()
@@ -126,6 +133,7 @@ public class HemeraLegionAI : MonoBehaviour
 
         var attackingHeroes = ChooseCombinations();
 
+        if (attackingHeroes == null) yield break;
 
         foreach (var (hero, attack) in attackingHeroes)
         {
@@ -153,6 +161,8 @@ public class HemeraLegionAI : MonoBehaviour
 
     private List<(Card, int)> ChooseCombinations()
     {
+        if(playerManager.GetAllCardInField().Count == 0) return null;
+
         var combinations = GenerateMoveCombinations();
         var totalDamage = 0;
 
