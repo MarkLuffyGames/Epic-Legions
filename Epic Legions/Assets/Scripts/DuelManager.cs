@@ -691,21 +691,22 @@ public class DuelManager : NetworkBehaviour
         return 0;
     }
 
-    private PlayerManager GetPlayerManagerForHero(Card heroCard)
+    public PlayerManager GetPlayerManagerForCard(Card card)
     {
         // Verifica si el héroe está en el campo del jugador 1
-        if (player1Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition) || player1Manager.SpellFieldPosition == card.FieldPosition 
+            || player1Manager.GetHandCardHandler().GetCardInHandList().Contains(card))
         {
             return player1Manager;
         }
         // Verifica si el héroe está en el campo del jugador 2
-        else if (player2Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        else if (player2Manager.GetFieldPositionList().Contains(card.FieldPosition) || player2Manager.SpellFieldPosition == card.FieldPosition)
         {
             return player2Manager;
         }
 
         // Si el héroe no se encuentra en el campo de ningún jugador, se muestra un error y se devuelve 0
-        Debug.LogError("El héroe no pertenece a ningún jugador");
+        Debug.LogError("La carta no pertenece a ningún jugador");
         return null;
     }
 
@@ -782,7 +783,7 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                var playerManager = GetPlayerManagerForHero(card);
+                var playerManager = GetPlayerManagerForCard(card);
                 ProcessAttack(target, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
             }
         }
@@ -791,7 +792,7 @@ public class DuelManager : NetworkBehaviour
             // Si no necesita objetivo, se ejecuta el ataque
             if (isSinglePlayer)
             {
-                var playerManager = GetPlayerManagerForHero(card);
+                var playerManager = GetPlayerManagerForCard(card);
                 ProcessAttack(card.FieldPosition.PositionIndex, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
             }
             else
@@ -848,7 +849,7 @@ public class DuelManager : NetworkBehaviour
             // Realiza el ataque directo a los puntos de vida del oponente (sin objetivo específico)
             if (isSinglePlayer)
             {
-                var playerManager = GetPlayerManagerForHero(attackingCard);
+                var playerManager = GetPlayerManagerForCard(attackingCard);
                 ProcessAttack(-1, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
             }
             else
@@ -932,7 +933,7 @@ public class DuelManager : NetworkBehaviour
         {
             // Si el movimiento es un efecto positivo, los objetivos serán las cartas del jugador aliado (jugador 1),
             // pero no se puede seleccionar la misma carta que está atacando
-            foreach (var position in GetPlayerManagerForHero(card).GetFieldPositionList())
+            foreach (var position in GetPlayerManagerForCard(card).GetFieldPositionList())
             {
                 if (position.Card != null && position.Card != card)
                 {
@@ -1693,30 +1694,6 @@ public class DuelManager : NetworkBehaviour
         // Muestra la interfaz de usuario de finalización del duelo, indicando si el jugador ha ganado o perdido.
         endDuelUI.Show(playerVictory);
     }
-
-
-    /// <summary>
-    /// Obtiene el `PlayerManager` correspondiente al jugador que posee el héroe especificado.
-    /// </summary>
-    /// <param name="hero">El objeto `Card` que representa el héroe cuyo jugador se desea obtener.</param>
-    /// <returns>El `PlayerManager` del jugador que posee el héroe, o null si el héroe no pertenece a ningún jugador.</returns>
-    public PlayerManager GetMyPlayerManager(Card hero)
-    {
-        // Si el héroe está en el campo del jugador 1, retorna el PlayerManager del jugador 1.
-        if (player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
-        {
-            return player1Manager;
-        }
-        // Si el héroe está en el campo del jugador 2, retorna el PlayerManager del jugador 2.
-        else if (player2Manager.GetFieldPositionList().Contains(hero.FieldPosition))
-        {
-            return player2Manager;
-        }
-
-        // Si no se encuentra el héroe en los campos de ninguno de los jugadores, retorna null.
-        return null;
-    }
-
 }
 
 [Serializable]

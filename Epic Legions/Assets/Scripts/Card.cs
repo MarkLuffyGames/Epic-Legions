@@ -494,7 +494,6 @@ public class Card : MonoBehaviour
     /// <returns>La posicion del mouse en pantalla</returns>
     private Vector3 GetMouseWorldPosition()
     {
-
         Vector3 mousePos = Vector3.zero;
 
         // Detectar entrada del mouse
@@ -978,7 +977,7 @@ public class Card : MonoBehaviour
 
     public void RechargeEnergy(int amount)
     {
-        var player = duelManager.GetMyPlayerManager(this);
+        var player = duelManager.GetPlayerManagerForCard(this);
         if (player != null)
         {
             player.RechargeEnergy(amount); 
