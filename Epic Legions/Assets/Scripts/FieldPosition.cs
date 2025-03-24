@@ -1,21 +1,26 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldPosition : MonoBehaviour
 {
     private Card card;
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor;
+    [SerializeField] private Color originalColor;
     [SerializeField] private Color isFreeColor;
+    [SerializeField] private Color isbusyColor;
     [SerializeField] private int positionIndex;
+    [SerializeField] private Renderer objRenderer;
+    [SerializeField] private float intensity = 5;
+    private MaterialPropertyBlock propertyBlock;
+    private Color startColor;
 
     public Card Card => card;
     public int PositionIndex => positionIndex;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        originalColor = spriteRenderer.color;
+        propertyBlock = new MaterialPropertyBlock();
+        startColor = originalColor;
     }
 
     /// <summary>
@@ -41,6 +46,7 @@ public class FieldPosition : MonoBehaviour
         card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.SetFieldPosition(this);
+        ChangeEmission(isbusyColor, intensity);
     }
 
     public void DestroyCard(Transform graveyard, bool isPlayer)
@@ -54,6 +60,7 @@ public class FieldPosition : MonoBehaviour
         card.ToGraveyard();
         card.SetFieldPosition(null);
         card = null;
+        RestoreOriginalColor();
     }
 
     /// <summary>
@@ -63,7 +70,7 @@ public class FieldPosition : MonoBehaviour
     {
         if(IsFree())
         {
-            spriteRenderer.color = isFreeColor;
+            ChangeEmission(isFreeColor, intensity);
         }
     }
 
@@ -72,6 +79,46 @@ public class FieldPosition : MonoBehaviour
     /// </summary>
     public void RemoveHighlight()
     {
-        spriteRenderer.color = originalColor;
+        if(card == null)
+        RestoreOriginalColor();
+    }
+
+    private Coroutine currentCoroutine; // Para controlar la interpolación en curso
+
+    public void ChangeEmission(Color nuevoColor, float intensidad = 3, float duracion = 0.3f)
+    {
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine); // Detener cualquier cambio en curso
+
+        currentCoroutine = StartCoroutine(LerpEmision(nuevoColor, intensidad, duracion));
+    }
+
+    public void RestoreOriginalColor(float duracion = 0.3f)
+    {
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine);
+
+        currentCoroutine = StartCoroutine(LerpEmision(card == null ? originalColor : isbusyColor * Mathf.Pow(2, intensity), 0, duracion)); // Volver al color original
+    }
+
+    private IEnumerator LerpEmision(Color targetColor, float intensidad, float duracion)
+    {
+        objRenderer.GetPropertyBlock(propertyBlock);
+        Color startColor = propertyBlock.GetColor("_EmissionColor");
+
+        float tiempo = 0f;
+        while (tiempo < duracion)
+        {
+            tiempo += Time.deltaTime;
+            Color colorInterpolado = Color.Lerp(startColor, targetColor * Mathf.Pow(2, intensidad), tiempo / duracion);
+            propertyBlock.SetColor("_EmissionColor", colorInterpolado);
+            objRenderer.SetPropertyBlock(propertyBlock);
+
+            yield return null; // Esperar al siguiente frame
+        }
+
+        // Asegurar que el color final sea exactamente el deseado
+        propertyBlock.SetColor("_EmissionColor", targetColor * Mathf.Pow(2, intensidad));
+        objRenderer.SetPropertyBlock(propertyBlock);
     }
 }

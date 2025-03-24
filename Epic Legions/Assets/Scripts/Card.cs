@@ -10,12 +10,10 @@ public class Card : MonoBehaviour
 {
     [SerializeField] private Canvas canvasFront;
     [SerializeField] private Canvas canvasBack;
-    [SerializeField] private Canvas cardSelected;
     [SerializeField] private Canvas cardActions;
     [SerializeField] private Button move1Button;
     [SerializeField] private Button move2Button;
     [SerializeField] private Image cardImage;
-    [SerializeField] private Image cardSelectedImage;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI lastNameText;
     [SerializeField] private TextMeshProUGUI healtText;
@@ -334,7 +332,6 @@ public class Card : MonoBehaviour
             StartCoroutine(MoveToPosition(focusPosition, cardMovementSpeed, true, false));
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
-            cardSelected.enabled = false;
             EnableActions(isMyTurn && !actionIsReady);
             isFocused = true;
             AdjustUIcons();
@@ -374,7 +371,6 @@ public class Card : MonoBehaviour
             MoveToLastPosition();
             RotateToAngle(lastRotation, cardMovementSpeed, false);
             ChangedSortingOrder(sortingOrder);
-            if (isMyTurn) cardSelected.enabled = true;
             cardActions.enabled = false;
             isFocused = false;
             AdjustUIcons();
@@ -411,7 +407,6 @@ public class Card : MonoBehaviour
     {
         canvasFront.sortingOrder = sortingOrder;
         canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
-        cardSelected.sortingOrder = sortingOrder;
         cardActions.sortingOrder = sortingOrder + 1;
     }
 
@@ -540,8 +535,7 @@ public class Card : MonoBehaviour
 
         if (isPlayer)
         {
-            cardSelected.enabled = true;
-            cardSelectedImage.color = Color.yellow;
+            fieldPosition.ChangeEmission(Color.yellow);
         }
     }
 
@@ -556,7 +550,7 @@ public class Card : MonoBehaviour
     public void EndTurn()
     {
         isMyTurn = false;
-        cardSelected.enabled = false;
+        fieldPosition.RestoreOriginalColor();
     }
 
     /// <summary>
@@ -576,8 +570,7 @@ public class Card : MonoBehaviour
     /// <param name="color">Color del marcador de seleccion.</param>
     public void ActiveSelectableTargets(Color color)
     {
-        cardSelected.enabled = true;
-        cardSelectedImage.color = color;
+        fieldPosition.ChangeEmission(color);
         isAttackable = true;
     }
 
@@ -589,7 +582,7 @@ public class Card : MonoBehaviour
     {
         if (isAttackable)
         {
-            cardSelected.enabled = false;
+            fieldPosition.RestoreOriginalColor();
             isAttackable = false;
         }
     }
