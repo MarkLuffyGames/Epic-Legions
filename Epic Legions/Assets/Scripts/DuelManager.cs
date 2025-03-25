@@ -728,6 +728,18 @@ public class DuelManager : NetworkBehaviour
         return null;
     }
 
+    public PlayerManager GetOpposingPlayerManager(PlayerManager playerManager)
+    {
+        if(player1Manager = playerManager)
+        {
+            return player2Manager;
+        }
+        else
+        {
+            return player1Manager;
+        }
+    }
+
     /// <summary>
     /// Gestiona los efectos de los héroes en el campo y actualiza su texto de estado.
     /// </summary>

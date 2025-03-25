@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 public enum GameStrategy { Defensive, Offensive, Balanced }
@@ -13,6 +14,8 @@ public class HemeraLegionAI : MonoBehaviour
     [SerializeField] private DuelManager duelManager;
     [SerializeField] private PlayerManager playerManager;
     [SerializeField] private HandCardHandler handCardHandler;
+
+    [SerializeField] List<(Card, int)> combinationAttacks = new List<(Card, int)>();
 
     private int turn;
 
@@ -32,7 +35,7 @@ public class HemeraLegionAI : MonoBehaviour
         if(newValue == DuelPhase.Preparation)
         {
             turn++;
-            PlanPlay();
+            StartCoroutine(PlanPlay());
         }
         else if(newValue == DuelPhase.Battle)
         {
@@ -40,17 +43,67 @@ public class HemeraLegionAI : MonoBehaviour
         }
     }
 
-    private void PlanPlay()
+    private IEnumerator PlanPlay()
     {
         if(turn == 1)
         {
-            //Invocar Heroes.
-            Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
-            SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
+            while(GetPlayableHeroes().Count > 0)
+            {
+                //Invocar Heroes.
+                Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
+                SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
+
+                yield return null;
+            }
         }
         else
         {
 
+            if (playerManager.GetAllCardInField().Count > 0)
+            {
+                var combination = GenerateMoveCombinations();
+
+                Card cardToAttack = null;
+                (int healt,int energyCost, int combIndex) combiData = (101,100,-1);
+
+                foreach (Card card in duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField())
+                {
+
+                    var damage = 0;
+                    var energy = 100;
+                    var combIndex = -1;
+
+                    for (int i = 0; i < combination.Count; i++)
+                    {
+                        var combData = GetDamageAndEnergyFromCombinationToHero(combination[i], card);
+                        if (combData.damage > damage || (combData.damage == damage && combData.energy < energy))
+                        {
+                            damage = combData.damage;
+                            energy = combData.energy;
+                            combIndex = i;
+                        }
+                    }
+
+                    var remainingDamage = card.CurrentHealtPoints + card.CurrentDefensePoints - damage;
+                    if ((remainingDamage < combiData.healt || (combiData.healt == remainingDamage && energy < combiData.energyCost)) && damage > card.CurrentDefensePoints)
+                    {
+                        combiData = (remainingDamage, energy, combIndex);
+                        cardToAttack = card;
+                    }
+                }
+
+                combination[0].ForEach(x => combinationAttacks.Add(x));
+
+                if (playerManager.PlayerEnergy >= combiData.energyCost)
+                {
+                    combination[combiData.combIndex].ForEach(x => combinationAttacks.Add(x));
+                }
+                else if(combiData.combIndex == -1)
+                {
+                    Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
+                    SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
+                }
+            }
         }
 
         playerManager.SetPlayerReady();
@@ -131,9 +184,13 @@ public class HemeraLegionAI : MonoBehaviour
             if(playerManager.GetAllCardInField().Contains(card)) heroesInTurn.Add(card);
         }
 
-        var attackingHeroes = ChooseCombinations();
+        var attackingHeroes = combinationAttacks;
 
-        if (attackingHeroes == null) yield break;
+        if(combinationAttacks.Count == 0)
+        {
+            attackingHeroes = ChooseCombinations();
+        }
+
 
         foreach (var (hero, attack) in attackingHeroes)
         {
@@ -265,4 +322,21 @@ public class HemeraLegionAI : MonoBehaviour
         }
     }
 
+    private (int damage, int energy) GetDamageAndEnergyFromCombinationToHero(List<(Card Hero, int Attack)> values, Card hero)
+    {
+        int damage = 0;
+        int energy = 0;
+
+
+        foreach ((Card Hero, int Attack) in values)
+        {
+            if(duelManager.ObtainTargets(hero, Attack).Contains(hero))
+            {
+                damage += Hero.Moves[Attack].MoveSO.Damage - hero.GetDamageAbsorbed();
+                energy += Hero.Moves[Attack].MoveSO.EnergyCost;
+            }
+        }
+
+        return (damage, energy);
+    }
 }

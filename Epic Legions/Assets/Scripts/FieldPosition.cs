@@ -12,7 +12,6 @@ public class FieldPosition : MonoBehaviour
     [SerializeField] private Renderer objRenderer;
     [SerializeField] private float intensity = 5;
     private MaterialPropertyBlock propertyBlock;
-    private Color startColor;
 
     public Card Card => card;
     public int PositionIndex => positionIndex;
@@ -20,7 +19,8 @@ public class FieldPosition : MonoBehaviour
     private void Awake()
     {
         propertyBlock = new MaterialPropertyBlock();
-        startColor = originalColor;
+
+        RestoreOriginalColor(0);
     }
 
     /// <summary>

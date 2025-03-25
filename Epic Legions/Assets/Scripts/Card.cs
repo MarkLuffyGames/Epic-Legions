@@ -860,7 +860,7 @@ public class Card : MonoBehaviour
     /// Verifica cuanto daño debe absorber esta carta segun los efectos activos.
     /// </summary>
     /// <returns>Cantidad absorbida.</returns>
-    private int GetDamageAbsorbed()
+    public int GetDamageAbsorbed()
     {
         int damageAbsorbed = 0;
 
