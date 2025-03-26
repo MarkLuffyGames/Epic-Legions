@@ -730,7 +730,7 @@ public class DuelManager : NetworkBehaviour
 
     public PlayerManager GetOpposingPlayerManager(PlayerManager playerManager)
     {
-        if(player1Manager = playerManager)
+        if(player1Manager == playerManager)
         {
             return player2Manager;
         }
@@ -1019,6 +1019,7 @@ public class DuelManager : NetworkBehaviour
         settingAttackTarget = false;
         cardSelectingTarget = null;
 
+        heroInTurn.Remove(heroUsesTheAttack);
         // Si este es el último movimiento de la fase, finalizar las acciones
         if (lastMove) yield return FinishActions();
     }
@@ -1151,8 +1152,9 @@ public class DuelManager : NetworkBehaviour
 
             // Activar los efectos después de ejecutar cada acción de efecto
             ActiveEffect();
-        }
 
+        }
+        
         // Limpiar la lista de acciones de efectos una vez que todas han sido ejecutadas
         effectActions.Clear();
 
@@ -1272,6 +1274,8 @@ public class DuelManager : NetworkBehaviour
         // Restablece las variables relacionadas con la selección de objetivo y el estado de ataque después de completar el ataque.
         settingAttackTarget = false;
         cardSelectingTarget = null;
+
+
     }
 
     /// <summary>
@@ -1385,6 +1389,8 @@ public class DuelManager : NetworkBehaviour
 
         // Espera un breve momento antes de finalizar la acción.
         yield return new WaitForSeconds(1);
+
+        heroInTurn.Remove(attackerCard);
 
         // Si es el último movimiento, finaliza las acciones.
         if (lastMove) yield return FinishActions();
