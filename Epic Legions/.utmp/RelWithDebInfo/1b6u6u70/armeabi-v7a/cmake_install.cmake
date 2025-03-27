@@ -45,6 +45,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/.utmp/RelWithDebInfo/1b6u6u70/armeabi-v7a/GameActivity/cmake_install.cmake")
+  include("D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/.utmp/RelWithDebInfo/1b6u6u70/armeabi-v7a/FramePacing/cmake_install.cmake")
 
 endif()
 

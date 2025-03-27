@@ -410,13 +410,11 @@ public class DuelManager : NetworkBehaviour
             // Verifica si el héroe está en el campo del jugador 1
             if (player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
             {
-                // Establece si el héroe está listo para actuar o no
-                hero.SetTurn(!hero.actionIsReady);
+                hero.SetTurn(true);
             }
             else
             {
-                // Si el héroe no está en el campo del jugador 1, se desactiva su turno
-                hero.EndTurn();
+                hero.SetTurn(false);
             }
         }
     }

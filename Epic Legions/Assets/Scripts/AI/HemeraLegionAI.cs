@@ -3,9 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 public enum GameStrategy { Defensive, Offensive, Balanced }
@@ -29,7 +27,10 @@ public class HemeraLegionAI : MonoBehaviour
 
     private void DuelManager_OnChangeTurn(object sender, EventArgs e)
     {
-        StartCoroutine(ExecuteAction());
+        if (executeActionCoroutine != null)
+            StopCoroutine(executeActionCoroutine);
+
+        executeActionCoroutine = StartCoroutine(ExecuteAction());
     }
 
     private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
@@ -140,37 +141,51 @@ public class HemeraLegionAI : MonoBehaviour
         {
             var combination = GenerateMoveCombinations();
             cardToAttack = null;
+            combinationAttacks.Clear();
 
             (int healt, int energyCost, int combIndex) combiData = (201, 200, -1);
 
-            foreach (Card card in duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField())
+            if(duelManager.duelPhase.Value == DuelPhase.Battle && duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField().Count == 0)
             {
+                combinationAttacks = ChooseCombinations();
 
-                var damage = 0;
-                var energy = 100;
-                var combIndex = -1;
+                if (executeActionCoroutine != null)
+                    StopCoroutine(executeActionCoroutine);
 
-                for (int i = 0; i < combination.Count; i++)
+                executeActionCoroutine = StartCoroutine(ExecuteAction());
+
+                yield break;
+            }
+            else
+            {
+                foreach (Card card in duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField())
                 {
-                    var combData = GetDamageAndEnergyFromCombinationToHero(combination[i], card);
-                    if (combData.damage > damage || (combData.damage == damage && combData.energy < energy))
+
+                    var damage = 0;
+                    var energy = 100;
+                    var combIndex = -1;
+
+                    for (int i = 0; i < combination.Count; i++)
                     {
-                        damage = combData.damage;
-                        energy = combData.energy;
-                        combIndex = i;
+                        var combData = GetDamageAndEnergyFromCombinationToHero(combination[i], card);
+                        if (combData.damage > damage || (combData.damage == damage && combData.energy < energy))
+                        {
+                            damage = combData.damage;
+                            energy = combData.energy;
+                            combIndex = i;
+                        }
                     }
-                }
 
-
-                var remainingDamage = card.CurrentHealtPoints + card.CurrentDefensePoints - damage;
-                if ((remainingDamage < combiData.healt || (combiData.healt == remainingDamage && energy < combiData.energyCost)) && damage > card.CurrentDefensePoints)
-                {
-                    combiData = (remainingDamage, energy, combIndex);
-                    cardToAttack = card;
+                    var remainingDamage = card.CurrentHealtPoints + card.CurrentDefensePoints - damage;
+                    if ((remainingDamage < combiData.healt || (combiData.healt == remainingDamage && energy < combiData.energyCost))
+                        && damage > card.CurrentDefensePoints + (card.CurrentHealtPoints / 2))
+                    {
+                        combiData = (remainingDamage, energy, combIndex);
+                        cardToAttack = card;
+                    }
                 }
             }
 
-            combinationAttacks.Clear();
             foreach (var card in playerManager.GetAllCardInField())
             {
                 combinationAttacks.Add((card, 2));
@@ -198,10 +213,30 @@ public class HemeraLegionAI : MonoBehaviour
                 }
             }
 
-            if (duelManager.duelPhase.Value == DuelPhase.Battle) StartCoroutine(ExecuteAction());
+            if(duelManager.duelPhase.Value == DuelPhase.Battle)
+            {
+                if (executeActionCoroutine != null)
+                    StopCoroutine(executeActionCoroutine);
+                executeActionCoroutine = StartCoroutine(ExecuteAction());
+            }
+                
+        }
+        else
+        {
+            Debug.Log("Intentar invocar un heroe");
+
+            Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
+
+            if (heroToPlay != null)
+            {
+                SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
+                yield return new WaitForSeconds(Random.Range(2, 3));
+                StartCoroutine(DefineActions());
+                yield break;
+            }
         }
     }
-
+    Coroutine executeActionCoroutine;
     private IEnumerator ExecuteAction()
     {
         yield return new WaitForSeconds(Random.Range(2, 5));
@@ -218,21 +253,33 @@ public class HemeraLegionAI : MonoBehaviour
             {
                 if(hero == card)
                 {
+
+                    yield return new WaitForSeconds(Random.Range(2, 5));
+
                     if (card.Moves[attack].MoveSO.NeedTarget)
                     {
-                        if (cardToAttack.FieldPosition == null)
+                        if(cardToAttack != null)
                         {
-                            StartCoroutine(DefineActions());
-                            yield break;
+                            if(cardToAttack.FieldPosition != null)
+                            {
+                                duelManager.UseMovement(attack, card, cardToAttack.FieldPosition.PositionIndex);
+                            }
+                            else
+                            {
+                                StartCoroutine(DefineActions());
+                                yield break;
+                            }
                         }
-                        duelManager.UseMovement(attack, card, cardToAttack.FieldPosition.PositionIndex);
+                        else
+                        {
+                            duelManager.UseMovement(attack, card, -1);
+                        }
                     }
                     else
                     {
                         duelManager.UseMovement(attack, card);
                     }
-
-                    yield return new WaitForSeconds(Random.Range(2, 5));
+                    continue;
                 }
             } 
         }
@@ -349,8 +396,9 @@ public class HemeraLegionAI : MonoBehaviour
             if(duelManager.ObtainTargets(Hero, Attack).Contains(hero))
             {
                 damage += Hero.Moves[Attack].MoveSO.Damage - hero.GetDamageAbsorbed();
-                energy += Hero.Moves[Attack].MoveSO.EnergyCost;
             }
+
+            energy += Hero.Moves[Attack].MoveSO.EnergyCost;
         }
 
         return (damage, energy);

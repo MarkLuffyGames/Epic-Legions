@@ -380,11 +380,11 @@ public class Card : MonoBehaviour
     /// <summary>
     /// Ajusta el tamaño de los iconos, agrandandolos si esta en el campo o su tamaño original si no lo está.
     /// </summary>
-    private void AdjustUIcons()
+    private void AdjustUIcons(bool defaultValue = false)
     {
         if (cardSO is HeroCardSO)
         {
-            if (isFocused)
+            if (isFocused || defaultValue)
             {
                 healtText.gameObject.transform.localScale = Vector3.one;
                 defenceText.gameObject.transform.localScale = Vector3.one;
@@ -531,12 +531,9 @@ public class Card : MonoBehaviour
     /// <param name="isPlayer">Bool esta carta es propiedad del jugador.</param>
     public void SetTurn(bool isPlayer)
     {
-        isMyTurn = true;
+        isMyTurn = isPlayer;
 
-        if (isPlayer)
-        {
-            fieldPosition.ChangeEmission(Color.yellow);
-        }
+        fieldPosition.ChangeEmission(Color.yellow);
     }
 
     public void PassTurn()
@@ -716,7 +713,7 @@ public class Card : MonoBehaviour
     public void ToGraveyard()
     {
         CancelAllEffects();
-        AdjustUIcons();
+        AdjustUIcons(true);
         currentDefense = defense;
         currentHealt = maxHealt;
         UpdateText();
