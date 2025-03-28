@@ -2,215 +2,150 @@
 
 Game Design Document
 
-Resumen del Juego
+1. Visión General
 
-El juego es un juego de cartas de duelos entre héroes, donde los jugadores invocan héroes, lanzan hechizos, equipan artefactos y manipulan el campo de batalla para ganar ventaja sobre sus oponentes. Cada jugador debe gestionar su energía, planear sus movimientos en el campo y aprovechar las debilidades elementales de sus enemigos. El objetivo es derrotar al equipo del oponente o agotar su vida mediante estrategias de ataque, defensa y control del campo de batalla.
+En un mundo donde el destino de las civilizaciones se define en el campo de batalla, Hemera Legion ofrece una experiencia estratégica profunda a través de duelos de cartas dinámicos y tácticos. Con un sistema de combate basado en velocidad, energía y sin turnos tradicionales, los jugadores deberán construir mazos versátiles y adaptarse a cada enfrentamiento en su lucha por la victoria.
 
+Hemera Legion es un juego de cartas coleccionables (TCG) diseñado para desafiar tanto a jugadores competitivos como a aquellos que buscan una experiencia más casual. Con una combinación de héroes únicos, hechizos poderosos y equipamientos estratégicos, cada partida es una prueba de ingenio y planificación.
 
-Los héroes, que cuentan con estadísticas como ataque, defensa, vida y velocidad, forman el núcleo de las tácticas, ya que pueden usar ataques normales y especiales. Las cartas de campo añaden una capa estratégica al juego, modificando condiciones y habilidades en el campo de batalla según dónde y cómo se coloquen.
+Características Clave:
 
+Duelos estratégicos simultáneos donde la velocidad y la energía definen el flujo de la batalla.
 
-1. Mecánica de Turnos
+Construcción de mazos personalizada, permitiendo adaptar estrategias según el estilo de juego.
 
-Resumen General del Turno
+Modos de juego variados, incluyendo un modo historia inmersivo, enfrentamientos contra la IA y duelos en línea.
 
-En el juego, ambos jugadores realizan sus acciones de forma simultánea en cada turno. El turno se divide en dos fases principales: Fase de Preparación y Fase de Batalla. Cada fase tiene su propósito y permite a los jugadores utilizar sus recursos estratégicamente para posicionar, atacar, o realizar movimientos tácticos.
+Un sistema de progresión y economía equilibrado, basado en sobres y recompensas por desempeño.
 
+Disponible en PC y dispositivos móviles, Hemera Legion busca ofrecer una experiencia accesible pero competitiva, donde cada decisión puede ser la clave para la victoria.
 
-Fase de Preparación
+2. Sistema de Cartas
 
-Robo y Energía:
+Tipos de Cartas
 
-Al inicio de la fase, ambos jugadores roban una carta de su mazo y reciben una cantidad de energía. Esta energía se utiliza para jugar cartas de héroes, hechizos, artefactos, o cartas de campo en el campo de batalla.
+Héroes: Unidades principales del juego.
 
-Colocación de Cartas:
+Hechizos: Cartas con efectos variados que modifican el campo de batalla.
 
-Los jugadores pueden colocar sus cartas en el campo pagando su coste de energía:
+Equipamiento: Mejoras para los héroes; cada héroe solo puede usar equipamiento según su clase.
 
-Héroes se colocan en una de las tres líneas del campo, en posiciones estratégicas según sus roles de combate.
+Atributos de los Héroes
 
-Artefactos y hechizos pueden usarse para mejorar a los héroes o aplicar efectos instantáneos.
+Vida
 
-Cartas de Campo se colocan en el área deseada (campo completo, del jugador, rival, línea, o posición específica) para modificar el entorno o aplicar efectos.
+Defensa
 
-Zona de Acción Rápida: Los jugadores también pueden colocar hechizos y artefactos boca abajo en esta zona pagando un coste de energia fijo, preparándolos para activarse durante la Fase de Batalla, y pagan un coste de energía al activarlas en ese momento.
+Velocidad
 
-Finalización de Preparación:
+Clase (define qué equipamiento puede usar)
 
-Una vez que ambos jugadores han finalizado sus colocaciones y gastos de energía, la fase de preparación concluye y da paso a la Fase de Batalla.
+Elemento (tendrán interacciones entre sí)
 
-Fase de Batalla
+Rareza de las Cartas
 
-Orden de Ataque por Velocidad:
+Los héroes tienen diferentes niveles de rareza.
 
-Los héroes atacan en un orden determinado por su velocidad. El héroe con mayor velocidad actúa primero, seguido por el segundo más rápido, y así sucesivamente. En caso de empate, se considera la posición en el campo y luego el orden de invocación.
+Las cartas más raras poseen ataques más poderosos.
 
-Acciones de Héroes:
+Efectos de las Cartas
 
-Cuando le corresponde actuar, cada héroe tiene tres opciones:
+Modificación de estadísticas (vida, defensa, velocidad).
 
-Moverse: Cambiar de posición en el campo de batalla para un mejor posicionamiento estratégico.
+Estados alterados: envenenado, aturdido, paralizado, quemado, congelado.
 
-Atacar: Elegir a un enemigo para atacar, cumpliendo con las restricciones de línea y alcance de cada tipo de héroe.
+Invocación de héroes desde el mazo.
 
-Recargar: Abstenerse de atacar y en su lugar recargar energía adicional para el jugador en el siguiente turno, aumentando las posibilidades de juego.
+Control de héroes del oponente.
 
-Activación de Cartas en la Zona de Acción Rápida:
+Renacimiento de héroes derrotados.
 
-En cualquier momento durante la Fase de Batalla, los jugadores pueden activar las cartas que colocaron en la Zona de Acción Rápida, siempre que tengan suficiente energía para pagar su coste de uso. Estas cartas pueden ser hechizos para afectar el campo o artefactos para mejorar a un héroe instantáneamente.
+Magias oscuras (ej: un efecto que se aplica a un héroe enemigo; si el usuario de la habilidad es derrotado, el enemigo afectado también es eliminado. Alternativamente, el enemigo bajo este efecto puede recibir el mismo daño que el usuario del ataque).
 
-Fin de la Fase de Batalla:
+Efectos pasivos (ej: aumentar la defensa de héroes aliados de una clase específica).
 
-Cuando todos los héroes han realizado su acción, la Fase de Batalla concluye. Ambos jugadores ingresan al siguiente turno y vuelven a la Fase de Preparación.
+Efectos al ser destruidos (activación de habilidades al morir).
 
-2. Tipos de Cartas y sus Funciones
+3. Clases y Elementos
 
-Héroes
+Clases
 
-Descripción: Las cartas principales que representan a los combatientes en el campo.
+Mezcla de arquetipos clásicos y originales.
 
-Atributos:
+No afectan estadísticas, solo determinan qué equipamientos pueden usarse.
 
-Ataque (ATK): El daño que puede infligir el héroe.
+Los equipamientos especifican qué clase puede utilizarlos.
 
-Defensa (DEF): Actúa como un escudo temporal que reduce el daño antes de afectar a la vida.
+Elementos
 
-Vida (HP): Los puntos de vida del héroe. Al llegar a cero, el héroe es eliminado del campo.
+Tienen interacciones entre sí (ejemplo: ventajas y desventajas elementales).
 
-Velocidad (SPD): Determina el orden de acción en el turno.
+4. Mecánicas del Juego
 
-Afinidad Elemental: Los héroes pueden tener una afinidad elemental que les otorga ventajas o desventajas en combate según el tipo de elemento del enemigo.
+Estructura del Mazo
 
-Habilidades Especiales: Los héroes pueden tener habilidades únicas que les permiten, por ejemplo, aumentar su daño, curarse o fortalecer a otros héroes aliados.
+Cada mazo debe tener entre 40 y 60 cartas.
 
-*Progresión: Algunos héroes pueden mejorar sus atributos o desbloquear habilidades adicionales tras cumplir ciertos requisitos, como sobrevivir un número determinado de turnos o derrotar a varios enemigos.
+Los héroes no pueden repetirse en un mismo mazo.
 
-Hechizos
+La cantidad de copias de otras cartas está limitada según su rareza.
 
-Descripción: Cartas de uso único que generan efectos inmediatos.
+Condiciones de Victoria
 
-Ejemplos:
+Un jugador pierde cuando su vida llega a cero.
 
-Bola de Fuego: Inflige daño directo a un héroe enemigo.
+Se puede atacar directamente al jugador si no tiene héroes en el campo.
 
-Escudo de Luz: Aumenta la defensa de un héroe aliado durante un número específico de turnos.
+Si un jugador se queda sin cartas en su mazo, no pierde automáticamente, pero deja de recibir la energía que gana por turno.
 
-Artefactos
+Fases del Turno
 
-Descripción: Objetos que se pueden equipar a un héroe para mejorar sus atributos o añadir nuevas habilidades.
+Fase de Preparación:
 
-Ejemplos:
+Los jugadores invocan héroes, usan hechizos y equipamientos.
 
-Espada de Llamas: Aumenta el ataque del héroe y añade daño de fuego a sus ataques.
+Los turnos son simultáneos; cuando ambos jugadores terminan, avanza la partida.
 
-Amuleto de Curación: Otorga curación pasiva al héroe que lo lleva equipado en cada turno.
+Fase de Combate:
 
+Los héroes atacan en orden de velocidad.
 
-Campo
+Si dos héroes tienen la misma velocidad, sus acciones ocurren al mismo tiempo.
 
-Descripción: Cartas que afectan el entorno del campo de batalla, generando efectos duraderos en zonas específicas.
+Se priorizan efectos positivos antes que los ataques.
 
-Tipos de Efectos de Cartas de Campo:
+Los efectos y el daño se aplican después de resolver las acciones.
 
-Campo Completo: Afecta a todos los héroes en el campo de ambos jugadores.
+Los héroes pueden optar por recargar energía en lugar de atacar.
 
-Campo del Jugador o del Rival: Afecta solo a los héroes de un jugador.
+Fase de Fin de Turno:
 
-Posición Específica: Afecta al héroe ubicado en esa posición específica del campo.
+Se restablece la defensa de los héroes.
 
-Línea Completa: Afecta a todos los héroes en una línea específica (primera, segunda o tercera).
+Cada jugador roba una carta.
 
-Alrededores: Afecta la posición de colocación y las posiciones adyacentes en el campo.
+Se inicia una nueva fase de preparación.
 
+Sistema de Energía
 
- 3. Manejo de Energía y Costos
-    
-Los jugadores cuentan con una cantidad de energía limitada que aumenta cada turno o mediante habilidades especiales.
+Límite máximo de energía: Sí, hay un tope de energía.
 
-Cada carta tiene un coste de energía. Las cartas más poderosas requieren mayor cantidad de energía.
+Recarga de energía: Se obtiene una cantidad fija por turno.
 
-Los jugadores pueden decidir si gastar toda la energía en su turno o acumularla para jugar cartas más poderosas en turnos futuros.
+Aumento progresivo: Cada cierta cantidad de turnos, la recarga de energía aumenta.
 
+Modificadores de energía: Actualmente, no hay habilidades o cartas que modifiquen la recarga de energía, pero podrían añadirse en el futuro tras pruebas de balance.
 
-4. Sistema de Elementos y Debilidades
+5. Economía del Juego
 
-Elemento	Fuerte Contra	  Débil Contra
+Sobres: Los jugadores pueden comprar sobres con cartas aleatorias.
 
-Agua	              Fuego	                Planta
+Recompensas: Se pueden obtener cartas como premio en el modo historia, eventos o partidas clasificatorias.
 
-Fuego	              Planta	                Agua
-
-Planta	              Agua	                Fuego
-
-Tierra	              Rayo	                Viento
-
-Rayo	              Viento	                Tierra
-
-Viento	              Tierra	                Rayo
-
-Luz	              Oscuridad	  Oscuridad
-
-Oscuridad	Luz	                Luz
-
-
-5. Efectos de Estado y Condiciones Especiales
-   
-Efectos de Estado: Los héroes pueden sufrir efectos que afectan su rendimiento:
-
-Quemadura: Reduce atributos de ataque y defensa.
-
-Congelación: Pierde el turno.
-
-Envenenamiento: Pierde una cantidad de vida en cada turno.
-
-*Condiciones Especiales: Algunas cartas tienen requisitos específicos para jugarse, como invocar una criatura legendaria solo cuando la vida del jugador está baja.
-
-
-6. Disposición del Campo de Batalla
-
-Líneas de Combate:
-
-Primera Línea: Para héroes cuerpo a cuerpo como guerreros y tanques. Son los primeros en recibir el daño y proteger a los de las otras líneas.
-
-Segunda Línea: Para héroes de rango medio, como arqueros y magos que necesitan protección, pero pueden atacar desde una distancia segura.
-
-Tercera Línea: Para héroes de apoyo. Son vulnerables en combate directo, pero influyen en el campo con habilidades de apoyo o efectos a distancia.
-
-Reglas de Combate según la Línea:
-
-Cuerpo a Cuerpo:
-
-Solo pueden atacar a héroes en la primera línea del oponente.
-
-Si la primera línea está vacía, avanzan y atacan a la segunda.
-
-A Rango:
-
-Pueden atacar a cualquier línea, pero el daño disminuye según la distancia.
-
-Soporte:
-
-Usualmente se colocan en la tercera línea. Suelen especializarse en apoyo más que en daño directo.
-
-
-7. Sistema de Ataque y Defensa
-   
-Defensa como Escudo Temporal:
-
-La defensa protege la vida del héroe y se reduce antes de que cualquier ataque afecte su vida directamente.
-
-Si la defensa llega a 0, el próximo ataque afecta directamente la vida del héroe.
-
-Regeneración de Defensa:
-
-La defensa se regenera al final del turno a su valor original, a menos que haya efectos que la disminuyan permanentemente.
-
-Interacción con Habilidades y Efectos:
-
-Ruptura de Defensa: Algunos ataques pueden ignorar la defensa y atacar directamente la vida.
-
-Refuerzo de Defensa: Algunas habilidades aumentan la defensa temporalmente, proporcionando mayor resistencia hasta el final del turno.
-
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Jaribi%20carta.png) 
-![Game Screenshot](Epic%20Legions/Assets/Sprites/YANSSO%20carta.png))
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/jaribi.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/carta%20silvadora.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/lord%20final.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/yansso%20aprendiz%20de%20mago.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Spells/Poción%20de%20vitalidad.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/IMG_20250114_231005.png)
 
