@@ -47,7 +47,8 @@ public class Card : MonoBehaviour
 
     private Vector3 offset;
     private bool isDragging = false;
-    private bool isMyTurn;
+    private bool isPlayer;
+    public bool isMyTurn;
     private bool isMoving;
     private int sortingOrder;
     public static int cardMovementSpeed = 20;
@@ -55,7 +56,7 @@ public class Card : MonoBehaviour
     private List<Effect> statModifier;
 
     private Vector3 lastPosition;
-    private Vector3 lastRotation;
+    private Vector3 defaultRotation;
 
     private bool isFocused;
     private bool isHighlight;
@@ -85,6 +86,8 @@ public class Card : MonoBehaviour
     public List<Movement> Moves => moves;
     public FieldPosition FieldPosition => fieldPosition;
 
+    Coroutine moveCoroutine;
+    Coroutine rotateCoroutine;
     /// <summary>
     /// Establece todos los datos de la carta.
     /// </summary>
@@ -94,10 +97,16 @@ public class Card : MonoBehaviour
         this.cardSO = cardSO;
         this.duelManager = duelManager;
 
+        defaultRotation = new Vector3(53, 0, 0);
+
         nameText.text = cardSO.CardName;
         lastNameText.text = cardSO.CardLastName;
-        cardImage.sprite = cardSO.CardSprite;
-        if(cardSO is HeroCardSO heroCardSO)
+
+        cardImage.material = new Material(cardImage.material);
+        cardImage.material.SetTexture("_BaseMap", cardSO.CardSprite.texture);
+        cardImage.material.SetTexture("_EmissionMap", cardSO.CardSprite.texture);
+
+        if (cardSO is HeroCardSO heroCardSO)
         {
             maxHealt = heroCardSO.Healt;
             defense = heroCardSO.Defence;
@@ -170,9 +179,10 @@ public class Card : MonoBehaviour
     /// Establece la posicion en el campo de la carta.
     /// </summary>
     /// <param name="fieldPosition">Posicion del campo donde estara la carta.</param>
-    public void SetFieldPosition(FieldPosition fieldPosition)
+    public void SetFieldPosition(FieldPosition fieldPosition, Vector3 rotation)
     {
         this.fieldPosition = fieldPosition;
+        defaultRotation = rotation;
         AdjustUIcons();
     }
 
@@ -203,8 +213,11 @@ public class Card : MonoBehaviour
     /// <param name="isLocal">La posicion que se desea mover es la posicion local?</param>
     public IEnumerator MoveToPosition(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
     {
-        StopAllCoroutines();
-        yield return StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
+        if (moveCoroutine != null)
+            StopCoroutine(moveCoroutine);
+
+        moveCoroutine = StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
+        yield return null;
     }
 
     /// <summary>
@@ -264,7 +277,10 @@ public class Card : MonoBehaviour
     /// <param name="speed">Velocidad a la que se quiere rotar la carta</param>
     public void RotateToAngle(Vector3 targetRotation, float speed, bool temporalRotation)
     {
-        StartCoroutine(RotateSmoothly(targetRotation, speed, temporalRotation));
+        if(rotateCoroutine != null)
+            StopCoroutine(rotateCoroutine);
+
+        rotateCoroutine = StartCoroutine(RotateSmoothly(targetRotation, speed, temporalRotation));
     }
 
     /// <summary>
@@ -272,8 +288,6 @@ public class Card : MonoBehaviour
     /// </summary>
     private IEnumerator RotateSmoothly(Vector3 targetRotation, float speed, bool temporalRotation)
     {
-
-        if(temporalRotation) lastRotation = transform.eulerAngles;
 
         Quaternion targetQuaternion = Quaternion.Euler(targetRotation);
         while (Quaternion.Angle(transform.rotation, targetQuaternion) > 0.1f)
@@ -332,7 +346,7 @@ public class Card : MonoBehaviour
             StartCoroutine(MoveToPosition(focusPosition, cardMovementSpeed, true, false));
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
-            EnableActions(isMyTurn && !actionIsReady);
+            EnableActions(isPlayer && !actionIsReady);
             isFocused = true;
             AdjustUIcons();
             return true;
@@ -369,7 +383,7 @@ public class Card : MonoBehaviour
         if (isFocused)
         {
             MoveToLastPosition();
-            RotateToAngle(lastRotation, cardMovementSpeed, false);
+            RotateToAngle(defaultRotation, cardMovementSpeed, false);
             ChangedSortingOrder(sortingOrder);
             cardActions.enabled = false;
             isFocused = false;
@@ -440,7 +454,7 @@ public class Card : MonoBehaviour
     {
         if (isDragging && !isTemporalPosition)
         {
-            RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed, true);
+            RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed * 2, true);
             Vector3 newPosition = GetMouseWorldPosition() + offset;
             newPosition = new Vector3(newPosition.x, heldCardHeight, newPosition.z);
 
@@ -531,7 +545,8 @@ public class Card : MonoBehaviour
     /// <param name="isPlayer">Bool esta carta es propiedad del jugador.</param>
     public void SetTurn(bool isPlayer)
     {
-        isMyTurn = isPlayer;
+        this.isPlayer = isPlayer;
+        isMyTurn = true;
 
         fieldPosition.ChangeEmission(Color.yellow);
     }

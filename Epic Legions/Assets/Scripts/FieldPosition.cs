@@ -45,7 +45,7 @@ public class FieldPosition : MonoBehaviour
         StartCoroutine(card.MoveToPosition(Vector3.back * 0.01f, Card.cardMovementSpeed, false, true));
         card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
-        card.SetFieldPosition(this);
+        card.SetFieldPosition(this, new Vector3(90, 0, isPlayer ? 0 : 180));
         ChangeEmission(isbusyColor, intensity);
     }
 
@@ -58,7 +58,7 @@ public class FieldPosition : MonoBehaviour
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 180), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.ToGraveyard();
-        card.SetFieldPosition(null);
+        card.SetFieldPosition(null, new Vector3(90, 0, isPlayer ? 0 : 180));
         card = null;
         RestoreOriginalColor();
     }
@@ -98,7 +98,14 @@ public class FieldPosition : MonoBehaviour
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
-        currentCoroutine = StartCoroutine(LerpEmision(card == null ? originalColor : isbusyColor * Mathf.Pow(2, intensity), 0, duracion)); // Volver al color original
+        if (card != null && card.isMyTurn)
+        {
+            ChangeEmission(Color.yellow);
+        }
+        else
+        {
+            currentCoroutine = StartCoroutine(LerpEmision(card == null ? originalColor : isbusyColor * Mathf.Pow(2, intensity), 0, duracion)); // Volver al color original
+        }
     }
 
     private IEnumerator LerpEmision(Color targetColor, float intensidad, float duracion)
