@@ -147,5 +147,5 @@ Recompensas: Se pueden obtener cartas como premio en el modo historia, eventos o
 ![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/lord%20final.png)
 ![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/yansso%20aprendiz%20de%20mago.png)
 ![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Spells/Poción%20de%20vitalidad.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/IMG_20250114_231005.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/carta%20modelo%201%20parte%20de%20atrás%20v3.png)
 
