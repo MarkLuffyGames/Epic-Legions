@@ -811,8 +811,8 @@ public class DuelManager : NetworkBehaviour
             }
 
             // Marca la acción como lista y finaliza el turno del héroe
-            card.actionIsReady = true;
-            card.EndTurn();
+            card.actionIsReady = true; 
+            if (GetPlayerManagerForCard(card) == player1Manager) card.EndTurn();
         }
     }
 
@@ -868,7 +868,7 @@ public class DuelManager : NetworkBehaviour
             }
 
             // Finaliza el turno del héroe
-            cardSelectingTarget.EndTurn();
+            if (GetPlayerManagerForCard(attackingCard) == player1Manager) cardSelectingTarget.EndTurn();
 
             // Desactiva los objetivos seleccionables
             DisableAttackableTargets();

@@ -424,12 +424,15 @@ public class Card : MonoBehaviour
         cardActions.sortingOrder = sortingOrder + 1;
     }
 
+
+    float heldTime;
     /// <summary>
     /// Inicia el arrastre de la carta
     /// </summary>
-    public void StartDragging()
+    public void StartDragging(float heldTime)
     {
-        if(isDragging)return;
+        this.heldTime = heldTime;
+        if (isDragging)return;
 
         isDragging = true;
         offset = transform.position - GetMouseWorldPosition();
@@ -454,7 +457,7 @@ public class Card : MonoBehaviour
     {
         if (isDragging && !isTemporalPosition)
         {
-            RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed * 2, true);
+            if(heldTime > CardSelector.clickHoldTime) RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed * 2, true);
             Vector3 newPosition = GetMouseWorldPosition() + offset;
             newPosition = new Vector3(newPosition.x, heldCardHeight, newPosition.z);
 
@@ -594,7 +597,15 @@ public class Card : MonoBehaviour
     {
         if (isAttackable)
         {
-            fieldPosition.RestoreOriginalColor();
+            if (isMyTurn)
+            {
+                fieldPosition.ChangeEmission(Color.yellow);
+            }
+            else
+            {
+                fieldPosition.RestoreOriginalColor();
+            }
+            
             isAttackable = false;
         }
     }

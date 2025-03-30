@@ -22,7 +22,7 @@ public class CardSelector : MonoBehaviour
     private bool isClickingCard = false;
     private bool isHoldingCard = false;
 
-    private float clickHoldTime = 0.2f; // Tiempo para diferenciar entre clic y arrastre
+    public static float clickHoldTime = 0.2f; // Tiempo para diferenciar entre clic y arrastre
     private float mouseDownTime; // Tiempo cuando el mouse fue presionado
 
     private bool isAnyFocusedCard;
@@ -234,7 +234,6 @@ public class CardSelector : MonoBehaviour
                     duelManager.MovementToUse);
                 }
 
-                duelManager.CardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
             }
         }
@@ -264,7 +263,7 @@ public class CardSelector : MonoBehaviour
             && !playerManager.isReady && !card.waitForServer //El jugador no puede estar listo para avanzar a la siguinte fase ni la carta estar esperando respuesta del servidor.
             && card.UsableCard(playerManager)) //La carta puede ser usada. 
         {
-            card.StartDragging();
+            card.StartDragging(heldTime);
 
             if(heldTime > clickHoldTime)
             {
