@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Paladin
   m_EditorClassIdentifier: 
   cardId: 5
-  cardName: Paladin
-  cardLastName: 
+  cardName: "Acr\xF3n"
+  cardLastName: "Palad\xEDn Testudo"
   cardSprite: {fileID: 21300000, guid: e81327ae025dd004dad290afc4f3a30b, type: 3}
   cardElemnt: 7
   heroClass: 0
