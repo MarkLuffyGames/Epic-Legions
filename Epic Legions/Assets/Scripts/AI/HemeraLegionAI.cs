@@ -21,8 +21,11 @@ public class HemeraLegionAI : MonoBehaviour
 
     private void Awake()
     {
-        duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
-        duelManager.OnChangeTurn += DuelManager_OnChangeTurn;
+        if (duelManager.IsSinglePlayer)
+        {
+            duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
+            duelManager.OnChangeTurn += DuelManager_OnChangeTurn;
+        }
     }
 
     private void DuelManager_OnChangeTurn(object sender, EventArgs e)

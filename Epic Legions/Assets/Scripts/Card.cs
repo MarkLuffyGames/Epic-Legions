@@ -79,6 +79,8 @@ public class Card : MonoBehaviour
     private DuelManager duelManager;
     public bool isAttackable;
 
+    public int lastDamageInflicted = 0;
+
     public int HealtPoint => maxHealt;
     public int CurrentHealtPoints => currentHealt;
     public int CurrentDefensePoints => Mathf.Clamp(currentDefense + GetDefenseModifier(), 0, 99);
@@ -697,13 +699,13 @@ public class Card : MonoBehaviour
     /// </summary>
     /// <param name="amountDamage"></param>
     /// <returns>Si el heroe se queda sin energia debuelve true</returns>
-    public void ReceiveDamage(int amountDamage, int ignoredDefense)
+    public int ReceiveDamage(int amountDamage, int ignoredDefense)
     {
+        var damageInflicted = 0;
         var protector = HasProtector();
         if (protector != null && protector.HasProtector())
         {
-            protector.damageReceiver.ReceiveDamage(amountDamage, ignoredDefense);
-            return;
+            return protector.damageReceiver.ReceiveDamage(amountDamage, ignoredDefense);
         }
 
         amountDamage -= GetDamageAbsorbed();
@@ -713,7 +715,8 @@ public class Card : MonoBehaviour
 
         if(remainingDamage > 0)
         {
-            ShowTextDamage(false, currentHealt > remainingDamage ? remainingDamage : currentHealt);
+            damageInflicted = currentHealt > remainingDamage ? remainingDamage : currentHealt;
+            ShowTextDamage(false, damageInflicted);
             currentHealt -= remainingDamage;
             if (currentHealt < 0) currentHealt = 0;
         }
@@ -721,6 +724,8 @@ public class Card : MonoBehaviour
         MoveToLastPosition();
 
         UpdateText();
+
+        return damageInflicted;
     }
 
 

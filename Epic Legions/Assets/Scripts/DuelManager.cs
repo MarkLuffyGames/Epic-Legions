@@ -47,7 +47,6 @@ public class DuelManager : NetworkBehaviour
     private Card cardSelectingTarget;
 
     private DuelPhase oldDuelPhase;
-
     public PlayerManager Player1Manager => player1Manager;
     public PlayerManager Player2Manager => player2Manager;
     public List<Card> HeroInTurn => heroInTurn;
@@ -1315,7 +1314,7 @@ public class DuelManager : NetworkBehaviour
                 cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-                cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
+                attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
                     attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
             }
             else
@@ -1330,7 +1329,7 @@ public class DuelManager : NetworkBehaviour
                 foreach (var card in targets)
                 {
                     // Aplica el daño a todos los objetivos.
-                    card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
+                    attackerCard.lastDamageInflicted = card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
                         attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
                 }
             }
@@ -1349,6 +1348,8 @@ public class DuelManager : NetworkBehaviour
                     card.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
                 }
             }
+
+            attackerCard.lastDamageInflicted = 0;
 
             // Espera un breve momento para completar la animación.
             yield return new WaitForSeconds(1);
