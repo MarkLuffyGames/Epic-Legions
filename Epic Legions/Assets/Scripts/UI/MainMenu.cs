@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 1000;
 
         InitializeUnityAuthentication();
         singlePlayerButton.onClick.AddListener(() =>

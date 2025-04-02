@@ -104,9 +104,11 @@ public class Card : MonoBehaviour
         nameText.text = cardSO.CardName;
         lastNameText.text = cardSO.CardLastName;
 
+        cardImage.sprite = cardSO.CardSprite;
+        /*
         cardImage.material = new Material(cardImage.material);
         cardImage.material.SetTexture("_BaseMap", cardSO.CardSprite.texture);
-        cardImage.material.SetTexture("_EmissionMap", cardSO.CardSprite.texture);
+        cardImage.material.SetTexture("_EmissionMap", cardSO.CardSprite.texture);*/
 
         if (cardSO is HeroCardSO heroCardSO)
         {

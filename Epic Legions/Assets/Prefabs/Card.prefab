@@ -2456,11 +2456,13 @@ MonoBehaviour:
   angleHeldCard: 70
   heldCardHeight: 2.75
   cardSO: {fileID: 0}
+  isMyTurn: 0
   isTemporalPosition: 0
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
   isAttackable: 0
+  lastDamageInflicted: 0
 --- !u!1 &6193242297218912138
 GameObject:
   m_ObjectHideFlags: 0
@@ -3386,7 +3388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: abcd8e34d0de1c94eba908c288b122b8, type: 2}
+  m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

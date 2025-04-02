@@ -21,16 +21,19 @@ public class HemeraLegionAI : MonoBehaviour
 
     private void Awake()
     {
-        if (duelManager.IsSinglePlayer)
-        {
-            duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
-            duelManager.OnChangeTurn += DuelManager_OnChangeTurn;
-        }
+        duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
+        duelManager.OnChangeTurn += DuelManager_OnChangeTurn;
     }
 
     private void DuelManager_OnChangeTurn(object sender, EventArgs e)
     {
-        if (executeActionCoroutine != null)
+        if (!duelManager.IsSinglePlayer)
+        {
+            duelManager.duelPhase.OnValueChanged -= OnDuelPhaseChanged;
+            duelManager.OnChangeTurn -= DuelManager_OnChangeTurn;
+            return;
+        }
+            if (executeActionCoroutine != null)
             StopCoroutine(executeActionCoroutine);
 
         executeActionCoroutine = StartCoroutine(ExecuteAction());
@@ -38,7 +41,14 @@ public class HemeraLegionAI : MonoBehaviour
 
     private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
     {
-        if(newValue == DuelPhase.Preparation)
+        if (!duelManager.IsSinglePlayer)
+        {
+            duelManager.duelPhase.OnValueChanged -= OnDuelPhaseChanged;
+            duelManager.OnChangeTurn -= DuelManager_OnChangeTurn;
+            return;
+        }
+
+        if (newValue == DuelPhase.Preparation)
         {
             turn++;
             StartCoroutine(PlanPlay());

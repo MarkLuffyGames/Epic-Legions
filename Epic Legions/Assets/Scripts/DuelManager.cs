@@ -344,6 +344,7 @@ public class DuelManager : NetworkBehaviour
         {
             foreach (var card in HeroCardsOnTheField)
             {
+                if(card.actionIsReady) continue;
                 // Calcula el turno basado en la velocidad del héroe
                 int turn = (100 - card.CurrentSpeedPoints) / 5;
                 turns[turn].Add(card);
@@ -968,7 +969,6 @@ public class DuelManager : NetworkBehaviour
     private IEnumerator HeroDirectAttack(int player, Card heroUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
         // Marca la carta atacante como lista para la acción y termina su turno.
-        heroUsesTheAttack.actionIsReady = false;
         heroUsesTheAttack.EndTurn();
 
         // Iniciar la animación del ataque dependiendo del tipo de movimiento (cuerpo a cuerpo o a distancia)
@@ -1092,12 +1092,6 @@ public class DuelManager : NetworkBehaviour
         {
             // Comienza el procesamiento de las acciones
             StartCoroutine(StartActions());
-
-            // Resetear el estado de todos los héroes, indicando que están listos para una nueva acción
-            foreach (var hero in HeroCardsOnTheField)
-            {
-                hero.actionIsReady = false;
-            }
         }
     }
 
@@ -1182,6 +1176,9 @@ public class DuelManager : NetworkBehaviour
         // Activar cualquier efecto pendiente antes de finalizar la fase de acciones.
         ActiveEffect();
 
+        //Calcular los turnos nuevamente por si algun heroe cambio su velocidad.
+        InitializeBattleTurns();
+
         // Si la fase actual es "PlayingSpellCard" (se está jugando una carta de hechizo),
         // las cartas se envían al cementerio de inmediato.
         if (duelPhase.Value == DuelPhase.PlayingSpellCard)
@@ -1193,6 +1190,12 @@ public class DuelManager : NetworkBehaviour
             // Si no es la fase de jugar un hechizo, esperar 1 segundo antes de enviar las cartas al cementerio.
             yield return new WaitForSeconds(1);
             SendCardsToGraveyard();
+        }
+
+        // Resetear el estado de todos los héroes, indicando que están listos para una nueva acción
+        foreach (var hero in HeroCardsOnTheField)
+        {
+            hero.actionIsReady = false;
         }
 
         // Si el código se está ejecutando en el cliente, marcar al jugador como listo y avanzar de fase.
@@ -1287,7 +1290,6 @@ public class DuelManager : NetworkBehaviour
     private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
     {
         // Marca la carta atacante como lista para la acción y termina su turno.
-        attackerCard.actionIsReady = false;
         attackerCard.EndTurn();
 
         // Inicia la animación de ataque, dependiendo del tipo de movimiento.
