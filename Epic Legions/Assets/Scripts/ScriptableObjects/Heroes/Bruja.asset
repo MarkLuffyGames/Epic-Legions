@@ -19,7 +19,7 @@ MonoBehaviour:
   cardElemnt: 0
   heroClass: 2
   healt: 45
-  defence: 30
+  defence: 15
   speed: 35
   energy: 30
   moves:
