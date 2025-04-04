@@ -38,6 +38,6 @@ public enum MoveType
 
 public enum TargetsType
 {
-    SingleTarget, TargetLine, Midfield
+    SingleTarget, TargetLine, Midfield, Direct
 }
 

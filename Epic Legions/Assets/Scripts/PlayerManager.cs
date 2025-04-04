@@ -271,10 +271,10 @@ public class PlayerManager : MonoBehaviour
         playerEnergyText.text = $"{playerEnergy}";
     }
 
-    public bool ReceiveDamage(Movement movement)
+    public bool ReceiveDamage(int damage)
     {
         //TODO: Ejecutar animacion de daño del jugador.
-        playerHealt -= movement.MoveSO.Damage;
+        playerHealt -= damage;
         if(playerHealt < 0) playerHealt = 0;
         UpdateUI();
 

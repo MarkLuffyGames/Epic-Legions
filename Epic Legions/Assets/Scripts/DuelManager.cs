@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
 public class DuelManager : NetworkBehaviour
@@ -598,7 +599,7 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                if (IsServer || IsSinglePlayer) duelPhase.Value = DuelPhase.PlayingSpellCard;
+                if (IsServer) duelPhase.Value = DuelPhase.PlayingSpellCard;
             }
             
             if (isPlayer || IsSinglePlayer) UseMovement(0, card);
@@ -922,20 +923,27 @@ public class DuelManager : NetworkBehaviour
         // Si el movimiento no es un efecto positivo, buscamos enemigos en el campo del jugador contrario
         if (card.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
-            // Itera sobre las posiciones de campo del jugador 2 (enemigo)
-            for (int i = 0; i < GetPlayerManagerRival(card).GetFieldPositionList().Count; i++)
+            if (card.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Direct)
             {
-                // Si hay una carta en la posición, la agregamos como objetivo
-                if (GetPlayerManagerRival(card).GetFieldPositionList()[i].Card != null)
+                targets.Add(card);
+            }
+            else
+            {
+                // Itera sobre las posiciones de campo del jugador 2 (enemigo)
+                for (int i = 0; i < GetPlayerManagerRival(card).GetFieldPositionList().Count; i++)
                 {
-                    targets.Add(GetPlayerManagerRival(card).GetFieldPositionList()[i].Card);
-                }
+                    // Si hay una carta en la posición, la agregamos como objetivo
+                    if (GetPlayerManagerRival(card).GetFieldPositionList()[i].Card != null)
+                    {
+                        targets.Add(GetPlayerManagerRival(card).GetFieldPositionList()[i].Card);
+                    }
 
-                // Si ya encontramos al menos un objetivo y estamos en las últimas posiciones (en este caso, filas 4, 9 o 14),
-                // retornamos la lista de objetivos solo si el movimiento es un ataque cuerpo a cuerpo (melee)
-                if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
-                {
-                    return targets; // Terminamos la búsqueda si encontramos un objetivo válido para un ataque cuerpo a cuerpo
+                    // Si ya encontramos al menos un objetivo y estamos en las últimas posiciones (en este caso, filas 4, 9 o 14),
+                    // retornamos la lista de objetivos solo si el movimiento es un ataque cuerpo a cuerpo (melee)
+                    if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+                    {
+                        return targets; // Terminamos la búsqueda si encontramos un objetivo válido para un ataque cuerpo a cuerpo
+                    }
                 }
             }
         }
@@ -962,25 +970,25 @@ public class DuelManager : NetworkBehaviour
     /// Dependiendo del tipo de movimiento, se ejecuta la animación correspondiente y se calcula el daño.
     /// </summary>
     /// <param name="player">El jugador que está realizando el ataque (1 o 2).</param>
-    /// <param name="heroUsesTheAttack">La carta del héroe que realiza el ataque.</param>
+    /// <param name="cardUsesTheAttack">La carta del héroe que realiza el ataque.</param>
     /// <param name="movementToUseIndex">El índice del movimiento que se va a utilizar.</param>
     /// <param name="lastMove">Indica si este es el último movimiento de la fase actual.</param>
     /// <returns>Una enumeración de la corrutina.</returns>
-    private IEnumerator HeroDirectAttack(int player, Card heroUsesTheAttack, int movementToUseIndex, bool lastMove)
+    private IEnumerator HeroDirectAttack(int player, Card cardUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
         // Marca la carta atacante como lista para la acción y termina su turno.
-        heroUsesTheAttack.EndTurn();
+        cardUsesTheAttack.EndTurn();
 
         // Iniciar la animación del ataque dependiendo del tipo de movimiento (cuerpo a cuerpo o a distancia)
-        if (heroUsesTheAttack.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
         {
             // Si es un ataque cuerpo a cuerpo, ejecutar la animación de ataque cuerpo a cuerpo
-            yield return heroUsesTheAttack.MeleeAttackAnimation(player, null, heroUsesTheAttack.Moves[movementToUseIndex]);
+            yield return cardUsesTheAttack.MeleeAttackAnimation(player, null, cardUsesTheAttack.Moves[movementToUseIndex]);
         }
         else
         {
             // Si es un ataque a distancia (u otro tipo), ejecutar la animación correspondiente
-            yield return heroUsesTheAttack.RangedMovementAnimation();
+            yield return cardUsesTheAttack.RangedMovementAnimation();
         }
 
         // Esperar un breve tiempo antes de aplicar el daño
@@ -990,7 +998,7 @@ public class DuelManager : NetworkBehaviour
         if (player == 1)
         {
             // Si es el jugador 1, aplicar el daño al jugador 2
-            if (player2Manager.ReceiveDamage(heroUsesTheAttack.Moves[movementToUseIndex]))
+            if (player2Manager.ReceiveDamage(cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.Damage))
             {
                 // Si el jugador 2 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(true);
@@ -999,15 +1007,20 @@ public class DuelManager : NetworkBehaviour
         else
         {
             // Si es el jugador 2, aplicar el daño al jugador 1
-            if (player1Manager.ReceiveDamage(heroUsesTheAttack.Moves[movementToUseIndex]))
+            if (player1Manager.ReceiveDamage(cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.Damage))
             {
                 // Si el jugador 1 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(false);
             }
         }
 
+        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Direct)
+        {
+            cardUsesTheAttack.Moves[movementToUseIndex].ActivateEffect(cardUsesTheAttack, (Card)null);
+        }
+
         // Mover la carta a su posicion en el campo.
-        heroUsesTheAttack.MoveToLastPosition();
+        cardUsesTheAttack.MoveToLastPosition();
 
         // Resetear el índice del movimiento utilizado y otras variables de estado
         movementToUseIndex = -1;
@@ -1016,7 +1029,11 @@ public class DuelManager : NetworkBehaviour
         settingAttackTarget = false;
         cardSelectingTarget = null;
 
-        heroInTurn.Remove(heroUsesTheAttack);
+        heroInTurn.Remove(cardUsesTheAttack);
+            
+
+        DestroySpell(cardUsesTheAttack);
+
         // Si este es el último movimiento de la fase, finalizar las acciones
         if (lastMove) yield return FinishActions();
     }
@@ -1263,6 +1280,7 @@ public class DuelManager : NetworkBehaviour
                 Card card = targetManager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
                 yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
             }
+
         }
         else
         {
@@ -1376,17 +1394,7 @@ public class DuelManager : NetworkBehaviour
         movementToUseIndex = -1;
 
         // Si el atacante es una carta de hechizo, destruye la carta después de su uso.
-        if (attackerCard.cardSO is SpellCardSO)
-        {
-            if (player1Manager.SpellFieldPosition.Card == attackerCard)
-            {
-                attackerCard.FieldPosition.DestroyCard(player1Manager.GetGraveyard(), true);
-            }
-            else
-            {
-                attackerCard.FieldPosition.DestroyCard(player2Manager.GetGraveyard(), false);
-            }
-        }
+        DestroySpell(attackerCard);
 
         // Espera un breve momento antes de finalizar la acción.
         yield return new WaitForSeconds(1);
@@ -1395,6 +1403,21 @@ public class DuelManager : NetworkBehaviour
 
         // Si es el último movimiento, finaliza las acciones.
         if (lastMove) yield return FinishActions();
+    }
+
+    private void DestroySpell(Card spellCard)
+    {
+        if (spellCard.cardSO is SpellCardSO)
+        {
+            if (player1Manager.SpellFieldPosition.Card == spellCard)
+            {
+                spellCard.FieldPosition.DestroyCard(player1Manager.GetGraveyard(), true);
+            }
+            else
+            {
+                spellCard.FieldPosition.DestroyCard(player2Manager.GetGraveyard(), false);
+            }
+        }
     }
 
 

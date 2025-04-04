@@ -1016,5 +1016,7 @@ public class Card : MonoBehaviour
         ReceiveDamage(amount, amount);
         ActivateVisualEffects();
     }
+
+    public DuelManager GetDuelManager() { return duelManager; }
 }
 
