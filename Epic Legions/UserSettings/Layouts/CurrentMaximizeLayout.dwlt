@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 1933
+  controlID: 40
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 1934
+  controlID: 41
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 1935
+  controlID: 42
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -199,8 +199,8 @@ MonoBehaviour:
     y: 0
     width: 323.2
     height: 487.2
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 226}
+  m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 6}
   m_Panes:
   - {fileID: 6}
@@ -247,7 +247,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 3c30fcffc2fafffff4ffffff
+      m_ExpandedIDs: c2faffff2ae80000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -291,8 +291,8 @@ MonoBehaviour:
     y: 0
     width: 787.99994
     height: 487.2
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 2}
   m_Panes:
   - {fileID: 8}
@@ -1589,7 +1589,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Prefabs
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1599,16 +1599,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 67
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Prefabs
   m_LastFoldersGridSize: 67
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 120}
-    m_SelectedIDs: 94f50000
-    m_LastClickedID: 62868
-    m_ExpandedIDs: 00000000c0f40000c2f40000c4f40000c6f40000c8f40000caf40000ccf40000cef40000d0f40000d2f40000d4f40000d6f40000d8f40000daf40000dcf40000def40000e0f40000e2f40000e4f40000e6f40000e8f40000eaf40000ecf40000eef40000f0f40000f2f40000f4f40000f6f40000f8f40000faf40000fcf40000fef4000000f5000002f5000004f5000006f5000008f500000af500000cf500000ef5000010f5000012f5000014f5000016f5000018f500001af500001cf500001ef50000a4f50000aaf50000
+    scrollPos: {x: 0, y: 68.400024}
+    m_SelectedIDs: 9ef50000
+    m_LastClickedID: 62878
+    m_ExpandedIDs: 00000000caf40000ccf40000cef40000d0f40000d2f40000d4f40000d6f40000d8f40000daf40000dcf40000def40000e0f40000e2f40000e4f40000e6f40000e8f40000eaf40000ecf40000eef40000f0f40000f2f40000f4f40000f6f40000f8f40000faf40000fcf40000fef4000000f5000002f5000004f5000006f5000008f500000af500000cf500000ef5000010f5000012f5000014f5000016f5000018f500001af500001cf500001ef5000020f5000022f5000024f5000026f500002cf50000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1637,7 +1637,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c0f40000c2f40000c4f40000c6f40000c8f40000caf40000ccf40000cef40000d0f40000d2f40000d4f40000d6f40000d8f40000daf40000dcf40000def40000e0f40000e2f40000e4f40000e6f40000e8f40000eaf40000ecf40000eef40000f0f40000f2f40000f4f40000f6f40000f8f40000faf40000fcf40000fef4000000f5000002f5000004f5000006f5000008f500000af500000cf500000ef5000010f5000012f5000014f5000016f5000018f500001af500001cf500001ef50000a4f50000aaf50000
+    m_ExpandedIDs: 00000000caf40000ccf40000cef40000d0f40000d2f40000d4f40000d6f40000d8f40000daf40000dcf40000def40000e0f40000e2f40000e4f40000e6f40000e8f40000eaf40000ecf40000eef40000f0f40000f2f40000f4f40000f6f40000f8f40000faf40000fcf40000fef4000000f5000002f5000004f5000006f5000008f500000af500000cf500000ef5000010f5000012f5000014f5000016f5000018f500001af500001cf500001ef5000020f5000022f5000024f5000026f5000028f500002af500002cf50000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1801,7 +1801,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 823.99994
+  m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:

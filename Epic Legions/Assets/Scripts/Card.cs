@@ -492,6 +492,7 @@ public class Card : MonoBehaviour
         {
             if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation ||
                 duelManager.GetCurrentDuelPhase() == DuelPhase.Battle) &&
+                spellCardSO.Move.EnergyCost <= playerManager.PlayerEnergy &&
                 !duelManager.SettingAttackTarget &&
                 duelManager.ObtainTargets(this, 0).Count > 0)
             {

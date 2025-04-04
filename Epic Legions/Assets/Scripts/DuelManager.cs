@@ -994,6 +994,11 @@ public class DuelManager : NetworkBehaviour
         // Esperar un breve tiempo antes de aplicar el daño
         yield return new WaitForSeconds(0.3f);
 
+        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Direct)
+        {
+            cardUsesTheAttack.Moves[movementToUseIndex].ActivateEffect(cardUsesTheAttack, (Card)null);
+        }
+
         // Verificar qué jugador está realizando el ataque
         if (player == 1)
         {
@@ -1012,11 +1017,6 @@ public class DuelManager : NetworkBehaviour
                 // Si el jugador 1 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(false);
             }
-        }
-
-        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Direct)
-        {
-            cardUsesTheAttack.Moves[movementToUseIndex].ActivateEffect(cardUsesTheAttack, (Card)null);
         }
 
         // Mover la carta a su posicion en el campo.

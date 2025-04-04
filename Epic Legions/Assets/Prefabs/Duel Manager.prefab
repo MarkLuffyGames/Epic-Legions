@@ -2777,6 +2777,7 @@ GameObject:
   - component: {fileID: 3294105951735913547}
   - component: {fileID: 7240668214990470102}
   - component: {fileID: 8055258763400123612}
+  - component: {fileID: 3588326798102989925}
   m_Layer: 0
   m_Name: P1 Manager
   m_TagString: Untagged
@@ -2868,6 +2869,22 @@ MonoBehaviour:
   fieldLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &3588326798102989925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712058943611541470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae542272dec119f4eabcf28b63ccd6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duelManager: {fileID: 1328336599689875757}
+  playerManager: {fileID: 7240668214990470102}
+  handCardHandler: {fileID: 5679681744472100564}
+  heroesInTurn: []
 --- !u!1 &4979797369168640912
 GameObject:
   m_ObjectHideFlags: 0
