@@ -132,10 +132,17 @@ public class PlayerManager : MonoBehaviour
     /// <summary>
     /// Metodo para robar una carta.
     /// </summary>
-    public void DrawCard()
+    public bool DrawCard()
     {
-        handCardHandler.GetNewCard(card[card.Count - 1]);
-        card.RemoveAt(card.Count - 1);
+        var wasStolen = false;
+
+        if (card.Count > 0)
+        {
+            handCardHandler.GetNewCard(card[card.Count - 1]);
+            card.RemoveAt(card.Count - 1);
+
+            wasStolen = true;
+        }
 
         if(duelManager.GetCurrentDuelPhase() == DuelPhase.DrawingCards)
         {
@@ -143,6 +150,7 @@ public class PlayerManager : MonoBehaviour
             IsReady();
         }
         
+        return wasStolen;
     }
 
     /// <summary>

@@ -116,10 +116,14 @@ public class DuelManager : NetworkBehaviour
         }
         else if(newPhase == DuelPhase.DrawingCards)
         {
-            player1Manager.DrawCard();
-            player2Manager.DrawCard();
-            player1Manager.RechargeEnergy(energyGainedPerTurn);
-            player2Manager.RechargeEnergy(energyGainedPerTurn);
+            if (player1Manager.DrawCard())
+            {
+                player1Manager.RechargeEnergy(energyGainedPerTurn);
+            }
+            if (player2Manager.DrawCard())
+            {
+                player2Manager.RechargeEnergy(energyGainedPerTurn);
+            }
         }
         else if(newPhase == DuelPhase.PlayingSpellCard)
         {
