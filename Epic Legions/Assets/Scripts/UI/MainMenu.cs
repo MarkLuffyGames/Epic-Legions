@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Button singlePlayerButton;
     [SerializeField] private Button multiplayerButton;
+    [SerializeField] private Button exitButton;
 
     private void Awake()
     {
@@ -25,6 +26,11 @@ public class MainMenu : MonoBehaviour
         multiplayerButton.onClick.AddListener(() =>
         {
             SceneManager.LoadScene("LobbyScene");
+        });
+
+        exitButton.onClick.AddListener(() =>
+        {
+            Application.Quit();
         });
 
         if (NetworkManager.Singleton != null)

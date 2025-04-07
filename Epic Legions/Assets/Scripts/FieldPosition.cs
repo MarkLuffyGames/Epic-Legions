@@ -43,9 +43,9 @@ public class FieldPosition : MonoBehaviour
         card.transform.parent = transform;
         card.transform.localScale = Vector3.one;
         StartCoroutine(card.MoveToPosition(Vector3.back * 0.01f, Card.cardMovementSpeed, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 180), Card.cardMovementSpeed, false);
+        card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 0), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
-        card.SetFieldPosition(this, new Vector3(90, 0, isPlayer ? 0 : 180));
+        card.SetFieldPosition(this, new Vector3(90, 0, isPlayer ? 0 : 0));
         ChangeEmission(isbusyColor, intensity);
     }
 
@@ -55,10 +55,10 @@ public class FieldPosition : MonoBehaviour
         card.transform.parent = graveyard;
         card.transform.localScale = Vector3.one;
         StartCoroutine(card.MoveToPosition(Vector3.up * 0.01f, Card.cardMovementSpeed, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 180), Card.cardMovementSpeed, false);
+        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.ToGraveyard();
-        card.SetFieldPosition(null, new Vector3(90, 0, isPlayer ? 0 : 180));
+        card.SetFieldPosition(null, new Vector3(90, 0, isPlayer ? 0 : 0));
         card = null;
         RestoreOriginalColor();
     }
