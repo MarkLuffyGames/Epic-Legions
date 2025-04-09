@@ -33,7 +33,7 @@ public class MoveSO : ScriptableObject
 
 public enum MoveType
 {
-    MeleeAttack, RangedAttack, PositiveEffect, AdverseEffect
+    MeleeAttack, RangedAttack, PositiveEffect, Ambush
 }
 
 public enum TargetsType

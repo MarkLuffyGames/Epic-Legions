@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
 public class DuelManager : NetworkBehaviour
@@ -933,20 +932,51 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                // Itera sobre las posiciones de campo del jugador 2 (enemigo)
-                for (int i = 0; i < GetPlayerManagerRival(card).GetFieldPositionList().Count; i++)
+                var rivalField = GetPlayerManagerRival(card).GetFieldPositionList();
+                if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack) //Devuelve los heroes en la fila mas adelantada.
                 {
-                    // Si hay una carta en la posición, la agregamos como objetivo
-                    if (GetPlayerManagerRival(card).GetFieldPositionList()[i].Card != null)
+                    // Itera sobre las posiciones de campo del jugador 2 (enemigo)
+                    for (int i = 0; i < rivalField.Count; i++)
                     {
-                        targets.Add(GetPlayerManagerRival(card).GetFieldPositionList()[i].Card);
-                    }
+                        // Si hay una carta en la posición, la agregamos como objetivo
+                        if (rivalField[i].Card != null)
+                        {
+                            targets.Add(rivalField[i].Card);
+                        }
 
-                    // Si ya encontramos al menos un objetivo y estamos en las últimas posiciones (en este caso, filas 4, 9 o 14),
-                    // retornamos la lista de objetivos solo si el movimiento es un ataque cuerpo a cuerpo (melee)
-                    if (targets.Count > 0 && (i == 4 || i == 9 || i == 14) && card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+                        if (targets.Count > 0 && (i == 4 || i == 9 || i == 14))
+                        {
+                            return targets;
+                        }
+                    }
+                }
+                else if(card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.Ambush) //Devuelve los heroes en la fila mas atrasada. 
+                {
+                    for (int i = rivalField.Count; i >= 0; --i)
                     {
-                        return targets; // Terminamos la búsqueda si encontramos un objetivo válido para un ataque cuerpo a cuerpo
+                        // Si hay una carta en la posición, la agregamos como objetivo
+                        if (rivalField[i].Card != null)
+                        {
+                            targets.Add(rivalField[i].Card);
+                        }
+
+                        if (targets.Count > 0 && (i == 0 || i == 5 || i == 10))
+                        {
+                            return targets;
+                        }
+                    }
+                }
+                else if(card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack) //Devuelve todos los heroes.
+                {
+                    for (int i = 0; i < rivalField.Count; i++)
+                    {
+                        // Si hay una carta en la posición, la agregamos como objetivo
+                        if (rivalField[i].Card != null)
+                        {
+                            targets.Add(rivalField[i].Card);
+                        }
+
+                        return targets;
                     }
                 }
             }
