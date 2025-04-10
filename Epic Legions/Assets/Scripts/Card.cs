@@ -693,7 +693,7 @@ public class Card : MonoBehaviour
         var protector = HasProtector();
         if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)
         {
-            protector.damageReceiver.ProtectAlly(fieldPosition);
+            protector.casterHero.ProtectAlly(fieldPosition);
         }
     }
 
@@ -708,7 +708,7 @@ public class Card : MonoBehaviour
         var protector = HasProtector();
         if (protector != null && protector.HasProtector())
         {
-            return protector.damageReceiver.ReceiveDamage(amountDamage, ignoredDefense);
+            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense);
         }
 
         amountDamage -= GetDamageAbsorbed();
@@ -845,7 +845,11 @@ public class Card : MonoBehaviour
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)
     {
-        statModifier.Add(effect);
+        if(effect.MoveEffect is not Poison || statModifier.All(x => x.MoveEffect is not Antivenom))
+        {
+            statModifier.Add(effect);
+        }
+        
         UpdateText();
     }
 

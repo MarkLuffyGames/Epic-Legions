@@ -14,7 +14,7 @@ public class Effect
     private int defense;
     private int currentDefense;
     private int absorbDamage;
-    public Card damageReceiver;
+    public Card casterHero;
     private bool hasProtector;
     private int speed;
     private int attack;
@@ -41,7 +41,7 @@ public class Effect
         }
         else if(cardEffect is TransferDamage transferDamage)
         {
-            damageReceiver = transferDamage.Caster;
+            casterHero = transferDamage.Caster;
             durability = transferDamage.NumberTurns;
             hasProtector = true;
         }
@@ -67,6 +67,11 @@ public class Effect
         else if(cardEffect is Poison poison)
         {
             durability = poison.NumberTurns;
+        }
+        else if(cardEffect is Antivenom antivenom)
+        {
+            casterHero = antivenom.Caster;
+            durability = 1;
         }
     }
 

@@ -975,8 +975,6 @@ public class DuelManager : NetworkBehaviour
                         {
                             targets.Add(rivalField[i].Card);
                         }
-
-                        return targets;
                     }
                 }
             }
