@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Toxinas Letales
   m_EditorClassIdentifier: 
   moveName: Toxinas Letales
-  damage: 10
+  damage: 20
   energyCost: 10
   moveEffect: {fileID: 11400000, guid: 9901dece633bc8e48b1f5e50ec32f8a0, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
