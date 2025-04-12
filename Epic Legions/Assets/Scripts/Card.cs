@@ -701,7 +701,7 @@ public class Card : MonoBehaviour
     /// Recibe el daño de un ataque o efecto.
     /// </summary>
     /// <param name="amountDamage"></param>
-    /// <returns>Si el heroe se queda sin energia debuelve true</returns>
+    /// <returns>Cantidad de vida perdida por el heroe</returns>
     public int ReceiveDamage(int amountDamage, int ignoredDefense)
     {
         var damageInflicted = 0;
@@ -1023,5 +1023,16 @@ public class Card : MonoBehaviour
     }
 
     public DuelManager GetDuelManager() { return duelManager; }
+
+    public IEnumerator Counter(Card card)
+    {
+        foreach (var item in statModifier)
+        {
+            if(item.MoveEffect is Counterattack counterattack)
+            {
+                yield return duelManager.Counterattack(item.casterHero, card, item.GetCounterattackDamage());
+            }
+        }
+    }
 }
 

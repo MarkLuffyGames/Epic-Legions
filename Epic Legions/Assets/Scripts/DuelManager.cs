@@ -1385,6 +1385,11 @@ public class DuelManager : NetworkBehaviour
                         attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
                 }
             }
+
+            if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+            {
+                yield return cardToAttack.Counter(attackerCard);
+            }
         }
         else // Si el ataque no causa daño, es un ataque de efecto.
         {
@@ -1450,6 +1455,33 @@ public class DuelManager : NetworkBehaviour
                 spellCard.FieldPosition.DestroyCard(player2Manager.GetGraveyard(), false);
             }
         }
+    }
+
+    public IEnumerator Counterattack(Card attackerCard, Card cardToAttack, int damage)
+    {
+        int movementToUseIndex = -1;
+        for (int i = 0; i < attackerCard.Moves.Count; i++)
+        {
+            if(attackerCard.Moves [i].MoveSO.MoveEffect is Counterattack counterattack)
+            {
+                movementToUse = i;
+                break;
+            }
+
+        }
+
+        yield return attackerCard.MeleeAttackAnimation(player1Manager.GetAllCardInField().Contains(attackerCard) ? 1 : 2, cardToAttack, attackerCard.Moves[movementToUseIndex]);
+
+        // Espera un breve tiempo antes de continuar.
+        yield return new WaitForSeconds(0.3f);
+
+        cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+
+        // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
+        attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(damage,
+            attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
+
+        attackerCard.MoveToLastPosition();
     }
 
 

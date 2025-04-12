@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
   m_Name: Picadura de la Reina
   m_EditorClassIdentifier: 
-  moveName: 
-  damage: 0
-  energyCost: 0
-  moveEffect: {fileID: 0}
-  effectCondition: {fileID: 0}
+  moveName: Picadura de la Reina
+  damage: 30
+  energyCost: 15
+  moveEffect: {fileID: 11400000, guid: 0b7b2c5e450f1ce4b8b76df18c779c08, type: 2}
+  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
-  needTarget: 0
-  moveType: 0
+  needTarget: 1
+  moveType: 3
   targetsType: 0
-  visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
-  effectDescription: 
+  visualEffect: {fileID: 3153472991145048103, guid: 3407e378c048bb5438424b28c7740b48, type: 3}
+  visualEffectHit: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
+  effectDescription: "Drena vida del objetivo igual al da\xF1o directo infligido "

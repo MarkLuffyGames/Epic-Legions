@@ -1,15 +1,30 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Counterattack : MonoBehaviour
+public class Counterattack : CardEffect
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Card caster;
+    private int amount;
+
+    public Card Caster => caster;
+    public int Amount => amount;
+    public override void ActivateEffect(Card caster, Card target)
     {
-        
+        this.caster = caster;
+        target.AddEffect(new Effect(this, target));
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void ActivateEffect(Card caster, List<Card> target)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void DeactivateEffect(Effect effect)
+    {
+        effect.durability = 0;
+    }
+
+    public override void UpdateEffect(Effect effect)
     {
         
     }

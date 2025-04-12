@@ -19,6 +19,7 @@ public class Effect
     private int speed;
     private int attack;
     private int ignoredDefense;
+    private int damageCounterattack;
 
     public int durability;
     public int elapsedTurns;
@@ -71,6 +72,12 @@ public class Effect
         else if(cardEffect is Antivenom antivenom)
         {
             casterHero = antivenom.Caster;
+            durability = 1;
+        }
+        else if( cardEffect is Counterattack counterattack)
+        {
+            casterHero = counterattack.Caster;
+            damageCounterattack = counterattack.Amount;
             durability = 1;
         }
     }
@@ -130,5 +137,10 @@ public class Effect
     public void ApplyPoisonDamage(int damage)
     {
         affectedHero.ApplyPoisonDamage(damage);
+    }
+
+    public int GetCounterattackDamage()
+    {
+        return damageCounterattack;
     }
 }
