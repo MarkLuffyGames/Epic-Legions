@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Counterattack", menuName = "Hemera Legions/Card Effects/ Counterattack")]
 public class Counterattack : CardEffect
 {
     private Card caster;
-    private int amount;
+    [SerializeField] private int amount;
 
     public Card Caster => caster;
     public int Amount => amount;

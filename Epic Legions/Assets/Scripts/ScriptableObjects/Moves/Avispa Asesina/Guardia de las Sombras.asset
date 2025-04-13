@@ -15,7 +15,7 @@ MonoBehaviour:
   moveName: Guardia de las Sombras
   damage: 0
   energyCost: 5
-  moveEffect: {fileID: 0}
+  moveEffect: {fileID: 11400000, guid: 4270e4c410c0f9940a54896c2c2d0f7c, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 1
