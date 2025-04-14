@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Poison", menuName = "Hemera Legions/Card Effects/ Poison")]
 public class Poison : CardEffect
 {
-    [SerializeField] private int amount;
+    [SerializeField] private int amount = 10;
     [SerializeField] private float numberTurns = Mathf.Infinity;
     public int Amount => amount;
     public int NumberTurns => (int)numberTurns;

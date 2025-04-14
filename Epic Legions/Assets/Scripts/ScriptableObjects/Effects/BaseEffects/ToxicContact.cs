@@ -1,22 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Modify Attack", menuName = "Hemera Legions/Card Effects/ Modify Attack")]
-public class ModifyAttack : CardEffect
+[CreateAssetMenu(fileName = "Toxic Contact", menuName = "Hemera Legions/Card Effects/ Toxic Contact")]
+public class ToxicContact : CardEffect
 {
-    [SerializeField] private int amount;
     [SerializeField] private int numberTurns;
-    [SerializeField] private bool isIncrease;
-
-    public int Amount => amount;
     public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
-    public bool IsIncrease => isIncrease;
     public override void ActivateEffect(Card caster, Card target)
     {
+        target.AddEffect(new Effect(this, target));
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
+        foreach (Card card in target)
+        {
+            card.AddEffect(new Effect(this, card));
+        }
     }
 
     public override void DeactivateEffect(Effect effect)

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Card : MonoBehaviour
 {
@@ -1031,6 +1032,13 @@ public class Card : MonoBehaviour
             if(item.MoveEffect is Counterattack counterattack)
             {
                 yield return duelManager.Counterattack(item.casterHero, card, item.GetCounterattackDamage());
+                statModifier.Remove(item);
+                break;
+            }
+            else if(item.MoveEffect is ToxicContact poisonedcounterattack)
+            {
+                card.AddEffect(new Effect(new Poison(), card));
+
             }
         }
     }

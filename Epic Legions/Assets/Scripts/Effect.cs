@@ -80,6 +80,10 @@ public class Effect
             damageCounterattack = counterattack.Amount;
             durability = 1;
         }
+        else if(cardEffect is ToxicContact poisonedcounterattack)
+        {
+            durability = poisonedcounterattack.NumberTurns;
+        }
     }
 
     public void ActivateEffect()
