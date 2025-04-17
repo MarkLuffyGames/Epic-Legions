@@ -20,6 +20,8 @@ public class Effect
     private int attack;
     private int ignoredDefense;
     private int damageCounterattack;
+    private bool isNegative;
+    private bool isRemovable = true;
 
     public int durability;
     public int elapsedTurns;
@@ -39,22 +41,26 @@ public class Effect
             defense = modifyDefense.IsIncrease ? modifyDefense.Amount : -modifyDefense.Amount;
             currentDefense = defense;
             durability = modifyDefense.NumberTurns;
+            isNegative = !modifyDefense.IsIncrease;
         }
         else if(cardEffect is TransferDamage transferDamage)
         {
             casterHero = transferDamage.Caster;
             durability = transferDamage.NumberTurns;
             hasProtector = true;
+            isRemovable = false;
         }
         else if(cardEffect is ModifySpeed modifySpeed)
         {
             speed = modifySpeed.IsIncrease ? modifySpeed.Amount : -modifySpeed.Amount;
             durability = modifySpeed.NumberTurns;
+            isNegative = !modifySpeed.IsIncrease;
         }
         else if(cardEffect is ModifyAttack modifyAttack)
         {
             attack = modifyAttack.IsIncrease ? modifyAttack.Amount : -modifyAttack.Amount;
             durability = modifyAttack.NumberTurns;
+            isNegative = !modifyAttack.IsIncrease;
         }
         else if(cardEffect is IgnoredDefense ignoredDefense)
         {
@@ -64,10 +70,12 @@ public class Effect
         {
             isStunned = true;
             durability = 21;
+            isNegative = true;
         }
         else if(cardEffect is Poison poison)
         {
             durability = poison.NumberTurns;
+            isNegative = true;
         }
         else if(cardEffect is Antivenom antivenom)
         {
@@ -79,6 +87,7 @@ public class Effect
             casterHero = counterattack.Caster;
             damageCounterattack = counterattack.Amount;
             durability = 1;
+            isRemovable = false;
         }
         else if(cardEffect is ToxicContact poisonedcounterattack)
         {
@@ -146,5 +155,15 @@ public class Effect
     public int GetCounterattackDamage()
     {
         return damageCounterattack;
+    }
+
+    public bool IsNegative()
+    {
+        return isNegative;
+    }
+
+    public bool IsRemovable()
+    {
+        return isRemovable;
     }
 }

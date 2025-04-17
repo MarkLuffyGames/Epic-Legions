@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -1045,7 +1046,12 @@ public class Card : MonoBehaviour
 
     public void ClearAllEffects()
     {
-        statModifier.Clear();
+        statModifier.RemoveAll(e => e.IsRemovable());
+    }
+
+    public void CleanAllNegativeEffects()
+    {
+        statModifier.RemoveAll(e => e.IsNegative());
     }
 }
 
