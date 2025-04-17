@@ -1042,5 +1042,10 @@ public class Card : MonoBehaviour
             }
         }
     }
+
+    public void ClearAllEffects()
+    {
+        statModifier.Clear();
+    }
 }
 
