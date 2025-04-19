@@ -23,4 +23,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  effectDescription: Un elixir de ingredientes raros que otorga vitalidad a los aliados.
+  effectDescription: Un elixir de ingredientes raros que otorga vitalidad a un aliado.

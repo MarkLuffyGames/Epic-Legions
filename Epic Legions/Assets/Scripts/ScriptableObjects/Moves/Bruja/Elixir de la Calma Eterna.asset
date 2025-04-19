@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Brebaje Purificador
+  m_Name: Elixir de la Calma Eterna
   m_EditorClassIdentifier: 
-  moveName: Brebaje Purificador
+  moveName: Elixir de la Calma Eterna
   damage: 0
-  energyCost: 10
-  moveEffect: {fileID: 11400000, guid: 65e6087b5ac155243a92b60f8f32d4a9, type: 2}
+  energyCost: 20
+  moveEffect: {fileID: 11400000, guid: efbbdc338fa803446bd0db920cb8e5af, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 0
@@ -23,4 +23,5 @@ MonoBehaviour:
   targetsType: 2
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  effectDescription: Elimina todos los efectos negativos de los aliados.
+  effectDescription: "Elimina todos los efectos negativos de los aliados y cura 20
+    puntos de da\xF1o."
