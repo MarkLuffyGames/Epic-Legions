@@ -14,6 +14,7 @@ public class ModifyDefense : CardEffect
 
     public override void ActivateEffect(Card caster, Card target)
     {
+        Instantiate(visualEffectCardEffect, target.FieldPosition.transform.position, Quaternion.identity);
         target.AddEffect(new Effect(this, target));
     }
 
@@ -21,6 +22,7 @@ public class ModifyDefense : CardEffect
     {
         foreach (Card card in target)
         {
+            Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position, Quaternion.identity);
             card.AddEffect(new Effect(this, card));
         }
     }

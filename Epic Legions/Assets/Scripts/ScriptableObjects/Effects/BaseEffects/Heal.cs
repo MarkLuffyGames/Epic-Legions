@@ -7,6 +7,7 @@ public class Heal : CardEffect
     [SerializeField] private int amount;
     public override void ActivateEffect(Card caster, Card target)
     {
+        Instantiate(visualEffectCardEffect, target.FieldPosition.transform.position, Quaternion.identity);
         target.ToHeal(amount);
     }
 
@@ -14,6 +15,7 @@ public class Heal : CardEffect
     {
         foreach(Card card in target)
         {
+            Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position, Quaternion.identity);
             card.ToHeal(amount);
         }
     }

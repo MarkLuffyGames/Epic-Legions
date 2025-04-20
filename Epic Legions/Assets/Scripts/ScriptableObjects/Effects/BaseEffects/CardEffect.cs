@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class CardEffect : ScriptableObject
 {
+
+    public GameObject visualEffectCardEffect;
     public abstract void ActivateEffect(Card caster, Card target);
     public abstract void ActivateEffect(Card caster, List<Card> target);
     public abstract void UpdateEffect(Effect effect);
