@@ -222,8 +222,7 @@ public class Card : MonoBehaviour
         if (moveCoroutine != null)
             StopCoroutine(moveCoroutine);
 
-        moveCoroutine = StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
-        yield return null;
+        yield return moveCoroutine = StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
     }
 
     /// <summary>
@@ -641,12 +640,12 @@ public class Card : MonoBehaviour
             if (player == 1)
             {
                 yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.identity);
             }
             else
             {
                 yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.identity);
             }
         }
         else
