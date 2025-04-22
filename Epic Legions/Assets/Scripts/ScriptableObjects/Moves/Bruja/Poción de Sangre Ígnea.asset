@@ -22,6 +22,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 7155335147208632822, guid: 97c43495f80a3244fad1301dfafbe252, type: 3}
+  visualEffectHit: {fileID: 418540983303527424, guid: 022d970fdd7676c4186ba3e6ec6d31ba, type: 3}
   effectDescription: "El aliado recibe un aumento de 20 de da\xF1o en sus ataques
     durante 2 turnos."

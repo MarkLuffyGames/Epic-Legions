@@ -22,5 +22,5 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
+  visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   effectDescription: Un elixir de ingredientes raros que otorga vitalidad a un aliado.

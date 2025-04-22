@@ -17,10 +17,10 @@ MonoBehaviour:
   energyCost: 20
   moveEffect: {fileID: 11400000, guid: cd6f61260300ae44189ee71d4a629011, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 0
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
+  visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   effectDescription: Una brisa sanadora restaura 20 de vida a todos los aliados.

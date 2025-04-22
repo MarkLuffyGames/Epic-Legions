@@ -21,7 +21,7 @@ MonoBehaviour:
   needTarget: 1
   moveType: 1
   targetsType: 1
-  visualEffect: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   effectDescription: Cubre a los aliados con toxinas inofensivas para ellos durante
     3 turnos que envenenan a quien los toque.

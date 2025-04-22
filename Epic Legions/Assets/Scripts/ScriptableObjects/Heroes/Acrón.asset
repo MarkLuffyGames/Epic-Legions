@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: Paladin
+  m_Name: "Acr\xF3n"
   m_EditorClassIdentifier: 
   cardId: 5
   cardName: "Acr\xF3n"

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088db273ef596f1479b1e86f8635e955, type: 3}
   m_Name: Reduce Defense -10, 1
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 4634121758534943757, guid: 3afef3aecbaff8d458af34daf839718b, type: 3}
   amount: 10
   numberTurns: 1
   isIncrease: 0

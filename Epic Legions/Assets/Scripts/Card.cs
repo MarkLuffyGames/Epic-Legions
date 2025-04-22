@@ -690,7 +690,10 @@ public class Card : MonoBehaviour
     public void AnimationReceivingMovement(Movement movement)
     {
         //Efecto de daño.
-        Instantiate(movement.MoveSO.VisualEffectHit, isFocused ? lastPosition : transform.position, Quaternion.identity);
+        if (movement.MoveSO.VisualEffectHit != null)
+        {
+            Instantiate(movement.MoveSO.VisualEffectHit, isFocused ? lastPosition : transform.position, Quaternion.identity);
+        }
 
         var protector = HasProtector();
         if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)

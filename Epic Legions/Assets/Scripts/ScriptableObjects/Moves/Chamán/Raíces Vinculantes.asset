@@ -22,6 +22,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 1
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffectHit: {fileID: 2717293893997149916, guid: 8f2d8143043461140b7c3d833cd06fa5, type: 3}
   effectDescription: Inmoviliza a los enemigos afectados, reduciendo su velocidad
     en 20 puntos durante 1 turno.

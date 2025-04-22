@@ -11,6 +11,7 @@ public class AbsorbDamage : CardEffect
     public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
+        Instantiate(visualEffectCardEffect, target.FieldPosition.transform.position + Vector3.up * 0.1f, Quaternion.identity);
         target.AddEffect(new Effect(this, target));
     }
 
@@ -18,6 +19,7 @@ public class AbsorbDamage : CardEffect
     {
         foreach (Card card in target)
         {
+            Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position, Quaternion.identity);
             card.AddEffect(new Effect(this, card));
         }
     }

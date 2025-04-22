@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387a3cca4762c2a4baa8a6481b0fc27b, type: 3}
   m_Name: Max Heal
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   amount: 100

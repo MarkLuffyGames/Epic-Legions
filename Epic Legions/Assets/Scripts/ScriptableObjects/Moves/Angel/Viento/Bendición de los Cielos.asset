@@ -17,11 +17,11 @@ MonoBehaviour:
   energyCost: 10
   moveEffect: {fileID: 11400000, guid: f8c8cc14b89489f4888966d3efec0bd2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 0
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 7155335147208632822, guid: 97c43495f80a3244fad1301dfafbe252, type: 3}
+  visualEffectHit: {fileID: 5920328240178098596, guid: b605c85b2383a0f42b09cace55b3f31a, type: 3}
   effectDescription: ' Un viento sagrado aumenta la velocidad de todos los aliados
     en 10 por dos turnos'

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebee11cf742f705458e3cc8505365428, type: 3}
   m_Name: Increase Speed +10, 2
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 5920328240178098596, guid: b605c85b2383a0f42b09cace55b3f31a, type: 3}
   amount: 10
   numberTurns: 2
   isIncrease: 1
