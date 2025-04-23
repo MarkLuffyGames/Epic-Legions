@@ -1138,6 +1138,7 @@ GameObject:
   - component: {fileID: 9032284547816904992}
   - component: {fileID: 7821186208896386969}
   - component: {fileID: 1328336599689875757}
+  - component: {fileID: 6742561984885964978}
   m_Layer: 0
   m_Name: Duel Manager
   m_TagString: Untagged
@@ -1209,6 +1210,18 @@ MonoBehaviour:
   duelPhase:
     m_InternalValue: 7
   duelPhaseText: {fileID: 2313290734361602176}
+--- !u!114 &6742561984885964978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293205258825124019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e2ad8bdc862b546ad6763fd957cb25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1443512085524854528
 GameObject:
   m_ObjectHideFlags: 0

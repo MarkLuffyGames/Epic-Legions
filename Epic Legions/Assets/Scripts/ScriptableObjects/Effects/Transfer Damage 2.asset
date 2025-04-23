@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c416fd2f995c146a3b72f40c361c07, type: 3}
   m_Name: Transfer Damage 2
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 5288482505334151866, guid: cae751c087587d64b87b09ad09645d2f, type: 3}
   numberTurns: 2
+  speed: 3
+  archHeight: 2
+  particlePrefab: {fileID: 8283537605138782889, guid: 3e376ce9f09ebb844a1d19189bc49f72, type: 3}
+  sparkPrefab: {fileID: 2738254166612787652, guid: 89b882232c73f8d4186ead62fdbba016, type: 3}
