@@ -97,7 +97,7 @@ public class PlayerManager : MonoBehaviour
         {
             duelManager.SetPlayerReadyAndTransitionPhase();
         }
-        else if (isReady && rivalPlayerManager.isReady && NetworkManager.Singleton.IsClient)
+        else if (isReady && NetworkManager.Singleton.IsClient)
         {
             duelManager.SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
         }
