@@ -10,7 +10,7 @@ public class TransferDamage : CardEffect
     [SerializeField] private int numberTurns;
     private Card caster;
 
-    [SerializeField] private float speed = 5f;
+    [SerializeField] private float duration = 3f;
     [SerializeField] private float archHeight = 1.5f;
     [SerializeField] private GameObject particlePrefab;
     [SerializeField] private GameObject sparkPrefab;
@@ -48,11 +48,10 @@ public class TransferDamage : CardEffect
     IEnumerator MoveInArc(GameObject p, Card caster, Card target)
     {
         float tiempo = 0f;
-        float duracion = Vector3.Distance(caster.transform.position, target.transform.position) / speed;
 
-        while (tiempo < duracion)
+        while (tiempo < duration)
         {
-            float t = tiempo / duracion;
+            float t = tiempo / duration;
 
             // Lerp base
             Vector3 punto = Vector3.Lerp(caster.transform.position, target.transform.position, t);

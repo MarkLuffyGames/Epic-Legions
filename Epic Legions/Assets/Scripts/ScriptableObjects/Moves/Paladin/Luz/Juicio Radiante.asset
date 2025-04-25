@@ -21,6 +21,6 @@ MonoBehaviour:
   needTarget: 1
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 3153472991145048103, guid: 3407e378c048bb5438424b28c7740b48, type: 3}
-  visualEffectHit: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
+  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
+  visualEffectHit: {fileID: 3915307300718007911, guid: 432121862024c074fbdf4af11819a2d5, type: 3}
   effectDescription: Ataque cuerpo a cuerpo que ignora la defensa del objetivo.

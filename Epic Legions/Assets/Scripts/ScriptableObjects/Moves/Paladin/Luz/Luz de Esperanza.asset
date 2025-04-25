@@ -15,12 +15,12 @@ MonoBehaviour:
   moveName: Luz de Esperanza
   damage: 0
   energyCost: 25
-  moveEffect: {fileID: 11400000, guid: cd6f61260300ae44189ee71d4a629011, type: 2}
+  moveEffect: {fileID: 11400000, guid: 66c9138ab2e2dce41926054b733524b2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 0
   moveType: 2
   targetsType: 2
-  visualEffect: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 0}
   effectDescription: Cura ligeramente a todos los aliados en el campo.
