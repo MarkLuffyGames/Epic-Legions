@@ -44,6 +44,7 @@ public class Card : MonoBehaviour
     [SerializeField] private float highlighterHeight = 0.1f;
     [SerializeField] private int angleHeldCard = 70;
     [SerializeField] private float heldCardHeight = 2.75f;
+    [SerializeField] private List<GameObject> statsIcons = new List<GameObject>();
 
     public CardSO cardSO;
 
@@ -811,7 +812,25 @@ public class Card : MonoBehaviour
             }
         }
 
+        List<Effect> effects = new List<Effect>();
+        foreach (var effect in statModifier)
+        {
+            if(effect.durability <= 0)
+            {
+                effects.Add(effect);
+            }
+        }
+
         statModifier.RemoveAll(stat => stat.durability <= 0);
+
+        foreach (var effect in effects)
+        {
+            if(statModifier.All(x => x.MoveEffect != effect.MoveEffect))
+            {
+                HideIcon(effect);
+            }
+        }
+
     }
 
     /// <summary>
@@ -849,12 +868,38 @@ public class Card : MonoBehaviour
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)
     {
-        if(effect.MoveEffect is not Poison || statModifier.All(x => x.MoveEffect is not Antivenom))
+        if(effect.MoveEffect is not Poison ||  statModifier.All(x => x.MoveEffect is not Antivenom))
         {
+            ShowIcon(effect.MoveEffect.iconSprite);
             statModifier.Add(effect);
         }
         
         UpdateText();
+    }
+
+    private void ShowIcon(Sprite sprite)
+    {
+        foreach (GameObject icon in statsIcons)
+        {
+            if(!icon.activeInHierarchy)
+            {
+                icon.SetActive(true);
+                icon.GetComponentInChildren<Image>().sprite = sprite;
+            }
+        }
+    }
+
+    private void HideIcon(Sprite sprite)
+    {
+        foreach (GameObject icon in statsIcons)
+        {
+            var s = icon.GetComponentInChildren<Image>().sprite;
+
+            if (icon.activeInHierarchy && s == sprite)
+            {
+                icon.SetActive(false);
+            }
+        }
     }
 
     public void ActivateVisualEffects()
