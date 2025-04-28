@@ -17,10 +17,11 @@ MonoBehaviour:
   energyCost: 20
   moveEffect: {fileID: 11400000, guid: a0c818b7459fb6d48a80fa52ab970b9e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  alwaysActive: 0
   needTarget: 0
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "Su cuerpo se endurece como la roca, reduciendo el da\xF1o en
     20 durante los proximos 3 turnos."

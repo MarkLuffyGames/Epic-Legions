@@ -17,11 +17,11 @@ MonoBehaviour:
   energyCost: 10
   moveEffect: {fileID: 11400000, guid: 9c693084f03f1f6489d46535256bb131, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 1
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
+  visualEffect: {fileID: 676203148132386820, guid: be87b79a8b3898647853b8caf52d5f78, type: 3}
+  visualEffectHit: {fileID: 4359607285572960429, guid: 36e647ab46f4a634ba6e44440ea8597f, type: 3}
   effectDescription: "Levanta una barrera de piedra para reforzar la defensa de un
     aliado, haci\xE9ndolo m\xE1s resistente temporalmente."

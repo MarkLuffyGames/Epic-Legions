@@ -640,13 +640,14 @@ public class Card : MonoBehaviour
         {
             if (player == 1)
             {
-                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -2), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.identity);
+                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed, true, false);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
             }
             else
             {
-                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 2), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.identity);
+                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed, true, false);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180,0)));
+                Debug.Log("Instance Effect");
             }
         }
         else
@@ -654,12 +655,12 @@ public class Card : MonoBehaviour
             if (player == 1)
             {
                 yield return MoveToPosition(new Vector3(0, 0.5f, 5), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.identity);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.Euler(Vector3.zero));
             }
             else
             {
                 yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.identity);
+                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
             }
         }
     }

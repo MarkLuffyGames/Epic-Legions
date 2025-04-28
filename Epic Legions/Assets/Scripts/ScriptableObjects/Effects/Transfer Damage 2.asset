@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Transfer Damage 2
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 5288482505334151866, guid: cae751c087587d64b87b09ad09645d2f, type: 3}
-  iconSprite: {fileID: -210410883, guid: 52bb7d5a54fcb734c8ac97b3fc16be7a, type: 3}
+  iconSprite: {fileID: 21300000, guid: 6424f721a9312f44d8b96b597ce33358, type: 3}
   numberTurns: 2
   duration: 3
   archHeight: 2
