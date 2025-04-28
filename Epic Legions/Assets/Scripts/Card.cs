@@ -827,7 +827,7 @@ public class Card : MonoBehaviour
         {
             if(statModifier.All(x => x.MoveEffect != effect.MoveEffect))
             {
-                HideIcon(effect);
+                HideIcon(effect.MoveEffect.iconSprite);
             }
         }
 
@@ -885,6 +885,14 @@ public class Card : MonoBehaviour
             {
                 icon.SetActive(true);
                 icon.GetComponentInChildren<Image>().sprite = sprite;
+                break;
+            }
+            else
+            {
+                if(icon.GetComponentInChildren<Image>().sprite == sprite)
+                {
+                    break;
+                }
             }
         }
     }
