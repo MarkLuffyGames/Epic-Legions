@@ -24,5 +24,5 @@ MonoBehaviour:
   energy: 50
   moves:
   - {fileID: 11400000, guid: fd408a1f9ef334a44bb5b7f184e4a416, type: 2}
-  - {fileID: 11400000, guid: c32ba2563e3917441b7648590a75126e, type: 2}
+  - {fileID: 11400000, guid: 6fa073e4aee9d6b46b90af485b8d3dd7, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

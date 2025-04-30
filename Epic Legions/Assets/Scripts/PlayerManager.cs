@@ -31,7 +31,6 @@ public class PlayerManager : MonoBehaviour
     public FieldPosition SpellFieldPosition => spellFieldPosition;
     public int PlayerEnergy => playerEnergy;
 
-    public bool isSinglePlayer;
     public bool isPlayer;
 
 
@@ -64,7 +63,7 @@ public class PlayerManager : MonoBehaviour
             card[i].SetCard(deck[i], duelManager);
         }
 
-        if (isPlayer || isSinglePlayer)
+        if (isPlayer || duelManager.IsSinglePlayer)
         {
             isReady = true;
             IsReady();
@@ -91,7 +90,7 @@ public class PlayerManager : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        if (isPlayer || isSinglePlayer)
+        if (isPlayer || duelManager.IsSinglePlayer)
         {
             isReady = true;
             IsReady();
@@ -153,7 +152,7 @@ public class PlayerManager : MonoBehaviour
 
         if(duelManager.GetCurrentDuelPhase() == DuelPhase.DrawingCards)
         {
-            if (isPlayer || isSinglePlayer)
+            if (isPlayer || duelManager.IsSinglePlayer)
             {
                 isReady = true;
                 IsReady();

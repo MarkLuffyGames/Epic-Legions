@@ -324,7 +324,7 @@ public class DuelManager : NetworkBehaviour
             if (card != null)
             {
                 // Asigna las cartas al mazo del jugador correspondiente
-                playerManager.AddCardToPlayerDeck(card, playerDecks[0].Count);
+                playerManager.AddCardToPlayerDeck(card, deckCardIds.Count);
             }
             else
             {
@@ -431,7 +431,6 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyAndTransitionPhaseServerRpc(ulong clientId)
     {
-        Debug.Log($"solicitud: {clientId} estado: {playerReady[playerId[1]]} {playerReady[playerId[2]]} Fase: {duelPhase.Value}");
         // Si la fase actual es Preparación, se notifica al cliente que está listo
         if (duelPhase.Value == DuelPhase.Preparation) NotifyPlayerReadyClientRpc(clientId);
 
