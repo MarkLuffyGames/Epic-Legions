@@ -431,6 +431,7 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyAndTransitionPhaseServerRpc(ulong clientId)
     {
+        Debug.Log($"solicitud: {clientId} estado: {playerReady[playerId[1]]} {playerReady[playerId[2]]} Fase: {duelPhase.Value}");
         // Si la fase actual es Preparación, se notifica al cliente que está listo
         if (duelPhase.Value == DuelPhase.Preparation) NotifyPlayerReadyClientRpc(clientId);
 
@@ -452,6 +453,7 @@ public class DuelManager : NetworkBehaviour
 
     public void SetPlayerReadyAndTransitionPhase()
     {
+        
         if(player1Manager.isReady && player2Manager.isReady)
         {
             ChangePhase();

@@ -64,8 +64,12 @@ public class PlayerManager : MonoBehaviour
             card[i].SetCard(deck[i], duelManager);
         }
 
-        isReady = true;
-        IsReady();
+        if (isPlayer || isSinglePlayer)
+        {
+            isReady = true;
+            IsReady();
+        }
+        
     }
 
     /// <summary>
@@ -87,8 +91,11 @@ public class PlayerManager : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        isReady = true;
-        IsReady();
+        if (isPlayer || isSinglePlayer)
+        {
+            isReady = true;
+            IsReady();
+        }
     }
 
     private void IsReady()
@@ -146,8 +153,11 @@ public class PlayerManager : MonoBehaviour
 
         if(duelManager.GetCurrentDuelPhase() == DuelPhase.DrawingCards)
         {
-            isReady = true;
-            IsReady();
+            if (isPlayer || isSinglePlayer)
+            {
+                isReady = true;
+                IsReady();
+            }
         }
         
         return wasStolen;
