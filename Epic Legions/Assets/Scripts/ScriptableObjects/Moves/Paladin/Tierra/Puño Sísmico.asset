@@ -20,7 +20,7 @@ MonoBehaviour:
   alwaysActive: 0
   needTarget: 1
   moveType: 0
-  targetsType: 0
+  targetsType: 4
   visualEffect: {fileID: 5045684933493461497, guid: 1e417b22e4d206b4f9a4ca699c3fdd08, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "Golpea con su pu\xF1o pesado, causando una onda s\xEDsmica"

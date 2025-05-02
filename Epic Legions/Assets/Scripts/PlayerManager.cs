@@ -228,6 +228,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public List<Card> GetColumnForCard(Card card, int amountTargets)
+    {
+        return GetColumnForIndex(card.FieldPosition.PositionIndex, amountTargets);
+    }
+
     private List<Card> GetLineForIndex(int startLine, int endLine)
     {
         List<Card> cards = new List<Card>();
@@ -238,6 +243,21 @@ public class PlayerManager : MonoBehaviour
             {
                 cards.Add(fieldPositionList[i].Card);
             }
+        }
+
+        return cards;
+    }
+    private List<Card> GetColumnForIndex(int targetIndex, int amountTargets)
+    {
+        List<Card> cards = new List<Card>();
+        int cardIndex = 0;
+        for (int i = 0; i < amountTargets && targetIndex + cardIndex < 15; i++)
+        {
+            if (fieldPositionList[targetIndex + cardIndex].Card != null)
+            {
+                cards.Add(fieldPositionList[targetIndex + cardIndex].Card);
+            }
+            cardIndex += 5;
         }
 
         return cards;

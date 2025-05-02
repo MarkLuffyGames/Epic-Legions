@@ -1508,6 +1508,18 @@ public class DuelManager : NetworkBehaviour
                 return player2Manager.GetLineForCard(cardToAttack);
             }
         }
+        else if(attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetColumn)
+        {
+            // Devuelve la línea de cartas asociada a la carta objetivo.
+            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            {
+                return player1Manager.GetColumnForCard(cardToAttack, 3);
+            }
+            else
+            {
+                return player2Manager.GetColumnForCard(cardToAttack, 3);
+            }
+        }
         // Si el tipo de objetivo es el campo medio (Midfield).
         else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Midfield)
         {

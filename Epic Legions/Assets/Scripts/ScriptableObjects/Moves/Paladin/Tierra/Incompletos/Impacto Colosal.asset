@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Impacto Colosal
   damage: 50
-  energyCost: 40
+  energyCost: 25
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 0}
+  alwaysActive: 0
   needTarget: 1
   moveType: 0
   targetsType: 0
