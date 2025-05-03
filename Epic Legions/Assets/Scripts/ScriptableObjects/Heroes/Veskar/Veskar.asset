@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: Avispa Asesina
+  m_Name: Veskar
   m_EditorClassIdentifier: 
   cardId: 0
-  cardName: Avispa Asesina
-  cardLastName: 
+  cardName: Veskar
+  cardLastName: "Aguij\xF3n del Crep\xFAsculo"
   cardSprite: {fileID: 21300000, guid: 4636eb7ebbbaa3c4489c95f08c46ddb2, type: 3}
   cardElemnt: 8
   heroClass: 0

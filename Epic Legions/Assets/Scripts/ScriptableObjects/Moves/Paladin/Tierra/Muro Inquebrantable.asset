@@ -20,8 +20,8 @@ MonoBehaviour:
   alwaysActive: 0
   needTarget: 1
   moveType: 2
-  targetsType: 0
+  targetsType: 1
   visualEffect: {fileID: 676203148132386820, guid: be87b79a8b3898647853b8caf52d5f78, type: 3}
   visualEffectHit: {fileID: 4359607285572960429, guid: 36e647ab46f4a634ba6e44440ea8597f, type: 3}
-  effectDescription: "Levanta una barrera de piedra para reforzar la defensa de un
-    aliado, haci\xE9ndolo m\xE1s resistente temporalmente."
+  effectDescription: Levanta una barrera de piedra para reforzar la defensa de los
+    aliados en su misma linea
