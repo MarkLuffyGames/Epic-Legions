@@ -17,7 +17,7 @@ MonoBehaviour:
   energyCost: 15
   moveEffect: {fileID: 11400000, guid: 0d643badef5e56d4d9952d21f5ca772e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
+  alwaysActive: 1
   needTarget: 1
   moveType: 0
   targetsType: 0

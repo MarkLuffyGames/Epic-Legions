@@ -617,14 +617,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Realiza la animacion de ataque cuerpo acuerpo.
-    /// </summary>
-    /// <param name="player">Numero del jugador que utiliza el atque.</param>
-    /// <param name="cardToAttak">Carta a la que se dirige el atque.</param>
-    /// <param name="movement">Movimiento utilizado.</param>
-    /// <returns></returns>
-    public IEnumerator MeleeAttackAnimation(int player, Card cardToAttak, Movement movement)
+    public IEnumerator AttackAnimation(int player, Card cardToAttack, Movement movement)
     {
         yield return new WaitWhile(() => isMoving);
 
@@ -636,52 +629,56 @@ public class Card : MonoBehaviour
 
         yield return new WaitWhile(() => isMoving);
 
-        if (cardToAttak != null)
+        if(movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
         {
-            if (player == 1)
-            {
-                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
-            }
-            else
-            {
-                yield return MoveToPosition(cardToAttak.gameObject.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180,0)));
-                Debug.Log("Instance Effect");
-            }
+            yield return MoveToPosition(lastPosition + Vector3.back, cardMovementSpeed, true, true);
         }
         else
         {
-            if (player == 1)
+            if (cardToAttack != null)
             {
-                yield return MoveToPosition(new Vector3(0, 0.5f, 5), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.Euler(Vector3.zero));
+                if(movement.MoveSO.MoveType == MoveType.MeleeAttack)
+                {
+                    if (player == 1)
+                    {
+                        yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed, true, false);
+                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
+                    }
+                    else
+                    {
+                        yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed, true, false);
+                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
+                    }
+                }
+                else
+                {
+                    if (player == 1)
+                    {
+                        yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed * 10, true, false);
+                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
+                    }
+                    else
+                    {
+                        yield return MoveToPosition(cardToAttack.gameObject.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed * 10, true, false);
+                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
+                    }
+                }
+                
             }
             else
             {
-                yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
-                Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
+                if (player == 1)
+                {
+                    yield return MoveToPosition(new Vector3(0, 0.5f, 5), cardMovementSpeed, true, false);
+                    Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.Euler(Vector3.zero));
+                }
+                else
+                {
+                    yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
+                    Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
+                }
             }
         }
-    }
-
-    /// <summary>
-    /// Realiza la animacion de movimiento a distancia.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator RangedMovementAnimation()
-    {
-        yield return new WaitWhile(() => isMoving);
-
-        if (isFocused)
-        {
-            ResetSize();
-            yield return null;
-        }
-
-        yield return new WaitWhile(() => isMoving);
-
-        yield return MoveToPosition(lastPosition + Vector3.back, cardMovementSpeed, true, true);
     }
 
     /// <summary>

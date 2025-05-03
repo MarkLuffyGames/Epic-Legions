@@ -953,7 +953,7 @@ public class DuelManager : NetworkBehaviour
                 }
                 else if(card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.Ambush) //Devuelve los heroes en la fila mas atrasada. 
                 {
-                    for (int i = rivalField.Count; i >= 0; --i)
+                    for (int i = rivalField.Count - 1; i >= 0; i--)
                     {
                         // Si hay una carta en la posición, la agregamos como objetivo
                         if (rivalField[i].Card != null)
@@ -1013,16 +1013,7 @@ public class DuelManager : NetworkBehaviour
         cardUsesTheAttack.EndTurn();
 
         // Iniciar la animación del ataque dependiendo del tipo de movimiento (cuerpo a cuerpo o a distancia)
-        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
-        {
-            // Si es un ataque cuerpo a cuerpo, ejecutar la animación de ataque cuerpo a cuerpo
-            yield return cardUsesTheAttack.MeleeAttackAnimation(player, null, cardUsesTheAttack.Moves[movementToUseIndex]);
-        }
-        else
-        {
-            // Si es un ataque a distancia (u otro tipo), ejecutar la animación correspondiente
-            yield return cardUsesTheAttack.RangedMovementAnimation();
-        }
+        yield return cardUsesTheAttack.AttackAnimation(player, null, cardUsesTheAttack.Moves[movementToUseIndex]);
 
         // Esperar un breve tiempo antes de aplicar el daño
         yield return new WaitForSeconds(0.3f);
@@ -1343,17 +1334,8 @@ public class DuelManager : NetworkBehaviour
         // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.EndTurn();
 
-        // Inicia la animación de ataque, dependiendo del tipo de movimiento.
-        if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
-        {
-            // Animación de ataque cuerpo a cuerpo.
-            yield return attackerCard.MeleeAttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
-        }
-        else
-        {
-            // Animación de ataque a distancia (o cualquier otro tipo de movimiento no cuerpo a cuerpo).
-            yield return attackerCard.RangedMovementAnimation();
-        }
+        // Inicia la animación de ataque.
+        yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
         // Espera un breve tiempo antes de continuar.
         yield return new WaitForSeconds(0.3f);
@@ -1471,7 +1453,7 @@ public class DuelManager : NetworkBehaviour
 
         }
 
-        yield return attackerCard.MeleeAttackAnimation(player1Manager.GetAllCardInField().Contains(attackerCard) ? 1 : 2, cardToAttack, attackerCard.Moves[movementToUseIndex]);
+        yield return attackerCard.AttackAnimation(player1Manager.GetAllCardInField().Contains(attackerCard) ? 1 : 2, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
         // Espera un breve tiempo antes de continuar.
         yield return new WaitForSeconds(0.3f);

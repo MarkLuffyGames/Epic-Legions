@@ -10,7 +10,7 @@ public class IgnoredDefense : CardEffect
 
     public override void ActivateEffect(Card caster, Card target)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
