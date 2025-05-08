@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Golpe de Avalancha
   m_EditorClassIdentifier: 
   moveName: Golpe de Avalancha
-  damage: 40
+  damage: 30
   energyCost: 15
-  moveEffect: {fileID: 0}
+  moveEffect: {fileID: 11400000, guid: 38e24763263f98649b80229e5f15fabf, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 1
@@ -24,4 +24,4 @@ MonoBehaviour:
   visualEffect: {fileID: 1954866420599182843, guid: d968493b7b3132341a182e7d04bab046, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "Descarga un golpe tit\xE1nico con toda su fuerza, enterrando
-    al enemigo bajo rocas."
+    al enemigo bajo rocas reduciendo su velocidad en 20 durante un turno"
