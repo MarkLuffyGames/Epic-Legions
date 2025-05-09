@@ -559,6 +559,11 @@ public class Card : MonoBehaviour
         isMyTurn = true;
 
         fieldPosition.ChangeEmission(Color.yellow);
+
+        if (IsInLethargy())
+        {
+            EndTurn();
+        }
     }
 
     public void PassTurn()
@@ -707,6 +712,11 @@ public class Card : MonoBehaviour
     /// <returns>Cantidad de vida perdida por el heroe</returns>
     public int ReceiveDamage(int amountDamage, int ignoredDefense)
     {
+        if (IsInLethargy())
+        {
+            amountDamage = 0;
+        }
+
         var damageInflicted = 0;
         var protector = HasProtector();
         if (protector != null && protector.HasProtector())
@@ -1105,6 +1115,11 @@ public class Card : MonoBehaviour
     public void CleanAllNegativeEffects()
     {
         statModifier.RemoveAll(e => e.IsNegative());
+    }
+
+    private bool IsInLethargy()
+    {
+        return statModifier.Any(x => x.MoveEffect is Lethargy);
     }
 }
 

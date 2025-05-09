@@ -93,6 +93,10 @@ public class Effect
         {
             durability = poisonedcounterattack.NumberTurns;
         }
+        else if(cardEffect is Lethargy lethargy)
+        {
+            durability = lethargy.NumberTurns;
+        }
     }
 
     public void ActivateEffect()
