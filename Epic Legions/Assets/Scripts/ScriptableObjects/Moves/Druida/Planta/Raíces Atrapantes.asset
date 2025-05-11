@@ -17,11 +17,11 @@ MonoBehaviour:
   energyCost: 5
   moveEffect: {fileID: 11400000, guid: 80ea3db986bf12b49b85f1eba75021bc, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 1
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "Invoca ra\xEDces que emergen del suelo y atrapan al enemigo,
     reduciendo su velocidad en 20 durante los proximos 2 turnos."

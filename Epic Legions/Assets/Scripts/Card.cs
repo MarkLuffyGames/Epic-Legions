@@ -764,6 +764,7 @@ public class Card : MonoBehaviour
         currentDefense = defense;
         currentHealt = maxHealt;
         UpdateText();
+        AudioManager.Instance.PlayCardDestroy();
     }
 
     /// <summary>

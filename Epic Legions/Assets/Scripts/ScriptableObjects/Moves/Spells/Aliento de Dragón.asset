@@ -17,10 +17,11 @@ MonoBehaviour:
   energyCost: 0
   moveEffect: {fileID: 11400000, guid: 730a7991269a7fa45a0167faa5d4b1c2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  alwaysActive: 0
   needTarget: 1
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
-  visualEffectHit: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   effectDescription: "Un poderoso brebaje extra\xEDdo del aliento de un drag\xF3n
     moribundo. Restaura en su totalidad la vida de un h\xE9roe en el campo de batalla."

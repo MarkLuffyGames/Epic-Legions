@@ -22,5 +22,5 @@ MonoBehaviour:
   moveType: 1
   targetsType: 3
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "inflige 30 de da\xF1o directo a los puntos de vida del enemigo."

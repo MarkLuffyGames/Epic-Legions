@@ -613,6 +613,7 @@ public class DuelManager : NetworkBehaviour
             // Si la carta se coloca en una posición en el campo
             playerManager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, isPlayer);
             InsertCardInOrder(HeroCardsOnTheField, card);
+            AudioManager.Instance.PlayCardPlacing();
         }
 
         // Marca la carta como lista para el servidor

@@ -17,10 +17,10 @@ MonoBehaviour:
   energyCost: 15
   moveEffect: {fileID: 11400000, guid: 9c693084f03f1f6489d46535256bb131, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 1
   moveType: 2
   targetsType: 1
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "Una barrera s\xF3lida que protege a los aliados."

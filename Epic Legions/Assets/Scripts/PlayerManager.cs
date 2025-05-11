@@ -87,7 +87,7 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < 7; i++)
         {
             DrawCard();
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.3f);
         }
 
         if (isPlayer || duelManager.IsSinglePlayer)
@@ -158,6 +158,8 @@ public class PlayerManager : MonoBehaviour
                 IsReady();
             }
         }
+
+        if (wasStolen) AudioManager.Instance.PlayCardDraw();
         
         return wasStolen;
     }

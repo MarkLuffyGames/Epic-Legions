@@ -54,7 +54,8 @@ public class HandCardHandler : MonoBehaviour
         cardsList.Add(card);
         card.transform.parent = transform;
         if(IsPlayer)card.isVisible = true;
-        SetCardsPosition();
+        Invoke("SetCardsPosition", 0.2f);
+        //SetCardsPosition();
     }
 
     /// <summary>
