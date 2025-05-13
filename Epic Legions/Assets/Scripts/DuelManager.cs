@@ -97,6 +97,8 @@ public class DuelManager : NetworkBehaviour
         {
             if (oldPhase != DuelPhase.PlayingSpellCard)
             {
+                AudioManager.Instance.PlayPhaseChanged();
+
                 player1Manager.HideWaitTextGameObject();
 
                 InitializeBattleTurns();

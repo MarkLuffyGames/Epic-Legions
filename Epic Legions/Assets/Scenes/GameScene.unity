@@ -1260,7 +1260,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 5c6e6e285d6fb7d4eb66d753eb64fdbb, type: 3}
   m_Resource: {fileID: 8300000, guid: 5c6e6e285d6fb7d4eb66d753eb64fdbb, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.053
+  m_Volume: 0.03
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1372,7 +1372,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1471,6 +1471,7 @@ MonoBehaviour:
   cardDrawSound: {fileID: 8300000, guid: 51fc906b0d7392b4385727f70b902386, type: 3}
   cardPlacingSound: {fileID: 8300000, guid: 78a9b0762c58768449bf137663aaca6f, type: 3}
   cardDestroySound: {fileID: 8300000, guid: e57671f52aea2e043ad0fa3439e496d0, type: 3}
+  phaseChangedSound: {fileID: 8300000, guid: 795d4a7fcc3ee8c47812d7130a0ede7f, type: 3}
 --- !u!1 &1272818055
 GameObject:
   m_ObjectHideFlags: 0

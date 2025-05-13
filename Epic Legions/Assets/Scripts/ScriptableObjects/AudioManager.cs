@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip cardDrawSound;
     [SerializeField] private AudioClip cardPlacingSound;
     [SerializeField] private AudioClip cardDestroySound;
+    [SerializeField] private AudioClip phaseChangedSound;
 
     private void Awake()
     {
@@ -35,6 +36,11 @@ public class AudioManager : MonoBehaviour
     public void PlayCardDestroy()
     {
         audioSource.clip = cardDestroySound;
+        audioSource.Play();
+    }
+    public void PlayPhaseChanged()
+    {
+        audioSource.clip = phaseChangedSound;
         audioSource.Play();
     }
 }
