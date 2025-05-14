@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
+  m_Name: "Bendici\xF3n del \xC1rbol Eterno"
+  m_EditorClassIdentifier: 
+  moveName: "Bendici\xF3n del \xC1rbol Eterno"
+  damage: 0
+  energyCost: 20
+  moveEffect: {fileID: 11400000, guid: 730a7991269a7fa45a0167faa5d4b1c2, type: 2}
+  effectCondition: {fileID: 0}
+  alwaysActive: 0
+  needTarget: 0
+  moveType: 2
+  targetsType: 2
+  visualEffect: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
+  visualEffectHit: {fileID: 0}
+  effectDescription: "Invoca la esencia m\xE1s pura de la naturaleza, restaurando
+    toda la vida de todos los aliados."

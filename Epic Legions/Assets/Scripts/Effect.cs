@@ -11,15 +11,11 @@ public class Effect
     private Card affectedHero;
     private bool isActive;
     private bool isStunned;
-    private int defense;
+    private int amount;
     private int currentDefense;
     private int absorbDamage;
     public Card casterHero;
     private bool hasProtector;
-    private int speed;
-    private int attack;
-    private int ignoredDefense;
-    private int damageCounterattack;
     private bool isNegative;
     private bool isRemovable = true;
 
@@ -38,8 +34,8 @@ public class Effect
         }
         else if(cardEffect is ModifyDefense modifyDefense)
         {
-            defense = modifyDefense.IsIncrease ? modifyDefense.Amount : -modifyDefense.Amount;
-            currentDefense = defense;
+            amount = modifyDefense.IsIncrease ? modifyDefense.Amount : -modifyDefense.Amount;
+            currentDefense = amount;
             durability = modifyDefense.NumberTurns;
             isNegative = !modifyDefense.IsIncrease;
         }
@@ -52,19 +48,19 @@ public class Effect
         }
         else if(cardEffect is ModifySpeed modifySpeed)
         {
-            speed = modifySpeed.IsIncrease ? modifySpeed.Amount : -modifySpeed.Amount;
+            amount = modifySpeed.IsIncrease ? modifySpeed.Amount : -modifySpeed.Amount;
             durability = modifySpeed.NumberTurns;
             isNegative = !modifySpeed.IsIncrease;
         }
         else if(cardEffect is ModifyAttack modifyAttack)
         {
-            attack = modifyAttack.IsIncrease ? modifyAttack.Amount : -modifyAttack.Amount;
+            amount = modifyAttack.IsIncrease ? modifyAttack.Amount : -modifyAttack.Amount;
             durability = modifyAttack.NumberTurns;
             isNegative = !modifyAttack.IsIncrease;
         }
         else if(cardEffect is IgnoredDefense ignoredDefense)
         {
-            this.ignoredDefense = ignoredDefense.Amount;
+            amount = ignoredDefense.Amount;
         }
         else if(cardEffect is Stun stun)
         {
@@ -75,6 +71,7 @@ public class Effect
         else if(cardEffect is Poison poison)
         {
             durability = poison.NumberTurns;
+            amount = poison.Amount;
             isNegative = true;
         }
         else if(cardEffect is Antivenom antivenom)
@@ -85,7 +82,7 @@ public class Effect
         else if( cardEffect is Counterattack counterattack)
         {
             casterHero = counterattack.Caster;
-            damageCounterattack = counterattack.Amount;
+            amount = counterattack.Amount;
             durability = 1;
             isRemovable = false;
         }
@@ -96,6 +93,11 @@ public class Effect
         else if(cardEffect is Lethargy lethargy)
         {
             durability = lethargy.NumberTurns;
+        }
+        else if(cardEffect is ParasiteSeed parasiteSeed)
+        {
+            casterHero = parasiteSeed.Caster;
+            durability = parasiteSeed.NumberTurns;
         }
     }
 
@@ -119,7 +121,7 @@ public class Effect
     }
     public void RegenerateDefense()
     {
-        currentDefense = defense;
+        currentDefense = amount;
     }
 
     public int GetDamageAbsorbed()
@@ -136,29 +138,35 @@ public class Effect
 
     public int GetSpeed()
     {
-        if (isActive) return speed;
+        if (isActive) return amount;
         return 0;
     }
 
     public int GetAttack()
     {
-        if (isActive) return attack;
+        if (isActive) return amount;
         return 0;
     }
 
     public int GetIgnoredDefense()
     {
-        return ignoredDefense;
+        return amount;
     }
 
-    public void ApplyPoisonDamage(int damage)
+    public void ApplyPoisonDamage()
     {
-        affectedHero.ApplyPoisonDamage(damage);
+        affectedHero.ApplyPoisonDamage(amount);
+    }
+
+    public void DrainHelat()
+    {
+        affectedHero.ReceiveDamage(amount, amount);
+        casterHero.ToHeal(amount);
     }
 
     public int GetCounterattackDamage()
     {
-        return damageCounterattack;
+        return amount;
     }
 
     public bool IsNegative()

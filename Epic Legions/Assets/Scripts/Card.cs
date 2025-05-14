@@ -872,7 +872,7 @@ public class Card : MonoBehaviour
     }
 
     /// <summary>
-    /// Añade un efcto a esta carta.
+    /// Añade un efecto a esta carta.
     /// </summary>
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)

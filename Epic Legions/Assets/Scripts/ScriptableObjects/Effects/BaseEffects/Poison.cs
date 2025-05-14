@@ -31,6 +31,6 @@ public class Poison : CardEffect
         effect.elapsedTurns++;
 
         if (DuelManager.NumberOfTurns % effect.elapsedTurns == 0)
-            effect.ApplyPoisonDamage(amount);
+            effect.ApplyPoisonDamage();
     }
 }
