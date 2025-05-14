@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: "Ra\xEDces Vinculantes"
+  m_Name: "Explosi\xF3n de Polen"
   m_EditorClassIdentifier: 
-  moveName: "Ra\xEDces Vinculantes"
-  damage: 20
-  energyCost: 20
-  moveEffect: {fileID: 11400000, guid: 0b7b2c5e450f1ce4b8b76df18c779c08, type: 2}
+  moveName: "Explosi\xF3n de Polen"
+  damage: 0
+  energyCost: 0
+  moveEffect: {fileID: 11400000, guid: 9901dece633bc8e48b1f5e50ec32f8a0, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 1
   moveType: 1
-  targetsType: 1
+  targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 2717293893997149916, guid: 8f2d8143043461140b7c3d833cd06fa5, type: 3}
-  effectDescription: "Enredaderas oscuras absorben la vida igual al da\xF1o infligido
-    directamente a la salud del enemigo."
+  visualEffectHit: {fileID: 0}
+  effectDescription: "Libera una nube de polen t\xF3xico que da\xF1a al enemigo y
+    lo envenena."

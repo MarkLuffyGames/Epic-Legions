@@ -23,5 +23,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Si el objetivo no tiene <sprite=2>, restaura <sprite=3> igual
-    al da\xF1o infligido."
+  effectDescription: "Recupera vida por el da\xF1o que atraviesa la defensa y afecta
+    la salud del objetivo."
