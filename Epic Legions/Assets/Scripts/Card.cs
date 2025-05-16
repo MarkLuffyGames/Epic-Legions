@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -710,9 +711,11 @@ public class Card : MonoBehaviour
     /// </summary>
     /// <param name="amountDamage"></param>
     /// <returns>Cantidad de vida perdida por el heroe</returns>
-    public int ReceiveDamage(int amountDamage, int ignoredDefense)
+    public int ReceiveDamage(int amountDamage, int ignoredDefense, Card attacker)
     {
-        if (IsInLethargy())
+        if(attacker != null && attacker.cardSO is HeroCardSO && HasFullDamageReflection()) attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
+
+        if (IsInLethargy() || HasPhantomShield())
         {
             amountDamage = 0;
         }
@@ -721,7 +724,7 @@ public class Card : MonoBehaviour
         var protector = HasProtector();
         if (protector != null && protector.HasProtector())
         {
-            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense);
+            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense, attacker);
         }
 
         amountDamage -= GetDamageAbsorbed();
@@ -925,67 +928,6 @@ public class Card : MonoBehaviour
         //TODO: Activar efecto visual de envenenamiento.
     }
 
-    /// <summary>
-    /// Verifica los modificadores de defensa que tenga activo esta carta.
-    /// </summary>
-    /// <returns>Cantidad modificada.</returns>
-    private int GetDefenseModifier()
-    {
-        int defenceModifier = 0;
-
-        foreach(Effect effect in statModifier)
-        {
-            defenceModifier += effect.GetCurrentDefence();
-        }
-
-        return defenceModifier;
-    }
-
-    /// <summary>
-    /// Verifica los modificadores de velocidad que tenga activo esta carta.
-    /// </summary>
-    /// <returns>Cantidad modificada.</returns>
-    private int GetSpeedModifier()
-    {
-        int speedModifier = 0;
-
-        foreach (Effect effect in statModifier)
-        {
-            speedModifier += effect.GetSpeed();
-        }
-
-        return speedModifier;
-    }
-
-    /// <summary>
-    /// Verifica cuanto daño debe absorber esta carta segun los efectos activos.
-    /// </summary>
-    /// <returns>Cantidad absorbida.</returns>
-    public int GetDamageAbsorbed()
-    {
-        int damageAbsorbed = 0;
-
-        foreach (Effect effect in statModifier)
-        {
-            damageAbsorbed += effect.GetDamageAbsorbed();
-        }
-
-        return damageAbsorbed;
-    }
-
-    /// <summary>
-    /// Verifica si esta carta esta protegida por otra.
-    /// </summary>
-    /// <returns>True si tiene un protector.</returns>
-    private Effect HasProtector()
-    {
-        foreach (Effect effect in statModifier)
-        {
-            if(effect.HasProtector()) return effect;
-        }
-
-        return null;
-    }
 
     /// <summary>
     /// Recibe el daño del escudo.
@@ -1084,7 +1026,7 @@ public class Card : MonoBehaviour
 
     public void ApplyPoisonDamage(int amount)
     {
-        ReceiveDamage(amount, amount);
+        ReceiveDamage(amount, amount, null);
         ActivateVisualEffects();
     }
 
@@ -1118,9 +1060,89 @@ public class Card : MonoBehaviour
         statModifier.RemoveAll(e => e.IsNegative());
     }
 
+    /// <summary>
+    /// Verifica si esta carta esta protegida por otra.
+    /// </summary>
+    /// <returns>True si tiene un protector.</returns>
+    private Effect HasProtector()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.HasProtector()) return effect;
+        }
+
+        return null;
+    }
+
     private bool IsInLethargy()
     {
         return statModifier.Any(x => x.MoveEffect is Lethargy);
+    }
+
+    private bool HasPhantomShield()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is PhantomShield phantomShield)
+            {
+                phantomShield.DeactivateEffect(effect);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool HasFullDamageReflection()
+    {
+        return statModifier.Any(x => x.MoveEffect is FullDamageReflection);
+    }
+
+    /// <summary>
+    /// Verifica los modificadores de defensa que tenga activo esta carta.
+    /// </summary>
+    /// <returns>Cantidad modificada.</returns>
+    private int GetDefenseModifier()
+    {
+        int defenceModifier = 0;
+
+        foreach (Effect effect in statModifier)
+        {
+            defenceModifier += effect.GetCurrentDefence();
+        }
+
+        return defenceModifier;
+    }
+
+    /// <summary>
+    /// Verifica los modificadores de velocidad que tenga activo esta carta.
+    /// </summary>
+    /// <returns>Cantidad modificada.</returns>
+    private int GetSpeedModifier()
+    {
+        int speedModifier = 0;
+
+        foreach (Effect effect in statModifier)
+        {
+            speedModifier += effect.GetSpeed();
+        }
+
+        return speedModifier;
+    }
+
+    /// <summary>
+    /// Verifica cuanto daño debe absorber esta carta segun los efectos activos.
+    /// </summary>
+    /// <returns>Cantidad absorbida.</returns>
+    public int GetDamageAbsorbed()
+    {
+        int damageAbsorbed = 0;
+
+        foreach (Effect effect in statModifier)
+        {
+            damageAbsorbed += effect.GetDamageAbsorbed();
+        }
+
+        return damageAbsorbed;
     }
 }
 

@@ -1353,7 +1353,7 @@ public class DuelManager : NetworkBehaviour
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
                 attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
-                    attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
+                    attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
             }
             else
             {
@@ -1368,7 +1368,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     // Aplica el daño a todos los objetivos.
                     attackerCard.lastDamageInflicted = card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
-                        attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
+                        attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
                 }
             }
 
@@ -1465,7 +1465,7 @@ public class DuelManager : NetworkBehaviour
 
         // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
         attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(damage,
-            attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0);
+            attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null);
 
         attackerCard.MoveToLastPosition();
     }

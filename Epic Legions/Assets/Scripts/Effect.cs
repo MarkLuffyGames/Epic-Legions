@@ -99,6 +99,10 @@ public class Effect
             casterHero = parasiteSeed.Caster;
             durability = parasiteSeed.NumberTurns;
         }
+        else if(cardEffect is FullDamageReflection fulldamageReflection)
+        {
+            durability = fulldamageReflection.NumberTurns;
+        }
     }
 
     public void ActivateEffect()
@@ -160,7 +164,7 @@ public class Effect
 
     public void DrainHelat()
     {
-        affectedHero.ReceiveDamage(amount, amount);
+        affectedHero.ReceiveDamage(amount, amount, null);
         casterHero.ToHeal(amount);
     }
 
