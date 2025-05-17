@@ -103,6 +103,10 @@ public class Effect
         {
             durability = fulldamageReflection.NumberTurns;
         }
+        else if(cardEffect is NoHealing noHealing)
+        {
+            durability = noHealing.NumberTurns;
+        }
     }
 
     public void ActivateEffect()

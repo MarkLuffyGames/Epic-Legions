@@ -989,6 +989,8 @@ public class Card : MonoBehaviour
     /// <param name="amount">Cantidad a sanar.</param>
     public void ToHeal(int amount)
     {
+        if(statModifier.Any(x => x.MoveEffect is NoHealing))amount = 0;
+
         ShowTextToHeal(maxHealt - currentHealt < amount ? maxHealt - currentHealt : amount);
         currentHealt += amount;
         if(currentHealt > maxHealt)currentHealt = maxHealt;

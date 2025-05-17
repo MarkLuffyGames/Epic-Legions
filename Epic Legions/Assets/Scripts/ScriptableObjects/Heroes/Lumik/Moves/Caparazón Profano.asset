@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Reflejo Retorcido
+  m_Name: "Caparaz\xF3n Profano"
   m_EditorClassIdentifier: 
-  moveName: 
+  moveName: "Caparaz\xF3n Profano"
   damage: 0
-  energyCost: 0
-  moveEffect: {fileID: 0}
+  energyCost: 5
+  moveEffect: {fileID: 11400000, guid: a0c818b7459fb6d48a80fa52ab970b9e, type: 2}
   effectCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 0
@@ -23,4 +23,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: 
+  effectDescription: "Reduce el da\xF1o recibido en 20 durante 3 turnos. "
