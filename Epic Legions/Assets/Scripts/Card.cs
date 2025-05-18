@@ -648,7 +648,7 @@ public class Card : MonoBehaviour
                     if (player == 1)
                     {
                         yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed, true, false);
-                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
+                        if(movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
                     }
                     else
                     {
@@ -661,7 +661,7 @@ public class Card : MonoBehaviour
                     if (player == 1)
                     {
                         yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed * 10, true, false);
-                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
+                        if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
                     }
                     else
                     {
@@ -869,7 +869,7 @@ public class Card : MonoBehaviour
             {
                 statModifier.RegenerateDefense();
             }
-            Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
+            if(regenerateDefenseEffect != null) Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
             UpdateText();   
         }
     }

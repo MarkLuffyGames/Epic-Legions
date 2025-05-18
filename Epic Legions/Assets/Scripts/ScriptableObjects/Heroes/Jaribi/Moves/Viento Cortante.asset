@@ -22,6 +22,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "Dispara una r\xE1faga de viento que reduce la velocidad del
     enemigo en 20 por un turno."

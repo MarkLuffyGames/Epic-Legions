@@ -23,5 +23,5 @@ MonoBehaviour:
   targetsType: 2
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 5920328240178098596, guid: b605c85b2383a0f42b09cace55b3f31a, type: 3}
-  effectDescription: ' Un viento sagrado aumenta la velocidad de todos los aliados
-    en 10 por dos turnos'
+  effectDescription: Un viento sagrado aumenta la velocidad de todos los aliados
+    en 10 por dos turnos

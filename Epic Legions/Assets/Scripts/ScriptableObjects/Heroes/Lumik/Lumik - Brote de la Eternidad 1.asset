@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: "Thal\xEDn - Portadora del Fin"
+  m_Name: Lumik - Brote de la Eternidad 1
   m_EditorClassIdentifier: 
-  cardId: 2
-  cardName: "Thal\xEDn"
-  cardLastName: Portadora del Fin
-  cardSprite: {fileID: 21300000, guid: 0a06f46b88f2e494eb82b9a0b9b9edcc, type: 3}
-  cardElemnt: 7
+  cardId: 13
+  cardName: Lumik
+  cardLastName: Brote de la Eternidad
+  cardSprite: {fileID: 21300000, guid: 74529e5aab1bf214b97bb9f0cc7d26b7, type: 3}
+  cardElemnt: 8
   heroClass: 0
   healt: 30
   defence: 25
-  speed: 60
-  energy: 25
+  speed: 15
+  energy: 35
   moves:
-  - {fileID: 11400000, guid: e85f0869664e48d44af293862fbf770a, type: 2}
-  - {fileID: 11400000, guid: a49e3fe05d00119499f077f4c3445ba6, type: 2}
+  - {fileID: 11400000, guid: 83e84dd006abee0479b70e91207543a5, type: 2}
+  - {fileID: 11400000, guid: 1e147cc904d76c14aafd029d8f0b4f23, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

@@ -17,11 +17,11 @@ MonoBehaviour:
   energyCost: 25
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 1
   moveType: 1
   targetsType: 1
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: Un torbellino de viento golpea a todos los enemigos en la misma
     fila.

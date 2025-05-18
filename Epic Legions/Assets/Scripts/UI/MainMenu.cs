@@ -87,6 +87,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
+        foreach(var card in CardDatabase.allCards)
+        {
+            deckCardIds.Add(card.CardID);
+        }
         var duelManagerInstance = Instantiate(duelManagerPrefab);
         duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(deckCardIds.ToArray(), deckCardIds.ToArray());
 
