@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Parasite Seed
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 0}
-  iconSprite: {fileID: 0}
+  iconSprite: {fileID: 21300000, guid: daffcf8e760af074283e066e0c03050a, type: 3}
   amount: 10
   numberTurns: 3

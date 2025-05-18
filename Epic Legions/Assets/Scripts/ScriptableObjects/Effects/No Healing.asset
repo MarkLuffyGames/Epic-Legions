@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: No Healing
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 0}
-  iconSprite: {fileID: 0}
+  iconSprite: {fileID: 21300000, guid: 2f7c500dbf0eb544890b9720451204f3, type: 3}
   numberTurns: 3

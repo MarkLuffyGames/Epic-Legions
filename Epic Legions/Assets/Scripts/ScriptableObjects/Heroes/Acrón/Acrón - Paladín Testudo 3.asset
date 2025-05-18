@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
+  m_Name: "Acr\xF3n - Palad\xEDn Testudo 3"
+  m_EditorClassIdentifier: 
+  cardId: 3
+  cardName: "Acr\xF3n"
+  cardLastName: "Palad\xEDn Testudo"
+  cardSprite: {fileID: 21300000, guid: e81327ae025dd004dad290afc4f3a30b, type: 3}
+  cardElemnt: 7
+  heroClass: 0
+  healt: 40
+  defence: 45
+  speed: 20
+  energy: 35
+  moves:
+  - {fileID: 11400000, guid: 0eebf4ad0cdf8ac408423c790731c2c4, type: 2}
+  - {fileID: 11400000, guid: 2309d573b4c4b104eb70e69b1d8028f8, type: 2}
+  - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}
