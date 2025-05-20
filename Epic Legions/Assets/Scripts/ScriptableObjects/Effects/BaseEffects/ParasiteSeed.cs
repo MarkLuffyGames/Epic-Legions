@@ -29,9 +29,11 @@ public class ParasiteSeed : CardEffect
     {
         effect.elapsedTurns++;
 
-        if (DuelManager.NumberOfTurns % effect.elapsedTurns == 0)
+        if (effect.elapsedTurns / (float)DuelManager.NumberOfTurns  == 1)
+        {
+            effect.elapsedTurns = 0;
             effect.DrainHelat();
-
+        }
 
         effect.durability--;
     }

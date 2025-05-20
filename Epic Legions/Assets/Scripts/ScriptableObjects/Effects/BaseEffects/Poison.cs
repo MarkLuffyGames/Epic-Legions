@@ -5,9 +5,9 @@ using UnityEngine;
 public class Poison : CardEffect
 {
     [SerializeField] private int amount = 10;
-    [SerializeField] private float numberTurns = Mathf.Infinity;
+    [SerializeField] private int numberTurns = 1;
     public int Amount => amount;
-    public int NumberTurns => (int)numberTurns;
+    public int NumberTurns => numberTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
         target.AddEffect(new Effect(this, target));
@@ -30,7 +30,10 @@ public class Poison : CardEffect
     {
         effect.elapsedTurns++;
 
-        if (DuelManager.NumberOfTurns % effect.elapsedTurns == 0)
+        if (effect.elapsedTurns / (float)DuelManager.NumberOfTurns == 1)
+        {
             effect.ApplyPoisonDamage();
+            effect.elapsedTurns = 0;
+        }
     }
 }

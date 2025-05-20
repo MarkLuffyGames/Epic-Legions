@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Aguij\xF3n en la Sombra"
   m_EditorClassIdentifier: 
   moveName: "Aguij\xF3n en la Sombra"
-  damage: 30
+  damage: 10
   energyCost: 10
   moveEffect: {fileID: 11400000, guid: 9901dece633bc8e48b1f5e50ec32f8a0, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

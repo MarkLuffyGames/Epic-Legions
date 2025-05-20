@@ -653,7 +653,7 @@ public class Card : MonoBehaviour
                     else
                     {
                         yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed, true, false);
-                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
+                        if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
                     }
                 }
                 else
@@ -666,7 +666,7 @@ public class Card : MonoBehaviour
                     else
                     {
                         yield return MoveToPosition(cardToAttack.gameObject.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed * 10, true, false);
-                        Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
+                        if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
                     }
                 }
                 
@@ -676,12 +676,12 @@ public class Card : MonoBehaviour
                 if (player == 1)
                 {
                     yield return MoveToPosition(new Vector3(0, 0.5f, 5), cardMovementSpeed, true, false);
-                    Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.Euler(Vector3.zero));
+                    if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.Euler(Vector3.zero));
                 }
                 else
                 {
                     yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
-                    Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
+                    if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
                 }
             }
         }
@@ -853,6 +853,11 @@ public class Card : MonoBehaviour
         if(cardSO is HeroCardSO)
         {
             stunEffect.SetActive(false);
+            foreach (var effect in statModifier)
+            {
+                HideIcon(effect.MoveEffect.iconSprite);
+            }
+
             statModifier.Clear();
         }
     }
@@ -1109,7 +1114,7 @@ public class Card : MonoBehaviour
 
         foreach (Effect effect in statModifier)
         {
-            defenceModifier += effect.GetCurrentDefence();
+            if(effect.MoveEffect is ModifyDefense) defenceModifier += effect.GetCurrentDefence();
         }
 
         return defenceModifier;
@@ -1125,7 +1130,7 @@ public class Card : MonoBehaviour
 
         foreach (Effect effect in statModifier)
         {
-            speedModifier += effect.GetSpeed();
+            if (effect.MoveEffect is ModifySpeed) speedModifier += effect.GetSpeed();
         }
 
         return speedModifier;

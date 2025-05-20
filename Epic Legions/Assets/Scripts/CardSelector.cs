@@ -234,6 +234,7 @@ public class CardSelector : MonoBehaviour
                     duelManager.MovementToUse);
                 }
 
+                duelManager.CardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
             }
         }

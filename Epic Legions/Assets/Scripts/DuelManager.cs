@@ -763,6 +763,8 @@ public class DuelManager : NetworkBehaviour
             // Actualiza el texto que muestra el estado del héroe
             hero.UpdateText();
         }
+
+        SendCardsToGraveyard();
     }
 
     /// <summary>

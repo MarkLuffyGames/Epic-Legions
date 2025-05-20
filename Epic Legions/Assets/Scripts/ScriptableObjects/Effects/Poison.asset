@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5cb8e201c1d4b499a224192c048a72, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
   amount: 10
-  numberTurns: Infinity
+  numberTurns: 1
