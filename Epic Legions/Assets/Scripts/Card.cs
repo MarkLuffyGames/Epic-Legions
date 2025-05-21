@@ -569,7 +569,7 @@ public class Card : MonoBehaviour
 
     public void PassTurn()
     {
-        statModifier.RemoveAll(stat => stat.IsStunned());
+        CancelStun();
     }
 
     /// <summary>
@@ -713,7 +713,9 @@ public class Card : MonoBehaviour
     /// <returns>Cantidad de vida perdida por el heroe</returns>
     public int ReceiveDamage(int amountDamage, int ignoredDefense, Card attacker)
     {
-        if(attacker != null && attacker.cardSO is HeroCardSO && HasFullDamageReflection()) attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
+        amountDamage += GetAttackModifier();
+
+        if (attacker != null && attacker.cardSO is HeroCardSO && HasFullDamageReflection()) attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
 
         if (IsInLethargy() || HasPhantomShield())
         {
@@ -790,15 +792,14 @@ public class Card : MonoBehaviour
     /// <returns></returns>
     public bool IsStunned()
     {
-        bool isStunned = false;
-
-        foreach (Effect effect in statModifier)
-        {
-            if(effect.IsStunned()) isStunned = true; break;
-        }
-
-        return isStunned;
+        return statModifier.Any(x => x.IsStunned());
     }
+
+    private void CancelStun()
+    {
+        statModifier.ForEach(x => x.CancelStun());
+    }
+
     /// <summary>
     /// Activa los efectos asignados a esta carta.
     /// </summary>
@@ -1092,7 +1093,7 @@ public class Card : MonoBehaviour
         {
             if (effect.MoveEffect is PhantomShield phantomShield)
             {
-                phantomShield.DeactivateEffect(effect);
+                effect.MoveEffect.DeactivateEffect(effect);
                 return true;
             }
         }
@@ -1134,6 +1135,22 @@ public class Card : MonoBehaviour
         }
 
         return speedModifier;
+    }
+
+    /// <summary>
+    /// Verifica los modificadores de ataque que tenga activo esta carta.
+    /// </summary>
+    /// <returns>Cantidad modificada.</returns>
+    private int GetAttackModifier()
+    {
+        int attackModifier = 0;
+
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is ModifyAttack) attackModifier += effect.GetAttack();
+        }
+
+        return attackModifier;
     }
 
     /// <summary>

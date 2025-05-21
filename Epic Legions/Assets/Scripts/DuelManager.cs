@@ -1466,8 +1466,7 @@ public class DuelManager : NetworkBehaviour
         cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
         // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-        attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(damage,
-            attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null);
+        cardToAttack.ReceiveDamage(damage, attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null);
 
         attackerCard.MoveToLastPosition();
     }

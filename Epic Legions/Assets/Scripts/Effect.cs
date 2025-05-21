@@ -65,7 +65,7 @@ public class Effect
         else if(cardEffect is Stun stun)
         {
             isStunned = true;
-            durability = 21;
+            durability = DuelManager.NumberOfTurns;
             isNegative = true;
         }
         else if(cardEffect is Poison poison)
@@ -170,6 +170,14 @@ public class Effect
     {
         affectedHero.ReceiveDamage(amount, amount, null);
         casterHero.ToHeal(amount);
+    }
+
+    public void CancelStun()
+    {
+        if(moveEffect is Stun)
+        {
+            moveEffect.DeactivateEffect(this);
+        }
     }
 
     public int GetCounterattackDamage()

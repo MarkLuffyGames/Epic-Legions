@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8705cbf60df404da13a0037f266442, type: 3}
   m_Name: Stun
   m_EditorClassIdentifier: 
-  effectDescription: "Aturde al objetivo si no le queda defensa cuando este ataque
-    impacta, dej\xE1ndolo inm\xF3vil durante un turno."
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
+  numberTurns: 1

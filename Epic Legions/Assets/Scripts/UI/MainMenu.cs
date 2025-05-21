@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour
     {
         foreach(var card in CardDatabase.allCards)
         {
-            deckCardIds.Add(32);
+            deckCardIds.Add(card.CardID);
         }
         var duelManagerInstance = Instantiate(duelManagerPrefab);
         duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(deckCardIds.ToArray(), deckCardIds.ToArray());
