@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1519f429f733124e8499772ccb5d7b9, type: 3}
   m_Name: Increase Attack 20 2
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 418540983303527424, guid: 022d970fdd7676c4186ba3e6ec6d31ba, type: 3}
+  iconSprite: {fileID: 0}
+  effectScore: 1
   amount: 20
   numberTurns: 2
   isIncrease: 1

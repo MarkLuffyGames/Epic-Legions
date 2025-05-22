@@ -713,9 +713,15 @@ public class Card : MonoBehaviour
     /// <returns>Cantidad de vida perdida por el heroe</returns>
     public int ReceiveDamage(int amountDamage, int ignoredDefense, Card attacker)
     {
-        amountDamage += GetAttackModifier();
+        if (attacker != null)
+        {
+            amountDamage += attacker.GetAttackModifier();
 
-        if (attacker != null && attacker.cardSO is HeroCardSO && HasFullDamageReflection()) attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
+            if(attacker.cardSO is HeroCardSO && HasFullDamageReflection())
+            {
+                attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
+            }
+        }
 
         if (IsInLethargy() || HasPhantomShield())
         {

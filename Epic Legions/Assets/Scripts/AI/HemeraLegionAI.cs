@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using Random = UnityEngine.Random;
 
 public enum GameStrategy { Defensive, Offensive, Balanced }
@@ -101,15 +102,57 @@ public class HemeraLegionAI : MonoBehaviour
     {
         Card heroToPlay = null;
 
-        if(usableHeroesCards.Count != 0)
+        float bestScore = 0;
+        foreach (var card in usableHeroesCards)
         {
-            if(strategy == GameStrategy.Defensive)
+            float score = EvaluarInvocacion(card);
+            if (score > bestScore)
             {
-                heroToPlay = usableHeroesCards.OrderByDescending(h => h.CurrentDefensePoints).First();
+                bestScore = score;
+                heroToPlay = card;
             }
         }
 
         return heroToPlay;
+    }
+
+    private float EvaluarInvocacion(Card heroCard)
+    {
+        float score = 0;
+
+        //Evaluacion basica de estadisticas.
+        score += heroCard.HealtPoint * 1.2f;
+        score += heroCard.CurrentDefensePoints * 1.0f;
+        score += heroCard.CurrentSpeedPoints * 0.8f;
+
+        //Evaluacion del potencial de los movimientos.
+        score += EvaluarMovimineto(heroCard.Moves[0]);
+        score += EvaluarMovimineto(heroCard.Moves[1]);
+
+        //Sinergias o afinidades especiales
+        // score += EvaluarSinergia(heroCard); 
+
+        //Penalizacion por coste.
+        if(heroCard.cardSO is HeroCardSO heroCardSO)
+        {
+            score -= heroCardSO.Energy * 1.5f;
+        }
+            
+        return score;
+    }
+
+    private float EvaluarMovimineto(Movement movement)
+    {
+        float score = 0;
+
+        //Daño del movimineto.
+        score += movement.MoveSO.Damage;
+
+        //Efectos adicionales
+        if(movement.MoveSO.MoveEffect != null)
+            score += movement.MoveSO.MoveEffect.effectScore;
+
+        return score;
     }
 
     private void SummonHero(Card heroToPlay, int positionIndex)
@@ -127,13 +170,14 @@ public class HemeraLegionAI : MonoBehaviour
             if(field.Card == null) availablePositions.Add(field);
         }
 
-        if(heroToPlay.CurrentDefensePoints >= 60)
+        if(heroToPlay.CurrentDefensePoints >= 40)
         {
             availablePositions.RemoveAll(p => p.PositionIndex > 4);
         }
-        else if(heroToPlay.CurrentDefensePoints >= 30 && heroToPlay.CurrentDefensePoints < 60)
+        else if(heroToPlay.CurrentDefensePoints >= 20 && heroToPlay.CurrentDefensePoints < 40)
         {
-            availablePositions.RemoveAll(p => p.PositionIndex < 5 && p.PositionIndex > 9);
+            availablePositions.RemoveAll(p => p.PositionIndex < 5);
+            availablePositions.RemoveAll(p => p.PositionIndex > 9);
         }
         else
         {
