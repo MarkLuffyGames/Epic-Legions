@@ -22,6 +22,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 2717293893997149916, guid: 8f2d8143043461140b7c3d833cd06fa5, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "Enredaderas oscuras absorben la vida igual al da\xF1o infligido
     directamente a la salud del enemigo."

@@ -23,7 +23,7 @@ public class DuelManager : NetworkBehaviour
     [SerializeField] private PlayerManager player1Manager;
     [SerializeField] private PlayerManager player2Manager;
     [SerializeField] private EndDuelUI endDuelUI;
-    [SerializeField] private int energyGainedPerTurn = 50;
+    [SerializeField] private int energyGainedPerTurn = 20;
 
     [SerializeField] private List<int> deckCardIds;
 

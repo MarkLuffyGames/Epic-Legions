@@ -353,7 +353,7 @@ public class Card : MonoBehaviour
             StartCoroutine(MoveToPosition(focusPosition, cardMovementSpeed, true, false));
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
-            EnableActions(isPlayer && !actionIsReady);
+            EnableActions(isPlayer && !actionIsReady && isMyTurn);
             isFocused = true;
             AdjustUIcons();
             return true;

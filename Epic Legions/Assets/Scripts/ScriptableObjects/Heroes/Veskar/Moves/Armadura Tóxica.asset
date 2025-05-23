@@ -18,9 +18,9 @@ MonoBehaviour:
   moveEffect: {fileID: 11400000, guid: 5ebbd04ccafe8944188e725c849b7a20, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
-  needTarget: 1
-  moveType: 1
-  targetsType: 1
+  needTarget: 0
+  moveType: 2
+  targetsType: 2
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   effectDescription: Cubre a los aliados con toxinas inofensivas para ellos durante
