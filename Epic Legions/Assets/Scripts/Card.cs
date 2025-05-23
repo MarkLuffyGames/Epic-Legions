@@ -180,6 +180,10 @@ public class Card : MonoBehaviour
             speedText.enabled = false;
             energyText.enabled = false;
         }
+        else if(cardSO is EquipmentCardSO equipmentCardSO)
+        {
+
+        }
     }
 
 

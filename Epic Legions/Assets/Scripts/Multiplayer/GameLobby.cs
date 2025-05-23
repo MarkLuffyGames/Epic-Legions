@@ -523,4 +523,9 @@ public class GameLobby : NetworkBehaviour
     {
         OnReadyToStart?.Invoke(this, EventArgs.Empty);
     }
+
+    private new void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }

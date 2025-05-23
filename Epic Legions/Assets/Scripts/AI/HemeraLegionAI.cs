@@ -34,12 +34,17 @@ public class HemeraLegionAI : MonoBehaviour
             duelManager.OnChangeTurn -= DuelManager_OnChangeTurn;
             return;
         }
-            if (executeActionCoroutine != null)
+        if (executeActionCoroutine != null)
             StopCoroutine(executeActionCoroutine);
 
         executeActionCoroutine = StartCoroutine(ExecuteAction());
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de manejar el cambio de fase del duelo.
+    /// </summary>
+    /// <param name="previousValue"></param>
+    /// <param name="newValue"></param>
     private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
     {
         if (!duelManager.IsSinglePlayer)
@@ -54,23 +59,27 @@ public class HemeraLegionAI : MonoBehaviour
             turn++;
             StartCoroutine(PlanPlay());
         }
-        else if(newValue == DuelPhase.Battle)
+        else if (newValue == DuelPhase.Battle)
         {
             StartCoroutine(DefineActions());
         }
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de planear las acciones del AI en el turno actual.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PlanPlay()
     {
-        if(turn == 1)
+        if (turn == 1)
         {
-            while(GetPlayableHeroes().Count > 0)
+            while (GetPlayableHeroes().Count > 0)
             {
                 //Invocar Heroes.
                 Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
                 if (heroToPlay != null) SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
 
-                yield return new WaitForSeconds(Random.Range(2,3));
+                yield return new WaitForSeconds(Random.Range(2, 3));
             }
 
             StartCoroutine(DefineActions());
@@ -86,6 +95,10 @@ public class HemeraLegionAI : MonoBehaviour
         playerManager.SetPlayerReady();
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de elegir los heroes que pueden ser invocados en el turno actual.
+    /// </summary>
+    /// <returns></returns>
     private List<Card> GetPlayableHeroes()
     {
         List<Card> usableHeroesCards = new List<Card>();
@@ -98,6 +111,12 @@ public class HemeraLegionAI : MonoBehaviour
         return usableHeroesCards;
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de elegir el mejor heroe para invocar en el turno actual.
+    /// </summary>
+    /// <param name="usableHeroesCards"></param>
+    /// <param name="strategy"></param>
+    /// <returns></returns>
     private Card ChoosingHeroToSummon(List<Card> usableHeroesCards, GameStrategy strategy)
     {
         Card heroToPlay = null;
@@ -116,6 +135,11 @@ public class HemeraLegionAI : MonoBehaviour
         return heroToPlay;
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de evaluar el potencial de invocacion de un heroe.
+    /// </summary>
+    /// <param name="heroCard"></param>
+    /// <returns></returns>
     private float EvaluarInvocacion(Card heroCard)
     {
         float score = 0;
@@ -133,14 +157,19 @@ public class HemeraLegionAI : MonoBehaviour
         // score += EvaluarSinergia(heroCard); 
 
         //Penalizacion por coste.
-        if(heroCard.cardSO is HeroCardSO heroCardSO)
+        if (heroCard.cardSO is HeroCardSO heroCardSO)
         {
             score -= heroCardSO.Energy * 1.5f;
         }
-            
+
         return score;
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de evaluar el potencial de un movimiento.
+    /// </summary>
+    /// <param name="movement"></param>
+    /// <returns></returns>
     private float EvaluarMovimineto(Movement movement)
     {
         float score = 0;
@@ -149,7 +178,7 @@ public class HemeraLegionAI : MonoBehaviour
         score += movement.MoveSO.Damage;
 
         //Efectos adicionales
-        if(movement.MoveSO.MoveEffect != null)
+        if (movement.MoveSO.MoveEffect != null)
             score += movement.MoveSO.MoveEffect.effectScore;
 
         return score;
@@ -161,6 +190,11 @@ public class HemeraLegionAI : MonoBehaviour
                     handCardHandler.GetIdexOfCard(heroToPlay), positionIndex);
     }
 
+    /// <summary>
+    /// Esta funcion se encarga de elegir la posicion en el campo donde se invocara el heroe.
+    /// </summary>
+    /// <param name="heroToPlay"></param>
+    /// <returns></returns>
     private int ChoosePositionFieldIndex(Card heroToPlay)
     {
         List<FieldPosition> availablePositions = new List<FieldPosition>();

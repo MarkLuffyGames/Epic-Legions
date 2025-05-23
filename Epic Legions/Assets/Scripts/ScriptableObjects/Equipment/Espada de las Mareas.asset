@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
+  m_Name: Espada de las Mareas
+  m_EditorClassIdentifier: 
+  cardId: 0
+  cardName: Espada de las Mareas
+  cardLastName: 
+  cardSprite: {fileID: 0}
+  cardElemnt: 2
+  equipmentType: 0
+  supportedClasses: 00000000
+  moves:
+  - {fileID: 11400000, guid: 48b7733aea9f0bc43a0d264bb9b72d84, type: 2}
+  effect: {fileID: 0}
