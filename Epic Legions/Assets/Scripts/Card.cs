@@ -182,7 +182,44 @@ public class Card : MonoBehaviour
         }
         else if(cardSO is EquipmentCardSO equipmentCardSO)
         {
+            foreach (var move in equipmentCardSO.Moves)
+            {
+                moves.Add(new Movement(move));
+                if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
+            }
 
+            if (moves[0] != null)
+            {
+                move1NameText.text = moves[0].MoveSO.MoveName;
+                move1EnergyCostText.text = moves[0].MoveSO.EnergyCost.ToString();
+                move1DamageText.text = moves[0].MoveSO.Damage.ToString();
+                move1DescriptionText.text = moves[0].MoveSO.EffectDescription;
+                if (moves[0].MoveSO.Damage == 0)
+                {
+                    move1DamageText.enabled = false;
+                    move1DamageImage.enabled = false;
+                }
+            }
+            else
+            {
+                move1NameText.enabled = false;
+                move1EnergyImage.enabled = false;
+                move1EnergyCostText.enabled = false;
+                move1DamageImage.enabled = false;
+                move1DamageText.enabled = false;
+                move1DescriptionText.enabled = false;
+            }
+
+            move2NameText.enabled = false;
+            move2EnergyImage.enabled = false;
+            move2EnergyCostText.enabled = false;
+            move2DamageImage.enabled = false;
+            move2DamageText.enabled = false;
+            move2DescriptionText.enabled = false;
+            healtText.enabled = false;
+            defenceText.enabled = false;
+            speedText.enabled = false;
+            energyText.enabled = false;
         }
     }
 
@@ -492,8 +529,6 @@ public class Card : MonoBehaviour
             {
                 return true;
             }
-
-            return false;
         }
         else if( cardSO is SpellCardSO spellCardSO)
         {
@@ -505,11 +540,18 @@ public class Card : MonoBehaviour
             {
                 return true;
             }
-
-            return false;
+        }
+        else if (cardSO is EquipmentCardSO equipmentCardSO)
+        {
+            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation ||
+                duelManager.GetCurrentDuelPhase() == DuelPhase.Battle) &&
+                !duelManager.SettingAttackTarget && playerManager.GetAllCardInField().Count > 0)
+            {
+                return true;
+            }
         }
 
-        return false;
+            return false;
     }
 
     /// <summary>

@@ -183,6 +183,16 @@ public class PlayerManager : MonoBehaviour
         {
             spellFieldPosition.Highlight();
         }
+        else if(card.cardSO is EquipmentCardSO)
+        {
+            foreach (var position in fieldPositionList)
+            {
+                if (position.Card != null)
+                {
+                    position.Highlight();
+                }
+            }
+        }
 
 
     }
