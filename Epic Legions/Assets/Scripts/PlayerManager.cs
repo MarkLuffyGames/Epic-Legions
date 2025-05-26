@@ -175,22 +175,19 @@ public class PlayerManager : MonoBehaviour
             {
                 if(position.Card == null)
                 {
-                    position.Highlight();
+                    position.Highlight(card.cardSO);
                 }
             }
         }
         else if (card.cardSO is SpellCardSO)
         {
-            spellFieldPosition.Highlight();
+            spellFieldPosition.Highlight(card.cardSO);
         }
         else if(card.cardSO is EquipmentCardSO)
         {
-            foreach (var position in fieldPositionList)
+            foreach (var heroCard in GetAllCardInField())
             {
-                if (position.Card != null)
-                {
-                    position.Highlight();
-                }
+                heroCard.FieldPosition.Highlight(card.cardSO);
             }
         }
 

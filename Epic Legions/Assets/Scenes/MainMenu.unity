@@ -1305,7 +1305,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: AllCards.Array.size
-      value: 32
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: 'AllCards.Array.data[0]'
@@ -1435,6 +1435,10 @@ PrefabInstance:
       propertyPath: 'AllCards.Array.data[31]'
       value: 
       objectReference: {fileID: 11400000, guid: c8bd7157047672a46a8576ea0998b156, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[32]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 50e6db8bf5af47a4eb19a0f2958ea272, type: 2}
     - target: {fileID: 7755612899893852066, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: m_Name
       value: CardDatabase

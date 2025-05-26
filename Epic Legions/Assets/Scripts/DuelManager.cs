@@ -610,12 +610,20 @@ public class DuelManager : NetworkBehaviour
             
             if (isPlayer || IsSinglePlayer) UseMovement(0, card);
         }
-        else
+        else// Si la carta se coloca en una posición en el campo
         {
-            // Si la carta se coloca en una posición en el campo
-            playerManager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, isPlayer);
-            InsertCardInOrder(HeroCardsOnTheField, card);
-            AudioManager.Instance.PlayCardPlacing();
+            if(card.cardSO is HeroCardSO heroCardSO) // Si la carta es un heroe
+            {
+                playerManager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, isPlayer);
+                InsertCardInOrder(HeroCardsOnTheField, card);
+                AudioManager.Instance.PlayCardPlacing();
+            }
+            else if(card.cardSO is EquipmentCardSO equipmentCardSO) // Si la carta es un equipo
+            {
+                playerManager.GetFieldPositionList()[fieldPositionIdex].Card.AddEquipment(card);
+                AudioManager.Instance.PlayCardPlacing();
+            }
+            
         }
 
         // Marca la carta como lista para el servidor

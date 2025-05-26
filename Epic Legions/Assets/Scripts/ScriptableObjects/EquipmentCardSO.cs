@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public enum EquipmentType { Weapon,  }
+public enum EquipmentType { Weapon, Armor, Accessory }
 [CreateAssetMenu(fileName = "New Equipment Card", menuName = "Hemera Legions/Equipment Card")]
 public class EquipmentCardSO : CardSO
 {

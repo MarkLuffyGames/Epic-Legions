@@ -1,13 +1,12 @@
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class Card : MonoBehaviour
 {
@@ -79,6 +78,7 @@ public class Card : MonoBehaviour
     private int currentDefense;
 
     private List<Movement> moves = new List<Movement>();
+    private Card[] equipmentCard = new Card[3];
     private FieldPosition fieldPosition;
     private DuelManager duelManager;
     public bool isAttackable;
@@ -90,6 +90,7 @@ public class Card : MonoBehaviour
     public int CurrentDefensePoints => Mathf.Clamp(currentDefense + GetDefenseModifier(), 0, 99);
     public int CurrentSpeedPoints => Mathf.Clamp(speed + GetSpeedModifier(), 1, 99);
     public List<Movement> Moves => moves;
+    public Card[] EquipmentCard => equipmentCard;
     public FieldPosition FieldPosition => fieldPosition;
 
     Coroutine moveCoroutine;
@@ -233,6 +234,29 @@ public class Card : MonoBehaviour
         this.fieldPosition = fieldPosition;
         defaultRotation = rotation;
         AdjustUIcons();
+    }
+
+    public void AddEquipment(Card card)
+    {
+        equipmentCard[Array.FindIndex(equipmentCard, c => c == null)] = card;
+        card.isVisible = true;
+        card.transform.parent = transform;
+        card.transform.localScale = Vector3.one;
+        StartCoroutine(card.MoveToPosition(Vector3.back * -0.01f, Card.cardMovementSpeed, false, true));
+        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), Card.cardMovementSpeed, false);
+        card.SetSortingOrder(0);
+        //fieldPosition.ChangeEmission(isbusyColor, intensity);
+    }
+
+    public int GetEquipmentCounts()
+    {
+        int count = 0;
+        foreach (var item in equipmentCard)
+        {
+            if (item != null) count++;
+        }
+
+        return count;
     }
 
     /// <summary>
@@ -391,7 +415,8 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            StartCoroutine(MoveToPosition(focusPosition, cardMovementSpeed, true, false));
+            StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (GetEquipmentCounts() * 0.25f) + new Vector3(-0.25f,0,0), cardMovementSpeed, true, false));
+            EnlargeEquipment();
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
             EnableActions(isPlayer && !actionIsReady && isMyTurn);
@@ -401,6 +426,19 @@ public class Card : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void EnlargeEquipment()
+    {
+        for (int i = 0; i < equipmentCard.Length; i++)
+        {
+            if (equipmentCard[i] != null)
+            {
+                equipmentCard[i].StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (i * 0.25f) + new Vector3(-0.25f, 0, 0), cardMovementSpeed, true, false));
+                equipmentCard[i].RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
+                equipmentCard[i].ChangedSortingOrder(110);
+            }
+        }
     }
 
     private void EnableActions(bool enable)

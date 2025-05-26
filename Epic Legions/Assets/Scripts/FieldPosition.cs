@@ -27,10 +27,41 @@ public class FieldPosition : MonoBehaviour
     /// Metodo para saber si esta posicion no esta ocupada por un heroe.
     /// </summary>
     /// <returns></returns>
-    public bool IsFree()
-   {
-        return card == null;
-   }
+    public bool IsFree(CardSO cardSO)
+    {
+        if(cardSO is HeroCardSO)
+        {
+            return card == null && positionIndex != -1;
+        }
+        else if (cardSO is SpellCardSO)
+        {
+            return card == null && positionIndex == -1;
+        }
+        else if (cardSO is EquipmentCardSO equipmentCard)
+        {
+            return card != null && IsAvailableEquipmentSlot(equipmentCard);
+        }
+
+        return false;
+    }
+
+    public bool IsAvailableEquipmentSlot(EquipmentCardSO equipmentCard)
+    {
+        bool isAvailable = true;
+
+        foreach (var item in card.EquipmentCard)
+        {
+            if(item != null && item.cardSO is EquipmentCardSO equipmentCardSO)
+            {
+                if (equipmentCardSO.EquipmentType == equipmentCard.EquipmentType)
+                {
+                    isAvailable = false;
+                }
+            }
+        }
+
+        return isAvailable;
+    }
 
     /// <summary>
     /// Establece la carta en esta pocion del campo.
@@ -66,9 +97,9 @@ public class FieldPosition : MonoBehaviour
     /// <summary>
     /// Resalta esta posicion si esta libre para indicar al jugador que puede colocar la carta aqui.
     /// </summary>
-    public void Highlight()
+    public void Highlight(CardSO cardSO)
     {
-        if(IsFree())
+        if(IsFree(cardSO))
         {
             ChangeEmission(isFreeColor, intensity);
         }
@@ -79,8 +110,13 @@ public class FieldPosition : MonoBehaviour
     /// </summary>
     public void RemoveHighlight()
     {
-        if(card == null)
-        RestoreOriginalColor();
+        if(card == null) { 
+            RestoreOriginalColor();
+        }
+        else
+        {
+            ChangeEmission(isbusyColor, intensity);
+        }
     }
 
     private Coroutine currentCoroutine; // Para controlar la interpolación en curso

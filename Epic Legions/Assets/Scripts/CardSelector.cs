@@ -166,14 +166,10 @@ public class CardSelector : MonoBehaviour
         
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
         if(currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard) 
-            && currentFieldPosition.IsFree() && card.UsableCard(playerManager)
+            && currentFieldPosition.IsFree(currentCard.cardSO) && card.UsableCard(playerManager)
             && !playerManager.isReady)
         {
-            if (card.cardSO is HeroCardSO && currentFieldPosition.PositionIndex != -1)
-            {
-                PlaceCardOnTheField(card);
-            }
-            else if(card.cardSO is SpellCardSO && currentFieldPosition.PositionIndex == -1)
+            if (playerManager.GetFieldPositionList().Contains(currentFieldPosition) || playerManager.SpellFieldPosition == currentFieldPosition)
             {
                 PlaceCardOnTheField(card);
             }
@@ -340,18 +336,10 @@ public class CardSelector : MonoBehaviour
     /// <param name="fieldPosition"></param>
     private void OnMouseEnterPosition(FieldPosition fieldPosition)
     {
-        if (fieldPosition.IsFree())
+        if (fieldPosition.IsFree(currentCard.cardSO) && (playerManager.GetFieldPositionList().Contains(fieldPosition) || playerManager.SpellFieldPosition == fieldPosition))
         {
-            if (currentCard.cardSO is HeroCardSO && fieldPosition.PositionIndex != -1)
-            {
-                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, Card.cardMovementSpeed, true, false));
-                currentCard.RotateToAngle(new Vector3(90, 0, 0), Card.cardMovementSpeed, true);
-            }
-            else if(currentCard.cardSO is SpellCardSO && fieldPosition == playerManager.SpellFieldPosition)
-            {
-                StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, Card.cardMovementSpeed, true, false));
-                currentCard.RotateToAngle(new Vector3(90, 0, 0), Card.cardMovementSpeed, true);
-            }
+            StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, Card.cardMovementSpeed, true, false));
+            currentCard.RotateToAngle(new Vector3(90, 0, 0), Card.cardMovementSpeed, true);
         }
     }
 
