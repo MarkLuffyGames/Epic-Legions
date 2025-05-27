@@ -45,6 +45,7 @@ public class DuelManager : NetworkBehaviour
     private int movementToUse;
     private bool settingAttackTarget;
     private Card cardSelectingTarget;
+    public SampleCard sampleCard;
 
     private DuelPhase oldDuelPhase;
     public PlayerManager Player1Manager => player1Manager;

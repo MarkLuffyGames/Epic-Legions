@@ -60,7 +60,7 @@ public class PlayerManager : MonoBehaviour
             newCard.transform.rotation = Quaternion.Euler(-90, 0, 0);
             newCard.transform.localPosition = new Vector3(0, i * 0.02f, 0);
             card.Add(newCard.GetComponent<Card>());
-            card[i].SetCard(deck[i], duelManager);
+            card[i].SetNewCard(deck[i], duelManager);
         }
 
         if (isPlayer || duelManager.IsSinglePlayer)

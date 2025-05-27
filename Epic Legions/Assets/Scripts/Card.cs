@@ -99,11 +99,16 @@ public class Card : MonoBehaviour
     /// Establece todos los datos de la carta.
     /// </summary>
     /// <param name="cardSO">Scriptable Object que contiene los datos de la carta que se desea establecer</param>
-    public void SetCard(CardSO cardSO, DuelManager duelManager)
+    public void SetNewCard(CardSO cardSO, DuelManager duelManager)
     {
         this.cardSO = cardSO;
         this.duelManager = duelManager;
 
+        SetCard();
+    }
+
+    private void SetCard()
+    {
         defaultRotation = new Vector3(53, 0, 0);
 
         nameText.text = cardSO.CardName;
@@ -121,11 +126,11 @@ public class Card : MonoBehaviour
             defense = heroCardSO.Defence;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
-            
-            foreach(var move in heroCardSO.Moves)
+
+            foreach (var move in heroCardSO.Moves)
             {
                 moves.Add(new Movement(move));
-                if(move.AlwaysActive) moves[moves.Count -1].ActivateEffect(this, this);
+                if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
             }
 
             currentHealt = maxHealt;
@@ -137,7 +142,7 @@ public class Card : MonoBehaviour
                 move1EnergyCostText.text = moves[0].MoveSO.EnergyCost.ToString();
                 move1DamageText.text = moves[0].MoveSO.Damage.ToString();
                 move1DescriptionText.text = moves[0].MoveSO.EffectDescription;
-                if(moves[0].MoveSO.Damage == 0)
+                if (moves[0].MoveSO.Damage == 0)
                 {
                     move1DamageText.enabled = false;
                     move1DamageImage.enabled = false;
@@ -181,7 +186,7 @@ public class Card : MonoBehaviour
             speedText.enabled = false;
             energyText.enabled = false;
         }
-        else if(cardSO is EquipmentCardSO equipmentCardSO)
+        else if (cardSO is EquipmentCardSO equipmentCardSO)
         {
             foreach (var move in equipmentCardSO.Moves)
             {
@@ -221,6 +226,22 @@ public class Card : MonoBehaviour
             defenceText.enabled = false;
             speedText.enabled = false;
             energyText.enabled = false;
+        }
+    }
+
+    public void CopyCard(Card card)
+    {
+        cardSO = card.cardSO;
+        SetCard();
+    }
+
+    public void CleanCard()
+    {
+        cardSO = null;
+        moves.Clear();
+        for (int i = 0; i < equipmentCard.Length; i++)
+        {
+            equipmentCard[i] = null;
         }
     }
 
@@ -415,13 +436,14 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (GetEquipmentCounts() * 0.25f) + new Vector3(-0.25f,0,0), cardMovementSpeed, true, false));
+            duelManager.sampleCard.Enlarge(this);
+            /*StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (GetEquipmentCounts() * 0.25f) + new Vector3(-0.25f,0,0), cardMovementSpeed, true, false));
             EnlargeEquipment();
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
             ChangedSortingOrder(110);
             EnableActions(isPlayer && !actionIsReady && isMyTurn);
+            AdjustUIcons();*/
             isFocused = true;
-            AdjustUIcons();
             return true;
         }
 
@@ -468,12 +490,13 @@ public class Card : MonoBehaviour
     {
         if (isFocused)
         {
-            MoveToLastPosition();
+            StartCoroutine(duelManager.sampleCard.ResetSize(this));
+            /*MoveToLastPosition();
             RotateToAngle(defaultRotation, cardMovementSpeed, false);
             ChangedSortingOrder(sortingOrder);
             cardActions.enabled = false;
+            AdjustUIcons();*/
             isFocused = false;
-            AdjustUIcons();
         }
     }
 
@@ -503,10 +526,10 @@ public class Card : MonoBehaviour
     /// Cambia el Sort Order de la carta.
     /// </summary>
     /// <param name="sortingOrder"></param>
-    private void ChangedSortingOrder(int sortingOrder)
+    public void ChangedSortingOrder(int sortingOrder)
     {
         canvasFront.sortingOrder = sortingOrder;
-        canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
+        if(canvasBack != null) canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
         cardActions.sortingOrder = sortingOrder + 1;
     }
 
@@ -1020,7 +1043,7 @@ public class Card : MonoBehaviour
 
     public void ActivateVisualEffects()
     {
-        stunEffect.SetActive(IsStunned());
+        if(stunEffect != null)stunEffect.SetActive(IsStunned());
         //TODO: Activar efecto visual de envenenamiento.
     }
 
