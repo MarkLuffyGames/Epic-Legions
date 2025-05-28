@@ -17,15 +17,16 @@ public class SampleCard : MonoBehaviour
             card.gameObject.SetActive(false);
         }
     }
-    public void Enlarge(Card card)
+    public void Enlarge(Card card, DuelManager duelManager)
     {
         cards[0].gameObject.SetActive(true);
-        SetCard(cards[0], card);
+        SetCard(cards[0], card, duelManager);
         cards[0].transform.position = card.transform.position;
         cards[0].transform.rotation = card.transform.rotation;
         StartCoroutine(cards[0].MoveToPosition(position1, Card.cardMovementSpeed, true, true));
         cards[0].RotateToAngle(Vector3.right * 53, Card.cardMovementSpeed, true);
         cards[0].ChangedSortingOrder(110);
+        cards[0].EnableActions(card.isPlayer && !card.actionIsReady && card.isMyTurn);
     }
 
     public IEnumerator ResetSize(Card card)
@@ -37,8 +38,8 @@ public class SampleCard : MonoBehaviour
         cards[0].gameObject.SetActive(false);
     }
 
-    public void SetCard(Card cardToSet, Card cardToCopy)
+    public void SetCard(Card cardToSet, Card cardToCopy, DuelManager duelManager)
     {
-        cardToSet.CopyCard(cardToCopy);
+        cardToSet.CopyCard(cardToCopy, duelManager);
     }
 }

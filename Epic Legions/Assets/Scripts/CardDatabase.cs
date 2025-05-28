@@ -4,9 +4,9 @@ using UnityEngine;
 public class CardDatabase : MonoBehaviour
 {
     public List<CardSO> AllCards;
-    public static List<CardSO> allCards; // Lista de todas las cartas disponibles.
+    public static List<CardSO> allCards; // Lista de todas las cartas disponibles.  
 
-    // Método para buscar una carta por su ID.
+    // Método para buscar una carta por su ID.  
     public static CardSO GetCardById(int cardId)
     {
         return allCards.Find(card => card.CardID == cardId);
@@ -18,14 +18,20 @@ public class CardDatabase : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeCardDatabase()
+    {
+        allCards = new List<CardSO>();
+    }
+
     public static int[] ShuffleArray(int[] array)
     {
         for (int i = array.Length - 1; i > 0; i--)
         {
-            // Generar un índice aleatorio
+            // Generar un índice aleatorio  
             int randomIndex = Random.Range(0, i + 1);
 
-            // Intercambiar el elemento actual con el elemento aleatorio
+            // Intercambiar el elemento actual con el elemento aleatorio  
             int temp = array[i];
             array[i] = array[randomIndex];
             array[randomIndex] = temp;

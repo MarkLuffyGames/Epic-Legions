@@ -136,8 +136,8 @@ public class HandCardHandler : MonoBehaviour
         return cardsList.IndexOf(card);
     }
 
-    private static GameObject selectedButtonObject;
-    public static bool IsMouseOverButton()
+    private GameObject selectedButtonObject;
+    public bool IsMouseOverButton()
     {
         // Obtén el objeto debajo del mouse
         GameObject newSelectedButtonObject = EventSystem.current.currentSelectedGameObject;

@@ -5,9 +5,15 @@ public class CorrutinaHelper : MonoBehaviour
 {
     public static CorrutinaHelper Instancia;
 
-    void Awake()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Initialize()
     {
-        Instancia = this;
+        if (Instancia == null)
+        {
+            GameObject helperObject = new GameObject("CorrutinaHelper");
+            Instancia = helperObject.AddComponent<CorrutinaHelper>();
+            DontDestroyOnLoad(helperObject);
+        }
     }
 
     public void EjecutarCorrutina(IEnumerator corrutina)

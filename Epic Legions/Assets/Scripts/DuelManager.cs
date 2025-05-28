@@ -10,6 +10,11 @@ public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, Play
 public class DuelManager : NetworkBehaviour
 {
     public static int NumberOfTurns = 21;
+    [RuntimeInitializeOnLoadMethod]
+    private static void InitializeOnLoad()
+    {
+        NumberOfTurns = 21; // Inicializa el valor de NumberOfTurns
+    }
 
     public event EventHandler OnPlayerNotReady;
     public event EventHandler<OnPlayerReadyEventArgs> OnPlayerReady;

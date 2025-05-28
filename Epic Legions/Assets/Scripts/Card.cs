@@ -50,11 +50,16 @@ public class Card : MonoBehaviour
 
     private Vector3 offset;
     private bool isDragging = false;
-    private bool isPlayer;
+    public bool isPlayer;
     public bool isMyTurn;
     private bool isMoving;
     private int sortingOrder;
     public static int cardMovementSpeed = 20;
+    [RuntimeInitializeOnLoadMethod]
+    private static void InitializeOnLoad()
+    {
+        cardMovementSpeed = 20; // Inicializa el valor de cardMovementSpeed
+    }
 
     private List<Effect> statModifier;
 
@@ -79,6 +84,7 @@ public class Card : MonoBehaviour
 
     private List<Movement> moves = new List<Movement>();
     private Card[] equipmentCard = new Card[3];
+    private Card copiedCard;
     private FieldPosition fieldPosition;
     private DuelManager duelManager;
     public bool isAttackable;
@@ -229,15 +235,19 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void CopyCard(Card card)
+    public void CopyCard(Card card, DuelManager duelManager)
     {
         cardSO = card.cardSO;
+        copiedCard = card;
+        this.duelManager = duelManager;
         SetCard();
     }
 
     public void CleanCard()
     {
         cardSO = null;
+        copiedCard = null;
+        duelManager = null;
         moves.Clear();
         for (int i = 0; i < equipmentCard.Length; i++)
         {
@@ -436,7 +446,7 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            duelManager.sampleCard.Enlarge(this);
+            duelManager.sampleCard.Enlarge(this, duelManager);
             /*StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (GetEquipmentCounts() * 0.25f) + new Vector3(-0.25f,0,0), cardMovementSpeed, true, false));
             EnlargeEquipment();
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
@@ -463,14 +473,14 @@ public class Card : MonoBehaviour
         }
     }
 
-    private void EnableActions(bool enable)
+    public void EnableActions(bool enable)
     {
         cardActions.enabled = enable;
         if (cardActions.isActiveAndEnabled)
         {
-            move1Button.gameObject.SetActive(UsableMovement(0, duelManager.Player1Manager));
+            move1Button.gameObject.SetActive(copiedCard.UsableMovement(0, duelManager.Player1Manager));
 
-            move2Button.gameObject.SetActive(UsableMovement(1, duelManager.Player1Manager));
+            move2Button.gameObject.SetActive(copiedCard.UsableMovement(1, duelManager.Player1Manager));
         }
     }
 
@@ -494,8 +504,8 @@ public class Card : MonoBehaviour
             /*MoveToLastPosition();
             RotateToAngle(defaultRotation, cardMovementSpeed, false);
             ChangedSortingOrder(sortingOrder);
-            cardActions.enabled = false;
             AdjustUIcons();*/
+            cardActions.enabled = false;
             isFocused = false;
         }
     }
@@ -694,9 +704,9 @@ public class Card : MonoBehaviour
     /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
-        duelManager.UseMovement(movementNumber, this);
+        duelManager.UseMovement(movementNumber, copiedCard);
         cardActions.enabled = false;
-        ResetSize();
+        copiedCard.ResetSize();
     }
 
     /// <summary>

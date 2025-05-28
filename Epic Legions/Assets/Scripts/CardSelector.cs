@@ -27,13 +27,20 @@ public class CardSelector : MonoBehaviour
 
     private bool isAnyFocusedCard;
 
+    // Método estático para inicializar valores en tiempo de ejecución
+    [RuntimeInitializeOnLoadMethod]
+    private static void InitializeOnLoad()
+    {
+        clickHoldTime = 0.2f; // Inicializa el valor de clickHoldTime
+    }
+
     void Update()
     {
-        if(NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
+        if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
 
         DetectCardUnderMouse();
 
-        if (HandCardHandler.IsMouseOverButton()) return;
+        if (handCardHandler.IsMouseOverButton()) return;
 
         // Detecta si el clic izquierdo del mouse está presionado sobre una carta
         if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)) && currentCard != null)
@@ -163,9 +170,9 @@ public class CardSelector : MonoBehaviour
             OnQuickClick(card);
         }
 
-        
+
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
-        if(currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard) 
+        if (currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard)
             && currentFieldPosition.IsFree(currentCard.cardSO) && card.UsableCard(playerManager)
             && !playerManager.isReady)
         {
@@ -173,7 +180,7 @@ public class CardSelector : MonoBehaviour
             {
                 PlaceCardOnTheField(card);
             }
-            else if(currentCard != null && isHoldingCard)
+            else if (currentCard != null && isHoldingCard)
             {
                 isHoldingCard = false;
                 if (handCardHandler.CardInThePlayerHand(card))
@@ -195,7 +202,7 @@ public class CardSelector : MonoBehaviour
         //En cualquier caso se ocultan las pocisiones disponibles en el campo.
         playerManager.HideAvailablePositions();
         //Si la carta que se solto no esta pocisionada en el campo mostrar las cartas de la mano.
-        if(handCardHandler.GetCardInHandList().Contains(card))
+        if (handCardHandler.GetCardInHandList().Contains(card))
         {
             handCardHandler.ShowHandCard();
         }
@@ -262,7 +269,7 @@ public class CardSelector : MonoBehaviour
         {
             card.StartDragging(heldTime);
 
-            if(heldTime > clickHoldTime)
+            if (heldTime > clickHoldTime)
             {
                 playerManager.ShowAvailablePositions(card);
                 handCardHandler.HideHandCard();
@@ -293,7 +300,7 @@ public class CardSelector : MonoBehaviour
             ray = Camera.main.ScreenPointToRay(Touchscreen.current.primaryTouch.position.ReadValue());
         }
 
-        
+
         RaycastHit hit;
 
         // Lanza el rayo y verifica si colisiona con una posicion de campo.
@@ -369,7 +376,7 @@ public class CardSelector : MonoBehaviour
 
         if (duelManager.IsSinglePlayer)
         {
-            duelManager.PlaceCardInField(duelManager.Player1Manager, true, handCardHandler.GetIdexOfCard(currentCard),currentFieldPosition.PositionIndex);
+            duelManager.PlaceCardInField(duelManager.Player1Manager, true, handCardHandler.GetIdexOfCard(currentCard), currentFieldPosition.PositionIndex);
         }
         else
         {
@@ -381,11 +388,11 @@ public class CardSelector : MonoBehaviour
 
         currentFieldPosition = null;
 
-        if(card.cardSO is HeroCardSO)
+        if (card.cardSO is HeroCardSO)
         {
             handCardHandler.ShowHandCard();
         }
-        else if(card.cardSO is SpellCardSO)
+        else if (card.cardSO is SpellCardSO)
         {
             handCardHandler.HideHandCard();
         }
