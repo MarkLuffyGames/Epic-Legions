@@ -19,13 +19,11 @@ public class CardSelector : MonoBehaviour
     private FieldPosition currentFieldPosition;
 
     // Bandera para verificar si se ha hecho clic en una carta
-    private bool isClickingCard = false;
+    private bool isClicking = false;
     private bool isHoldingCard = false;
 
     public static float clickHoldTime = 0.2f; // Tiempo para diferenciar entre clic y arrastre
     private float mouseDownTime; // Tiempo cuando el mouse fue presionado
-
-    private bool isAnyFocusedCard;
 
     // Método estático para inicializar valores en tiempo de ejecución
     [RuntimeInitializeOnLoadMethod]
@@ -43,18 +41,18 @@ public class CardSelector : MonoBehaviour
         if (handCardHandler.IsMouseOverButton()) return;
 
         // Detecta si el clic izquierdo del mouse está presionado sobre una carta
-        if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)) && currentCard != null)
+        if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)))
         {
-            OnMouseDownCard(currentCard);
-            isClickingCard = true;
-            isHoldingCard = true;
+            OnMouseDownCard();
+            if (currentCard != null) isHoldingCard = true;
+            isClicking = true;
         }
 
         // Detecta si el clic izquierdo del mouse se suelta
-        if (((Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame)) && isClickingCard)
+        if (((Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame)) && isClicking)
         {
             OnMouseUpCard(currentCard);
-            isClickingCard = false;
+            isClicking = false;
         }
 
         // Si se está manteniendo la carta, llama al método OnCardHeld
@@ -70,12 +68,8 @@ public class CardSelector : MonoBehaviour
     private void DetectCardUnderMouse()
     {
 
-        if (isHoldingCard || isAnyFocusedCard)
+        if (isHoldingCard)
         {
-            if (duelManager.SettingAttackTarget)
-            {
-                isAnyFocusedCard = false;
-            }
             return;
         }
 
@@ -150,7 +144,7 @@ public class CardSelector : MonoBehaviour
     /// Método para cuando se hace clic en la carta
     /// </summary>
     /// <param name="card">Carta a la que se le hace clic</param>
-    private void OnMouseDownCard(Card card)
+    private void OnMouseDownCard()
     {
         mouseDownTime = Time.time; // Registra el tiempo en que se hizo clic
     }
@@ -170,7 +164,10 @@ public class CardSelector : MonoBehaviour
             OnQuickClick(card);
         }
 
-
+        if(card == null)
+        {
+            return; // Si la carta es nula, no hacer nada
+        }
         //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
         if (currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard)
             && currentFieldPosition.IsFree(currentCard.cardSO) && card.UsableCard(playerManager)
@@ -190,7 +187,7 @@ public class CardSelector : MonoBehaviour
             }
         }
         //Si se suelta la carta pero no se puede colocar en el campo dejar de arrastrar.
-        else if (currentCard != null && isHoldingCard)
+        else if (isHoldingCard)
         {
             isHoldingCard = false;
             if (handCardHandler.CardInThePlayerHand(card))
@@ -214,11 +211,16 @@ public class CardSelector : MonoBehaviour
     private void OnQuickClick(Card card)
     {
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
-        if (duelManager.SettingAttackTarget)
+        if (duelManager.SettingAttackTarget && card != null)
         {
             if (card.isAttackable)
             {
                 duelManager.CardSelectingTarget.actionIsReady = true;
+
+                if(card.cardSO is EquipmentCardSO)
+                {
+                    card = card.HeroOwner; // Si es una carta de equipo, se ataca al héroe del jugador.
+                }
 
                 if (duelManager.IsSinglePlayer)
                 {
@@ -242,16 +244,17 @@ public class CardSelector : MonoBehaviour
             }
         }
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
-        else if (!isAnyFocusedCard && card.isVisible)
+        else if (!duelManager.sampleCard.IsEnlarged && card != null && card.isVisible)
         {
             card.RemoveHighlight();
-            isAnyFocusedCard = card.Enlarge();
+            card.Enlarge();
         }
         //Si hay una carta enfocada desenfocar la carta.
-        else if (isAnyFocusedCard)
+        else if (duelManager.sampleCard.IsEnlarged)
         {
-            card.ResetSize();
-            isAnyFocusedCard = false;
+            duelManager.sampleCard.OnClick(currentCard);
+            //card.ResetSize();
+            //isAnyFocusedCard = false;
         }
     }
 
@@ -263,7 +266,7 @@ public class CardSelector : MonoBehaviour
     {
         float heldTime = Time.time - mouseDownTime;
 
-        if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard//La carta esta en la mano del jugador y no esta enfocada
+        if (handCardHandler.CardInThePlayerHand(card) && !duelManager.sampleCard.IsEnlarged//La carta esta en la mano del jugador y no esta enfocada
             && !playerManager.isReady && !card.waitForServer //El jugador no puede estar listo para avanzar a la siguinte fase ni la carta estar esperando respuesta del servidor.
             && card.UsableCard(playerManager)) //La carta puede ser usada. 
         {
@@ -354,7 +357,7 @@ public class CardSelector : MonoBehaviour
 
     private void HighlightCardInHand(Card card)
     {
-        if (handCardHandler.CardInThePlayerHand(card) && !isAnyFocusedCard)
+        if (handCardHandler.CardInThePlayerHand(card) && !duelManager.sampleCard.IsEnlarged)
         {
             card.Highlight();
         }

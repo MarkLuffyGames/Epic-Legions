@@ -730,15 +730,19 @@ public class DuelManager : NetworkBehaviour
         return null;
     }
 
-    private PlayerManager GetPlayerManagerRival(Card heroCard)
+    private PlayerManager GetPlayerManagerRival(Card card)
     {
-        // Verifica si el héroe está en el campo del jugador 1
-        if (player1Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        if(card.cardSO is EquipmentCardSO)
+        {
+            card = card.HeroOwner; // Si la carta es un equipo, se obtiene el héroe propietario del equipo
+        }
+        // Verifica si la carta está en el campo del jugador 1
+        if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
         {
             return player2Manager;
         }
-        // Verifica si el héroe está en el campo del jugador 2
-        else if (player2Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
+        // Verifica si la carta está en el campo del jugador 2
+        else if (player2Manager.GetFieldPositionList().Contains(card.FieldPosition))
         {
             return player1Manager;
         }

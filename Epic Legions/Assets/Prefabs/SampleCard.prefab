@@ -10862,6 +10862,11 @@ MonoBehaviour:
   - {fileID: 7731407162947478294}
   - {fileID: 8582530829819514478}
   - {fileID: 8288065389844798221}
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: -0.5, y: 0, z: 0.5}
+  - {x: 0.5, y: 0, z: 0.5}
+  - {x: 0, y: 0, z: 1}
   position1: {x: 0, y: 0, z: 0}
   position2: {x: -0.5, y: 0, z: 0.5}
   position3: {x: 0.5, y: 0, z: 0.5}
@@ -12176,6 +12181,7 @@ MonoBehaviour:
   - {fileID: 7037704159152813073}
   - {fileID: 4490357744986759387}
   cardSO: {fileID: 0}
+  isPlayer: 0
   isMyTurn: 0
   isTemporalPosition: 0
   isVisible: 0
@@ -13414,6 +13420,7 @@ MonoBehaviour:
   - {fileID: 2546918319338784955}
   - {fileID: 2852359920716186135}
   cardSO: {fileID: 0}
+  isPlayer: 0
   isMyTurn: 0
   isTemporalPosition: 0
   isVisible: 0
@@ -14774,6 +14781,7 @@ MonoBehaviour:
   - {fileID: 2189816275850914712}
   - {fileID: 8208855830072282979}
   cardSO: {fileID: 0}
+  isPlayer: 0
   isMyTurn: 0
   isTemporalPosition: 0
   isVisible: 0
@@ -15033,6 +15041,7 @@ MonoBehaviour:
   - {fileID: 758321128772335198}
   - {fileID: 3909501587322180857}
   cardSO: {fileID: 0}
+  isPlayer: 0
   isMyTurn: 0
   isTemporalPosition: 0
   isVisible: 0

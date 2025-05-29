@@ -72,7 +72,7 @@ public class FieldPosition : MonoBehaviour
         this.card = card;
         card.isVisible = true;
         card.transform.parent = transform;
-        card.transform.localScale = Vector3.one;
+        card.RemoveHighlight();
         StartCoroutine(card.MoveToPosition(Vector3.back * 0.01f, Card.cardMovementSpeed, false, true));
         card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 0), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);

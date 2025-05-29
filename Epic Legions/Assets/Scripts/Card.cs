@@ -66,7 +66,6 @@ public class Card : MonoBehaviour
     private Vector3 lastPosition;
     private Vector3 defaultRotation;
 
-    private bool isFocused;
     private bool isHighlight;
     public bool isTemporalPosition;
 
@@ -84,6 +83,7 @@ public class Card : MonoBehaviour
 
     private List<Movement> moves = new List<Movement>();
     private Card[] equipmentCard = new Card[3];
+    private Card heroOwner;
     private Card copiedCard;
     private FieldPosition fieldPosition;
     private DuelManager duelManager;
@@ -97,6 +97,7 @@ public class Card : MonoBehaviour
     public int CurrentSpeedPoints => Mathf.Clamp(speed + GetSpeedModifier(), 1, 99);
     public List<Movement> Moves => moves;
     public Card[] EquipmentCard => equipmentCard;
+    public Card HeroOwner => heroOwner;
     public FieldPosition FieldPosition => fieldPosition;
 
     Coroutine moveCoroutine;
@@ -166,6 +167,23 @@ public class Card : MonoBehaviour
                     move2DamageImage.enabled = false;
                 }
             }
+
+            move1NameText.enabled = true;
+            move1EnergyImage.enabled = true;
+            move1EnergyCostText.enabled = true;
+            move1DamageImage.enabled = true;
+            move1DamageText.enabled = true;
+            move1DescriptionText.enabled = true;
+            move2NameText.enabled = true;
+            move2EnergyImage.enabled = true;
+            move2EnergyCostText.enabled = true;
+            move2DamageImage.enabled = true;
+            move2DamageText.enabled = true;
+            move2DescriptionText.enabled = true;
+            healtText.enabled = true;
+            defenceText.enabled = true;
+            speedText.enabled = true;
+            energyText.enabled = true;
 
             statModifier = new List<Effect>();
             UpdateText();
@@ -249,10 +267,6 @@ public class Card : MonoBehaviour
         copiedCard = null;
         duelManager = null;
         moves.Clear();
-        for (int i = 0; i < equipmentCard.Length; i++)
-        {
-            equipmentCard[i] = null;
-        }
     }
 
 
@@ -273,10 +287,15 @@ public class Card : MonoBehaviour
         card.isVisible = true;
         card.transform.parent = transform;
         card.transform.localScale = Vector3.one;
-        StartCoroutine(card.MoveToPosition(Vector3.back * -0.01f, Card.cardMovementSpeed, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), Card.cardMovementSpeed, false);
+        StartCoroutine(card.MoveToPosition(Vector3.back * -0.01f, cardMovementSpeed, false, true));
+        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), cardMovementSpeed, false);
         card.SetSortingOrder(0);
-        //fieldPosition.ChangeEmission(isbusyColor, intensity);
+        card.SetEquipmentOwner(this);
+    }
+
+    public void SetEquipmentOwner(Card heroOwner)
+    {
+        this.heroOwner = heroOwner;
     }
 
     public int GetEquipmentCounts()
@@ -442,7 +461,7 @@ public class Card : MonoBehaviour
     /// Posiciona la carta en un punto delante de la pantalla para verla detalladamente.
     /// </summary>
     /// <returns>Retorna true si la carta fue agrandada correctamente.</returns>
-    public bool Enlarge()
+    public void Enlarge()
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
@@ -453,11 +472,8 @@ public class Card : MonoBehaviour
             ChangedSortingOrder(110);
             EnableActions(isPlayer && !actionIsReady && isMyTurn);
             AdjustUIcons();*/
-            isFocused = true;
-            return true;
+            //isFocused = true;
         }
-
-        return false;
     }
 
     public void EnlargeEquipment()
@@ -478,9 +494,23 @@ public class Card : MonoBehaviour
         cardActions.enabled = enable;
         if (cardActions.isActiveAndEnabled)
         {
-            move1Button.gameObject.SetActive(copiedCard.UsableMovement(0, duelManager.Player1Manager));
+            if (moves.Count > 0)
+            {
+                move1Button.gameObject.SetActive(copiedCard.UsableMovement(0, duelManager.Player1Manager));
+            }
+            else
+            {
+                move1Button.gameObject.SetActive(false);
+            }
 
-            move2Button.gameObject.SetActive(copiedCard.UsableMovement(1, duelManager.Player1Manager));
+            if (moves.Count > 1)
+            {
+                move2Button.gameObject.SetActive(copiedCard.UsableMovement(1, duelManager.Player1Manager));
+            }
+            else
+            {
+                move2Button.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -498,16 +528,16 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ResetSize()
     {
-        if (isFocused)
+        /*if (isFocused)
         {
-            StartCoroutine(duelManager.sampleCard.ResetSize(this));
-            /*MoveToLastPosition();
+            duelManager.sampleCard.ResetSize(this);
+            MoveToLastPosition();
             RotateToAngle(defaultRotation, cardMovementSpeed, false);
             ChangedSortingOrder(sortingOrder);
-            AdjustUIcons();*/
+            AdjustUIcons();
             cardActions.enabled = false;
             isFocused = false;
-        }
+        }*/
     }
 
     /// <summary>
@@ -517,13 +547,13 @@ public class Card : MonoBehaviour
     {
         if (cardSO is HeroCardSO)
         {
-            if (isFocused || defaultValue)
+            if (defaultValue)
             {
                 healtText.gameObject.transform.localScale = Vector3.one;
                 defenceText.gameObject.transform.localScale = Vector3.one;
                 speedText.gameObject.transform.localScale = Vector3.one;
             }
-            else if (!isFocused && fieldPosition != null)
+            else if (fieldPosition != null)
             {
                 healtText.gameObject.transform.localScale = Vector3.one * 5;
                 defenceText.gameObject.transform.localScale = Vector3.one * 5;
@@ -563,7 +593,7 @@ public class Card : MonoBehaviour
     public void StopDragging(bool returnLastPosition)
     {
         isDragging = false;
-        if (!isFocused && returnLastPosition)
+        if (!duelManager.sampleCard.Card == this && returnLastPosition)
         {
             MoveToLastPosition();
         }
@@ -706,7 +736,7 @@ public class Card : MonoBehaviour
     {
         duelManager.UseMovement(movementNumber, copiedCard);
         cardActions.enabled = false;
-        copiedCard.ResetSize();
+        duelManager.sampleCard.ResetSize();
     }
 
     /// <summary>
@@ -742,14 +772,6 @@ public class Card : MonoBehaviour
 
     public IEnumerator AttackAnimation(int player, Card cardToAttack, Movement movement)
     {
-        yield return new WaitWhile(() => isMoving);
-
-        if (isFocused)
-        {
-            ResetSize();
-            yield return null;
-        }
-
         yield return new WaitWhile(() => isMoving);
 
         if(movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
@@ -813,7 +835,7 @@ public class Card : MonoBehaviour
         //Efecto de daño.
         if (movement.MoveSO.VisualEffectHit != null)
         {
-            Instantiate(movement.MoveSO.VisualEffectHit, isFocused ? lastPosition : transform.position, Quaternion.identity);
+            Instantiate(movement.MoveSO.VisualEffectHit, transform.position, Quaternion.identity);
         }
 
         var protector = HasProtector();
@@ -976,7 +998,7 @@ public class Card : MonoBehaviour
     {
         if(cardSO is HeroCardSO)
         {
-            stunEffect.SetActive(false);
+            if (stunEffect != null) stunEffect.SetActive(false);
             foreach (var effect in statModifier)
             {
                 HideIcon(effect.MoveEffect.iconSprite);
