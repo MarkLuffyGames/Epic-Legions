@@ -291,6 +291,13 @@ public class Card : MonoBehaviour
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.SetEquipmentOwner(this);
+        if(card.moves.Count > 0)
+        {
+            foreach (var move in card.moves)
+            {
+                moves.Add(move);
+            }
+        }
     }
 
     public void SetEquipmentOwner(Card heroOwner)
@@ -734,7 +741,7 @@ public class Card : MonoBehaviour
     /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
-        duelManager.UseMovement(movementNumber, copiedCard);
+        duelManager.UseMovement(cardSO is EquipmentCardSO e ? movementNumber + 3 : movementNumber, cardSO is EquipmentCardSO eq ? copiedCard.HeroOwner: copiedCard);
         cardActions.enabled = false;
         duelManager.sampleCard.ResetSize();
     }

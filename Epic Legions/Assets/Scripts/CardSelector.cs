@@ -217,16 +217,24 @@ public class CardSelector : MonoBehaviour
             {
                 duelManager.CardSelectingTarget.actionIsReady = true;
 
-                if(card.cardSO is EquipmentCardSO)
+                Card cardSelectingTarget = duelManager.CardSelectingTarget;
+                bool isHeroCard = cardSelectingTarget.cardSO is HeroCardSO || cardSelectingTarget.cardSO is EquipmentCardSO;
+                int heroPositionIndex = -10;
+
+                if (cardSelectingTarget.cardSO is EquipmentCardSO)
                 {
-                    card = card.HeroOwner; // Si es una carta de equipo, se ataca al héroe del jugador.
+                    heroPositionIndex = cardSelectingTarget.HeroOwner.FieldPosition.PositionIndex;
+                    cardSelectingTarget = cardSelectingTarget.HeroOwner;
+                }
+                else
+                {
+                    heroPositionIndex = duelManager.CardSelectingTarget.FieldPosition.PositionIndex;
                 }
 
                 if (duelManager.IsSinglePlayer)
                 {
                     duelManager.ProcessAttack(card.FieldPosition.PositionIndex,
-                        duelManager.CardSelectingTarget.cardSO is HeroCardSO,
-                        duelManager.CardSelectingTarget.FieldPosition.PositionIndex,
+                        isHeroCard, heroPositionIndex,
                         duelManager.MovementToUse, 1);
 
                 }
@@ -234,12 +242,11 @@ public class CardSelector : MonoBehaviour
                 {
                     duelManager.ProcessAttackServerRpc(card.FieldPosition.PositionIndex,
                     NetworkManager.Singleton.LocalClientId,
-                    duelManager.CardSelectingTarget.cardSO is HeroCardSO,
-                    duelManager.CardSelectingTarget.FieldPosition.PositionIndex,
+                    isHeroCard, heroPositionIndex,
                     duelManager.MovementToUse);
                 }
 
-                duelManager.CardSelectingTarget.EndTurn();
+                cardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
             }
         }
