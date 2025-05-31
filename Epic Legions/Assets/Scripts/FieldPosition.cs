@@ -115,7 +115,10 @@ public class FieldPosition : MonoBehaviour
         }
         else
         {
-            ChangeEmission(isbusyColor, intensity);
+            if(card.isMyTurn)
+                ChangeEmission(Color.yellow);
+            else
+                ChangeEmission(isbusyColor, intensity);
         }
     }
 

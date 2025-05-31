@@ -143,6 +143,23 @@ public class Card : MonoBehaviour
             currentHealt = maxHealt;
             currentDefense = defense;
 
+            move1NameText.enabled = true;
+            move1EnergyImage.enabled = true;
+            move1EnergyCostText.enabled = true;
+            move1DamageImage.enabled = true;
+            move1DamageText.enabled = true;
+            move1DescriptionText.enabled = true;
+            move2NameText.enabled = true;
+            move2EnergyImage.enabled = true;
+            move2EnergyCostText.enabled = true;
+            move2DamageImage.enabled = true;
+            move2DamageText.enabled = true;
+            move2DescriptionText.enabled = true;
+            healtText.enabled = true;
+            defenceText.enabled = true;
+            speedText.enabled = true;
+            energyText.enabled = true;
+
             if (moves[0] != null)
             {
                 move1NameText.text = moves[0].MoveSO.MoveName;
@@ -167,23 +184,6 @@ public class Card : MonoBehaviour
                     move2DamageImage.enabled = false;
                 }
             }
-
-            move1NameText.enabled = true;
-            move1EnergyImage.enabled = true;
-            move1EnergyCostText.enabled = true;
-            move1DamageImage.enabled = true;
-            move1DamageText.enabled = true;
-            move1DescriptionText.enabled = true;
-            move2NameText.enabled = true;
-            move2EnergyImage.enabled = true;
-            move2EnergyCostText.enabled = true;
-            move2DamageImage.enabled = true;
-            move2DamageText.enabled = true;
-            move2DescriptionText.enabled = true;
-            healtText.enabled = true;
-            defenceText.enabled = true;
-            speedText.enabled = true;
-            energyText.enabled = true;
 
             statModifier = new List<Effect>();
             UpdateText();
