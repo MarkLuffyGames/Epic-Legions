@@ -93,8 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 1f4ab25bbc355bc4a805690d15bd53db, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 2ac515376a73cca4891fad03c09a091e, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -527,6 +527,26 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5951778418261218967, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5951778418261218967, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5951778418261218967, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5951778418261218967, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 459066696257675108, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6a871b241abaa244ea92fb8433f428a5, type: 3}
       propertyPath: m_Name
