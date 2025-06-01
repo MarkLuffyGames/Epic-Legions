@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: Tharun - Guardian de la Bruma
+  m_Name: Tharun - Guardian de la Bruma 2
   m_EditorClassIdentifier: 
   cardId: 0
   cardName: Tharun
@@ -22,4 +22,7 @@ MonoBehaviour:
   defence: 30
   speed: 25
   energy: 35
-  moves: []
+  moves:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}
