@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: "Maegir - Domador de la Monta\xF1a"
+  m_Name: "Maegir - Domador de la Monta\xF1a 4"
   m_EditorClassIdentifier: 
   cardId: 3
   cardName: Maegir
@@ -23,6 +23,6 @@ MonoBehaviour:
   speed: 65
   energy: 30
   moves:
-  - {fileID: 11400000, guid: ef16db8fea6693a43a5c3e772d8cec8d, type: 2}
-  - {fileID: 11400000, guid: 1e55fa4dcd5affe4e8d36d31931ce0bd, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

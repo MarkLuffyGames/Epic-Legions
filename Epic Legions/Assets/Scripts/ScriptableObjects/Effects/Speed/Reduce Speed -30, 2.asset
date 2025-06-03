@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Reduce Speed -30, 2
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 2717293893997149916, guid: 8f2d8143043461140b7c3d833cd06fa5, type: 3}
-  amount: 20
+  iconSprite: {fileID: 0}
+  effectScore: 1
+  amount: 30
   numberTurns: 2
   isIncrease: 0

@@ -23,5 +23,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Una ola densa golpea al enemigo, impidiendole ecibir curacio
-    durante 2 turnos.
+  effectDescription: "Una ola densa golpea al enemigo, impidi\xE9ndole recibir curaci\xF3n
+    durante 2 turnos."
