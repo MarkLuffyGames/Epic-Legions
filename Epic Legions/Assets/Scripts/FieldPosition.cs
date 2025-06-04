@@ -8,11 +8,17 @@ public class FieldPosition : MonoBehaviour
     [SerializeField] private Color originalColor;
     [SerializeField] private Color isFreeColor;
     [SerializeField] private Color isbusyColor;
+    [SerializeField] private Color turnColor;
+    [SerializeField] private Color playerTurnColor;
     [SerializeField] private int positionIndex;
     [SerializeField] private Renderer objRenderer;
     [SerializeField] private float intensity = 5;
     private MaterialPropertyBlock propertyBlock;
 
+    public Color IsbusyColor => isbusyColor;
+    public Color TurnColor => turnColor;
+    public Color PlayerTurnColor => playerTurnColor;
+    public float Intensity => intensity;
     public Card Card => card;
     public int PositionIndex => positionIndex;
 
@@ -116,7 +122,7 @@ public class FieldPosition : MonoBehaviour
         else
         {
             if(card.isMyTurn)
-                ChangeEmission(Color.yellow);
+                ChangeEmission(card.isPlayer ? PlayerTurnColor : TurnColor);
             else
                 ChangeEmission(isbusyColor, intensity);
         }
@@ -139,7 +145,7 @@ public class FieldPosition : MonoBehaviour
 
         if (card != null && card.isMyTurn)
         {
-            ChangeEmission(Color.yellow);
+            ChangeEmission(card.isPlayer ? PlayerTurnColor : TurnColor);
         }
         else
         {

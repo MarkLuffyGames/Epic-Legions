@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: "Maegir - Domador de la Monta\xF1a 3"
   m_EditorClassIdentifier: 
-  cardId: 3
+  cardId: 10
   cardName: Maegir
   cardLastName: "Domador de la Monta\xF1a"
   cardSprite: {fileID: 21300000, guid: 5af5c1e712213634681a0c5e36874f46, type: 3}
@@ -23,6 +23,6 @@ MonoBehaviour:
   speed: 65
   energy: 30
   moves:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 78bd9b00e8e277649bec6140c25c59c9, type: 2}
+  - {fileID: 11400000, guid: 8afdfdd876b53f94fa827102be224127, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

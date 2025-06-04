@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 1f4ab25bbc355bc4a805690d15bd53db, type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 2ac515376a73cca4891fad03c09a091e, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -1325,7 +1325,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: AllCards.Array.size
-      value: 33
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: 'AllCards.Array.data[0]'
@@ -1459,6 +1459,38 @@ PrefabInstance:
       propertyPath: 'AllCards.Array.data[32]'
       value: 
       objectReference: {fileID: 11400000, guid: 50e6db8bf5af47a4eb19a0f2958ea272, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[33]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 9c8681bca6482144d82de2d546525c17, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[34]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 18fc566fd4284c24b97538f7d15fb66f, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[35]'
+      value: 
+      objectReference: {fileID: 11400000, guid: faecac7b339119d4f976e4a6edfe7dd3, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[36]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c5ba12999d8d7cb4ebdbd412421a15af, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[37]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6114bd04505b8284686903ba763485f2, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[38]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f8b43c33d9a3dd409ac74d07fb44135, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[39]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e347d6d9915cd7f46b8edf7321f9dc9e, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[40]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e7494be96f8b1b48a11b4742c78b567, type: 2}
     - target: {fileID: 7755612899893852066, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: m_Name
       value: CardDatabase

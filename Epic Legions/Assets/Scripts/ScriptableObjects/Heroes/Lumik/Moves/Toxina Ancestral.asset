@@ -18,7 +18,7 @@ MonoBehaviour:
   moveEffect: {fileID: 11400000, guid: 9901dece633bc8e48b1f5e50ec32f8a0, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
-  needTarget: 0
+  needTarget: 1
   moveType: 0
   targetsType: 0
   visualEffect: {fileID: 0}

@@ -27,6 +27,6 @@ public class NoHealing : CardEffect
 
     public override void UpdateEffect(Effect effect)
     {
-        throw new System.NotImplementedException();
+        
     }
 }

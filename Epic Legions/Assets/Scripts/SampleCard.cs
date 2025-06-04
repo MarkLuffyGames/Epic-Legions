@@ -44,6 +44,7 @@ public class SampleCard : MonoBehaviour
     {
         cards[cardIndex].gameObject.SetActive(true);
         SetCard(cards[cardIndex], card, duelManager);
+        cards[cardIndex].transform.localScale = Vector3.one;
         cards[cardIndex].transform.position = card.transform.position;
         cards[cardIndex].transform.rotation = card.transform.rotation;
         StartCoroutine(cards[cardIndex].MoveToPosition(position, Card.cardMovementSpeed, true, true));
@@ -66,6 +67,7 @@ public class SampleCard : MonoBehaviour
     public IEnumerator ResetCardSize( int cardIndex)
     {
         cards[cardIndex].transform.rotation = card.transform.rotation;
+        StartCoroutine(cards[cardIndex].ScaleCard(Vector3.zero, Card.cardMovementSpeed, true));
         yield return cards[cardIndex].MoveToPosition(card.transform.position, Card.cardMovementSpeed, true, false);
 
         card = null;

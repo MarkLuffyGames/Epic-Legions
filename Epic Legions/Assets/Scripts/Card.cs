@@ -427,6 +427,18 @@ public class Card : MonoBehaviour
         transform.rotation = targetQuaternion;
     }
 
+    public IEnumerator ScaleCard(Vector3 targetScale, float speed, bool temporalScale)
+    {
+        Vector3 initialScale = transform.localScale;
+        Vector3 target = temporalScale ? targetScale : Vector3.one;
+        while (Vector3.Distance(transform.localScale, target) > 0.01f)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, target, speed * Time.deltaTime);
+            yield return null;
+        }
+        transform.localScale = target;
+    }
+
     /// <summary>
     /// Resalta la carta
     /// </summary>
@@ -713,7 +725,7 @@ public class Card : MonoBehaviour
         this.isPlayer = isPlayer;
         isMyTurn = true;
 
-        fieldPosition.ChangeEmission(Color.yellow);
+        fieldPosition.ChangeEmission(isPlayer ? fieldPosition.PlayerTurnColor : fieldPosition.TurnColor);
 
         if (IsInLethargy())
         {
@@ -762,19 +774,16 @@ public class Card : MonoBehaviour
     /// </summary>
     public void DesactiveSelectableTargets()
     {
-        if (isAttackable)
+        if (isMyTurn)
         {
-            if (isMyTurn)
-            {
-                fieldPosition.ChangeEmission(Color.yellow);
-            }
-            else
-            {
-                fieldPosition.RestoreOriginalColor();
-            }
-            
-            isAttackable = false;
+            fieldPosition.ChangeEmission(isPlayer ? fieldPosition.PlayerTurnColor : fieldPosition.TurnColor);
         }
+        else
+        {
+            fieldPosition.RestoreOriginalColor();
+        }
+
+        isAttackable = false;
     }
 
     public IEnumerator AttackAnimation(int player, Card cardToAttack, Movement movement)

@@ -866,17 +866,27 @@ public class DuelManager : NetworkBehaviour
         // Si hay enemigos en el campo rival, los marca como seleccionables
         if (targets.Count > 0)
         {
-            foreach (Card card in targets)
+            foreach (Card card in HeroCardsOnTheField)
             {
-                // Marca los objetivos de acuerdo con el jugador (verde para el jugador 1, rojo para el jugador 2)
-                if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
+                if(card == attackingCard) continue;
+
+                if (targets.Contains(card))
                 {
-                    card.ActiveSelectableTargets(Color.green);
+                    // Marca los objetivos de acuerdo con el jugador (verde para el jugador 1, rojo para el jugador 2)
+                    if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
+                    {
+                        card.ActiveSelectableTargets(Color.green);
+                    }
+                    else
+                    {
+                        card.ActiveSelectableTargets(Color.red);
+                    }
                 }
-                else
+                else if(card.FieldPosition != null)
                 {
-                    card.ActiveSelectableTargets(Color.red);
+                    card.FieldPosition.ChangeEmission(card.FieldPosition.IsbusyColor, card.FieldPosition.Intensity); // Restaura el color original si no es un objetivo
                 }
+                
             }
         }
         else

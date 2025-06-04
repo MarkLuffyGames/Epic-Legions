@@ -246,8 +246,8 @@ public class CardSelector : MonoBehaviour
                     duelManager.MovementToUse);
                 }
 
-                cardSelectingTarget.EndTurn();
                 duelManager.DisableAttackableTargets();
+                cardSelectingTarget.EndTurn();
             }
         }
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
