@@ -6,6 +6,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour
@@ -722,7 +723,7 @@ public class Card : MonoBehaviour
     /// <param name="isPlayer">Bool esta carta es propiedad del jugador.</param>
     public void SetTurn(bool isPlayer)
     {
-        this.isPlayer = isPlayer;
+        this.isPlayer = IsControlledByPlayer();
         isMyTurn = true;
 
         fieldPosition.ChangeEmission(isPlayer ? fieldPosition.PlayerTurnColor : fieldPosition.TurnColor);
@@ -1328,6 +1329,38 @@ public class Card : MonoBehaviour
         }
 
         return damageAbsorbed;
+    }
+
+    public Card GetController()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is HeroControl heroControl) return heroControl.Caster;
+        }
+
+        return null;
+    }
+
+    private bool IsControlledByPlayer()
+    {
+        Card controller = null;
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is HeroControl)
+            {
+                controller = effect.casterHero;
+                break;
+            }
+        }
+
+        if (controller != null)
+        {
+            return duelManager.Player1Manager == duelManager.GetPlayerManagerForCard(controller);
+        }
+        else
+        {
+            return duelManager.Player1Manager == duelManager.GetPlayerManagerForCard(this);
+        }
     }
 }
 

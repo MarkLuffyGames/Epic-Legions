@@ -966,7 +966,7 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                var rivalField = GetPlayerManagerRival(card).GetFieldPositionList();
+                var rivalField = card.GetController() != null ? GetPlayerManagerForCard(card).GetFieldPositionList() : GetPlayerManagerRival(card).GetFieldPositionList();
                 if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack) //Devuelve los heroes en la fila mas adelantada.
                 {
                     // Itera sobre las posiciones de campo del jugador 2 (enemigo)
@@ -1017,7 +1017,8 @@ public class DuelManager : NetworkBehaviour
         {
             // Si el movimiento es un efecto positivo, los objetivos serán las cartas del jugador aliado (jugador 1),
             // pero no se puede seleccionar la misma carta que está atacando
-            foreach (var position in GetPlayerManagerForCard(card).GetFieldPositionList())
+            var field = card.GetController() != null ? GetPlayerManagerRival(card.GetController()).GetFieldPositionList() : GetPlayerManagerForCard(card).GetFieldPositionList();
+            foreach (var position in field)
             {
                 if (position.Card != null && position.Card != card)
                 {

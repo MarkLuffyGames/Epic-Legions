@@ -23,5 +23,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
   visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
-  effectDescription: "Aturde al objetivo si no le queda defensa despues que este
+  effectDescription: "Aturde al objetivo si no le queda defensa despu\xE9s que este
     ataque impacta, dej\xE1ndolo inm\xF3vil durante un turno."

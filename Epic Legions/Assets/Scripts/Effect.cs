@@ -107,6 +107,11 @@ public class Effect
         {
             durability = noHealing.NumberTurns;
         }
+        else if (cardEffect is HeroControl heroControl)
+        {
+            casterHero = heroControl.Caster;
+            durability = 1;
+        }
     }
 
     public void ActivateEffect()
