@@ -16,7 +16,7 @@ MonoBehaviour:
   cardName: Veskar
   cardLastName: "Aguij\xF3n del Crep\xFAsculo"
   cardSprite: {fileID: 21300000, guid: 4636eb7ebbbaa3c4489c95f08c46ddb2, type: 3}
-  cardElemnt: 8
+  cardElemnt: 3
   heroClass: 0
   healt: 20
   defence: 10

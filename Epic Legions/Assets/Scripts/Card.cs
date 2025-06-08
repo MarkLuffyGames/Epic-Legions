@@ -668,7 +668,16 @@ public class Card : MonoBehaviour
                 duelManager.GetCurrentDuelPhase() == DuelPhase.Battle) &&
                 !duelManager.SettingAttackTarget && playerManager.GetAllCardInField().Count > 0)
             {
-                return true;
+                foreach (var card in playerManager.GetAllCardInField())
+                {
+                    HeroCardSO HCSO = card.cardSO as HeroCardSO;
+                    if (equipmentCardSO.SupportedClasses.Contains(HCSO.HeroClass))
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
             }
         }
 

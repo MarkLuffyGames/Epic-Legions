@@ -24,4 +24,4 @@ MonoBehaviour:
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
   effectDescription: "Toma el control de un h\xE9roe enemigo con menor velocidad
-    durante este turno. Al finalizar, vuelve al control de su invocador."
+    durante este turno."

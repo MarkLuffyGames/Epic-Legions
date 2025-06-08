@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FieldPosition : MonoBehaviour
@@ -55,13 +56,23 @@ public class FieldPosition : MonoBehaviour
     {
         bool isAvailable = true;
 
-        foreach (var item in card.EquipmentCard)
+        HeroCardSO HCSO = card.cardSO as HeroCardSO;
+        if (!equipmentCard.SupportedClasses.Contains(HCSO.HeroClass)) // Si la clase del heroe no es compatible con el equipo, no se puede añadir
         {
-            if(item != null && item.cardSO is EquipmentCardSO equipmentCardSO)
+            isAvailable = false;
+        }
+
+        // Si la carta ya tiene un equipo de este tipo, no se puede añadir otro
+        if (isAvailable)
+        {
+            foreach (var item in card.EquipmentCard)
             {
-                if (equipmentCardSO.EquipmentType == equipmentCard.EquipmentType)
+                if (item != null && item.cardSO is EquipmentCardSO equipmentCardSO)
                 {
-                    isAvailable = false;
+                    if (equipmentCardSO.EquipmentType == equipmentCard.EquipmentType)
+                    {
+                        isAvailable = false;
+                    }
                 }
             }
         }
