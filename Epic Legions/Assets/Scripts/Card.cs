@@ -66,6 +66,7 @@ public class Card : MonoBehaviour
 
     private Vector3 lastPosition;
     private Vector3 defaultRotation;
+    public Vector3 targetLocalPosition;
 
     private bool isHighlight;
     public bool isTemporalPosition;
@@ -87,6 +88,7 @@ public class Card : MonoBehaviour
     private Card heroOwner;
     private Card copiedCard;
     private FieldPosition fieldPosition;
+    public Graveyard graveyard;
     private DuelManager duelManager;
     public bool isAttackable;
 
@@ -100,6 +102,7 @@ public class Card : MonoBehaviour
     public Card[] EquipmentCard => equipmentCard;
     public Card HeroOwner => heroOwner;
     public FieldPosition FieldPosition => fieldPosition;
+    public DuelManager DuelManager => duelManager;
 
     Coroutine moveCoroutine;
     Coroutine rotateCoroutine;
@@ -344,6 +347,8 @@ public class Card : MonoBehaviour
     /// <param name="isLocal">La posicion que se desea mover es la posicion local?</param>
     public IEnumerator MoveToPosition(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
     {
+        if(isLocal) targetLocalPosition = targetPosition;
+
         if (moveCoroutine != null)
             StopCoroutine(moveCoroutine);
 
@@ -485,7 +490,7 @@ public class Card : MonoBehaviour
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
-            duelManager.sampleCard.Enlarge(this, duelManager);
+            duelManager.sampleCard.Enlarge(this);
             /*StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (GetEquipmentCounts() * 0.25f) + new Vector3(-0.25f,0,0), cardMovementSpeed, true, false));
             EnlargeEquipment();
             RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
@@ -933,7 +938,7 @@ public class Card : MonoBehaviour
     /// <summary>
     /// Atualiza los datos de la carta para cuando esta en el cementerio.
     /// </summary>
-    public void ToGraveyard()
+    public void ToGraveyard(Graveyard graveyard)
     {
         CancelAllEffects();
         AdjustUIcons(true);
@@ -941,6 +946,8 @@ public class Card : MonoBehaviour
         currentHealt = maxHealt;
         UpdateText();
         AudioManager.Instance.PlayCardDestroy();
+        this.graveyard = graveyard;
+        graveyard.AddCard(this);
     }
 
     /// <summary>

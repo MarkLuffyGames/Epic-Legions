@@ -8,7 +8,7 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private List<CardSO> deck;
     [SerializeField] private Transform deckPosition;
-    [SerializeField] private Transform graveyardPosition;
+    [SerializeField] private Graveyard graveyard;
     [SerializeField] private List<FieldPosition> fieldPositionList;
     [SerializeField] private FieldPosition spellFieldPosition;
     [SerializeField] private HandCardHandler handCardHandler;
@@ -216,9 +216,9 @@ public class PlayerManager : MonoBehaviour
         return handCardHandler;
     }
 
-    public Transform GetGraveyard()
+    public Graveyard GetGraveyard()
     {
-        return graveyardPosition;
+        return graveyard;
     }
 
     public List<Card> GetLineForCard(Card card)

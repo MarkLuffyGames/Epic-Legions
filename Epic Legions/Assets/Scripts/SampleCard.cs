@@ -22,11 +22,11 @@ public class SampleCard : MonoBehaviour
             card.gameObject.SetActive(false);
         }
     }
-    public void Enlarge(Card card, DuelManager duelManager)
+    public void Enlarge(Card card)
     {
         this.card = card;
         isEnlarged = true;
-        EnlargeCard(card, duelManager, 0, positions[0]);
+        EnlargeCard(card, 0, positions[0]);
 
         if (card.GetEquipmentCounts() > 0)
         {
@@ -34,16 +34,24 @@ public class SampleCard : MonoBehaviour
             {
                 if(card.EquipmentCard[i] != null)
                 {
-                    EnlargeCard(card.EquipmentCard[i], duelManager, i + 1, positions[i + 1]);
+                    EnlargeCard(card.EquipmentCard[i], i + 1, positions[i + 1]);
                 }
+            }
+        }
+
+        if(card.graveyard != null)
+        {
+            if (card.graveyard.GetCards().Count > 1)
+            {
+                EnlargeCard(card.graveyard.GetCards()[1], 2, positions[2]);
             }
         }
     }
 
-    public void EnlargeCard(Card card, DuelManager duelManager, int cardIndex, Vector3 position)
+    public void EnlargeCard(Card card, int cardIndex, Vector3 position)
     {
         cards[cardIndex].gameObject.SetActive(true);
-        SetCard(cards[cardIndex], card, duelManager);
+        SetCard(cards[cardIndex], card, card.DuelManager);
         cards[cardIndex].transform.localScale = Vector3.one;
         cards[cardIndex].transform.position = card.transform.position;
         cards[cardIndex].transform.rotation = card.transform.rotation;
@@ -117,24 +125,64 @@ public class SampleCard : MonoBehaviour
 
     private void ShiftCardsRight()
     {
-        foreach (var card in cards)
+        if (card.graveyard != null)
         {
-            if(card.gameObject.activeSelf)
+            int predecessor = card.graveyard.GetCardIndex(card) - 2;
+            if (predecessor >= 0)
             {
-                ShiftCardRigth(card);
+                Debug.Log("Enlarging predecessor card: " + predecessor + " at position: " + GetCardInPosition(positions[3]));
+                EnlargeCard(card.graveyard.GetCard(predecessor), GetCardInPosition(positions[3]), positions[3]);
+            }
+            else
+            {
+                Debug.Log("No predecessor card found, deactivating position 3");
+                //cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
+            }
+
+            foreach (var card in cards)
+            {
+                if (card.gameObject.activeSelf)
+                {
+                    ShiftCardRigth(card);
+                }
             }
         }
+        
     }
 
     private void ShiftCardsLeft()
     {
-        foreach (var card in cards)
+        if (card.graveyard != null)
         {
-            if (card.gameObject.activeSelf)
+            int successor = card.graveyard.GetCardIndex(cards[GetCardInPosition(positions[0])]) + 2;
+            if (successor < card.graveyard.GetCards().Count)
             {
-                ShiftCardLeft(card);
+                Debug.Log("Enlarging successor card: " + successor + " at position: " + GetCardInPosition(positions[3]));
+
+                Card cardToSet = cards[GetCardInPosition(positions[3])];
+                cardToSet.gameObject.SetActive(true);
+                SetCard(cardToSet, card, card.DuelManager);
+                cardToSet.transform.localScale = Vector3.one;
+                cardToSet.transform.position = positions[3];
+                cardToSet.transform.rotation = Quaternion.Euler(Vector3.right * 53);
+                cardToSet.ChangedSortingOrder(110);
+                StartCoroutine(cardToSet.MoveToPosition(positions[3], Card.cardMovementSpeed, true, true));
             }
+            else
+            {
+                Debug.Log("No successor card found, deactivating position 3");
+                //cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
+            }
+
+                foreach (var card in cards)
+                {
+                    if (card.gameObject.activeSelf)
+                    {
+                        ShiftCardLeft(card);
+                    }
+                }
         }
+            
     }
 
     private void ShiftCardRigth(Card card)
@@ -179,5 +227,18 @@ public class SampleCard : MonoBehaviour
         {
             StartCoroutine(card.MoveToPosition(positions[2], Card.cardMovementSpeed, true, true));
         }
+    }
+
+    public int GetCardInPosition(Vector3 position)
+    {
+        foreach (var card in cards)
+        {
+            Debug.Log("Checking card at position: " + card.transform.localPosition + " against target position: " + position);
+            if (card.targetLocalPosition == position || card.transform.localPosition == position)
+            {
+                return cards.IndexOf(card);
+            }
+        }
+        return -1;
     }
 }

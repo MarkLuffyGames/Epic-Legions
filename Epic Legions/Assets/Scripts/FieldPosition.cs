@@ -97,15 +97,15 @@ public class FieldPosition : MonoBehaviour
         ChangeEmission(isbusyColor, intensity);
     }
 
-    public void DestroyCard(Transform graveyard, bool isPlayer)
+    public void DestroyCard(Graveyard graveyard, bool isPlayer)
     {
         card.isVisible = true;
-        card.transform.parent = graveyard;
+        card.transform.parent = graveyard.gameObject.transform;
         card.transform.localScale = Vector3.one;
         StartCoroutine(card.MoveToPosition(Vector3.up * 0.01f, Card.cardMovementSpeed, false, true));
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
-        card.ToGraveyard();
+        card.ToGraveyard(graveyard);
         card.SetFieldPosition(null, new Vector3(90, 0, isPlayer ? 0 : 0));
         card = null;
         RestoreOriginalColor();

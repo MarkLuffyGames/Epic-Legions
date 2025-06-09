@@ -1264,6 +1264,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4648896356634244004}
+  - component: {fileID: 9057437064508993823}
   m_Layer: 0
   m_Name: Graveyard
   m_TagString: Untagged
@@ -1286,6 +1287,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1291054851702726554}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &9057437064508993823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741380367372952461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d6b3d78ed38744b8efce296f2dbb4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1810634410124334763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1462,6 +1475,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3233658191116292988}
+  - component: {fileID: 4948359909659829966}
   m_Layer: 0
   m_Name: Graveyard
   m_TagString: Untagged
@@ -1484,6 +1498,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3294105951735913547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4948359909659829966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956820009914611772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49d6b3d78ed38744b8efce296f2dbb4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2449477360749751774
 GameObject:
   m_ObjectHideFlags: 0
@@ -2600,7 +2626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: []
   deckPosition: {fileID: 4244165507072053703}
-  graveyardPosition: {fileID: 4648896356634244004}
+  graveyard: {fileID: 9057437064508993823}
   fieldPositionList:
   - {fileID: 6900977528163320477}
   - {fileID: 6761828321220384133}
@@ -2832,7 +2858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: []
   deckPosition: {fileID: 2520979270971673263}
-  graveyardPosition: {fileID: 3233658191116292988}
+  graveyard: {fileID: 4948359909659829966}
   fieldPositionList:
   - {fileID: 5285086935050678760}
   - {fileID: 312782843174453102}
@@ -3743,6 +3769,8 @@ MonoBehaviour:
   originalColor: {r: 1.1698112, g: 1.1698112, b: 1.1698112, a: 1}
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   isbusyColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
+  turnColor: {r: 0, g: 0, b: 0, a: 0}
+  playerTurnColor: {r: 0, g: 0, b: 0, a: 0}
   positionIndex: -1
   objRenderer: {fileID: 4626974744926648680}
   intensity: 3
@@ -4485,6 +4513,8 @@ MonoBehaviour:
   originalColor: {r: 1.1698112, g: 1.1698112, b: 1.1698112, a: 1}
   isFreeColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
   isbusyColor: {r: 0.13333334, g: 0.81960785, b: 0.16862746, a: 0.6666667}
+  turnColor: {r: 0, g: 0, b: 0, a: 0}
+  playerTurnColor: {r: 0, g: 0, b: 0, a: 0}
   positionIndex: -1
   objRenderer: {fileID: 2293931292726079899}
   intensity: 3
