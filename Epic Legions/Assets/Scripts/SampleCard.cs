@@ -22,6 +22,8 @@ public class SampleCard : MonoBehaviour
     }
     public void Enlarge(Card card)
     {
+        if (isEnlarged) return;
+
         this.card = card;
         isEnlarged = true;
         EnlargeCard(card, 0, positions[0]);
@@ -74,8 +76,6 @@ public class SampleCard : MonoBehaviour
                 StartCoroutine(ResetCardSize(i));
             }
         }
-
-        isEnlarged = false;
     }
 
     public IEnumerator ResetCardSize( int cardIndex)
@@ -88,6 +88,8 @@ public class SampleCard : MonoBehaviour
         cards[cardIndex].CleanCard();
         cards[cardIndex].transform.localPosition = positions[cardIndex]; // Reset position to initial
         cards[cardIndex].gameObject.SetActive(false);
+
+        isEnlarged = false;
     }
     public void SetCard(Card cardToSet, Card cardToCopy, DuelManager duelManager)
     {

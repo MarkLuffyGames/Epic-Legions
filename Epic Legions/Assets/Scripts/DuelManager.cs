@@ -1479,9 +1479,9 @@ public class DuelManager : NetworkBehaviour
         int movementToUseIndex = -1;
         for (int i = 0; i < attackerCard.Moves.Count; i++)
         {
-            if(attackerCard.Moves [i].MoveSO.MoveEffect is Counterattack counterattack)
+            if(attackerCard.Moves[i].MoveSO.MoveEffect is Counterattack counterattack)
             {
-                movementToUse = i;
+                movementToUseIndex = i;
                 break;
             }
 
