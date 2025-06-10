@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.GPUSort;
 
 public class SampleCard : MonoBehaviour
 {
@@ -65,8 +63,16 @@ public class SampleCard : MonoBehaviour
     {
         for (int i = 0; i < cards.Count; i++)
         {
-            if (!cards[i].gameObject.activeSelf) continue;
-            StartCoroutine(ResetCardSize(i));
+            if (!cards[i].gameObject.activeSelf)
+            {
+                cards[i].gameObject.SetActive(true);
+                cards[i].transform.localPosition = positions[i];
+                cards[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                StartCoroutine(ResetCardSize(i));
+            }
         }
 
         isEnlarged = false;
@@ -80,6 +86,7 @@ public class SampleCard : MonoBehaviour
 
         card = null;
         cards[cardIndex].CleanCard();
+        cards[cardIndex].transform.localPosition = positions[cardIndex]; // Reset position to initial
         cards[cardIndex].gameObject.SetActive(false);
     }
     public void SetCard(Card cardToSet, Card cardToCopy, DuelManager duelManager)
@@ -127,23 +134,27 @@ public class SampleCard : MonoBehaviour
     {
         if (card.graveyard != null)
         {
-            int predecessor = card.graveyard.GetCardIndex(card) - 2;
+            int predecessor = card.graveyard.GetCardIndex(cards[GetCardInPosition(positions[0])].GetCopiedCard()) - 2;
             if (predecessor >= 0)
             {
-                Debug.Log("Enlarging predecessor card: " + predecessor + " at position: " + GetCardInPosition(positions[3]));
-                EnlargeCard(card.graveyard.GetCard(predecessor), GetCardInPosition(positions[3]), positions[3]);
+                Card cardToSet = cards[GetCardInPosition(positions[3])];
+                ChangeCard(cardToSet, card.graveyard.GetCard(predecessor), 3);
             }
             else
             {
-                Debug.Log("No predecessor card found, deactivating position 3");
-                //cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
+                cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
             }
 
             foreach (var card in cards)
             {
                 if (card.gameObject.activeSelf)
                 {
-                    ShiftCardRigth(card);
+                    ShiftCardRigth(card, true);
+                }
+                else
+                {
+                    card.gameObject.SetActive(true);
+                    ShiftCardRigth(card, false);
                 }
             }
         }
@@ -154,78 +165,151 @@ public class SampleCard : MonoBehaviour
     {
         if (card.graveyard != null)
         {
-            int successor = card.graveyard.GetCardIndex(cards[GetCardInPosition(positions[0])]) + 2;
+            int successor = card.graveyard.GetCardIndex(cards[GetCardInPosition(positions[0])].GetCopiedCard()) + 2;
             if (successor < card.graveyard.GetCards().Count)
             {
-                Debug.Log("Enlarging successor card: " + successor + " at position: " + GetCardInPosition(positions[3]));
-
                 Card cardToSet = cards[GetCardInPosition(positions[3])];
-                cardToSet.gameObject.SetActive(true);
-                SetCard(cardToSet, card, card.DuelManager);
-                cardToSet.transform.localScale = Vector3.one;
-                cardToSet.transform.position = positions[3];
-                cardToSet.transform.rotation = Quaternion.Euler(Vector3.right * 53);
-                cardToSet.ChangedSortingOrder(110);
-                StartCoroutine(cardToSet.MoveToPosition(positions[3], Card.cardMovementSpeed, true, true));
+                ChangeCard(cardToSet, card.graveyard.GetCard(successor), 3);
             }
             else
             {
-                Debug.Log("No successor card found, deactivating position 3");
-                //cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
+                cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
             }
-
-                foreach (var card in cards)
-                {
-                    if (card.gameObject.activeSelf)
-                    {
-                        ShiftCardLeft(card);
-                    }
-                }
         }
-            
+
+        foreach (var card in cards)
+        {
+            if (card.gameObject.activeSelf)
+            {
+                ShiftCardLeft(card, true);
+            }
+            else
+            {
+                card.gameObject.SetActive(true);
+                ShiftCardLeft(card, false);
+            }
+        }
     }
 
-    private void ShiftCardRigth(Card card)
+    private void ChangeCard(Card cardToSet,Card cardToCopy, int positionIndex)
+    {
+        if (card != null)
+        {
+            cardToSet.gameObject.SetActive(true);
+            SetCard(cardToSet, cardToCopy, cardToCopy.DuelManager);
+            cardToSet.transform.localScale = Vector3.one;
+            cardToSet.transform.localPosition = positions[positionIndex];
+            cardToSet.transform.rotation = Quaternion.Euler(Vector3.right * 53);
+            cardToSet.ChangedSortingOrder(110);
+            StartCoroutine(cardToSet.MoveToPosition(positions[positionIndex], Card.cardMovementSpeed, true, true));
+        }
+    }
+
+    private void ShiftCardRigth(Card card, bool moveSmoothly)
     {
         card.EnableActions(false);
         if (card.transform.localPosition == positions[0])
         {
-            StartCoroutine(card.MoveToPosition(positions[2], Card.cardMovementSpeed, true, true));
+            if (moveSmoothly)
+            {
+                StartCoroutine(card.MoveToPosition(positions[2], Card.cardMovementSpeed, true, true));
+            }
+            else
+            {
+                card.transform.localPosition = positions[2];
+                card.gameObject.SetActive(false);
+            }
         }
         else if (card.transform.localPosition == positions[1])
         {
-            StartCoroutine(card.MoveToPosition(positions[0], Card.cardMovementSpeed, true, true));
-            card.EnableActions(this.card.isPlayer && !this.card.actionIsReady && this.card.isMyTurn);
+            if (moveSmoothly)
+            {
+                StartCoroutine(card.MoveToPosition(positions[0], Card.cardMovementSpeed, true, true));
+                card.EnableActions(this.card.isPlayer && !this.card.actionIsReady && this.card.isMyTurn);
+            }
+            else
+            {
+                card.transform.localPosition = positions[0];
+                card.gameObject.SetActive(false);
+            }
         }
         else if (card.transform.localPosition == positions[2])
         {
-            StartCoroutine(card.MoveToPosition(positions[3], Card.cardMovementSpeed, true, true));
+            if (moveSmoothly)
+            {
+                StartCoroutine(card.MoveToPosition(positions[3], Card.cardMovementSpeed, true, true));
+            }
+            else
+            {
+                card.transform.localPosition = positions[3];
+                card.gameObject.SetActive(false);
+            }
         }
         else if (card.transform.localPosition == positions[3])
         {
-            StartCoroutine(card.MoveToPosition(positions[1], Card.cardMovementSpeed, true, true));
+            if (moveSmoothly)
+            {
+                StartCoroutine(card.MoveToPosition(positions[1], Card.cardMovementSpeed, true, true));
+            }
+            else
+            {
+                card.transform.localPosition = positions[1];
+                card.gameObject.SetActive(false);
+            }
         }
     }
 
-    private void ShiftCardLeft(Card card)
+    private void ShiftCardLeft(Card card, bool moveSmoothly)
     {
         card.EnableActions(false);
         if (card.transform.localPosition == positions[0])
         {
-            StartCoroutine(card.MoveToPosition(positions[1], Card.cardMovementSpeed, true, true));
+            if (moveSmoothly)
+            {
+                StartCoroutine(card.MoveToPosition(positions[1], Card.cardMovementSpeed, true, true)); 
+            }
+            else
+            {
+                card.transform.localPosition = positions[1];
+                card.gameObject.SetActive(false);
+            }
         }
         else if (card.transform.localPosition == positions[1])
         {
-            StartCoroutine(card.MoveToPosition(positions[3], Card.cardMovementSpeed, true, true));
+            if (moveSmoothly) 
+            { 
+                StartCoroutine(card.MoveToPosition(positions[3], Card.cardMovementSpeed, true, true)); 
+            }
+            else
+            {
+                card.transform.localPosition = positions[3];
+                card.gameObject.SetActive(false);
+            }
         }
         else if (card.transform.localPosition == positions[2])
         {
-            StartCoroutine(card.MoveToPosition(positions[0], Card.cardMovementSpeed, true, true));
-            card.EnableActions(this.card.isPlayer && !this.card.actionIsReady && this.card.isMyTurn);
+            if (moveSmoothly)
+            {
+                StartCoroutine(card.MoveToPosition(positions[0], Card.cardMovementSpeed, true, true));
+                card.EnableActions(this.card.isPlayer && !this.card.actionIsReady && this.card.isMyTurn);
+            }
+            else
+            {
+                card.transform.localPosition = positions[0];
+                card.gameObject.SetActive(false);
+            }
         }
         else if (card.transform.localPosition == positions[3])
         {
-            StartCoroutine(card.MoveToPosition(positions[2], Card.cardMovementSpeed, true, true));
+            if (moveSmoothly) 
+            { 
+                StartCoroutine(card.MoveToPosition(positions[2], Card.cardMovementSpeed, true, true)); 
+            }
+            else
+            {
+                card.transform.localPosition = positions[2];
+                card.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -233,8 +317,7 @@ public class SampleCard : MonoBehaviour
     {
         foreach (var card in cards)
         {
-            Debug.Log("Checking card at position: " + card.transform.localPosition + " against target position: " + position);
-            if (card.targetLocalPosition == position || card.transform.localPosition == position)
+            if (card.transform.localPosition == position)
             {
                 return cards.IndexOf(card);
             }

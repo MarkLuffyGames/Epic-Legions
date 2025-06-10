@@ -102,7 +102,6 @@ public class FieldPosition : MonoBehaviour
         card.isVisible = true;
         card.transform.parent = graveyard.gameObject.transform;
         card.transform.localScale = Vector3.one;
-        StartCoroutine(card.MoveToPosition(Vector3.up * 0.01f, Card.cardMovementSpeed, false, true));
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.ToGraveyard(graveyard);

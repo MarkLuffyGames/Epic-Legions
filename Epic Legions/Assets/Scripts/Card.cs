@@ -66,7 +66,6 @@ public class Card : MonoBehaviour
 
     private Vector3 lastPosition;
     private Vector3 defaultRotation;
-    public Vector3 targetLocalPosition;
 
     private bool isHighlight;
     public bool isTemporalPosition;
@@ -273,6 +272,11 @@ public class Card : MonoBehaviour
         moves.Clear();
     }
 
+    public Card GetCopiedCard()
+    {
+        return copiedCard;
+    }
+
 
     /// <summary>
     /// Establece la posicion en el campo de la carta.
@@ -347,8 +351,6 @@ public class Card : MonoBehaviour
     /// <param name="isLocal">La posicion que se desea mover es la posicion local?</param>
     public IEnumerator MoveToPosition(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
     {
-        if(isLocal) targetLocalPosition = targetPosition;
-
         if (moveCoroutine != null)
             StopCoroutine(moveCoroutine);
 
