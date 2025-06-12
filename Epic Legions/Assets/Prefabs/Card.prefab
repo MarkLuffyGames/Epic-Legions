@@ -2813,11 +2813,13 @@ MonoBehaviour:
   - {fileID: 6740196984766212101}
   - {fileID: 6928042564114355550}
   cardSO: {fileID: 0}
+  isPlayer: 0
   isMyTurn: 0
   isTemporalPosition: 0
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
+  graveyard: {fileID: 0}
   isAttackable: 0
   lastDamageInflicted: 0
 --- !u!1 &6193242297218912138

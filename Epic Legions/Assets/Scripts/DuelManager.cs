@@ -173,6 +173,10 @@ public class DuelManager : NetworkBehaviour
         playerRoles[1] = 1;
         playerRoles[2] = 2;
 
+        // Asigna los identificadores de los jugadores en la partida
+        playerId[1] = 1;
+        playerId[2] = 2;
+
         // Marca a los jugadores como no listos al inicio
         playerReady[0] = false;
         playerReady[1] = false;
@@ -419,15 +423,7 @@ public class DuelManager : NetworkBehaviour
         // Recorre los héroes en turno y configura su estado
         foreach (var hero in heroInTurn)
         {
-            // Verifica si el héroe está en el campo del jugador 1
-            if (player1Manager.GetFieldPositionList().Contains(hero.FieldPosition))
-            {
-                hero.SetTurn(true);
-            }
-            else
-            {
-                hero.SetTurn(false);
-            }
+            hero.SetTurn();
         }
     }
 
@@ -821,26 +817,29 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                var playerManager = GetPlayerManagerForCard(card);
-                ProcessAttack(target, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
+                var playerManager = card.IsControlled() ? GetOpposingPlayerManager(GetPlayerManagerForCard(card)) : GetPlayerManagerForCard(card);
+
+                ProcessAttack(target, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex,
+                    movementToUseIndex, playerManager == player1Manager ? playerId[1] : playerId[2], card.IsControlled());
             }
         }
         else
         {
             // Si no necesita objetivo, se ejecuta el ataque
+
+            var playerManager = card.IsControlled() ? GetOpposingPlayerManager(GetPlayerManagerForCard(card)) : GetPlayerManagerForCard(card);
             if (isSinglePlayer)
             {
-                var playerManager = GetPlayerManagerForCard(card);
-                ProcessAttack(card.FieldPosition.PositionIndex, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
+                ProcessAttack(card.FieldPosition.PositionIndex, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? playerId[1] : playerId[2], card.IsControlled());
             }
             else
             {
-                ProcessAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex);
+                ProcessAttackServerRpc(card.FieldPosition.PositionIndex, NetworkManager.Singleton.LocalClientId, card.cardSO is HeroCardSO, card.FieldPosition.PositionIndex, movementToUseIndex, card.IsControlled());
             }
 
             // Marca la acción como lista y finaliza el turno del héroe
             card.actionIsReady = true; 
-            if (GetPlayerManagerForCard(card) == player1Manager) card.EndTurn();
+            if (playerManager == player1Manager) card.EndTurn();
         }
     }
 
@@ -894,19 +893,19 @@ public class DuelManager : NetworkBehaviour
             // Si no hay enemigos en el campo rival, realiza el ataque directamente a los puntos de vida del oponente
             cardSelectingTarget.actionIsReady = true;
 
+            var playerManager = attackingCard.IsControlled() ? GetOpposingPlayerManager(GetPlayerManagerForCard(attackingCard)) : GetPlayerManagerForCard(attackingCard);
             // Realiza el ataque directo a los puntos de vida del oponente (sin objetivo específico)
             if (isSinglePlayer)
             {
-                var playerManager = GetPlayerManagerForCard(attackingCard);
-                ProcessAttack(-1, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? 1u : 2u);
+                ProcessAttack(-1, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex, playerManager == player1Manager ? playerId[1] : playerId[2], attackingCard.IsControlled());
             }
             else
             {
-                ProcessAttackServerRpc(-1, NetworkManager.Singleton.LocalClientId, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex);
+                ProcessAttackServerRpc(-1, NetworkManager.Singleton.LocalClientId, true, attackingCard.FieldPosition.PositionIndex, movementToUseIndex, attackingCard.IsControlled());
             }
 
             // Finaliza el turno del héroe
-            if (GetPlayerManagerForCard(attackingCard) == player1Manager) cardSelectingTarget.EndTurn();
+            if (playerManager == player1Manager) cardSelectingTarget.EndTurn();
 
             // Desactiva los objetivos seleccionables
             DisableAttackableTargets();
@@ -1110,11 +1109,11 @@ public class DuelManager : NetworkBehaviour
     /// <param name="isHero">Indica si el ataque es realizado por un héroe (verdadero) o por otro tipo de entidad (falso).</param>
     /// <param name="heroUsesTheAttack">El índice de la carta del héroe que está realizando el ataque.</param>
     /// <param name="movementToUseIndex">El índice del movimiento que se va a utilizar para el ataque.</param>
-    public void ProcessAttackServerRpc(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex)
+    public void ProcessAttackServerRpc(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool isControlledHero)
     {
-        ProcessAttack(heroToAttackPositionIndex, isHero, heroUsesTheAttack, movementToUseIndex, clientId);
+        ProcessAttack(heroToAttackPositionIndex, isHero, heroUsesTheAttack, movementToUseIndex, clientId, isControlledHero);
     }
-    public void ProcessAttack(int heroToAttackPositionIndex, bool isHero, int heroUsesTheAttack, int movementToUseIndex, ulong clientId)
+    public void ProcessAttack(int heroToAttackPositionIndex, bool isHero, int heroUsesTheAttack, int movementToUseIndex, ulong clientId, bool isControlledHero)
     {
         // Si el ataque es realizado por un héroe
         if (isHero)
@@ -1124,42 +1123,46 @@ public class DuelManager : NetworkBehaviour
             // Verificar el jugador (1 o 2) que está realizando la acción
             if (playerRoles[clientId] == 1)
             {
+                PlayerManager playerManagerTemp = isControlledHero ? GetOpposingPlayerManager(player1Manager) : player1Manager;
+
+                Debug.Log(player1Manager == playerManagerTemp);
                 // Marcar la carta como lista para la acción
-                player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
+                playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
 
                 // Verificar si el movimiento es un efecto positivo (esto determina la prioridad)
-                hasPriority = player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
+                hasPriority = playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
 
                 // Consumir energía por el movimiento
-                player1Manager.ConsumeEnergy(player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                player1Manager.ConsumeEnergy(playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
 
                 // Sincronizar el consumo de energía con el cliente
-                if (!IsSinglePlayer) ConsumeEnergyClientRpc(clientId, player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                if (!IsSinglePlayer) ConsumeEnergyClientRpc(clientId, playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
             }
             else
             {
                 // Lo mismo para el jugador 2
-                player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
-                hasPriority = player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
-                player2Manager.ConsumeEnergy(player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
-                if (IsSinglePlayer) ConsumeEnergyClientRpc(clientId, player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                PlayerManager playerManagerTemp = isControlledHero ? GetOpposingPlayerManager(player2Manager) : player2Manager;
+                playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
+                hasPriority = playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
+                player2Manager.ConsumeEnergy(playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                if (IsSinglePlayer) ConsumeEnergyClientRpc(clientId, playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
             }
 
             // Si el movimiento tiene prioridad (es un efecto positivo), se añade a las acciones de efecto
             if (hasPriority)
             {
-                effectActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex));
+                effectActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex, isControlledHero));
             }
             else
             {
                 // Si no tiene prioridad, se añade a las acciones de ataque
-                attackActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex));
+                attackActions.Add(new HeroAction(heroToAttackPositionIndex, clientId, heroUsesTheAttack, movementToUseIndex, isControlledHero));
             }
         }
         else
         {
             // Si no es un héroe (por ejemplo, si es un efecto que no requiere ataque), se ejecuta el ataque de otra manera
-            StartCoroutine(HeroAttackServer(heroToAttackPositionIndex, clientId, isHero, heroUsesTheAttack, movementToUseIndex, true));
+            StartCoroutine(HeroAttackServer(heroToAttackPositionIndex, clientId, isHero, heroUsesTheAttack, movementToUseIndex, true, false));
         }
 
         // Si todos los héroes han indicado sus acciones, se empieza la ejecución de todas las acciones
@@ -1213,7 +1216,8 @@ public class DuelManager : NetworkBehaviour
                 true,                                        // Indica que es un héroe el que realiza la acción
                 effectActions[i].heroUsesTheAttack,          // Índice del héroe que usa el ataque
                 effectActions[i].movementToUseIndex,         // Índice del movimiento que se usará
-                i == effectActions.Count - 1 && attackActions.Count == 0 // Si es la última acción y no hay ataques restantes, se marca como el último movimiento
+                i == effectActions.Count - 1 && attackActions.Count == 0,// Se marca como el último movimiento si es la última acción en la lista
+                effectActions[i].isControlledHero               // Indica si es un heroe controlado
             );
 
             // Activar los efectos después de ejecutar cada acción de efecto
@@ -1233,7 +1237,8 @@ public class DuelManager : NetworkBehaviour
                 true,                                        // Indica que es un héroe el que realiza la acción
                 attackActions[i].heroUsesTheAttack,          // Índice del héroe que usa el ataque
                 attackActions[i].movementToUseIndex,         // Índice del movimiento que se usará
-                i == attackActions.Count - 1                 // Se marca como el último movimiento si es la última acción en la lista
+                i == attackActions.Count - 1,                // Se marca como el último movimiento si es la última acción en la lista
+                attackActions[i].isControlledHero            // Indica si es un heroe controlado
             );
         }
 
@@ -1309,16 +1314,19 @@ public class DuelManager : NetworkBehaviour
     /// <param name="movementToUseIndex">Índice del movimiento que se está utilizando para el ataque.</param>
     /// <param name="lastMove">Indica si es el último movimiento en la secuencia de ataques.</param>
     /// <returns>Un IEnumerator que permite la ejecución secuencial del ataque en el servidor.</returns>
-    IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
+    IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
     {
+        Debug.Log("A");
         // Determina qué carta está realizando el ataque (héroe o hechizo).
         Card attackerCard = isHero ?
-            (playerRoles[clientId] == 1 ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
+            (playerRoles[clientId] == 1 ? (isControlledHero ? player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
+            : (isControlledHero ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card))
             : (playerRoles[clientId] == 1 ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
 
 
+        Debug.Log("B");
         // Llama a la función RPC para ejecutar el ataque en los clientes.
-        if (!isSinglePlayer) HeroAttackClientRpc(heroToAttackPositionIndex, clientId, movementToUseIndex, isHero, heroUsesTheAttack, lastMove);
+        if (!isSinglePlayer) HeroAttackClientRpc(heroToAttackPositionIndex, clientId, movementToUseIndex, isHero, heroUsesTheAttack, lastMove, isControlledHero);
 
         // Determina el jugador objetivo: si el cliente es 1, el objetivo será el jugador 2, y viceversa.
         int targetPlayer = (playerRoles[clientId] == 1) ? 2 : 1;
@@ -1617,10 +1625,10 @@ public class DuelManager : NetworkBehaviour
     /// <param name="heroUsesTheAttack">El índice del héroe que está usando el ataque (si es un héroe).</param>
     /// <param name="lastMove">Un valor booleano que indica si este es el último movimiento a ejecutar.</param>
     [ClientRpc]
-    private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId, int movementToUseIndex, bool isHero, int heroUsesTheAttack, bool lastMove)
+    private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId, int movementToUseIndex, bool isHero, int heroUsesTheAttack, bool lastMove, bool isControlledHero)
     {
         // Inicia la corrutina para ejecutar el ataque en el cliente correspondiente.
-        StartCoroutine(HeroAttackClient(fieldPositionIndex, attackerClientId, isHero, heroUsesTheAttack, movementToUseIndex, lastMove));
+        StartCoroutine(HeroAttackClient(fieldPositionIndex, attackerClientId, isHero, heroUsesTheAttack, movementToUseIndex, lastMove, isControlledHero));
     }
 
     /// <summary>
@@ -1637,14 +1645,16 @@ public class DuelManager : NetworkBehaviour
     /// <param name="heroUsesTheAttack">El índice del héroe que está usando el ataque (si es un héroe).</param>
     /// <param name="movementToUseIndex">El índice del movimiento que se está utilizando para el ataque.</param>
     /// <param name="lastMove">Indica si este es el último movimiento a ejecutar.</param>
-    private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove)
+    private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
     {
         // Si este cliente es el host, no se ejecuta la lógica en él.
         if (IsHost) yield break;
 
         // Determina qué carta está realizando el ataque (héroe o hechizo).
         Card attackerCard = isHero ?
-            (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
+            (NetworkManager.Singleton.LocalClientId == attackerClientId ?
+            (isControlledHero ? player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card) :
+            (isControlledHero ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card))
             : (NetworkManager.Singleton.LocalClientId == attackerClientId ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
 
 
@@ -1837,11 +1847,13 @@ public class HeroAction
     public ulong clientId;
     public int heroUsesTheAttack;
     public int movementToUseIndex;
-    public HeroAction(int heroToAttackPositionIndex, ulong clientId, int heroUsesTheAttack, int movementToUseIndex)
+    public bool isControlledHero;
+    public HeroAction(int heroToAttackPositionIndex, ulong clientId, int heroUsesTheAttack, int movementToUseIndex, bool isControlledHero)
     {
         this.heroToAttackPositionIndex = heroToAttackPositionIndex;
         this.clientId = clientId;
         this.heroUsesTheAttack = heroUsesTheAttack;
         this.movementToUseIndex = movementToUseIndex;
+        this.isControlledHero = isControlledHero;
     }
 }

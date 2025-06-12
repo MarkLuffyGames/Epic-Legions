@@ -235,7 +235,7 @@ public class CardSelector : MonoBehaviour
                 {
                     duelManager.ProcessAttack(card.FieldPosition.PositionIndex,
                         isHeroCard, heroPositionIndex,
-                        duelManager.MovementToUse, 1);
+                        duelManager.MovementToUse, 1, duelManager.CardSelectingTarget.IsControlled());
 
                 }
                 else
@@ -243,7 +243,7 @@ public class CardSelector : MonoBehaviour
                     duelManager.ProcessAttackServerRpc(card.FieldPosition.PositionIndex,
                     NetworkManager.Singleton.LocalClientId,
                     isHeroCard, heroPositionIndex,
-                    duelManager.MovementToUse);
+                    duelManager.MovementToUse, duelManager.CardSelectingTarget.IsControlled());
                 }
 
                 duelManager.DisableAttackableTargets();

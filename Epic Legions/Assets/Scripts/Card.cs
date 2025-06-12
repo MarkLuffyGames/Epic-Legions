@@ -737,9 +737,9 @@ public class Card : MonoBehaviour
     /// Prepara la carta para realizar las acciones de su turno.
     /// </summary>
     /// <param name="isPlayer">Bool esta carta es propiedad del jugador.</param>
-    public void SetTurn(bool isPlayer)
+    public void SetTurn()
     {
-        this.isPlayer = IsControlledByPlayer();
+        isPlayer = IsControlledByPlayer();
         isMyTurn = true;
 
         fieldPosition.ChangeEmission(isPlayer ? fieldPosition.PlayerTurnColor : fieldPosition.TurnColor);
@@ -1358,7 +1358,17 @@ public class Card : MonoBehaviour
 
         return null;
     }
-
+    public bool IsControlled()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is HeroControl)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     private bool IsControlledByPlayer()
     {
         Card controller = null;

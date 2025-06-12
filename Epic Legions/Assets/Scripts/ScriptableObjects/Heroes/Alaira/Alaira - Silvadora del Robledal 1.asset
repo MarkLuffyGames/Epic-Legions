@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Alaira - Silvadora del Robledal 1
   m_EditorClassIdentifier: 
-  cardId: 9
+  cardId: 42
   cardName: Alaira
   cardLastName: Silvadora del Robledal
   cardSprite: {fileID: 21300000, guid: 757ee54104131c1448d8cfaab599021d, type: 3}
@@ -23,6 +23,6 @@ MonoBehaviour:
   speed: 25
   energy: 30
   moves:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: c644dbd743a3cf1428a8db6a74fe054c, type: 2}
+  - {fileID: 11400000, guid: 26b3363d222af6c43826cb5ecec11b0a, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

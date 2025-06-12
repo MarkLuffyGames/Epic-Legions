@@ -17,10 +17,10 @@ MonoBehaviour:
   energyCost: 0
   moveEffect: {fileID: 11400000, guid: 5f96daa4213bbd246a0eb76ad4146f9c, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  isPassiveEffect: 0
+  alwaysActive: 0
   needTarget: 0
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 2715471840370901047, guid: df9374346b76e444dbbb2b019de4da25, type: 3}
+  visualEffectHit: {fileID: 7768995540086951145, guid: 5e097239e023ad043844ee9e79681097, type: 3}
   effectDescription: 

@@ -79,7 +79,7 @@ public class HemeraLegionAI : MonoBehaviour
                 Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
                 if (heroToPlay != null) SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
 
-                yield return new WaitForSeconds(Random.Range(2, 3));
+                yield return new WaitForSeconds(1);
             }
 
             StartCoroutine(DefineActions());
@@ -87,7 +87,7 @@ public class HemeraLegionAI : MonoBehaviour
         else
         {
 
-            yield return new WaitForSeconds(Random.Range(2, 3));
+            yield return new WaitForSeconds(1);
 
             StartCoroutine(DefineActions());
         }
@@ -312,7 +312,7 @@ public class HemeraLegionAI : MonoBehaviour
             }
                 
         }
-        else
+        else if (duelManager.duelPhase.Value == DuelPhase.Preparation)
         {
             Debug.Log("Intentar invocar un heroe");
 
@@ -321,21 +321,22 @@ public class HemeraLegionAI : MonoBehaviour
             if (heroToPlay != null)
             {
                 SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
-                yield return new WaitForSeconds(Random.Range(2, 3));
+                yield return new WaitForSeconds(1);
                 StartCoroutine(DefineActions());
                 yield break;
             }
         }
     }
+
     Coroutine executeActionCoroutine;
     private IEnumerator ExecuteAction()
     {
-        yield return new WaitForSeconds(Random.Range(2, 5));
+        yield return new WaitForSeconds(1);
         heroesInTurn.Clear();// Limpia la lista 
 
         foreach (var card in duelManager.HeroInTurn)
         {
-            if(playerManager.GetAllCardInField().Contains(card)) heroesInTurn.Add(card); // Agrega a la lista los heroes que deben realizar acciones en este turno
+            if(playerManager.GetAllCardInField().Contains(card) && !card.IsControlled()) heroesInTurn.Add(card); // Agrega a la lista los heroes que deben realizar acciones en este turno
         }
 
         foreach (var card in heroesInTurn)// Ejecutar accion predefinida para cade heroe
@@ -345,7 +346,7 @@ public class HemeraLegionAI : MonoBehaviour
                 if(hero == card)
                 {
 
-                    yield return new WaitForSeconds(Random.Range(2, 5));
+                    yield return new WaitForSeconds(1);
 
                     if (card.Moves[attack].MoveSO.NeedTarget)
                     {
@@ -424,6 +425,8 @@ public class HemeraLegionAI : MonoBehaviour
     {
         var heroes = playerManager.GetAllCardInField();
         var usableCombinations = new List<List<(Card, int)>>();
+
+        heroes.RemoveAll(hero => hero.IsControlled()); // Eliminar heroes bajo efecto de control
 
         // Obtener combinaciones asegurando que todos los héroes tienen una acción
         List<List<(Card, int)>> combinations = GetHeroAttackCombinations(heroes);

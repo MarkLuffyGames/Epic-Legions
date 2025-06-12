@@ -8,6 +8,7 @@ public class HeroControl : CardEffect
     public Card Caster => caster;
     public override void ActivateEffect(Card caster, Card target)
     {
+        this.caster = caster;
         target.AddEffect(new Effect(this, target));
     }
 
