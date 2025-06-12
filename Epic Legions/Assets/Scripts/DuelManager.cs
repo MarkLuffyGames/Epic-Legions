@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -953,6 +954,8 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Una lista de cartas que pueden ser objetivo del movimiento.</returns>
     public List<Card> ObtainTargets(Card card, int movementToUseIndex)
     {
+
+        //Debug.Log($"Obteniendo objetivos para el movimiento: {card.Moves[movementToUseIndex].MoveSO.MoveName}, de la carta {card.cardSO.CardName}");
         // Lista que contendrá los objetivos posibles
         List<Card> targets = new List<Card>();
 
@@ -1125,7 +1128,6 @@ public class DuelManager : NetworkBehaviour
             {
                 PlayerManager playerManagerTemp = isControlledHero ? GetOpposingPlayerManager(player1Manager) : player1Manager;
 
-                Debug.Log(player1Manager == playerManagerTemp);
                 // Marcar la carta como lista para la acción
                 playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
 
@@ -1145,7 +1147,7 @@ public class DuelManager : NetworkBehaviour
                 playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
                 hasPriority = playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
                 player2Manager.ConsumeEnergy(playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
-                if (IsSinglePlayer) ConsumeEnergyClientRpc(clientId, playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
+                if (!IsSinglePlayer) ConsumeEnergyClientRpc(clientId, playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
             }
 
             // Si el movimiento tiene prioridad (es un efecto positivo), se añade a las acciones de efecto
@@ -1184,6 +1186,7 @@ public class DuelManager : NetworkBehaviour
         // Si el cliente actual es el host (servidor), no se realiza ninguna acción (el host ya maneja la energía)
         if (IsHost) return;
 
+        Debug.Log($"Consumir energía: {amount} para el cliente {clientId}");
         // Verificar si el cliente que ejecuta esta función es el cliente local
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
@@ -1316,15 +1319,12 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Un IEnumerator que permite la ejecución secuencial del ataque en el servidor.</returns>
     IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
     {
-        Debug.Log("A");
         // Determina qué carta está realizando el ataque (héroe o hechizo).
         Card attackerCard = isHero ?
             (playerRoles[clientId] == 1 ? (isControlledHero ? player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card)
             : (isControlledHero ? player1Manager.GetFieldPositionList()[heroUsesTheAttack].Card : player2Manager.GetFieldPositionList()[heroUsesTheAttack].Card))
             : (playerRoles[clientId] == 1 ? player1Manager.SpellFieldPosition.Card : player2Manager.SpellFieldPosition.Card);
 
-
-        Debug.Log("B");
         // Llama a la función RPC para ejecutar el ataque en los clientes.
         if (!isSinglePlayer) HeroAttackClientRpc(heroToAttackPositionIndex, clientId, movementToUseIndex, isHero, heroUsesTheAttack, lastMove, isControlledHero);
 
@@ -1351,7 +1351,8 @@ public class DuelManager : NetworkBehaviour
         else
         {
             // Si el movimiento es un efecto positivo, ataca al héroe objetivo correspondiente.
-            Card card = (targetPlayer == 2) ? player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card : player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+            Card card = (targetPlayer == 2) ? player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card 
+                : player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
             yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
         }
 
