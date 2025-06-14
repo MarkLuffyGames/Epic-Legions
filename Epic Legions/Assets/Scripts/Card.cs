@@ -1201,7 +1201,7 @@ public class Card : MonoBehaviour
 
     public void RechargeEnergy(int amount)
     {
-        var player = duelManager.GetPlayerManagerForCard(this);
+        var player = IsControlled() ? duelManager.GetOpposingPlayerManager(duelManager.GetPlayerManagerForCard(this)) : duelManager.GetPlayerManagerForCard(this);
         if (player != null)
         {
             player.RechargeEnergy(amount); 

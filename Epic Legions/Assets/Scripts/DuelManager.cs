@@ -954,8 +954,6 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Una lista de cartas que pueden ser objetivo del movimiento.</returns>
     public List<Card> ObtainTargets(Card card, int movementToUseIndex)
     {
-
-        //Debug.Log($"Obteniendo objetivos para el movimiento: {card.Moves[movementToUseIndex].MoveSO.MoveName}, de la carta {card.cardSO.CardName}");
         // Lista que contendrá los objetivos posibles
         List<Card> targets = new List<Card>();
 
@@ -1353,6 +1351,9 @@ public class DuelManager : NetworkBehaviour
             // Si el movimiento es un efecto positivo, ataca al héroe objetivo correspondiente.
             Card card = (targetPlayer == 2) ? player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card 
                 : player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+
+            if (!attackerCard.Moves[movementToUseIndex].MoveSO.NeedTarget) card = attackerCard;
+
             yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
         }
 
@@ -1678,6 +1679,7 @@ public class DuelManager : NetworkBehaviour
         else // Si es un ataque de tipo efecto positivo, ataca al objetivo correspondiente.
         {
             Card card = playerRole == 1 ? player1Manager.GetFieldPositionList()[fieldPositionIndex].Card : player2Manager.GetFieldPositionList()[fieldPositionIndex].Card;
+            if (!attackerCard.Moves[movementToUseIndex].MoveSO.NeedTarget) card = attackerCard;
             yield return HeroAttack(card, playerRole, attackerCard, movementToUseIndex, lastMove);
         }
 

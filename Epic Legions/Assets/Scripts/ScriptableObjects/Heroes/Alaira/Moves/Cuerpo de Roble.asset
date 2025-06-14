@@ -15,7 +15,7 @@ MonoBehaviour:
   moveName: Cuerpo de Roble
   damage: 0
   energyCost: 10
-  moveEffect: {fileID: 11400000, guid: 89e6e69a483eab4419f4346899cb613e, type: 2}
+  moveEffect: {fileID: 11400000, guid: ab03e171a83b486419215af1115728ad, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 0
