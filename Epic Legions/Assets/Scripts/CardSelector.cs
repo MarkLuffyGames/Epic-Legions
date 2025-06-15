@@ -213,6 +213,7 @@ public class CardSelector : MonoBehaviour
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
         if (duelManager.SettingAttackTarget && card != null)
         {
+            Debug.Log($"Setting attack target");
             if (card.isAttackable)
             {
                 duelManager.CardSelectingTarget.actionIsReady = true;
@@ -253,12 +254,14 @@ public class CardSelector : MonoBehaviour
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
         else if (!duelManager.sampleCard.IsEnlarged && card != null && card.isVisible)
         {
+            Debug.Log($"Enlarge card");
             card.RemoveHighlight();
             card.Enlarge();
         }
         //Si hay una carta enfocada desenfocar la carta.
         else if (duelManager.sampleCard.IsEnlarged)
         {
+            Debug.Log($"Unenlarge card");
             duelManager.sampleCard.OnClick(currentCard);
             //card.ResetSize();
             //isAnyFocusedCard = false;
