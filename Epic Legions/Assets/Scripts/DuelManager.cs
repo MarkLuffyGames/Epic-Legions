@@ -1736,9 +1736,6 @@ public class DuelManager : NetworkBehaviour
 
         // Inicia el turno del héroe en el cliente.
         BeginHeroTurn();
-
-        // Imprime el índice del héroe en turno para fines de depuración.
-        Debug.Log(heroesInTurnIndex);
     }
 
 
