@@ -977,7 +977,8 @@ public class DuelManager : NetworkBehaviour
                         // Si hay una carta en la posición, la agregamos como objetivo
                         if (rivalField[i].Card != null)
                         {
-                            targets.Add(rivalField[i].Card);
+                            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null 
+                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, rivalField[i].Card)) targets.Add(rivalField[i].Card);
                         }
 
                         if (targets.Count > 0 && (i == 4 || i == 9 || i == 14))
@@ -993,7 +994,8 @@ public class DuelManager : NetworkBehaviour
                         // Si hay una carta en la posición, la agregamos como objetivo
                         if (rivalField[i].Card != null)
                         {
-                            targets.Add(rivalField[i].Card);
+                            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
+                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, rivalField[i].Card)) targets.Add(rivalField[i].Card);
                         }
 
                         if (targets.Count > 0 && (i == 0 || i == 5 || i == 10))
@@ -1009,7 +1011,8 @@ public class DuelManager : NetworkBehaviour
                         // Si hay una carta en la posición, la agregamos como objetivo
                         if (rivalField[i].Card != null)
                         {
-                            targets.Add(rivalField[i].Card);
+                            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
+                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, rivalField[i].Card)) targets.Add(rivalField[i].Card);
                         }
                     }
                 }
@@ -1024,7 +1027,8 @@ public class DuelManager : NetworkBehaviour
             {
                 if (position.Card != null && position.Card != card)
                 {
-                    targets.Add(position.Card); // Añadimos los aliados como objetivo
+                    if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
+                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, position.Card)) targets.Add(position.Card); // Añadimos los aliados como objetivo
                 }
             }
         }
