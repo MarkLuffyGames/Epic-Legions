@@ -1358,6 +1358,21 @@ public class Card : MonoBehaviour
 
         return null;
     }
+
+    public Effect GetControllerEffect()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is HeroControl heroControl) return effect;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Devuelve true si esta carta está siendo controlada por el efecto de control.
+    /// </summary>
+    /// <returns></returns>
     public bool IsControlled()
     {
         foreach (Effect effect in statModifier)
@@ -1390,5 +1405,7 @@ public class Card : MonoBehaviour
             return duelManager.Player1Manager == duelManager.GetPlayerManagerForCard(this);
         }
     }
+
+
 }
 

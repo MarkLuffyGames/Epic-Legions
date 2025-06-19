@@ -1471,6 +1471,8 @@ public class DuelManager : NetworkBehaviour
 
         heroInTurn.Remove(attackerCard);
 
+        if(attackerCard.IsControlled()) attackerCard.GetControllerEffect().MoveEffect.DeactivateEffect(attackerCard.GetControllerEffect());
+
         // Si es el último movimiento, finaliza las acciones.
         if (lastMove) yield return FinishActions();
     }
