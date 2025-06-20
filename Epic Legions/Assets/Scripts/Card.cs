@@ -744,7 +744,7 @@ public class Card : MonoBehaviour
 
         fieldPosition.ChangeEmission(isPlayer ? fieldPosition.PlayerTurnColor : fieldPosition.TurnColor);
 
-        if (IsInLethargy())
+        if (IsInLethargy() || IsParalyzed())
         {
             EndTurn();
         }
@@ -1406,6 +1406,16 @@ public class Card : MonoBehaviour
         }
     }
 
-
+    public bool IsParalyzed()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is Paralysis)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

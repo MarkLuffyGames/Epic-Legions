@@ -98,6 +98,7 @@ public class Effect
         {
             casterHero = parasiteSeed.Caster;
             durability = parasiteSeed.NumberTurns;
+            isNegative = true;
         }
         else if(cardEffect is FullDamageReflection fulldamageReflection)
         {
@@ -106,11 +107,18 @@ public class Effect
         else if(cardEffect is NoHealing noHealing)
         {
             durability = noHealing.NumberTurns;
+            isNegative = true;
         }
         else if (cardEffect is HeroControl heroControl)
         {
             casterHero = heroControl.Caster;
             durability = 1;
+            isNegative = true;
+        }
+        else if (cardEffect is Paralysis paralysis)
+        {
+            durability = paralysis.NumberTurns;
+            isNegative = true;
         }
     }
 

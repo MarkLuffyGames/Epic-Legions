@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: "Pu\xF1o de los Robles"
+  m_Name: Enredo Ancestral
   m_EditorClassIdentifier: 
-  moveName: "Pu\xF1o de los Robles"
-  damage: 25
+  moveName: Enredo Ancestral
+  damage: 0
   energyCost: 15
-  moveEffect: {fileID: 11400000, guid: ed04b1553edf7b94cb808bd21366c76c, type: 2}
+  moveEffect: {fileID: 11400000, guid: e53e649879ac198498df5cfc273bafae, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 1
-  moveType: 0
+  moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Canaliza el poder de un coloso para asestar un golpe brutal
-    y reducir la defensa del objetivo en 10 durante un turno.
+  effectDescription: "Ra\xEDces ancestrales emergen del suelo e inmovilizan al enemigo
+    durante 3 turnos."
