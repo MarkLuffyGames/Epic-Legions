@@ -888,8 +888,9 @@ public class Card : MonoBehaviour
         if (attacker != null)
         {
             amountDamage += attacker.GetAttackModifier();
+            if (IsBurned()) amountDamage += 10;
 
-            if(attacker.cardSO is HeroCardSO && HasFullDamageReflection())
+            if (attacker.cardSO is HeroCardSO && HasFullDamageReflection())
             {
                 attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
             }
@@ -1413,6 +1414,18 @@ public class Card : MonoBehaviour
             if (effect.MoveEffect is Paralysis)
             {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsBurned()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is Burn)
+            {
+                return effect.IsBurned();
             }
         }
         return false;

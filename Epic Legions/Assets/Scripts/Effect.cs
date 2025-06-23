@@ -11,6 +11,7 @@ public class Effect
     private Card affectedHero;
     private bool isActive;
     private bool isStunned;
+    private bool isBurned;
     private int amount;
     private int currentDefense;
     private int absorbDamage;
@@ -120,6 +121,12 @@ public class Effect
             durability = paralysis.NumberTurns;
             isNegative = true;
         }
+        else if (cardEffect is Burn burn)
+        {
+            isBurned = true;
+            durability = 1;
+            isNegative = true;
+        }
     }
 
     public void ActivateEffect()
@@ -129,6 +136,12 @@ public class Effect
     public bool IsStunned()
     {
         if (isActive) return isStunned;
+        return false;
+    }
+
+    public bool IsBurned()
+    {
+        if (isActive) return isBurned;
         return false;
     }
     public void SetCurrentDefence(int newCurrentDefence)
