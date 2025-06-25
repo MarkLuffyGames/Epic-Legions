@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: "Fuerza Volc\xE1nica"
+  m_Name: Furia Ardiente
   m_EditorClassIdentifier: 
-  moveName: "Fuerza Volc\xE1nica"
-  damage: 35
-  energyCost: 30
-  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
-  effectCondition: {fileID: 11400000, guid: d23d390840908954aacf94b6e82fc5e8, type: 2}
+  moveName: Furia Ardiente
+  damage: 0
+  energyCost: 15
+  moveEffect: {fileID: 11400000, guid: cf7e90baa30164e41af9c53eb7106c5e, type: 2}
+  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   alwaysActive: 0
-  needTarget: 1
-  moveType: 0
+  needTarget: 0
+  moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Un golpe devastador que puede aturdir si rompe la defensa del
-    objetivo.
+  effectDescription: Aumenta el poder de ataque del usuario en 20 durante 1 turno.
