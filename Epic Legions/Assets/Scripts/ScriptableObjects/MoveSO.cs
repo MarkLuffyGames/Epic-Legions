@@ -12,6 +12,7 @@ public class MoveSO : ScriptableObject
     [SerializeField] private Condition targetsCondition;
     [SerializeField] private bool alwaysActive;
     [SerializeField] private bool needTarget;
+    [SerializeField] private bool onMyself;
     [SerializeField] private MoveType moveType;
     [SerializeField] private TargetsType targetsType;
     [SerializeField] private GameObject visualEffect; 
@@ -26,6 +27,7 @@ public class MoveSO : ScriptableObject
     public Condition TargetsCondition => targetsCondition;
     public bool AlwaysActive => alwaysActive;
     public bool NeedTarget => needTarget;
+    public bool OnMyself => onMyself;
     public MoveType MoveType => moveType;
     public TargetsType TargetsType => targetsType;
     public GameObject VisualEffect => visualEffect;

@@ -18,13 +18,19 @@ public class Movement
         {
             if (moveSO.MoveEffect != null)
             {
-                moveSO.MoveEffect.ActivateEffect(caster, target);
+                moveSO.MoveEffect.ActivateEffect(caster, moveSO.OnMyself ? caster : target);
             }
         }
     }
 
     public void ActivateEffect(Card caster, List<Card> target)
     {
+        if(moveSO.OnMyself)
+        {
+            ActivateEffect(caster, caster);
+            return;
+        }
+
         List<Card> targets = new List<Card>();
         foreach (Card card in target)
         {

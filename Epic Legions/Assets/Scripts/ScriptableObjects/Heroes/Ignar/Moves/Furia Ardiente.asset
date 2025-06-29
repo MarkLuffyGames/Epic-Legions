@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Furia Ardiente
   damage: 0
-  energyCost: 15
+  energyCost: 10
   moveEffect: {fileID: 11400000, guid: cf7e90baa30164e41af9c53eb7106c5e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 0
+  onMyself: 0
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}

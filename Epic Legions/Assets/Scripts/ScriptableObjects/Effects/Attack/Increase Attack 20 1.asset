@@ -16,5 +16,5 @@ MonoBehaviour:
   iconSprite: {fileID: 0}
   effectScore: 1
   amount: 20
-  numberTurns: 2
+  numberTurns: 1
   isIncrease: 1
