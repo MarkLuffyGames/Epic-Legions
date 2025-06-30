@@ -10,20 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Impacto Ascendente
+  m_Name: "Cataclismo \xEDgneo"
   m_EditorClassIdentifier: 
-  moveName: Impacto Ascendente
-  damage: 25
-  energyCost: 15
-  moveEffect: {fileID: 11400000, guid: 8492e7280f8578342aba425f1f2ed99d, type: 2}
+  moveName: "Cataclismo \xEDgneo"
+  damage: 40
+  energyCost: 50
+  moveEffect: {fileID: 11400000, guid: abcc03a1a223de94ab0fc6aa83bbfc9d, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   alwaysActive: 0
-  needTarget: 1
-  onMyself: 1
-  moveType: 0
-  targetsType: 0
+  needTarget: 0
+  onMyself: 0
+  moveType: 1
+  targetsType: 2
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Causa da\xF1o al enemigo y aumenta el ataque del usuario en
-    20 durante 1 turno."
+  effectDescription: "Da\xF1a severamente a todos los enemigos y les aplica quemaduras."
