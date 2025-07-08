@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: "Bendici\xF3n del \xC1rbol Eterno"
   damage: 0
-  energyCost: 20
+  energyCost: 15
   moveEffect: {fileID: 11400000, guid: 730a7991269a7fa45a0167faa5d4b1c2, type: 2}
   effectCondition: {fileID: 0}
+  targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 0
+  onMyself: 0
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}

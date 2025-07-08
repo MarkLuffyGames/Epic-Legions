@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: "Coraz\xF3n del Oc\xE9ano"
   damage: 0
-  energyCost: 10
+  energyCost: 15
   moveEffect: {fileID: 11400000, guid: 730a7991269a7fa45a0167faa5d4b1c2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 0
+  onMyself: 0
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}

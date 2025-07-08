@@ -17,10 +17,12 @@ MonoBehaviour:
   energyCost: 10
   moveEffect: {fileID: 11400000, guid: 5c9c6dbba6d23bb4b8f07a24903d0ea8, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 1
+  onMyself: 0
   moveType: 0
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: " Desgarra con sus afiladas garras, causando da\xF1o directo."
+  effectDescription: "Desgarra con sus afiladas garras, causando da\xF1o directo."
