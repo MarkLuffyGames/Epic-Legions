@@ -10,20 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Muro de Piedra
+  m_Name: "Impulso S\xEDsmico"
   m_EditorClassIdentifier: 
-  moveName: Muro de Piedra
+  moveName: "Impulso S\xEDsmico"
   damage: 0
-  energyCost: 15
-  moveEffect: {fileID: 11400000, guid: eec7afefde9565540abd19d681a55f03, type: 2}
+  energyCost: 10
+  moveEffect: {fileID: 11400000, guid: cf7e90baa30164e41af9c53eb7106c5e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 1
   onMyself: 0
   moveType: 2
-  targetsType: 1
+  targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Una barrera s\xF3lida que protege a los aliados absorviendo
-    20 de da\xF1o durante 3 turnos."
+  effectDescription: Aumenta el ataque de un aliado en 20 durante 2 turnos.
