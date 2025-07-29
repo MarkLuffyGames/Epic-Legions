@@ -887,7 +887,6 @@ public class Card : MonoBehaviour
     {
         if (attacker != null)
         {
-            amountDamage += attacker.GetAttackModifier();
             if (IsBurned()) amountDamage += 10;
 
             if (attacker.cardSO is HeroCardSO && HasFullDamageReflection())
@@ -1322,7 +1321,7 @@ public class Card : MonoBehaviour
     /// Verifica los modificadores de ataque que tenga activo esta carta.
     /// </summary>
     /// <returns>Cantidad modificada.</returns>
-    private int GetAttackModifier()
+    public int GetAttackModifier()
     {
         int attackModifier = 0;
 

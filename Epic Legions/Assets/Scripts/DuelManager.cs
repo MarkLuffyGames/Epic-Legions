@@ -5,7 +5,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.Netcode;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
 public class DuelManager : NetworkBehaviour
@@ -974,12 +977,8 @@ public class DuelManager : NetworkBehaviour
                     // Itera sobre las posiciones de campo del jugador 2 (enemigo)
                     for (int i = 0; i < rivalField.Count; i++)
                     {
-                        // Si hay una carta en la posición, la agregamos como objetivo
-                        if (rivalField[i].Card != null)
-                        {
-                            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null 
-                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, rivalField[i].Card)) targets.Add(rivalField[i].Card);
-                        }
+
+                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);    
 
                         if (targets.Count > 0 && (i == 4 || i == 9 || i == 14))
                         {
@@ -991,12 +990,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     for (int i = rivalField.Count - 1; i >= 0; i--)
                     {
-                        // Si hay una carta en la posición, la agregamos como objetivo
-                        if (rivalField[i].Card != null)
-                        {
-                            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
-                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, rivalField[i].Card)) targets.Add(rivalField[i].Card);
-                        }
+                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
 
                         if (targets.Count > 0 && (i == 0 || i == 5 || i == 10))
                         {
@@ -1008,12 +1002,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     for (int i = 0; i < rivalField.Count; i++)
                     {
-                        // Si hay una carta en la posición, la agregamos como objetivo
-                        if (rivalField[i].Card != null)
-                        {
-                            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
-                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, rivalField[i].Card)) targets.Add(rivalField[i].Card);
-                        }
+                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
                     }
                 }
             }
@@ -1025,16 +1014,28 @@ public class DuelManager : NetworkBehaviour
             var field = card.GetController() != null ? GetPlayerManagerRival(card).GetFieldPositionList() : GetPlayerManagerForCard(card).GetFieldPositionList();
             foreach (var position in field)
             {
-                if (position.Card != null && position.Card != card)
-                {
-                    if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
-                                && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, position.Card)) targets.Add(position.Card); // Añadimos los aliados como objetivo
-                }
+                TryAddTarget(position.Card, card, movementToUseIndex, targets);
             }
         }
 
         // Retornamos la lista de objetivos posibles
         return targets;
+    }
+
+    private void TryAddTarget(Card position, Card card, int movementToUseIndex, List<Card> targets)
+    {
+        if (position != null && position != card)
+        {
+            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
+                    && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, position))
+            {
+                targets.Add(position);
+            }
+            else if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition == null)
+            {
+                targets.Add(position); // Si no hay condición, se agrega directamente
+            }
+        }
     }
 
 
@@ -1399,7 +1400,7 @@ public class DuelManager : NetworkBehaviour
                 cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-                attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
+                attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex),
                     attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
             }
             else
@@ -1414,7 +1415,7 @@ public class DuelManager : NetworkBehaviour
                 foreach (var card in targets)
                 {
                     // Aplica el daño a todos los objetivos.
-                    attackerCard.lastDamageInflicted = card.ReceiveDamage(attackerCard.Moves[movementToUseIndex].MoveSO.Damage,
+                    attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex),
                         attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
                 }
             }
@@ -1475,6 +1476,15 @@ public class DuelManager : NetworkBehaviour
 
         // Si es el último movimiento, finaliza las acciones.
         if (lastMove) yield return FinishActions();
+    }
+
+    private int CalculateAttackDamage(Card attackerCard, int movementToUseIndex)
+    {
+        int damage = attackerCard.Moves[movementToUseIndex].MoveSO.Damage;
+        damage += attackerCard.GetAttackModifier(); // Añade el bono de ataque del héroe, si lo tiene.
+        damage += attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IncreaseAttackDamage attackModifier ? attackModifier.Amount : 0; // Añade el modificador de ataque del movimiento, si lo tiene.
+
+        return damage;
     }
 
     private void DestroySpell(Card spellCard)

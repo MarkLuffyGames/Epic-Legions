@@ -166,8 +166,7 @@ public class Effect
 
     public bool HasProtector()
     {
-        if (isActive) return hasProtector;
-        return false;
+        return hasProtector;
     }
 
     public int GetSpeed()

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: "Kaelis - Sombra Carmes\xED"
   m_EditorClassIdentifier: 
   cardId: 0
-  cardName: 
-  cardLastName: 
-  cardSprite: {fileID: 0}
-  cardElemnt: 0
+  cardName: Kaelis
+  cardLastName: "Sombra Carmes\xED"
+  cardSprite: {fileID: 21300000, guid: 71950461698528f41974e3ee7a60eb32, type: 3}
+  cardElemnt: 8
   heroClass: 0
   healt: 0
   defence: 0

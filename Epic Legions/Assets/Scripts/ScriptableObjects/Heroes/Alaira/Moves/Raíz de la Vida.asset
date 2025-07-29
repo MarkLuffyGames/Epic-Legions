@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Herida Profunda
+  m_Name: "Ra\xEDz de la Vida"
   m_EditorClassIdentifier: 
-  moveName: Herida Profunda
-  damage: 25
-  energyCost: 15
-  moveEffect: {fileID: 11400000, guid: efad936f7e25dd04d86d8a4cced6b4a6, type: 2}
-  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  moveName: "Ra\xEDz de la Vida"
+  damage: 0
+  energyCost: 50
+  moveEffect: {fileID: 0}
+  effectCondition: {fileID: 0}
   targetsCondition: {fileID: 0}
   alwaysActive: 0
-  needTarget: 1
+  needTarget: 0
   onMyself: 0
-  moveType: 0
+  moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Causa da\xF1o y evita que el enemigo se cure durante 2 turnos."
+  effectDescription: "Revive a un h\xE9roe aliado derrotado, el h\xE9roe revivido
+    no puede atacar en este turno. "

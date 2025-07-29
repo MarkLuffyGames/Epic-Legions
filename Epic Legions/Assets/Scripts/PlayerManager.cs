@@ -57,7 +57,7 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < deck.Count; i++)
         {
             var newCard = Instantiate(cardPrafab, deckPosition);
-            newCard.transform.rotation = Quaternion.Euler(-90, 0, 0);
+            newCard.transform.rotation = Quaternion.Euler(-90, isPlayer ? 180 : 0, 0);
             newCard.transform.localPosition = new Vector3(0, i * 0.02f, 0);
             card.Add(newCard.GetComponent<Card>());
             card[i].SetNewCard(deck[i], duelManager);
