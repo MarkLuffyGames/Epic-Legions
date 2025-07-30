@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: "Thal\xEDn - Portadora del Fin 1"
   m_EditorClassIdentifier: 
-  cardId: 25
+  cardId: 1021
   cardName: "Thal\xEDn"
   cardLastName: Portadora del Fin
   cardSprite: {fileID: 21300000, guid: 0a06f46b88f2e494eb82b9a0b9b9edcc, type: 3}

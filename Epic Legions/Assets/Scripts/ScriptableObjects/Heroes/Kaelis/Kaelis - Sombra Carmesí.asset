@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: "Kaelis - Sombra Carmes\xED"
   m_EditorClassIdentifier: 
-  cardId: 0
+  cardId: 1052
   cardName: Kaelis
   cardLastName: "Sombra Carmes\xED"
   cardSprite: {fileID: 21300000, guid: 71950461698528f41974e3ee7a60eb32, type: 3}
   cardElemnt: 8
   heroClass: 0
-  healt: 0
-  defence: 0
-  speed: 0
-  energy: 0
-  moves: []
+  healt: 30
+  defence: 20
+  speed: 50
+  energy: 20
+  moves:
+  - {fileID: 11400000, guid: 3ee1b879a70f81b49b709500515d0182, type: 2}
+  - {fileID: 11400000, guid: 3999c8234c541244599e7451e37bd747, type: 2}
+  - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

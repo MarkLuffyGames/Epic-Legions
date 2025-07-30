@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Ignar - Llama Indomable 4
   m_EditorClassIdentifier: 
-  cardId: 0
+  cardId: 1053
   cardName: Ignar
   cardLastName: Llama Indomable
   cardSprite: {fileID: 21300000, guid: c1d708f2bf4ae62489d164bb925c051d, type: 3}
@@ -23,6 +23,6 @@ MonoBehaviour:
   speed: 50
   energy: 30
   moves:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: be63aa993fed8844499cf6e817187da7, type: 2}
+  - {fileID: 11400000, guid: 65abce9bd4e982e4aa8f9b3e4b75c4a1, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

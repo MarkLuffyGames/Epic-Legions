@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
   m_Name: Espada de las Mareas
   m_EditorClassIdentifier: 
-  cardId: 33
+  cardId: 1015
   cardName: Espada de las Mareas
   cardLastName: 
   cardSprite: {fileID: 21300000, guid: fad1e7489335fa64d819af134b33c1b7, type: 3}

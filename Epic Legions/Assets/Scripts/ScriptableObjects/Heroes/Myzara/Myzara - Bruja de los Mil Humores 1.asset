@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Myzara - Bruja de los Mil Humores 1
   m_EditorClassIdentifier: 
-  cardId: 17
+  cardId: 1033
   cardName: Myzara
   cardLastName: Bruja de los Mil Humores
   cardSprite: {fileID: 21300000, guid: 5fda2390577f8df46894df7bf6e036fa, type: 3}

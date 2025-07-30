@@ -4,24 +4,28 @@ using UnityEngine;
 public class CardDatabase : MonoBehaviour
 {
     public List<CardSO> AllCards;
-    public static List<CardSO> allCards; // Lista de todas las cartas disponibles.  
+    public static Dictionary<int, CardSO> allCards; // Lista de todas las cartas disponibles.  
 
     // Método para buscar una carta por su ID.  
     public static CardSO GetCardById(int cardId)
     {
-        return allCards.Find(card => card.CardID == cardId);
+        allCards.TryGetValue(cardId, out CardSO card);
+        return card;
     }
 
     private void Awake()
     {
-        allCards = AllCards;
+        foreach (CardSO card in AllCards)
+        {
+            allCards[card.CardID] = card;
+        }
         DontDestroyOnLoad(gameObject);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeCardDatabase()
     {
-        allCards = new List<CardSO>();
+        allCards = new Dictionary<int, CardSO>();
     }
 
     public static int[] ShuffleArray(int[] array)

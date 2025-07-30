@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Jaribi - Arcangel Oscuro 1
   m_EditorClassIdentifier: 
-  cardId: 5
+  cardId: 1010
   cardName: Jaribi
   cardLastName: Arcangel Oscuro
   cardSprite: {fileID: 21300000, guid: 4844fa2ebee1d2241ac9eab3f3e7b9e2, type: 3}

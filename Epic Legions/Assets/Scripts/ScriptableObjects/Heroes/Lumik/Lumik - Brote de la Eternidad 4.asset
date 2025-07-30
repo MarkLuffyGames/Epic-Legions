@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Lumik - Brote de la Eternidad 4
   m_EditorClassIdentifier: 
-  cardId: 16
+  cardId: 1020
   cardName: Lumik
   cardLastName: Brote de la Eternidad
   cardSprite: {fileID: 21300000, guid: 74529e5aab1bf214b97bb9f0cc7d26b7, type: 3}

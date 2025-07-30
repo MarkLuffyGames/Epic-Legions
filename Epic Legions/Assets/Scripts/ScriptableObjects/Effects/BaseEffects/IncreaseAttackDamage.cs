@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Increase Attack Damage", menuName = "Hemera Legions/Card Effects/ Increase Attack Damage")]
 public class IncreaseAttackDamage : CardEffect
 {
     [SerializeField] private int amount;

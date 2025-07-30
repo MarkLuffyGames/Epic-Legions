@@ -16,9 +16,11 @@ MonoBehaviour:
   damage: 0
   energyCost: 5
   moveEffect: {fileID: 11400000, guid: a0c818b7459fb6d48a80fa52ab970b9e, type: 2}
-  effectCondition: {fileID: 0}
+  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  targetsCondition: {fileID: 0}
   alwaysActive: 0
   needTarget: 0
+  onMyself: 0
   moveType: 0
   targetsType: 0
   visualEffect: {fileID: 0}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7e458957e68cc45927b7ff5f83ef41, type: 3}
   m_Name: Muerte Subita
   m_EditorClassIdentifier: 
-  cardId: 14
+  cardId: 1040
   cardName: "Aniquilaci\xF3n Instant\xE1nea"
   cardLastName: Muerte Subita
   cardSprite: {fileID: 21300000, guid: e9015122fc2619d43a2db5ec75aacf3d, type: 3}

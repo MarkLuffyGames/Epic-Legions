@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Yansso - Aprendiz de Mago 2
   m_EditorClassIdentifier: 
-  cardId: 1
+  cardId: 1057
   cardName: Yansso
   cardLastName: Aprendiz de Mago
   cardSprite: {fileID: 21300000, guid: c72e3b9f50b186743bf734458d243c9b, type: 3}
@@ -23,6 +23,6 @@ MonoBehaviour:
   speed: 30
   energy: 30
   moves:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 2941125b8f34f4648b458a971ff43b37, type: 2}
+  - {fileID: 11400000, guid: bb095003c1d8ebd43b985537f6ee90b7, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

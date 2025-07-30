@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7e458957e68cc45927b7ff5f83ef41, type: 3}
   m_Name: "Poci\xF3n de Vitalidad"
   m_EditorClassIdentifier: 
-  cardId: 7
+  cardId: 1048
   cardName: "Poci\xF3n de Vitalidad"
   cardLastName: "Aliento de Drag\xF3n"
   cardSprite: {fileID: 21300000, guid: 9132c598ccb87004d8046072f8fab875, type: 3}

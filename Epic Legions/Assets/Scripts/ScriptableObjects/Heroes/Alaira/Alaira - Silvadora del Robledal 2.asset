@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
   m_Name: Alaira - Silvadora del Robledal 2
   m_EditorClassIdentifier: 
-  cardId: 9
+  cardId: 1004
   cardName: Alaira
   cardLastName: Silvadora del Robledal
   cardSprite: {fileID: 21300000, guid: 757ee54104131c1448d8cfaab599021d, type: 3}
