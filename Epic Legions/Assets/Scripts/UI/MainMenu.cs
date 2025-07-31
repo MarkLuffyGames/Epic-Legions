@@ -87,14 +87,13 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
-
         for (int i = 0; i < 20; i++)
         {
-            //deckCardIds.Add(42);
+            deckCardIds.Add(CardDatabase.allCards[1048].CardID);
         }
-        foreach (var card in CardDatabase.allCards)
+        for (int i = 0; i < 40; i++)
         {
-            deckCardIds.Add(card.Value.CardID);
+            deckCardIds.Add(CardDatabase.GetRandomCards());
         }
         var duelManagerInstance = Instantiate(duelManagerPrefab);
         duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(deckCardIds.ToArray(), deckCardIds.ToArray());

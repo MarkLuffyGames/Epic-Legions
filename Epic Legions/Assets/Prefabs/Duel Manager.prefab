@@ -7330,6 +7330,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9032284547816904992}
     m_Modifications:
+    - target: {fileID: 62206159494934656, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: rechargeButton
+      value: 
+      objectReference: {fileID: 7628978546840641404}
     - target: {fileID: 2408581497199084325, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7386,6 +7390,10 @@ PrefabInstance:
       propertyPath: 'cards.Array.data[3]'
       value: 
       objectReference: {fileID: 8625122800790170319}
+    - target: {fileID: 3365259843115312580, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: rechargeButton
+      value: 
+      objectReference: {fileID: 3175523184334733021}
     - target: {fileID: 6094107271579088076, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: m_Name
       value: SampleCard
@@ -7394,6 +7402,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6414835055857107811, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: rechargeButton
+      value: 
+      objectReference: {fileID: 4092110144044359083}
+    - target: {fileID: 8548403891688233280, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: rechargeButton
+      value: 
+      objectReference: {fileID: 6627992889737403868}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7410,6 +7426,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d7fd50e039bf87459bccc45a966bcad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3175523184334733021 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6592758390856410258, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+  m_PrefabInstance: {fileID: 8606263788866443855}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3344350637753571628 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6414835055857107811, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
@@ -7419,6 +7446,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d7fd50e039bf87459bccc45a966bcad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4092110144044359083 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5739150735790589924, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+  m_PrefabInstance: {fileID: 8606263788866443855}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &6197682394780162410 stripped
@@ -7446,6 +7484,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd7df45e70b211848a3091cceeb9be6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6627992889737403868 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3212415891911067539, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+  m_PrefabInstance: {fileID: 8606263788866443855}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7628978546840641404 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2211272640007636275, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+  m_PrefabInstance: {fileID: 8606263788866443855}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8625122800790170319 stripped

@@ -98,7 +98,6 @@ public class SampleCard : MonoBehaviour
 
     public void OnClick(Card card)
     {
-        
         if (card == null || !CardWasClicked(card))
         {
             ResetSize();
@@ -146,21 +145,20 @@ public class SampleCard : MonoBehaviour
             {
                 cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
             }
+        }
 
-            foreach (var card in cards)
+        foreach (var card in cards)
+        {
+            if (card.gameObject.activeSelf)
             {
-                if (card.gameObject.activeSelf)
-                {
-                    ShiftCardRigth(card, true);
-                }
-                else
-                {
-                    card.gameObject.SetActive(true);
-                    ShiftCardRigth(card, false);
-                }
+                ShiftCardRigth(card, true);
+            }
+            else
+            {
+                card.gameObject.SetActive(true);
+                ShiftCardRigth(card, false);
             }
         }
-        
     }
 
     private void ShiftCardsLeft()

@@ -18,6 +18,6 @@ MonoBehaviour:
   amount: 100
   duration: 3
   archHeight: 1.5
-  particlePrefab: {fileID: 5660713056209881971, guid: 1cecb2453243ccd4d9e534f05c3082f3, type: 3}
-  arcPrefab: {fileID: 5044149007102076030, guid: 30e60d688e03dcd4ba4c658c62162a56, type: 3}
-  receivePrefab: {fileID: 2749420892920482201, guid: 3414dc7ae4be67447a4d98cd540ccf46, type: 3}
+  particlePrefab: {fileID: 0}
+  arcPrefab: {fileID: 0}
+  receivePrefab: {fileID: 0}

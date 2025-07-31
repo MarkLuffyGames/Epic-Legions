@@ -16,6 +16,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas cardActions;
     [SerializeField] private Button move1Button;
     [SerializeField] private Button move2Button;
+    [SerializeField] private Button rechargeButton;
     [SerializeField] private Image cardImage;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI lastNameText;
@@ -162,6 +163,7 @@ public class Card : MonoBehaviour
             defenceText.enabled = true;
             speedText.enabled = true;
             energyText.enabled = true;
+            description.text = "";
 
             if (moves[0] != null)
             {
@@ -537,6 +539,11 @@ public class Card : MonoBehaviour
             else
             {
                 move2Button.gameObject.SetActive(false);
+            }
+
+            if (cardSO is not HeroCardSO)
+            {
+                rechargeButton.gameObject.SetActive(false);
             }
         }
     }
@@ -942,6 +949,14 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ToGraveyard(Graveyard graveyard)
     {
+        foreach (var equipment in equipmentCard)
+        {
+            if (equipment != null)
+            {
+                equipment.ToGraveyard(graveyard);
+            }
+        }
+        equipmentCard = new Card[3];
         CancelAllEffects();
         AdjustUIcons(true);
         currentDefense = defense;
@@ -1351,6 +1366,8 @@ public class Card : MonoBehaviour
 
     public Card GetController()
     {
+        if(statModifier == null) return null;
+
         foreach (Effect effect in statModifier)
         {
             if (effect.MoveEffect is HeroControl heroControl) return heroControl.Caster;
@@ -1375,6 +1392,8 @@ public class Card : MonoBehaviour
     /// <returns></returns>
     public bool IsControlled()
     {
+        if (statModifier == null) return false;
+
         foreach (Effect effect in statModifier)
         {
             if (effect.MoveEffect is HeroControl)

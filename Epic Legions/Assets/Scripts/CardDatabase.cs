@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CardDatabase : MonoBehaviour
@@ -42,5 +43,10 @@ public class CardDatabase : MonoBehaviour
         }
 
         return array;
+    }
+
+    public static int GetRandomCards()
+    {
+        return allCards.Values.ToArray()[Random.Range(0, allCards.Count)].CardID;
     }
 }

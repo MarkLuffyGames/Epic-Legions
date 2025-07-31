@@ -14,23 +14,40 @@ public class Heal : CardEffect
     [SerializeField] private GameObject receivePrefab;
     public override void ActivateEffect(Card caster, Card target)
     {
-        Instantiate(particlePrefab, caster.FieldPosition.transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        if(particlePrefab != null && arcPrefab != null && receivePrefab != null)
+        {
+            Instantiate(particlePrefab, caster.FieldPosition.transform.position + Vector3.up * 0.5f, Quaternion.identity);
 
-        GameObject p = Instantiate(arcPrefab, caster.transform.position, Quaternion.identity);
-        CorrutinaHelper.Instancia.EjecutarCorrutina(MoveInArc(p, caster, target));
+            GameObject p = Instantiate(arcPrefab, caster.transform.position, Quaternion.identity);
+            CorrutinaHelper.Instancia.EjecutarCorrutina(MoveInArc(p, caster, target));
+        }
+        else
+        {
+            target.ToHeal(amount);
+        }
 
-        
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)
     {
-        Instantiate(particlePrefab, caster.FieldPosition.transform.position + Vector3.up * 0.5f, Quaternion.identity);
-
-        foreach (Card card in target)
+        if (particlePrefab != null && arcPrefab != null && receivePrefab != null)
         {
-            GameObject p = Instantiate(arcPrefab, caster.transform.position, Quaternion.identity);
-            CorrutinaHelper.Instancia.EjecutarCorrutina(MoveInArc(p, caster, card));
+            Instantiate(particlePrefab, caster.FieldPosition.transform.position + Vector3.up * 0.5f, Quaternion.identity);
+
+            foreach (Card card in target)
+            {
+                GameObject p = Instantiate(arcPrefab, caster.transform.position, Quaternion.identity);
+                CorrutinaHelper.Instancia.EjecutarCorrutina(MoveInArc(p, caster, card));
+            }
         }
+        else
+        {
+            foreach (Card card in target)
+            {
+                card.ToHeal(amount);
+            }
+        }
+        
     }
 
     public override void DeactivateEffect(Effect effect)

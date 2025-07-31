@@ -2777,6 +2777,7 @@ MonoBehaviour:
   cardActions: {fileID: 4191007347987392996}
   move1Button: {fileID: 2651439469424710317}
   move2Button: {fileID: 8855211243749122795}
+  rechargeButton: {fileID: 6639967436386170854}
   cardImage: {fileID: 8462960837391840768}
   nameText: {fileID: 8397680356145545021}
   lastNameText: {fileID: 5998372238065985793}
