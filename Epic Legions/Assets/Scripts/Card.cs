@@ -223,7 +223,7 @@ public class Card : MonoBehaviour
                 if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
             }
 
-            if (moves[0] != null)
+            if (moves.Count > 0 && moves[0] != null)
             {
                 move1NameText.text = moves[0].MoveSO.MoveName;
                 move1EnergyCostText.text = moves[0].MoveSO.EnergyCost.ToString();
@@ -297,7 +297,7 @@ public class Card : MonoBehaviour
         card.isVisible = true;
         card.transform.parent = transform;
         card.transform.localScale = Vector3.one;
-        StartCoroutine(card.MoveToPosition(Vector3.back * -0.01f, cardMovementSpeed, false, true));
+        StartCoroutine(card.MoveToPosition(Vector3.back * -0.05f, cardMovementSpeed, false, true));
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.SetEquipmentOwner(this);
@@ -307,6 +307,10 @@ public class Card : MonoBehaviour
             {
                 moves.Add(move);
             }
+        }
+        if(card.cardSO is EquipmentCardSO equipment)
+        {
+            equipment.Effect.ActivateEffect(card, this);
         }
     }
 
@@ -953,6 +957,7 @@ public class Card : MonoBehaviour
         {
             if (equipment != null)
             {
+                equipment.transform.parent = graveyard.gameObject.transform;
                 equipment.ToGraveyard(graveyard);
             }
         }

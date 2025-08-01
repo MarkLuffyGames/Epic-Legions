@@ -171,8 +171,7 @@ public class Effect
 
     public int GetSpeed()
     {
-        if (isActive) return amount;
-        return 0;
+        return amount;
     }
 
     public int GetAttack()
