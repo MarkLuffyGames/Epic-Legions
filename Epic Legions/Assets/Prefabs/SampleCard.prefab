@@ -10867,10 +10867,6 @@ MonoBehaviour:
   - {x: -0.5, y: 0, z: 0.5}
   - {x: 0.5, y: 0, z: 0.5}
   - {x: 0, y: 0, z: 1}
-  position1: {x: 0, y: 0, z: 0}
-  position2: {x: -0.5, y: 0, z: 0.5}
-  position3: {x: 0.5, y: 0, z: 0.5}
-  position4: {x: 0, y: 0, z: 1}
 --- !u!1 &6104431326287783674
 GameObject:
   m_ObjectHideFlags: 0
@@ -12145,6 +12141,7 @@ MonoBehaviour:
   cardActions: {fileID: 6027781224115610509}
   move1Button: {fileID: 1328745926540241853}
   move2Button: {fileID: 824588230865388794}
+  rechargeButton: {fileID: 0}
   cardImage: {fileID: 1833471298210512262}
   nameText: {fileID: 6462787401592327231}
   lastNameText: {fileID: 6528321308271742561}
@@ -12187,6 +12184,7 @@ MonoBehaviour:
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
+  graveyard: {fileID: 0}
   isAttackable: 0
   lastDamageInflicted: 0
 --- !u!1 &7126607449439204301
@@ -13384,6 +13382,7 @@ MonoBehaviour:
   cardActions: {fileID: 3408247502723764274}
   move1Button: {fileID: 6369699063146558633}
   move2Button: {fileID: 4474065507084384493}
+  rechargeButton: {fileID: 0}
   cardImage: {fileID: 7059212479576441485}
   nameText: {fileID: 4908756797639312278}
   lastNameText: {fileID: 3944650421857459478}
@@ -13426,6 +13425,7 @@ MonoBehaviour:
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
+  graveyard: {fileID: 0}
   isAttackable: 0
   lastDamageInflicted: 0
 --- !u!1 &7779685883219907917
@@ -14745,6 +14745,7 @@ MonoBehaviour:
   cardActions: {fileID: 4934807389361003339}
   move1Button: {fileID: 7543450757706668831}
   move2Button: {fileID: 8683503183226418559}
+  rechargeButton: {fileID: 0}
   cardImage: {fileID: 7355089833102824083}
   nameText: {fileID: 1010796963515098728}
   lastNameText: {fileID: 7944127516686035795}
@@ -14787,6 +14788,7 @@ MonoBehaviour:
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
+  graveyard: {fileID: 0}
   isAttackable: 0
   lastDamageInflicted: 0
 --- !u!1 &8378446636054594592
@@ -15005,6 +15007,7 @@ MonoBehaviour:
   cardActions: {fileID: 5263492788736922611}
   move1Button: {fileID: 9072334201895606584}
   move2Button: {fileID: 1853789402005997518}
+  rechargeButton: {fileID: 0}
   cardImage: {fileID: 8810259546796626000}
   nameText: {fileID: 7492503576835226515}
   lastNameText: {fileID: 7570168543917869646}
@@ -15047,6 +15050,7 @@ MonoBehaviour:
   isVisible: 0
   waitForServer: 0
   actionIsReady: 0
+  graveyard: {fileID: 0}
   isAttackable: 0
   lastDamageInflicted: 0
 --- !u!1 &8743414226956162372

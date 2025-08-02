@@ -54,30 +54,9 @@ public class FieldPosition : MonoBehaviour
 
     public bool IsAvailableEquipmentSlot(EquipmentCardSO equipmentCard)
     {
-        bool isAvailable = true;
-
         HeroCardSO HCSO = card.cardSO as HeroCardSO;
-        if (!equipmentCard.SupportedClasses.Contains(HCSO.HeroClass)) // Si la clase del heroe no es compatible con el equipo, no se puede añadir
-        {
-            isAvailable = false;
-        }
 
-        // Si la carta ya tiene un equipo de este tipo, no se puede añadir otro
-        if (isAvailable)
-        {
-            foreach (var item in card.EquipmentCard)
-            {
-                if (item != null && item.cardSO is EquipmentCardSO equipmentCardSO)
-                {
-                    if (equipmentCardSO.EquipmentType == equipmentCard.EquipmentType)
-                    {
-                        isAvailable = false;
-                    }
-                }
-            }
-        }
-
-        return isAvailable;
+        return equipmentCard.SupportedClasses.Contains(HCSO.HeroClass) && !card.IsEquipped(equipmentCard.EquipmentType); // La carta a queipar es compatible con el heroe y no esta equipada ya otra carta del mismo tipo
     }
 
     /// <summary>

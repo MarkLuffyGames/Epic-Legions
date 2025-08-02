@@ -12,6 +12,9 @@ public class Heal : CardEffect
     [SerializeField] private GameObject particlePrefab;
     [SerializeField] private GameObject arcPrefab;
     [SerializeField] private GameObject receivePrefab;
+    [SerializeField] private bool isPassive;
+
+    public bool IsPassive => isPassive;
     public override void ActivateEffect(Card caster, Card target)
     {
         if(particlePrefab != null && arcPrefab != null && receivePrefab != null)

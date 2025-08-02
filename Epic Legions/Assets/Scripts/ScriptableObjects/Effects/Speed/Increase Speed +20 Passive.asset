@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebee11cf742f705458e3cc8505365428, type: 3}
-  m_Name: Increase Speed +20
+  m_Name: Increase Speed +20 Passive
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 5920328240178098596, guid: b605c85b2383a0f42b09cace55b3f31a, type: 3}
   iconSprite: {fileID: 0}
   effectScore: 1
   amount: 20
-  numberTurns: 99999999
+  numberTurns: 1
   isIncrease: 1
+  isPassive: 1

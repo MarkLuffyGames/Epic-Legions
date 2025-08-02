@@ -310,7 +310,7 @@ public class Card : MonoBehaviour
         }
         if(card.cardSO is EquipmentCardSO equipment)
         {
-            equipment.Effect.ActivateEffect(card, this);
+            if(equipment.Effect != null) equipment.Effect.ActivateEffect(card, this);
         }
     }
 
@@ -357,10 +357,16 @@ public class Card : MonoBehaviour
     /// <param name="isLocal">La posicion que se desea mover es la posicion local?</param>
     public IEnumerator MoveToPosition(Vector3 targetPosition, float speed, bool temporalPosition, bool isLocal)
     {
+        ShowFront(true);
+        ShowBack(true);
+
         if (moveCoroutine != null)
             StopCoroutine(moveCoroutine);
 
         yield return moveCoroutine = StartCoroutine(MoveSmoothly(targetPosition, speed, temporalPosition, isLocal));
+
+        ShowFront(isVisible);
+        ShowBack(!isVisible);
     }
 
     /// <summary>
@@ -611,6 +617,14 @@ public class Card : MonoBehaviour
         cardActions.sortingOrder = sortingOrder + 1;
     }
 
+    public void ShowFront(bool showFront)
+    {
+        if (canvasBack != null) canvasFront.gameObject.SetActive(showFront);
+    }
+    public void ShowBack(bool showFront)
+    {
+        if(canvasBack != null) canvasBack.gameObject.SetActive(showFront);
+    }
 
     float heldTime;
     /// <summary>
@@ -1451,6 +1465,39 @@ public class Card : MonoBehaviour
                 return effect.IsBurned();
             }
         }
+        return false;
+    }
+
+    public void ActivatePassiveSkills()
+    {
+        if(IsEquipped(EquipmentType.Accessory))
+        {
+            foreach (var item in equipmentCard)
+            {
+                if (item != null && item.cardSO is EquipmentCardSO equipmentCardSO)
+                {
+                    if (equipmentCardSO.EquipmentType == EquipmentType.Accessory)
+                    {
+                        equipmentCardSO.Effect.ActivateEffect(this, this);
+                    }
+                }
+            }
+        }
+    }
+
+    public bool IsEquipped(EquipmentType equipmentType)
+    {
+        foreach (var item in equipmentCard)
+        {
+            if (item != null && item.cardSO is EquipmentCardSO equipmentCardSO)
+            {
+                if (equipmentCardSO.EquipmentType == equipmentType)
+                {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 }

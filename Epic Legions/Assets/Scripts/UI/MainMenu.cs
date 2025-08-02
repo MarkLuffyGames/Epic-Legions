@@ -87,10 +87,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
-        for (int i = 0; i < 20; i++)
+        /*for (int i = 0; i < 20; i++)
         {
-            deckCardIds.Add(CardDatabase.allCards[1060].CardID);
-        }
+            deckCardIds.Add(CardDatabase.allCards[1006].CardID);
+        }*/
         for (int i = 0; i < 40; i++)
         {
             deckCardIds.Add(CardDatabase.GetRandomCards());
@@ -99,6 +99,7 @@ public class MainMenu : MonoBehaviour
         duelManagerInstance.GetComponent<DuelManager>().AssignPlayersAndStartDuel(deckCardIds.ToArray(), deckCardIds.ToArray());
 
         Loader.sceneToLoad = "GameScene"; // Set the scene to load
+        //SceneManager.LoadScene("LoadingScene");
         SceneManager.LoadScene("GameScene");
     }
 

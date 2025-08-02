@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 387a3cca4762c2a4baa8a6481b0fc27b, type: 3}
+  m_Name: Heal +10 Passive
+  m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
+  iconSprite: {fileID: 0}
+  effectScore: 1
+  amount: 20
+  duration: 3
+  archHeight: 1.5
+  particlePrefab: {fileID: 5660713056209881971, guid: 1cecb2453243ccd4d9e534f05c3082f3, type: 3}
+  arcPrefab: {fileID: 5044149007102076030, guid: 30e60d688e03dcd4ba4c658c62162a56, type: 3}
+  receivePrefab: {fileID: 2749420892920482201, guid: 3414dc7ae4be67447a4d98cd540ccf46, type: 3}
