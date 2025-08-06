@@ -7,7 +7,6 @@ public class ModifySpeed : CardEffect
     [SerializeField] private int amount;
     [SerializeField] private int numberTurns;
     [SerializeField] private bool isIncrease;
-    [SerializeField] private bool isPassive;
 
     public int Amount => amount;
     public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
@@ -34,6 +33,6 @@ public class ModifySpeed : CardEffect
 
     public override void UpdateEffect(Effect effect)
     {
-        if (!isPassive) effect.durability--;
+        if (!isPermanent) effect.durability--;
     }
 }

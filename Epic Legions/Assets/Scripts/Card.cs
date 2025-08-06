@@ -255,6 +255,7 @@ public class Card : MonoBehaviour
             defenceText.enabled = false;
             speedText.enabled = false;
             energyText.enabled = false;
+            description.text = equipmentCardSO.Description;
         }
     }
 
@@ -310,7 +311,7 @@ public class Card : MonoBehaviour
         }
         if(card.cardSO is EquipmentCardSO equipment)
         {
-            if(equipment.Effect != null) equipment.Effect.ActivateEffect(card, this);
+            if(equipment.Effect != null && !equipment.Effect.isPassive) equipment.Effect.ActivateEffect(card, this);
         }
     }
 
@@ -505,13 +506,6 @@ public class Card : MonoBehaviour
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
             duelManager.sampleCard.Enlarge(this);
-            /*StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (GetEquipmentCounts() * 0.25f) + new Vector3(-0.25f,0,0), cardMovementSpeed, true, false));
-            EnlargeEquipment();
-            RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
-            ChangedSortingOrder(110);
-            EnableActions(isPlayer && !actionIsReady && isMyTurn);
-            AdjustUIcons();*/
-            //isFocused = true;
         }
     }
 
@@ -565,23 +559,6 @@ public class Card : MonoBehaviour
         return moves[moveIndex].MoveSO.EnergyCost <= playerManager.PlayerEnergy
                 && (duelManager.ObtainTargets(this, moveIndex).Count > 0 || (moves[moveIndex].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[moveIndex].MoveSO.NeedTarget :
                 otherPlayerManager.GetFieldPositionList().All(field => field.Card == null)));
-    }
-
-    /// <summary>
-    /// Devuelve la carta a su posicion.
-    /// </summary>
-    public void ResetSize()
-    {
-        /*if (isFocused)
-        {
-            duelManager.sampleCard.ResetSize(this);
-            MoveToLastPosition();
-            RotateToAngle(defaultRotation, cardMovementSpeed, false);
-            ChangedSortingOrder(sortingOrder);
-            AdjustUIcons();
-            cardActions.enabled = false;
-            isFocused = false;
-        }*/
     }
 
     /// <summary>
@@ -768,6 +745,8 @@ public class Card : MonoBehaviour
         isMyTurn = true;
 
         fieldPosition.ChangeEmission(isPlayer ? fieldPosition.PlayerTurnColor : fieldPosition.TurnColor);
+
+        ActivatePassiveSkills(PassiveSkillActivationPhase.StartOfTurn);
 
         if (IsInLethargy() || IsParalyzed())
         {
@@ -1209,7 +1188,7 @@ public class Card : MonoBehaviour
     /// <param name="amount">Cantidad a sanar.</param>
     public void ToHeal(int amount)
     {
-        if(statModifier.Any(x => x.MoveEffect is NoHealing))amount = 0;
+        if (statModifier.Any(x => x.MoveEffect is NoHealing))amount = 0;
 
         ShowTextToHeal(maxHealt - currentHealt < amount ? maxHealt - currentHealt : amount);
         currentHealt += amount;
@@ -1223,14 +1202,15 @@ public class Card : MonoBehaviour
     /// <param name="amount"></param>
     private void ShowTextToHeal(int amount)
     {
+        if(amount <= 0) return;
+
         var position = healtText.transform.position;
         position += Vector3.up;
 
-        var popUp = Instantiate(energyPopUpPrefab, healtText.transform.position, Quaternion.identity);
+        var popUp = Instantiate(energyPopUpPrefab, position, Quaternion.identity);
         var text = popUp.GetComponentInChildren<TextMeshProUGUI>();
         text.color = Color.green;
         text.text = $"+{amount}";
-        text.color = Color.red;
     }
 
     public void RechargeEnergy(int amount)
@@ -1468,7 +1448,7 @@ public class Card : MonoBehaviour
         return false;
     }
 
-    public void ActivatePassiveSkills()
+    public void ActivatePassiveSkills(PassiveSkillActivationPhase passiveSkillActivationPhase)
     {
         if(IsEquipped(EquipmentType.Accessory))
         {
@@ -1478,7 +1458,8 @@ public class Card : MonoBehaviour
                 {
                     if (equipmentCardSO.EquipmentType == EquipmentType.Accessory)
                     {
-                        equipmentCardSO.Effect.ActivateEffect(this, this);
+                        if(passiveSkillActivationPhase == equipmentCardSO.Effect.passiveSkillActivationPhase)
+                            equipmentCardSO.Effect.ActivateEffect(this, this);
                     }
                 }
             }

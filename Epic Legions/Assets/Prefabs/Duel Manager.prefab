@@ -7334,6 +7334,10 @@ PrefabInstance:
       propertyPath: rechargeButton
       value: 
       objectReference: {fileID: 7628978546840641404}
+    - target: {fileID: 1525405003791258446, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 2408581497199084325, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7374,6 +7378,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2528132705092880231, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 3283895096360196753, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: 'cards.Array.data[0]'
       value: 
@@ -7390,6 +7398,14 @@ PrefabInstance:
       propertyPath: 'cards.Array.data[3]'
       value: 
       objectReference: {fileID: 8625122800790170319}
+    - target: {fileID: 3283895096360196753, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: positions.Array.data[1].x
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3283895096360196753, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: positions.Array.data[2].x
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 3365259843115312580, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: rechargeButton
       value: 
