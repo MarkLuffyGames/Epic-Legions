@@ -1416,7 +1416,8 @@ public class DuelManager : NetworkBehaviour
                 }
             }
 
-            if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+            if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack ||
+                attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.Ambush)
             {
                 yield return cardToAttack.Counter(attackerCard);
             }
@@ -1511,17 +1512,25 @@ public class DuelManager : NetworkBehaviour
 
         }
 
-        yield return attackerCard.AttackAnimation(player1Manager.GetAllCardInField().Contains(attackerCard) ? 1 : 2, cardToAttack, attackerCard.Moves[movementToUseIndex]);
+        if(movementToUseIndex == -1)
+        {
+            cardToAttack.ReceiveDamage(damage, 0, null);
+        }
+        else
+        {
+            yield return attackerCard.AttackAnimation(player1Manager.GetAllCardInField().Contains(attackerCard) ? 1 : 2, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
-        // Espera un breve tiempo antes de continuar.
-        yield return new WaitForSeconds(0.3f);
+            // Espera un breve tiempo antes de continuar.
+            yield return new WaitForSeconds(0.3f);
 
-        cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+            cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
-        // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-        cardToAttack.ReceiveDamage(damage, attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null);
+            // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
+            cardToAttack.ReceiveDamage(damage, attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null);
 
-        attackerCard.MoveToLastPosition();
+            attackerCard.MoveToLastPosition();
+        }
+        
     }
 
 

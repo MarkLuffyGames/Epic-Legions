@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 15822
+  controlID: 16484
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 15823
+  controlID: 16485
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 15824
+  controlID: 16486
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -200,8 +200,8 @@ MonoBehaviour:
     y: 0
     width: 242.4
     height: 536.8
-  m_MinSize: {x: 201, y: 226}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 6}
   m_Panes:
   - {fileID: 6}
@@ -246,8 +246,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: dcfaffff
-      m_LastClickedID: -1316
+      m_SelectedIDs: 48800100
+      m_LastClickedID: 0
       m_ExpandedIDs: d42af3fff25ff5ffa660f5ffbe60f5ff6e63f5ff4a2df6ff4e2df6ff4ed8f6ff56d8f6ff8ed9f6ffd2ddf6ff909afbffd49efbfff6aefdffdefafffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -1684,7 +1684,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/ScriptableObjects/Equipment/Armor
+    - Assets/Scripts/ScriptableObjects/Effects/BaseEffects
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1694,16 +1694,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/ScriptableObjects/Equipment/Armor
+  - Assets/Scripts/ScriptableObjects/Effects/BaseEffects
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 399}
-    m_SelectedIDs: cc130100
-    m_LastClickedID: 70604
-    m_ExpandedIDs: 000000002a1101002c1101002e11010030110100321101003411010036110100381101003a1101003c1101003e11010040110100421101004411010046110100481101004a1101004c1101004e11010050110100521101005411010056110100581101005a1101005c1101005e11010060110100621101006411010066110100681101006a1101006c1101006e11010070110100721101007411010076110100781101007a1101007c1101007e11010080110100821101008411010086110100881101008a1101008c1101008e11010090110100921101009411010096110100981101009a1101009c1101009e110100a0110100a2110100a4110100a6110100a8110100aa110100ac110100ae110100b0110100b2110100b6110100b8110100bc110100be1101004c120100521201006212010068120100
+    scrollPos: {x: 0, y: 339}
+    m_SelectedIDs: da130100
+    m_LastClickedID: 70618
+    m_ExpandedIDs: 000000002a1101002c1101002e11010030110100321101003411010036110100381101003a1101003c1101003e11010040110100421101004411010046110100481101004a1101004c1101004e11010050110100521101005411010056110100581101005a1101005c1101005e11010060110100621101006411010066110100681101006a1101006c1101006e11010070110100721101007411010076110100781101007a1101007c1101007e11010080110100821101008411010086110100881101008a1101008c1101008e11010090110100921101009411010096110100981101009a1101009c1101009e110100a0110100a2110100a4110100a6110100a8110100aa110100ac110100ae110100b0110100b2110100b6110100b8110100bc110100be1101004c12010052120100601201006212010068120100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1758,8 +1758,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: dcfaffff
-    m_LastClickedInstanceID: -1316
+    m_SelectedInstanceIDs: 48800100
+    m_LastClickedInstanceID: 98376
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300008eef000072e600003ef6000064150100bcfd0000aafd0000befd0000d206010000000000200c010068f20000
     m_RenameOverlay:
@@ -1786,7 +1786,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 58.5}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 207
