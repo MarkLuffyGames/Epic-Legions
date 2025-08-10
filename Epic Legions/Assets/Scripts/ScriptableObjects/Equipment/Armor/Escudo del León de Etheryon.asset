@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
-  m_Name: "T\xFAnica  del Umbral Siliente"
+  m_Name: "Escudo del Le\xF3n de Etheryon"
   m_EditorClassIdentifier: 
-  cardId: 1067
-  cardName: "T\xFAnica del Umbral Siliente"
+  cardId: 1069
+  cardName: "Escudo del Le\xF3n de Etheryon"
   cardLastName: 
-  cardSprite: {fileID: 21300000, guid: 6f7e944a01a86074383607f1f0bd32df, type: 3}
-  cardElemnt: 8
+  cardSprite: {fileID: 21300000, guid: d2339469e071b7b478fd6c627b92c88f, type: 3}
+  cardElemnt: 1
   equipmentType: 1
   supportedClasses: 0000000001000000020000000300000004000000
   moves: []
-  effect: {fileID: 11400000, guid: acef66adfc569f0499eddca2246d3314, type: 2}
-  description: "Absorbe  15 de da\xF1o de cada ataque recibido."
+  effect: {fileID: 11400000, guid: c0138d3281235ce46ab867df9523d906, type: 2}
+  description: Aumenta en 30 la defensa del portador.

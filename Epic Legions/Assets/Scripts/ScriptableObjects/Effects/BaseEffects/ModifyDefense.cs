@@ -34,6 +34,6 @@ public class ModifyDefense : CardEffect
 
     public override void UpdateEffect(Effect effect)
     {
-        effect.durability--;
+        if (!isPermanent) effect.durability--;
     }
 }

@@ -127,6 +127,11 @@ public class Effect
             durability = 1;
             isNegative = true;
         }
+
+        if (!isNegative)
+        {
+            ActivateEffect();
+        }
     }
 
     public void ActivateEffect()
@@ -171,7 +176,8 @@ public class Effect
 
     public int GetSpeed()
     {
-        return amount;
+        if (isActive) return amount;
+        return 0;
     }
 
     public int GetAttack()
