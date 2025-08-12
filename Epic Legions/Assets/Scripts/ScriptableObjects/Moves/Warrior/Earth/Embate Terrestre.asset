@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
+  m_Name: Embate Terrestre
+  m_EditorClassIdentifier: 
+  moveName: Embate Terrestre
+  damage: 30
+  energyCost: 10
+  moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
+  effectCondition: {fileID: 11400000, guid: d23d390840908954aacf94b6e82fc5e8, type: 2}
+  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  alwaysActive: 0
+  needTarget: 1
+  onMyself: 0
+  moveType: 0
+  targetsType: 0
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 0}
+  effectDescription: Aturde al objetivo si este no tiene defensa despues de recibir
+    el golpe.

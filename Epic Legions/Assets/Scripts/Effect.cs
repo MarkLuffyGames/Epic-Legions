@@ -131,6 +131,7 @@ public class Effect
         if (!isNegative)
         {
             ActivateEffect();
+            durability++;
         }
     }
 

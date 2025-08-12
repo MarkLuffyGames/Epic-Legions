@@ -17,7 +17,7 @@ MonoBehaviour:
   cardLastName: Guardian de la Bruma
   cardSprite: {fileID: 21300000, guid: 57d5dabcc7fec1e41958213d916a19c0, type: 3}
   cardElemnt: 2
-  heroClass: 2
+  heroClass: 0
   healt: 30
   defence: 30
   speed: 25

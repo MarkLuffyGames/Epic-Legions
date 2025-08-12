@@ -17,7 +17,7 @@ MonoBehaviour:
   cardLastName: Silvadora del Robledal
   cardSprite: {fileID: 21300000, guid: 757ee54104131c1448d8cfaab599021d, type: 3}
   cardElemnt: 3
-  heroClass: 3
+  heroClass: 5
   healt: 30
   defence: 20
   speed: 25

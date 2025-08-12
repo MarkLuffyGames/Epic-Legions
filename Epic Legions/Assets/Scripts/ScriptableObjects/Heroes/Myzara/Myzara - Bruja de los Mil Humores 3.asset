@@ -16,7 +16,7 @@ MonoBehaviour:
   cardName: Myzara
   cardLastName: Bruja de los Mil Humores
   cardSprite: {fileID: 21300000, guid: 5fda2390577f8df46894df7bf6e036fa, type: 3}
-  cardElemnt: 8
+  cardElemnt: 1
   heroClass: 2
   healt: 25
   defence: 15

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
+  m_Name: Espada Maldita del Juramento
+  m_EditorClassIdentifier: 
+  cardId: 1077
+  cardName: Espada Maldita del Juramento
+  cardLastName: 
+  cardSprite: {fileID: 21300000, guid: 4ee95b3861f06c441a3b26c404d22547, type: 3}
+  cardElemnt: 8
+  equipmentType: 0
+  supportedClasses: 00000000
+  moves:
+  - {fileID: 11400000, guid: d49f7c7569b01d546a0cc73a85e57334, type: 2}
+  effect: {fileID: 0}
+  description: 

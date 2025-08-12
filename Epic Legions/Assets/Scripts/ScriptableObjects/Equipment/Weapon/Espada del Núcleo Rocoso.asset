@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
+  m_Name: "Espada del N\xFAcleo Rocoso"
+  m_EditorClassIdentifier: 
+  cardId: 1073
+  cardName: "Espada del N\xFAcleo Rocoso"
+  cardLastName: 
+  cardSprite: {fileID: 21300000, guid: fdc98cc9fd987f64fba1d5fa4a765f77, type: 3}
+  cardElemnt: 4
+  equipmentType: 0
+  supportedClasses: 00000000
+  moves:
+  - {fileID: 11400000, guid: 0475318b619efba41b112c877ee31f32, type: 2}
+  effect: {fileID: 0}
+  description: 

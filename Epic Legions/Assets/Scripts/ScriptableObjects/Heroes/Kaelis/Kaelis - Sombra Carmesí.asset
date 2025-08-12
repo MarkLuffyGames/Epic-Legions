@@ -17,7 +17,7 @@ MonoBehaviour:
   cardLastName: "Sombra Carmes\xED"
   cardSprite: {fileID: 21300000, guid: 71950461698528f41974e3ee7a60eb32, type: 3}
   cardElemnt: 8
-  heroClass: 0
+  heroClass: 4
   healt: 30
   defence: 20
   speed: 50

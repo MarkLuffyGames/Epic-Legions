@@ -913,7 +913,6 @@ public class Card : MonoBehaviour
         amountDamage -= GetDamageAbsorbed();
         if (amountDamage < 0) amountDamage = 0;
 
-        Debug.Log(amountDamage);
         ignoredDefense = Mathf.Min(ignoredDefense, amountDamage);
         int remainingDamage = ReceiveDamageToShield(amountDamage - ignoredDefense) + ignoredDefense;
 
