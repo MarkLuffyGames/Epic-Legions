@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -42,5 +43,11 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.clip = phaseChangedSound;
         audioSource.Play();
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeCardDatabase()
+    {
+        Instance = null;
     }
 }

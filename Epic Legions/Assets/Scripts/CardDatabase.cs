@@ -7,6 +7,10 @@ public class CardDatabase : MonoBehaviour
     public List<CardSO> AllCards;
     public static Dictionary<int, CardSO> allCards; // Lista de todas las cartas disponibles.  
 
+
+    public List<HeroClassIcon> classIcons;
+    private static Dictionary<HeroClass, Sprite> _iconDictionary;
+
     // Método para buscar una carta por su ID.  
     public static CardSO GetCardById(int cardId)
     {
@@ -20,6 +24,11 @@ public class CardDatabase : MonoBehaviour
         {
             allCards[card.CardID] = card;
         }
+        foreach (var item in classIcons)
+        {
+            if (!_iconDictionary.ContainsKey(item.heroClass))
+                _iconDictionary.Add(item.heroClass, item.icon);
+        }
         DontDestroyOnLoad(gameObject);
     }
 
@@ -27,6 +36,7 @@ public class CardDatabase : MonoBehaviour
     private static void InitializeCardDatabase()
     {
         allCards = new Dictionary<int, CardSO>();
+        _iconDictionary = new Dictionary<HeroClass, Sprite>();
     }
 
     public static int[] ShuffleArray(int[] array)
@@ -49,4 +59,20 @@ public class CardDatabase : MonoBehaviour
     {
         return allCards.Values.ToArray()[Random.Range(0, allCards.Count)].CardID;
     }
+
+    [System.Serializable]
+    public class HeroClassIcon
+    {
+        public HeroClass heroClass;
+        public Sprite icon;
+    }
+    public static Sprite GetIcon(HeroClass heroClass)
+    {
+        if (_iconDictionary.TryGetValue(heroClass, out Sprite icon))
+            return icon;
+
+        Debug.LogWarning($"No icon found for class {heroClass}");
+        return null;
+    }
+
 }

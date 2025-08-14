@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour
@@ -18,6 +16,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Button move2Button;
     [SerializeField] private Button rechargeButton;
     [SerializeField] private Image cardImage;
+    [SerializeField] private Image classIcon;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI lastNameText;
     [SerializeField] private TextMeshProUGUI healtText;
@@ -147,6 +146,7 @@ public class Card : MonoBehaviour
             currentHealt = maxHealt;
             currentDefense = defense;
 
+            classIcon.sprite = CardDatabase.GetIcon(heroCardSO.HeroClass);
             ActivateMoveText1(true);
             ActivateMoveText2(true);
             ActivateHeroStats(true);
@@ -257,6 +257,7 @@ public class Card : MonoBehaviour
         defenceText.enabled = activate;
         speedText.enabled = activate;
         energyText.enabled = activate;
+        classIcon.enabled = activate;
     }
 
     public void CopyCard(Card card, DuelManager duelManager)
