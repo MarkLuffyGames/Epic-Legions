@@ -87,10 +87,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
-        for (int i = 0; i < 20; i++)
+        /*for (int i = 0; i < 20; i++)
         {
             deckCardIds.Add(CardDatabase.allCards[1077].CardID);
-        }
+        }*/
         for (int i = 0; i < 40; i++)
         {
             deckCardIds.Add(CardDatabase.GetRandomCards());

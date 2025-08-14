@@ -25,5 +25,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Aturde al objetivo si este no tiene defensa despues de recibir
-    el golpe.
+  effectDescription: "Aturde al objetivo si este no tiene defensa despu\xE9s de recibir
+    el golpe."

@@ -147,47 +147,23 @@ public class Card : MonoBehaviour
             currentHealt = maxHealt;
             currentDefense = defense;
 
-            move1NameText.enabled = true;
-            move1EnergyImage.enabled = true;
-            move1EnergyCostText.enabled = true;
-            move1DamageImage.enabled = true;
-            move1DamageText.enabled = true;
-            move1DescriptionText.enabled = true;
-            move2NameText.enabled = true;
-            move2EnergyImage.enabled = true;
-            move2EnergyCostText.enabled = true;
-            move2DamageImage.enabled = true;
-            move2DamageText.enabled = true;
-            move2DescriptionText.enabled = true;
-            healtText.enabled = true;
-            defenceText.enabled = true;
-            speedText.enabled = true;
-            energyText.enabled = true;
+            ActivateMoveText1(true);
+            ActivateMoveText2(true);
+            ActivateHeroStats(true);
             description.text = "";
 
             if (moves[0] != null)
             {
-                move1NameText.text = moves[0].MoveSO.MoveName;
-                move1EnergyCostText.text = moves[0].MoveSO.EnergyCost.ToString();
-                move1DamageText.text = moves[0].MoveSO.Damage.ToString();
-                move1DescriptionText.text = moves[0].MoveSO.EffectDescription;
-                if (moves[0].MoveSO.Damage == 0)
-                {
-                    move1DamageText.enabled = false;
-                    move1DamageImage.enabled = false;
-                }
+                move1NameText.rectTransform.localPosition = new Vector3(0.041f, -0.499f, -0.0001f);
+                move1Button.transform.localPosition = new Vector3(0.0123f, -0.544f, 0.0f);
+
+                SetMovement1UI(moves[0]);
+                
             }
             if (moves[1] != null)
             {
-                move2NameText.text = moves[1].MoveSO.MoveName;
-                move2EnergyCostText.text = moves[1].MoveSO.EnergyCost.ToString();
-                move2DamageText.text = moves[1].MoveSO.Damage.ToString();
-                move2DescriptionText.text = moves[1].MoveSO.EffectDescription;
-                if (moves[1].MoveSO.Damage == 0)
-                {
-                    move2DamageText.enabled = false;
-                    move2DamageImage.enabled = false;
-                }
+                SetMovement2UI(moves[1]);
+                
             }
 
             statModifier = new List<Effect>();
@@ -198,22 +174,9 @@ public class Card : MonoBehaviour
             moves.Add(new Movement(spellCardSO.Move));
             description.text = spellCardSO.Move.EffectDescription;
 
-            move1NameText.enabled = false;
-            move1EnergyImage.enabled = false;
-            move1EnergyCostText.enabled = false;
-            move1DamageImage.enabled = false;
-            move1DamageText.enabled = false;
-            move1DescriptionText.enabled = false;
-            move2NameText.enabled = false;
-            move2EnergyImage.enabled = false;
-            move2EnergyCostText.enabled = false;
-            move2DamageImage.enabled = false;
-            move2DamageText.enabled = false;
-            move2DescriptionText.enabled = false;
-            healtText.enabled = false;
-            defenceText.enabled = false;
-            speedText.enabled = false;
-            energyText.enabled = false;
+            ActivateMoveText1(false);
+            ActivateMoveText2(false);
+            ActivateHeroStats(false);
         }
         else if (cardSO is EquipmentCardSO equipmentCardSO)
         {
@@ -225,38 +188,75 @@ public class Card : MonoBehaviour
 
             if (moves.Count > 0 && moves[0] != null)
             {
-                move1NameText.text = moves[0].MoveSO.MoveName;
-                move1EnergyCostText.text = moves[0].MoveSO.EnergyCost.ToString();
-                move1DamageText.text = moves[0].MoveSO.Damage.ToString();
-                move1DescriptionText.text = moves[0].MoveSO.EffectDescription;
-                if (moves[0].MoveSO.Damage == 0)
-                {
-                    move1DamageText.enabled = false;
-                    move1DamageImage.enabled = false;
-                }
+                ActivateMoveText1(true);
+
+                move1NameText.rectTransform.localPosition = new Vector3(0.041f, -0.601f, -0.0001f);
+                move1Button.transform.localPosition = new Vector3(0.0123f, -0.63f, 0.0f);
+                SetMovement1UI(moves[0]);
             }
             else
             {
-                move1NameText.enabled = false;
-                move1EnergyImage.enabled = false;
-                move1EnergyCostText.enabled = false;
-                move1DamageImage.enabled = false;
-                move1DamageText.enabled = false;
-                move1DescriptionText.enabled = false;
+                ActivateMoveText1(false);
             }
 
-            move2NameText.enabled = false;
-            move2EnergyImage.enabled = false;
-            move2EnergyCostText.enabled = false;
-            move2DamageImage.enabled = false;
-            move2DamageText.enabled = false;
-            move2DescriptionText.enabled = false;
-            healtText.enabled = false;
-            defenceText.enabled = false;
-            speedText.enabled = false;
-            energyText.enabled = false;
+            
+            ActivateMoveText2(false);
+            ActivateHeroStats(false);
             description.text = equipmentCardSO.Description;
         }
+    }
+
+    private void SetMovement1UI(Movement movement)
+    {
+        move1NameText.text = movement.MoveSO.MoveName;
+        move1EnergyCostText.text = movement.MoveSO.EnergyCost.ToString();
+        move1DamageText.text = movement.MoveSO.Damage.ToString();
+        move1DescriptionText.text = movement.MoveSO.EffectDescription;
+        if (movement.MoveSO.Damage == 0)
+        {
+            move1DamageText.enabled = false;
+            move1DamageImage.enabled = false;
+        }
+    }
+
+    private void SetMovement2UI(Movement movement)
+    {
+        move2NameText.text = movement.MoveSO.MoveName;
+        move2EnergyCostText.text = movement.MoveSO.EnergyCost.ToString();
+        move2DamageText.text = movement.MoveSO.Damage.ToString();
+        move2DescriptionText.text = movement.MoveSO.EffectDescription;
+        if (movement.MoveSO.Damage == 0)
+        {
+            move2DamageText.enabled = false;
+            move2DamageImage.enabled = false;
+        }
+    }
+
+    private void ActivateMoveText1(bool activate)
+    {
+        move1NameText.enabled = activate;
+        move1EnergyImage.enabled = activate;
+        move1EnergyCostText.enabled = activate;
+        move1DamageImage.enabled = activate;
+        move1DamageText.enabled = activate;
+        move1DescriptionText.enabled = activate;
+    }
+    private void ActivateMoveText2(bool activate)
+    {
+        move2NameText.enabled = activate;
+        move2EnergyImage.enabled = activate;
+        move2EnergyCostText.enabled = activate;
+        move2DamageImage.enabled = activate;
+        move2DamageText.enabled = activate;
+        move2DescriptionText.enabled = activate;
+    }
+
+    private void ActivateHeroStats(bool activate)
+    {
+        healtText.enabled = activate;
+        defenceText.enabled = activate;
+        speedText.enabled = activate;
+        energyText.enabled = activate;
     }
 
     public void CopyCard(Card card, DuelManager duelManager)

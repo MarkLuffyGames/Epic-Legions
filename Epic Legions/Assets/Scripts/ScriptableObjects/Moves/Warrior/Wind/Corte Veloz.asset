@@ -25,4 +25,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Corte prufundo a gran velocidad.
+  effectDescription: Corte profundo a gran velocidad.
