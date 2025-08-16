@@ -21,7 +21,7 @@ MonoBehaviour:
   alwaysActive: 0
   needTarget: 0
   onMyself: 0
-  moveType: 0
+  moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
