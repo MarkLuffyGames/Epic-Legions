@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour
     {
         for (int i = 0; i < 20; i++)
         {
-            deckCardIds.Add(CardDatabase.allCards[1080].CardID);
+            deckCardIds.Add(CardDatabase.allCards[1081].CardID);
         }
         for (int i = 0; i < 40; i++)
         {

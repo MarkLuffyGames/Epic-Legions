@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
-  m_Name: Martillo de la Llama Sagrada
+  m_Name: "Escudo del Basti\xF3n Inamovible"
   m_EditorClassIdentifier: 
-  cardId: 1078
-  cardName: Martillo de la Llama Sagrada
+  cardId: 1081
+  cardName: "Escudo del Basti\xF3n Inamovible"
   cardLastName: 
-  cardSprite: {fileID: 21300000, guid: 20e98456894bc1846963f0f298f6b188, type: 3}
-  cardElemnt: 1
+  cardSprite: {fileID: 21300000, guid: 33fd9514a0552f0468ce8227dc5271bb, type: 3}
+  cardElemnt: 4
   equipmentType: 0
   supportedClasses: 000000000100000002000000030000000400000005000000060000000700000008000000
   moves:
-  - {fileID: 11400000, guid: 3e74b5e39f77e5544ad3b07c84ceb447, type: 2}
+  - {fileID: 11400000, guid: 829aca3325ddc354e9fd16b997f08101, type: 2}
   effect: {fileID: 0}
   description: 

@@ -121,3 +121,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 34a4a1bded4c7b74bb847d4b8f1bf17e, type: 2}
   - {fileID: 11400000, guid: b502c21c00bfa6140b55f5de65fe4adc, type: 2}
   - {fileID: 11400000, guid: f0a523f86f5f6f04bbe1817452f2414a, type: 2}
+  - {fileID: 11400000, guid: 762411ed6e52a8b4381b83d5b0f7543c, type: 2}
+  - {fileID: 11400000, guid: 715975f535cdf264d9f9e3d451851879, type: 2}
+  classIcons:
+  - heroClass: 0
+    icon: {fileID: 21300000, guid: 708f829855bba4949b50535bfd08e2b9, type: 3}
+  - heroClass: 1
+    icon: {fileID: 21300000, guid: a57d8783aab791f498e24c521c383854, type: 3}
+  - heroClass: 2
+    icon: {fileID: 21300000, guid: 7b4c212ff409c7647aef80f0e553ba5a, type: 3}
+  - heroClass: 3
+    icon: {fileID: 21300000, guid: ca934f723b6585447b7063ec3e2ddc12, type: 3}
+  - heroClass: 4
+    icon: {fileID: 21300000, guid: 3f53a8fefb559314a85c1c725b5147b9, type: 3}
+  - heroClass: 5
+    icon: {fileID: 21300000, guid: a1ddc5b068796794d8137bb5e17db2c7, type: 3}
+  - heroClass: 6
+    icon: {fileID: 21300000, guid: 501c4f4679ebe5a4a962b5019f183fec, type: 3}
+  - heroClass: 7
+    icon: {fileID: 21300000, guid: 4a4f20cf972ad824eba532d33e389340, type: 3}
+  - heroClass: 8
+    icon: {fileID: 21300000, guid: 9251e48175bd66a47a96bed3613e759c, type: 3}

@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Veneno Persistente
+  m_Name: Onda de Choque
   m_EditorClassIdentifier: 
-  moveName: Veneno Persistente
-  damage: 10
+  moveName: Onda de Choque
+  damage: 15
   energyCost: 10
-  moveEffect: {fileID: 11400000, guid: 9901dece633bc8e48b1f5e50ec32f8a0, type: 2}
+  moveEffect: {fileID: 11400000, guid: 2a708e632d2bbca43889564efc055308, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  targetsCondition: {fileID: 0}
+  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   alwaysActive: 0
   needTarget: 1
   onMyself: 0
-  moveType: 1
-  targetsType: 0
+  moveType: 0
+  targetsType: 1
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8960550792083637929, guid: d0fe5c41c0985b044a2c2d30cce73c6d, type: 3}
-  effectDescription: "Aplica veneno al enemigo, causando 10 de da\xF1o adicional
-    por turno."
+  visualEffectHit: {fileID: 0}
+  effectDescription: "Inflige da\xF1o a todos los enemigos en la misma l\xEDnea y
+    reduce su velocidad en 10 durante un turno."
