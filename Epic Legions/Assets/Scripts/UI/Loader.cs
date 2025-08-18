@@ -18,4 +18,20 @@ public static class Loader
         player2deckCardIds = new int[40];
         isSinglePlayer = false;
     }
+
+    public static void SetDecks()
+    {
+        /*for (int i = 0; i < 20; i++)
+        {
+            player1deckCardIds[i] = CardDatabase.allCards[1081].CardID;
+        }*/
+        for (int i = 0; i < 40; i++)
+        {
+            player1deckCardIds[i] = CardDatabase.GetRandomCards();
+        }
+        for (int i = 0; i < 40; i++)
+        {
+            player2deckCardIds[i] = CardDatabase.GetRandomCards();
+        }
+    }
 }

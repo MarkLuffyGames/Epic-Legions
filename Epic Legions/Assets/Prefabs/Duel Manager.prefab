@@ -7334,6 +7334,14 @@ PrefabInstance:
       propertyPath: rechargeButton
       value: 
       objectReference: {fileID: 7628978546840641404}
+    - target: {fileID: 144348194153184785, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
+    - target: {fileID: 380532632582413361, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
     - target: {fileID: 1525405003791258446, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.75
@@ -7382,6 +7390,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0.75
       objectReference: {fileID: 0}
+    - target: {fileID: 2805801810061126487, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
     - target: {fileID: 3283895096360196753, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: 'cards.Array.data[0]'
       value: 
@@ -7410,6 +7422,14 @@ PrefabInstance:
       propertyPath: rechargeButton
       value: 
       objectReference: {fileID: 3175523184334733021}
+    - target: {fileID: 5683234008516482732, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
+    - target: {fileID: 6090850684455143092, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
     - target: {fileID: 6094107271579088076, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: m_Name
       value: SampleCard
@@ -7422,10 +7442,22 @@ PrefabInstance:
       propertyPath: rechargeButton
       value: 
       objectReference: {fileID: 4092110144044359083}
+    - target: {fileID: 7181462591737872444, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
+    - target: {fileID: 7943553125603077247, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
     - target: {fileID: 8548403891688233280, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: rechargeButton
       value: 
       objectReference: {fileID: 6627992889737403868}
+    - target: {fileID: 9053517385642770708, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed3abc33388d1794aa22ed18c673f29a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

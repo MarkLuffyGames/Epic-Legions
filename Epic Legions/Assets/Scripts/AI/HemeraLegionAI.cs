@@ -1,10 +1,8 @@
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using Random = UnityEngine.Random;
 
 public enum GameStrategy { Defensive, Offensive, Balanced }
@@ -57,7 +55,7 @@ public class HemeraLegionAI : MonoBehaviour
         if (newValue == DuelPhase.Preparation)
         {
             turn++;
-            StartCoroutine(PlanPlay());
+            StartCoroutine(PlayCardsHand());
         }
         else if (newValue == DuelPhase.Battle)
         {
@@ -69,30 +67,48 @@ public class HemeraLegionAI : MonoBehaviour
     /// Esta funcion se encarga de planear las acciones del AI en el turno actual.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator PlanPlay()
+    private IEnumerator PlayCardsHand()
     {
-        if (turn == 1)
+        while(NeedsMoreHeroes() && GetPlayableHeroes().Count > 0)
         {
-            while (GetPlayableHeroes().Count > 0)
-            {
-                //Invocar Heroes.
-                Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
-                if (heroToPlay != null) SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
-
-                yield return new WaitForSeconds(1);
-            }
-
-            StartCoroutine(DefineActions());
-        }
-        else
-        {
-
             yield return new WaitForSeconds(1);
-
-            StartCoroutine(DefineActions());
+            if(!PlayHeroCard()) break;
         }
+
+        while (GetPlayableEquipment().Count > 0)
+        {
+            yield return new WaitForSeconds(1);
+            PlayEquipmentCard();
+        }
+
 
         playerManager.SetPlayerReady();
+    }
+
+    private bool PlayHeroCard()
+    {
+        Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes());
+        if (heroToPlay != null && playerManager.GetFieldPositionList().Any(field => field.Card == null)) 
+        { 
+            SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay, false)); 
+            return true;
+        }
+        return false;
+    }
+
+    private void PlayEquipmentCard()
+    {
+        var equipmentToPlay = GetPlayableEquipment().Count > 0 ? GetPlayableEquipment()[0] : null;
+        if (equipmentToPlay != null)
+        {
+            duelManager.PlaceCardInField(playerManager, playerManager.isPlayer,
+                handCardHandler.GetIdexOfCard(equipmentToPlay), ChooseHeroToEquip(GetHeroesCompatibleWithEquipment(equipmentToPlay.cardSO as EquipmentCardSO)));
+        }
+    }
+
+    private bool NeedsMoreHeroes()
+    {
+        return true;
     }
 
     /// <summary>
@@ -111,20 +127,57 @@ public class HemeraLegionAI : MonoBehaviour
         return usableHeroesCards;
     }
 
+    private List<Card> GetPlayableEquipment()
+    {
+        List<Card> playableEquipment = new List<Card>();
+
+        foreach (var card in handCardHandler.GetCardInHandList())
+        {
+            if (card.cardSO is EquipmentCardSO && card.UsableCard(playerManager)) playableEquipment.Add(card);
+        }
+
+        return playableEquipment;
+    }
+
+    private List<Card> GetPlayableSpells()
+    {
+        List<Card> playableSpells = new List<Card>();
+        foreach (var card in handCardHandler.GetCardInHandList())
+        {
+            if (card.cardSO is SpellCardSO && card.UsableCard(playerManager)) playableSpells.Add(card);
+        }
+        return playableSpells;
+    }
+
+    private List<Card> GetHeroesCompatibleWithEquipment(EquipmentCardSO equipmentCardSO)
+    {
+        List<Card> compatibleHeroes = new List<Card>();
+
+        foreach (var card in playerManager.GetAllCardInField())
+        {
+            if (card.IsAvailableEquipmentSlot(equipmentCardSO))
+            {
+                compatibleHeroes.Add(card);
+            }
+        }
+
+        return compatibleHeroes;
+    }
+
     /// <summary>
     /// Esta funcion se encarga de elegir el mejor heroe para invocar en el turno actual.
     /// </summary>
     /// <param name="usableHeroesCards"></param>
     /// <param name="strategy"></param>
     /// <returns></returns>
-    private Card ChoosingHeroToSummon(List<Card> usableHeroesCards, GameStrategy strategy)
+    private Card ChoosingHeroToSummon(List<Card> usableHeroesCards)
     {
         Card heroToPlay = null;
 
         float bestScore = 0;
         foreach (var card in usableHeroesCards)
         {
-            float score = EvaluarInvocacion(card);
+            float score = EvaluateInvocation(card);
             if (score > bestScore)
             {
                 bestScore = score;
@@ -140,7 +193,7 @@ public class HemeraLegionAI : MonoBehaviour
     /// </summary>
     /// <param name="heroCard"></param>
     /// <returns></returns>
-    private float EvaluarInvocacion(Card heroCard)
+    private float EvaluateInvocation(Card heroCard)
     {
         float score = 0;
 
@@ -150,8 +203,8 @@ public class HemeraLegionAI : MonoBehaviour
         score += heroCard.CurrentSpeedPoints * 0.8f;
 
         //Evaluacion del potencial de los movimientos.
-        score += EvaluarMovimineto(heroCard.Moves[0]);
-        score += EvaluarMovimineto(heroCard.Moves[1]);
+        score += EvaluateMovement(heroCard.Moves[0]);
+        score += EvaluateMovement(heroCard.Moves[1]);
 
         //Sinergias o afinidades especiales
         // score += EvaluarSinergia(heroCard); 
@@ -170,7 +223,7 @@ public class HemeraLegionAI : MonoBehaviour
     /// </summary>
     /// <param name="movement"></param>
     /// <returns></returns>
-    private float EvaluarMovimineto(Movement movement)
+    private float EvaluateMovement(Movement movement)
     {
         float score = 0;
 
@@ -195,16 +248,21 @@ public class HemeraLegionAI : MonoBehaviour
     /// </summary>
     /// <param name="heroToPlay"></param>
     /// <returns></returns>
-    private int ChoosePositionFieldIndex(Card heroToPlay)
+    private int ChoosePositionFieldIndex(Card heroToPlay, bool random)
     {
         List<FieldPosition> availablePositions = new List<FieldPosition>();
 
-        foreach(var field in playerManager.GetFieldPositionList())
+        foreach (var field in playerManager.GetFieldPositionList())
         {
             if(field.Card == null) availablePositions.Add(field);
         }
 
-        if(heroToPlay.CurrentDefensePoints >= 40)
+        if(random)
+        {
+            return availablePositions[Random.Range(0, availablePositions.Count)].PositionIndex;
+        }
+
+        if (heroToPlay.CurrentDefensePoints >= 40)
         {
             availablePositions.RemoveAll(p => p.PositionIndex > 4);
         }
@@ -223,7 +281,12 @@ public class HemeraLegionAI : MonoBehaviour
             return availablePositions[Random.Range(0, availablePositions.Count)].PositionIndex;
         }
 
-        return -1;
+        return ChoosePositionFieldIndex(heroToPlay, true);
+    }
+
+    private int ChooseHeroToEquip(List<Card> compatibleHeroes)
+    {
+        return compatibleHeroes[Random.Range(0, compatibleHeroes.Count)].FieldPosition.PositionIndex;
     }
 
     private IEnumerator DefineActions()
@@ -236,7 +299,8 @@ public class HemeraLegionAI : MonoBehaviour
 
             (int healt, int energyCost, int combIndex) combiData = (201, 200, -1);
 
-            if(duelManager.duelPhase.Value == DuelPhase.Battle && duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField().Count == 0)
+            if(duelManager.duelPhase.Value == DuelPhase.Battle 
+                && duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField().Count == 0)
             {
                 combinationAttacks = ChooseCombinations();
 
@@ -288,21 +352,6 @@ public class HemeraLegionAI : MonoBehaviour
                 Debug.Log($"Atacar con la combinacion {combiData.combIndex}, al objetivo en la pocion {cardToAttack.FieldPosition.PositionIndex}");
                 combination[combiData.combIndex].ForEach(x => combinationAttacks.Add(x));
             }
-            
-            if (combiData.combIndex == -1 && duelManager.duelPhase.Value == DuelPhase.Preparation)
-            {
-                Debug.Log("Intentar invocar un heroe para tener mas fuerza de ataque");
-
-                Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
-
-                if (heroToPlay != null) 
-                { 
-                    SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
-                    yield return new WaitForSeconds(Random.Range(2, 3));
-                    StartCoroutine(DefineActions());
-                    yield break;
-                }
-            }
 
             if(duelManager.duelPhase.Value == DuelPhase.Battle)
             {
@@ -311,20 +360,6 @@ public class HemeraLegionAI : MonoBehaviour
                 executeActionCoroutine = StartCoroutine(ExecuteAction());
             }
                 
-        }
-        else if (duelManager.duelPhase.Value == DuelPhase.Preparation)
-        {
-            Debug.Log("Intentar invocar un heroe");
-
-            Card heroToPlay = ChoosingHeroToSummon(GetPlayableHeroes(), GameStrategy.Defensive);
-
-            if (heroToPlay != null)
-            {
-                SummonHero(heroToPlay, ChoosePositionFieldIndex(heroToPlay));
-                yield return new WaitForSeconds(1);
-                StartCoroutine(DefineActions());
-                yield break;
-            }
         }
     }
 
@@ -336,7 +371,8 @@ public class HemeraLegionAI : MonoBehaviour
 
         foreach (var card in duelManager.HeroInTurn)
         {
-            if(playerManager.GetAllCardInField().Contains(card) && !card.IsControlled()) heroesInTurn.Add(card); // Agrega a la lista los heroes que deben realizar acciones en este turno
+            if(playerManager.GetAllCardInField().Contains(card) && !card.IsControlled()
+                && !card.IsParalyzed() && !card.IsStunned() && !card.IsInLethargy()) heroesInTurn.Add(card); // Agrega a la lista los heroes que deben realizar acciones en este turno
         }
 
         foreach (var card in heroesInTurn)// Ejecutar accion predefinida para cade heroe

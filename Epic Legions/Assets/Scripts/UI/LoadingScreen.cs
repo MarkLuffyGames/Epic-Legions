@@ -35,7 +35,7 @@ public class LoadingScreen : MonoBehaviour
             // Cuando llega al 90%, ya está lista para activarse
             if (operation.progress >= 0.9f)
             {
-                yield return new WaitForSeconds(5f); // Delay opcional
+                yield return new WaitForSeconds(1f); // Delay opcional
 
                 operation.allowSceneActivation = true;
             }

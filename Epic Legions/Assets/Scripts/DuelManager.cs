@@ -74,6 +74,11 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
+    private void Start()
+    {
+        AssignPlayersAndStartDuel(Loader.player1deckCardIds.ToArray(), Loader.player2deckCardIds.ToArray());
+    }
+
     private void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
     {
         UpdateDuelPhaseText();

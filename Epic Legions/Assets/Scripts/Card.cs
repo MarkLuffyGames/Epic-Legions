@@ -17,6 +17,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Button rechargeButton;
     [SerializeField] private Image cardImage;
     [SerializeField] private Image classIcon;
+    [SerializeField] private Image elementIcon;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI lastNameText;
     [SerializeField] private TextMeshProUGUI healtText;
@@ -146,7 +147,8 @@ public class Card : MonoBehaviour
             currentHealt = maxHealt;
             currentDefense = defense;
 
-            classIcon.sprite = CardDatabase.GetIcon(heroCardSO.HeroClass);
+            classIcon.sprite = CardDatabase.GetClassIcon(heroCardSO.HeroClass);
+            elementIcon.sprite = CardDatabase.GetElementIcon(heroCardSO.CardElemnt);
             ActivateMoveText1(true);
             ActivateMoveText2(true);
             ActivateHeroStats(true);
@@ -681,7 +683,7 @@ public class Card : MonoBehaviour
                 foreach (var card in playerManager.GetAllCardInField())
                 {
                     HeroCardSO HCSO = card.cardSO as HeroCardSO;
-                    if (equipmentCardSO.SupportedClasses.Contains(HCSO.HeroClass))
+                    if (equipmentCardSO.SupportedClasses.Contains(HCSO.HeroClass) && !card.IsEquipped(equipmentCardSO.EquipmentType))
                     {
                         return true;
                     }
@@ -1277,7 +1279,7 @@ public class Card : MonoBehaviour
         return null;
     }
 
-    private bool IsInLethargy()
+    public bool IsInLethargy()
     {
         return statModifier.Any(x => x.MoveEffect is Lethargy);
     }
@@ -1447,6 +1449,15 @@ public class Card : MonoBehaviour
             }
         }
         return false;
+    }
+
+
+
+    public bool IsAvailableEquipmentSlot(EquipmentCardSO equipmentCard)
+    {
+        HeroCardSO HCSO = cardSO as HeroCardSO;
+
+        return equipmentCard.SupportedClasses.Contains(HCSO.HeroClass) && !IsEquipped(equipmentCard.EquipmentType); // La carta a queipar es compatible con el heroe y no esta equipada ya otra carta del mismo tipo
     }
 
     public void ActivatePassiveSkills(PassiveSkillActivationPhase passiveSkillActivationPhase)

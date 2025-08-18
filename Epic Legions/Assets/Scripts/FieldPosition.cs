@@ -46,17 +46,10 @@ public class FieldPosition : MonoBehaviour
         }
         else if (cardSO is EquipmentCardSO equipmentCard)
         {
-            return card != null && IsAvailableEquipmentSlot(equipmentCard);
+            return card != null && card.IsAvailableEquipmentSlot(equipmentCard);
         }
 
         return false;
-    }
-
-    public bool IsAvailableEquipmentSlot(EquipmentCardSO equipmentCard)
-    {
-        HeroCardSO HCSO = card.cardSO as HeroCardSO;
-
-        return equipmentCard.SupportedClasses.Contains(HCSO.HeroClass) && !card.IsEquipped(equipmentCard.EquipmentType); // La carta a queipar es compatible con el heroe y no esta equipada ya otra carta del mismo tipo
     }
 
     /// <summary>

@@ -142,3 +142,20 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 4a4f20cf972ad824eba532d33e389340, type: 3}
   - heroClass: 8
     icon: {fileID: 21300000, guid: 9251e48175bd66a47a96bed3613e759c, type: 3}
+  elementIcons:
+  - heroElement: 1
+    icon: {fileID: 21300000, guid: ae9869ce6b6aca743bb4d7e843fa0c52, type: 3}
+  - heroElement: 2
+    icon: {fileID: 21300000, guid: c2daea3d0e2ad14499d0ba35d9b4899d, type: 3}
+  - heroElement: 3
+    icon: {fileID: 21300000, guid: 8afd4ea67c907d64293ef4ee54e38f62, type: 3}
+  - heroElement: 4
+    icon: {fileID: 21300000, guid: d161263565e361f4aaad52f2fd852370, type: 3}
+  - heroElement: 5
+    icon: {fileID: 21300000, guid: 15b21431932e9f04bacfbc70c361f5fb, type: 3}
+  - heroElement: 6
+    icon: {fileID: 21300000, guid: e9c0cedd0c5ebfe4d8deca91ec04c20d, type: 3}
+  - heroElement: 7
+    icon: {fileID: 21300000, guid: 783fe6a6daa443a4e981f9b7742c6741, type: 3}
+  - heroElement: 8
+    icon: {fileID: 21300000, guid: c825bb1d99423b343a0927d9feda391c, type: 3}
