@@ -81,6 +81,7 @@ public class HemeraLegionAI : MonoBehaviour
             PlayEquipmentCard();
         }
 
+        yield return new WaitForSeconds(1);
 
         playerManager.SetPlayerReady();
     }
@@ -371,8 +372,7 @@ public class HemeraLegionAI : MonoBehaviour
 
         foreach (var card in duelManager.HeroInTurn)
         {
-            if(playerManager.GetAllCardInField().Contains(card) && !card.IsControlled()
-                && !card.IsParalyzed() && !card.IsStunned() && !card.IsInLethargy()) heroesInTurn.Add(card); // Agrega a la lista los heroes que deben realizar acciones en este turno
+            if(playerManager.GetAllCardInField().Contains(card) && !card.IsControlled()) heroesInTurn.Add(card); // Agrega a la lista los heroes que deben realizar acciones en este turno
         }
 
         foreach (var card in heroesInTurn)// Ejecutar accion predefinida para cade heroe

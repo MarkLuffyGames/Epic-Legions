@@ -396,9 +396,9 @@ public class DuelManager : NetworkBehaviour
 
         foreach (var card in turns[heroesInTurnIndex])
         {
-            if (card.IsStunned())
+            if (card.IsStunned() || card.IsInLethargy() || card.IsParalyzed())
             {
-                card.PassTurn(); // El héroe pierde el turno si está aturdido
+                card.PassTurn();
             }
             else if (card.FieldPosition != null)
             {

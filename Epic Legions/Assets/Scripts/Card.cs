@@ -260,6 +260,7 @@ public class Card : MonoBehaviour
         speedText.enabled = activate;
         energyText.enabled = activate;
         classIcon.enabled = activate;
+        elementIcon.enabled = activate;
     }
 
     public void CopyCard(Card card, DuelManager duelManager)
@@ -751,10 +752,6 @@ public class Card : MonoBehaviour
 
         ActivatePassiveSkills(PassiveSkillActivationPhase.StartOfTurn);
 
-        if (IsInLethargy() || IsParalyzed())
-        {
-            EndTurn();
-        }
     }
 
     public void PassTurn()

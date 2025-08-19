@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Increase Defense +10, 1
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 4359607285572960429, guid: 36e647ab46f4a634ba6e44440ea8597f, type: 3}
+  iconSprite: {fileID: 21300000, guid: 82c693de10f1f0344bd179186b34a981, type: 3}
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   amount: 10
   numberTurns: 1
   isIncrease: 1

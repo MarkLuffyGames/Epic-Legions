@@ -14,18 +14,18 @@ public static class Loader
     private static void InitializeCardDatabase()
     {
         sceneToLoad = string.Empty;
-        player1deckCardIds = new int[40];
+        player1deckCardIds = new int[60];
         player2deckCardIds = new int[40];
         isSinglePlayer = false;
     }
 
     public static void SetDecks()
     {
-        /*for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 20; i++)
         {
-            player1deckCardIds[i] = CardDatabase.allCards[1081].CardID;
-        }*/
-        for (int i = 0; i < 40; i++)
+            player1deckCardIds[i] = CardDatabase.allCards[1048].CardID;
+        }
+        for (int i = 20; i < 40; i++)
         {
             player1deckCardIds[i] = CardDatabase.GetRandomCards();
         }

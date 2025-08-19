@@ -69,6 +69,7 @@ public class SampleCard : MonoBehaviour
             {
                 cards[i].gameObject.SetActive(true);
                 cards[i].transform.localPosition = positions[i];
+                cards[i].CleanCard();
                 cards[i].gameObject.SetActive(false);
             }
             else

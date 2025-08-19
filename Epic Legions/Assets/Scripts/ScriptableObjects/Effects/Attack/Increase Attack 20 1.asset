@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Increase Attack 20 1
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 418540983303527424, guid: 022d970fdd7676c4186ba3e6ec6d31ba, type: 3}
-  iconSprite: {fileID: 0}
+  iconSprite: {fileID: 21300000, guid: 82c693de10f1f0344bd179186b34a981, type: 3}
   effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   amount: 20
   numberTurns: 1
   isIncrease: 1
