@@ -30,7 +30,7 @@ public class DuelManager : NetworkBehaviour
     [SerializeField] private EndDuelUI endDuelUI;
     [SerializeField] private int energyGainedPerTurn = 20;
 
-    [SerializeField] private List<int> deckCardIds;
+    [SerializeField] private int[] deckCardIds;
 
     private Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
     private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
@@ -76,7 +76,11 @@ public class DuelManager : NetworkBehaviour
 
     private void Start()
     {
-        AssignPlayersAndStartDuel(Loader.player1deckCardIds.ToArray(), Loader.player2deckCardIds.ToArray());
+        isSinglePlayer = Loader.isSinglePlayer;
+        if (isSinglePlayer)
+        {
+            AssignPlayersAndStartDuel(Loader.player1deckCardIds.ToArray(), Loader.player2deckCardIds.ToArray());
+        }
     }
 
     private void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
@@ -128,6 +132,10 @@ public class DuelManager : NetworkBehaviour
         }
         else if(newPhase == DuelPhase.DrawingCards)
         {
+            foreach(var item in HeroCardsOnTheField)
+            {
+                item.turnCompleted = false;
+            }
             if (player1Manager.DrawCard())
             {
                 player1Manager.RechargeEnergy(energyGainedPerTurn);
@@ -202,7 +210,7 @@ public class DuelManager : NetworkBehaviour
         }
         else
         {
-            ReceiveAndStoreDeckServerRpc(NetworkManager.Singleton.LocalClientId, deckCardIds.ToArray());
+            ReceiveAndStoreDeckServerRpc(NetworkManager.Singleton.LocalClientId, deckCardIds);
         }
     }
 
@@ -215,6 +223,11 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ReceiveAndStoreDeckServerRpc(ulong clientId, int[] deckCardIds)
     {
+        deckCardIds = new int[40];
+        for (int i = 0; i < 40; i++)
+        {
+            deckCardIds[i] = CardDatabase.GetRandomCards();
+        }
         // Validar si el mazo es válido
         if (deckCardIds == null || deckCardIds.Length == 0)
         {
@@ -396,7 +409,7 @@ public class DuelManager : NetworkBehaviour
 
         foreach (var card in turns[heroesInTurnIndex])
         {
-            if (card.IsStunned() || card.IsInLethargy() || card.IsParalyzed())
+            if (card.IsStunned() || card.IsInLethargy() || card.IsParalyzed() || card.turnCompleted)
             {
                 card.PassTurn();
             }
@@ -404,6 +417,7 @@ public class DuelManager : NetworkBehaviour
             {
                 heroInTurn.Add(card); // Agrega el héroe a la lista si tiene posición en el campo
             }
+            card.turnCompleted = true;
         }
 
         // Si no hay héroes disponibles después de la validación, finaliza las acciones del turno
@@ -970,20 +984,41 @@ public class DuelManager : NetworkBehaviour
             }
             else
             {
-                var rivalField = new List<FieldPosition>(card.GetController() != null ? GetPlayerManagerForCard(card).GetFieldPositionList() : GetPlayerManagerRival(card).GetFieldPositionList());
+                var FieldPositionList = card.GetController() != null ? GetPlayerManagerForCard(card).GetFieldPositionList() : GetPlayerManagerRival(card).GetFieldPositionList();
+                var rivalField = new List<FieldPosition>(FieldPositionList);
                 rivalField.Remove(card.FieldPosition);
 
-                if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack) //Devuelve los heroes en la fila mas adelantada.
+                if(card.GetController() != null)
+                {
+                    for (int i = 0; i < rivalField.Count; i++)
+                    {
+                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                    }
+                }
+                else if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack
+                    || card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack) //Devuelve los heroes en la fila mas adelantada.
                 {
                     // Itera sobre las posiciones de campo del jugador 2 (enemigo)
                     for (int i = 0; i < rivalField.Count; i++)
                     {
-
-                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);    
-
-                        if (targets.Count > 0 && (i == 4 || i == 9 || i == 14))
+                        if (rivalField[i].PositionIndex < 5)
                         {
-                            return targets;
+                            TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                        }
+                        else if(rivalField[i].PositionIndex < 10)
+                        {
+                            if (FieldPositionList[rivalField[i].PositionIndex - 5].Card == null)
+                            {
+                                TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                            }
+                        }
+                        else if (rivalField[i].PositionIndex < 15)
+                        {
+                            if (FieldPositionList[rivalField[i].PositionIndex - 5].Card == null &&
+                                FieldPositionList[rivalField[i].PositionIndex - 10].Card == null)
+                            {
+                                TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                            }
                         }
                     }
                 }
@@ -999,13 +1034,8 @@ public class DuelManager : NetworkBehaviour
                         }
                     }
                 }
-                else if(card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack) //Devuelve todos los heroes.
-                {
-                    for (int i = 0; i < rivalField.Count; i++)
-                    {
-                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
-                    }
-                }
+
+                return targets;
             }
         }
         else

@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: 04db09724fa3e2c41b03ced41e7f4971, type: 3}
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   numberTurns: 3
+  poisonEffect: {fileID: 11400000, guid: 9901dece633bc8e48b1f5e50ec32f8a0, type: 2}

@@ -87,7 +87,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
-        Loader.sceneToLoad = "GameScene"; // Set the scene to load
+        Loader.isSinglePlayer = true;
+        Loader.sceneToLoad = "GameScene";
         SceneManager.LoadScene("LoadingScene");
         //SceneManager.LoadScene("GameScene");
     }

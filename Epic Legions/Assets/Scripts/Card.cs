@@ -74,6 +74,7 @@ public class Card : MonoBehaviour
     public bool isVisible;
     public bool waitForServer;
     public bool actionIsReady;
+    public bool turnCompleted;
 
     private int maxHealt;
     private int defense;
@@ -1246,8 +1247,8 @@ public class Card : MonoBehaviour
             }
             else if(item.MoveEffect is ToxicContact poisonedcounterattack)
             {
-                card.AddEffect(new Effect(new Poison(), card));
-
+                var poison = poisonedcounterattack.PoisonEffect;
+                poison.ActivateEffect(item.casterHero, card);
             }
         }
     }

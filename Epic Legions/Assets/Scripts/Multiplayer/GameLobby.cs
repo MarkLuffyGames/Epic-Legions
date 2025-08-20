@@ -153,6 +153,7 @@ public class GameLobby : NetworkBehaviour
         {
             Debug.Log("GameScene cargada. Instanciando Duel Manager...");
 
+            FindAnyObjectByType<DuelManager>()?.gameObject.SetActive(false);
             // Instanciar el Duel Manager en el servidor
             if (NetworkManager.Singleton.IsServer)
             {

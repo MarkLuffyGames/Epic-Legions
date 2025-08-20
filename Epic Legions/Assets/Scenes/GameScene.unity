@@ -1571,6 +1571,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Duel Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 1293205258825124019, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7821186208896386969, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2862535368

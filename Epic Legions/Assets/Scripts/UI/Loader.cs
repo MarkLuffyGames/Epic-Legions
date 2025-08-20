@@ -21,11 +21,11 @@ public static class Loader
 
     public static void SetDecks()
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 40; i < 60; i++)
         {
-            player1deckCardIds[i] = CardDatabase.allCards[1048].CardID;
+            player1deckCardIds[i] = CardDatabase.allCards[1005].CardID;
         }
-        for (int i = 20; i < 40; i++)
+        for (int i = 0; i < 40; i++)
         {
             player1deckCardIds[i] = CardDatabase.GetRandomCards();
         }

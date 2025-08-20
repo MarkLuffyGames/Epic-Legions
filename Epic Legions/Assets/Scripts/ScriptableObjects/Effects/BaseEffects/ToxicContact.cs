@@ -5,7 +5,9 @@ using UnityEngine;
 public class ToxicContact : CardEffect
 {
     [SerializeField] private int numberTurns;
+    [SerializeField] private Poison poisonEffect;
     public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
+    public Poison PoisonEffect => poisonEffect;
     public override void ActivateEffect(Card caster, Card target)
     {
         target.AddEffect(new Effect(this, target));
