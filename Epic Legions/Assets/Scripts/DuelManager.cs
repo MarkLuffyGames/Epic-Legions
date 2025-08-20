@@ -1099,7 +1099,7 @@ public class DuelManager : NetworkBehaviour
         if (player == 1)
         {
             // Si es el jugador 1, aplicar el daño al jugador 2
-            if (player2Manager.ReceiveDamage(cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.Damage))
+            if (player2Manager.ReceiveDamage(CalculateAttackDamage(cardUsesTheAttack, movementToUseIndex)))
             {
                 // Si el jugador 2 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(true);
@@ -1108,7 +1108,7 @@ public class DuelManager : NetworkBehaviour
         else
         {
             // Si es el jugador 2, aplicar el daño al jugador 1
-            if (player1Manager.ReceiveDamage(cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.Damage))
+            if (player1Manager.ReceiveDamage(CalculateAttackDamage(cardUsesTheAttack, movementToUseIndex)))
             {
                 // Si el jugador 1 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(false);

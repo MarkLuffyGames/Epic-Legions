@@ -347,7 +347,7 @@ public class Card : MonoBehaviour
             defenceText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
             speedText.color = CurrentSpeedPoints < speed ? Color.red : CurrentSpeedPoints > speed ? Color.green : Color.yellow;
 
-            healtText.text = currentHealt.ToString();
+            healtText.text = (currentHealt > 0 ? currentHealt : 0).ToString();
             defenceText.text = CurrentDefensePoints.ToString();
             speedText.text = CurrentSpeedPoints.ToString();
             energyText.text = energy.ToString(); 
@@ -922,7 +922,6 @@ public class Card : MonoBehaviour
             damageInflicted = currentHealt > remainingDamage ? remainingDamage : currentHealt;
             ShowTextDamage(false, damageInflicted);
             currentHealt -= remainingDamage;
-            if (currentHealt < 0) currentHealt = 0;
         }
 
         MoveToLastPosition();
@@ -932,6 +931,12 @@ public class Card : MonoBehaviour
         return damageInflicted;
     }
 
+    public void ReceivePoisonDamage(int amount)
+    {
+        int damageInflicted = currentHealt > amount ? amount : currentHealt;
+        ShowTextDamage(false, damageInflicted);
+        currentHealt -= amount;
+    }
 
     /// <summary>
     /// Realiza la animacion de proteger a un aliado.
@@ -1229,7 +1234,7 @@ public class Card : MonoBehaviour
 
     public void ApplyPoisonDamage(int amount)
     {
-        ReceiveDamage(amount, amount, null);
+        ReceivePoisonDamage(amount);
         ActivateVisualEffects();
     }
 

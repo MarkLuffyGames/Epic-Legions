@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -12,10 +13,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button singlePlayerButton;
     [SerializeField] private Button multiplayerButton;
     [SerializeField] private Button exitButton;
-
+    [SerializeField] private TextMeshProUGUI versionText;
     private void Awake()
     {
-        Application.targetFrameRate = 1000;
+        versionText.text = $"v{Application.version}";
+        Application.targetFrameRate = 120;
 
         InitializeUnityAuthentication();
         singlePlayerButton.onClick.AddListener(() =>
