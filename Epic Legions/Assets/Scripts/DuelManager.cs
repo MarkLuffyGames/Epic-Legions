@@ -1632,9 +1632,21 @@ public class DuelManager : NetworkBehaviour
                 }
             }
         }
+        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.FrontBack)
+        {
+            // Devuelve la línea de cartas asociada a la carta objetivo.
+            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            {
+                return player1Manager.GetColumnForCard(cardToAttack, 2);
+            }
+            else
+            {
+                return player2Manager.GetColumnForCard(cardToAttack, 2);
+            }
+        }
 
-        // Si no hay un tipo de objetivo válido, devuelve null.
-        return null;
+            // Si no hay un tipo de objetivo válido, devuelve null.
+            return null;
     }
 
 

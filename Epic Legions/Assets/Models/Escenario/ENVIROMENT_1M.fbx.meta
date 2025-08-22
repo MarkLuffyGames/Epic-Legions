@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: 6a871b241abaa244ea92fb8433f428a5
+guid: 673de2c42cd1bb44aac5a10b001d1cf8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: DEFAULT
-    second: {fileID: 2100000, guid: 26a082bef9f74684c8127504c673b945, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: EMISIVE
-    second: {fileID: 2100000, guid: 4c9161a59cb477a49b800f15a3ba33bd, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
