@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
 public class DuelManager : NetworkBehaviour
@@ -988,17 +989,16 @@ public class DuelManager : NetworkBehaviour
                 var rivalField = new List<FieldPosition>(FieldPositionList);
                 rivalField.Remove(card.FieldPosition);
 
-                if(card.GetController() != null)
+                if(card.GetController() != null
+                    || card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack)
                 {
                     for (int i = 0; i < rivalField.Count; i++)
                     {
                         TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
                     }
                 }
-                else if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack
-                    || card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack) //Devuelve los heroes en la fila mas adelantada.
+                else if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack) 
                 {
-                    // Itera sobre las posiciones de campo del jugador 2 (enemigo)
                     for (int i = 0; i < rivalField.Count; i++)
                     {
                         if (rivalField[i].PositionIndex < 5)

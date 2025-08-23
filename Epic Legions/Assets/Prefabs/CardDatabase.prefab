@@ -124,6 +124,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 762411ed6e52a8b4381b83d5b0f7543c, type: 2}
   - {fileID: 11400000, guid: 715975f535cdf264d9f9e3d451851879, type: 2}
   - {fileID: 11400000, guid: ec2df03e85b2eb643888e8f9e8c33898, type: 2}
+  - {fileID: 11400000, guid: b80985f88d7029f41bc8c7438554374b, type: 2}
+  - {fileID: 11400000, guid: ec4d2114d16593d4fa4f60fb2f1e5017, type: 2}
+  - {fileID: 11400000, guid: 993c8d24545ca654da70a9567db6d080, type: 2}
   classIcons:
   - heroClass: 0
     icon: {fileID: 21300000, guid: 708f829855bba4949b50535bfd08e2b9, type: 3}
