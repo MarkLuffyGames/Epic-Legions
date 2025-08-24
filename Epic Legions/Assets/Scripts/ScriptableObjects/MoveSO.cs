@@ -10,7 +10,6 @@ public class MoveSO : ScriptableObject
     [SerializeField] private CardEffect moveEffect;
     [SerializeField] private Condition effectCondition;
     [SerializeField] private Condition targetsCondition;
-    [SerializeField] private bool alwaysActive;
     [SerializeField] private bool needTarget;
     [SerializeField] private bool onMyself;
     [SerializeField] private MoveType moveType;
@@ -25,7 +24,6 @@ public class MoveSO : ScriptableObject
     public CardEffect MoveEffect => moveEffect;
     public Condition EffectCondition => effectCondition;
     public Condition TargetsCondition => targetsCondition;
-    public bool AlwaysActive => alwaysActive;
     public bool NeedTarget => needTarget;
     public bool OnMyself => onMyself;
     public MoveType MoveType => moveType;

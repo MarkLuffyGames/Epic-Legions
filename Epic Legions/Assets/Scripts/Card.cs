@@ -142,7 +142,7 @@ public class Card : MonoBehaviour
             foreach (var move in heroCardSO.Moves)
             {
                 moves.Add(new Movement(move));
-                if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
+                //if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
             }
 
             currentHealt = maxHealt;
@@ -186,7 +186,6 @@ public class Card : MonoBehaviour
             foreach (var move in equipmentCardSO.Moves)
             {
                 moves.Add(new Movement(move));
-                if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
             }
 
             if (moves.Count > 0 && moves[0] != null)
@@ -315,8 +314,8 @@ public class Card : MonoBehaviour
             }
         }
         if(card.cardSO is EquipmentCardSO equipment)
-        {
-            if(equipment.Effect != null && !equipment.Effect.isPassive) equipment.Effect.ActivateEffect(card, this);
+        { 
+            if(equipment.Effect != null && !equipment.Effect.isPassive) equipment.Effect.ActivateEffect(card, this); 
         }
     }
 

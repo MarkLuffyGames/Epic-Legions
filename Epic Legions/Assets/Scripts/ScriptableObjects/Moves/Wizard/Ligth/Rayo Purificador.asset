@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Rayo de Obsidiana
+  m_Name: Rayo Purificador
   m_EditorClassIdentifier: 
-  moveName: Rayo de Obsidiana
-  damage: 20
+  moveName: Rayo Purificador
+  damage: 25
   energyCost: 10
-  moveEffect: {fileID: 11400000, guid: d58bff745d34bfd4fba3ea87088db30b, type: 2}
+  moveEffect: {fileID: 11400000, guid: 65e6087b5ac155243a92b60f8f32d4a9, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 1
-  onMyself: 0
+  onMyself: 1
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Reduce la defensa del objetivo en 30 durante 2 turnos.
+  effectDescription: Elimina los efectos negativos del usuario luego de ejecutar
+    este ataque.

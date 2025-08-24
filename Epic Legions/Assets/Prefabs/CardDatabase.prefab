@@ -133,6 +133,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 295c57fc7cf287b418811be95d7253cf, type: 2}
   - {fileID: 11400000, guid: 82881b9c7ce5e2a4cb5ff025c42aaf45, type: 2}
   - {fileID: 11400000, guid: 7483c71c99d9c494cad862f1827a0a46, type: 2}
+  - {fileID: 11400000, guid: 1bf88e5c7ad485c4793412ba7f037d0f, type: 2}
+  - {fileID: 11400000, guid: fc922966c81e212479bed10df4592c10, type: 2}
   classIcons:
   - heroClass: 0
     icon: {fileID: 21300000, guid: 708f829855bba4949b50535bfd08e2b9, type: 3}

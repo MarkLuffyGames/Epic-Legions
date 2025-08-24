@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: Rayo de Obsidiana
+  m_Name: Sombras Devoradoras
   m_EditorClassIdentifier: 
-  moveName: Rayo de Obsidiana
+  moveName: Sombras Devoradoras
   damage: 20
   energyCost: 10
-  moveEffect: {fileID: 11400000, guid: d58bff745d34bfd4fba3ea87088db30b, type: 2}
+  moveEffect: {fileID: 11400000, guid: 0b7b2c5e450f1ce4b8b76df18c779c08, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 1
@@ -24,4 +24,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Reduce la defensa del objetivo en 30 durante 2 turnos.
+  effectDescription: Roba la vida al obvjetivo.

@@ -1484,13 +1484,11 @@ public class DuelManager : NetworkBehaviour
         // Aplica efectos adicionales del ataque si no es un efecto pasivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
         {
-            if (!attackerCard.Moves[movementToUseIndex].MoveSO.AlwaysActive)
-                attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
+            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
         }
         else
         {
-            if (!attackerCard.Moves[movementToUseIndex].MoveSO.AlwaysActive)
-                attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
+            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
         }
 
         // Resetea el índice del movimiento utilizado.
