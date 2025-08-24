@@ -1099,7 +1099,7 @@ public class DuelManager : NetworkBehaviour
         if (player == 1)
         {
             // Si es el jugador 1, aplicar el daño al jugador 2
-            if (player2Manager.ReceiveDamage(CalculateAttackDamage(cardUsesTheAttack, movementToUseIndex)))
+            if (player2Manager.ReceiveDamage(CalculateAttackDamage(cardUsesTheAttack, movementToUseIndex, null)))
             {
                 // Si el jugador 2 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(true);
@@ -1108,7 +1108,7 @@ public class DuelManager : NetworkBehaviour
         else
         {
             // Si es el jugador 2, aplicar el daño al jugador 1
-            if (player1Manager.ReceiveDamage(CalculateAttackDamage(cardUsesTheAttack, movementToUseIndex)))
+            if (player1Manager.ReceiveDamage(CalculateAttackDamage(cardUsesTheAttack, movementToUseIndex, null)))
             {
                 // Si el jugador 1 recibe suficiente daño y termina el duelo, invocar el fin del duelo
                 EndDuel(false);
@@ -1431,7 +1431,7 @@ public class DuelManager : NetworkBehaviour
                 cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-                attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex),
+                attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
                     attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
             }
             else
@@ -1446,7 +1446,7 @@ public class DuelManager : NetworkBehaviour
                 foreach (var card in targets)
                 {
                     // Aplica el daño a todos los objetivos.
-                    attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex),
+                    attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
                         attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
                 }
             }
@@ -1510,8 +1510,13 @@ public class DuelManager : NetworkBehaviour
         if (lastMove) yield return FinishActions();
     }
 
-    private int CalculateAttackDamage(Card attackerCard, int movementToUseIndex)
+    private int CalculateAttackDamage(Card attackerCard, int movementToUseIndex, Card cardToAttack)
     {
+        if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is DestroyDefense)
+        {
+            return cardToAttack.CurrentDefensePoints + cardToAttack.GetDamageAbsorbed();
+        }
+
         int damage = attackerCard.Moves[movementToUseIndex].MoveSO.Damage;
         damage += attackerCard.GetAttackModifier(); // Añade el bono de ataque del héroe, si lo tiene.
         damage += attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IncreaseAttackDamage attackModifier ? attackModifier.Amount : 0; // Añade el modificador de ataque del movimiento, si lo tiene.

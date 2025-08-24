@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
-  m_Name: Martillo del Amanecer Radiante
+  m_Name: Orbe de Geocristal
   m_EditorClassIdentifier: 
-  cardId: 1084
-  cardName: Martillo del Amanecer Radiante
+  cardId: 1090
+  cardName: Orbe de geocristal
   cardLastName: 
   cardSprite: {fileID: 21300000, guid: e14e50689b52f574eb75e1045bbbb2de, type: 3}
-  cardElemnt: 7
+  cardElemnt: 4
   equipmentType: 0
   supportedClasses: 000000000100000002000000030000000400000005000000060000000700000008000000
   moves:
-  - {fileID: 11400000, guid: e05c3eabb174f9441985103a08c2adbb, type: 2}
+  - {fileID: 11400000, guid: 35b49119ba5934749ad122607c9c294a, type: 2}
   effect: {fileID: 0}
   description: 

@@ -557,13 +557,13 @@ public class Card : MonoBehaviour
         }
     }
 
-    public bool UsableMovement(int moveIndex, PlayerManager playerManager)
+    public bool  UsableMovement(int moveIndex, PlayerManager playerManager)
     {
         PlayerManager otherPlayerManager = playerManager == duelManager.Player1Manager ? duelManager.Player2Manager : duelManager.Player1Manager;
 
         return moves[moveIndex].MoveSO.EnergyCost <= playerManager.PlayerEnergy
                 && (duelManager.ObtainTargets(this, moveIndex).Count > 0 || (moves[moveIndex].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[moveIndex].MoveSO.NeedTarget :
-                otherPlayerManager.GetFieldPositionList().All(field => field.Card == null)));
+                otherPlayerManager.GetFieldPositionList().All(field => field.Card == null) && moves[moveIndex].MoveSO.Damage > 0));
     }
 
     /// <summary>
