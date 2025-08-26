@@ -36,5 +36,10 @@ public class ParasiteSeed : CardEffect
         }
 
         effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+    public string DescriptionText(Effect effect)
+    {
+        return $"Parasite Seed \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
     }
 }

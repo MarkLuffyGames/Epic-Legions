@@ -33,5 +33,9 @@ public class Antivenom : CardEffect
             effect.durability = 0;
         }
     }
+    public string DescriptionText()
+    {
+        return $"Cannot be poisoned";
+    }
 }
 

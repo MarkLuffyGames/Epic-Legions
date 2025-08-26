@@ -25,4 +25,8 @@ public class Burn : CardEffect
     public override void UpdateEffect(Effect effect)
     {
     }
+    public string DescriptionText()
+    {
+        return $"Burn";
+    }
 }

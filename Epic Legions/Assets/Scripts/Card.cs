@@ -12,6 +12,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas canvasFront;
     [SerializeField] private Canvas canvasBack;
     [SerializeField] private Canvas cardActions;
+    [SerializeField] private Canvas cardBorder;
     [SerializeField] private Button move1Button;
     [SerializeField] private Button move2Button;
     [SerializeField] private Button rechargeButton;
@@ -47,6 +48,7 @@ public class Card : MonoBehaviour
     [SerializeField] private int angleHeldCard = 70;
     [SerializeField] private float heldCardHeight = 2.75f;
     [SerializeField] private List<GameObject> statsIcons = new List<GameObject>();
+    private Material borderMaterial;
 
     public CardSO cardSO;
 
@@ -64,6 +66,7 @@ public class Card : MonoBehaviour
     }
 
     private List<Effect> statModifier;
+    public List<Effect> StatModifier => statModifier;
 
     private Vector3 lastPosition;
     private Vector3 defaultRotation;
@@ -115,6 +118,10 @@ public class Card : MonoBehaviour
     {
         this.cardSO = cardSO;
         this.duelManager = duelManager;
+
+        var cardImage = cardBorder.GetComponentInChildren<Image>();
+        borderMaterial =  new Material(cardImage.material);
+        cardImage.material = borderMaterial;
 
         SetCard();
     }
@@ -595,6 +602,7 @@ public class Card : MonoBehaviour
     {
         canvasFront.sortingOrder = sortingOrder;
         if(canvasBack != null) canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
+        if (cardBorder != null) cardBorder.sortingOrder = sortingOrder;
         cardActions.sortingOrder = sortingOrder + 1;
     }
 
@@ -605,6 +613,34 @@ public class Card : MonoBehaviour
     public void ShowBack(bool showFront)
     {
         if(canvasBack != null) canvasBack.gameObject.SetActive(showFront);
+    }
+
+    
+    private float fadeDuration = 0.3f;
+    private Coroutine fadeRoutine;
+
+    public void ShowCardBorder(bool showCardBorder)
+    {
+        if (cardBorder == null) return;
+
+        if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+        fadeRoutine = StartCoroutine(FadeAlpha(showCardBorder ? 1f : 0f));
+    }
+    private IEnumerator FadeAlpha(float target)
+    {
+        float start = borderMaterial.GetFloat("_Alpha");
+        float time = 0f;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            float t = time / fadeDuration;
+            float newAlpha = Mathf.Lerp(start, target, t);
+            borderMaterial.SetFloat("_Alpha", newAlpha);
+            yield return null;
+        }
+
+        borderMaterial.SetFloat("_Alpha", target);
     }
 
     float heldTime;
@@ -666,8 +702,7 @@ public class Card : MonoBehaviour
         }
         else if( cardSO is SpellCardSO spellCardSO)
         {
-            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation ||
-                duelManager.GetCurrentDuelPhase() == DuelPhase.Battle) &&
+            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation) &&
                 spellCardSO.Move.EnergyCost <= playerManager.PlayerEnergy &&
                 !duelManager.SettingAttackTarget &&
                 duelManager.ObtainTargets(this, 0).Count > 0)
@@ -677,8 +712,7 @@ public class Card : MonoBehaviour
         }
         else if (cardSO is EquipmentCardSO equipmentCardSO)
         {
-            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation ||
-                duelManager.GetCurrentDuelPhase() == DuelPhase.Battle) &&
+            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation) &&
                 !duelManager.SettingAttackTarget && playerManager.GetAllCardInField().Count > 0)
             {
                 foreach (var card in playerManager.GetAllCardInField())

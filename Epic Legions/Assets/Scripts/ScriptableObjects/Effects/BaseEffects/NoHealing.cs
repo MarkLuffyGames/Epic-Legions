@@ -27,6 +27,11 @@ public class NoHealing : CardEffect
 
     public override void UpdateEffect(Effect effect)
     {
-        
+        effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+    public string DescriptionText(Effect effect)
+    {
+        return $"No healing \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
     }
 }

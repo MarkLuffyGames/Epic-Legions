@@ -34,5 +34,11 @@ public class ModifyAttack : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+    public string DescriptionText(Effect effect)
+    {
+        var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
+        return $"{(isIncrease ? "+" : "-")}{amount} attack{(!isPermanent ? s : "")}";
     }
 }

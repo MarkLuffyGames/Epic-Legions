@@ -25,5 +25,10 @@ public class Lethargy : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+    public string DescriptionText(Effect effect)
+    {
+        return $"Lethargy \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
     }
 }

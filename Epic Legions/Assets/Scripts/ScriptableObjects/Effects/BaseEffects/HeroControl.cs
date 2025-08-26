@@ -26,4 +26,8 @@ public class HeroControl : CardEffect
     {
         
     }
+    public string DescriptionText()
+    {
+        return $"Brain control";
+    }
 }

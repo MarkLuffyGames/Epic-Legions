@@ -26,5 +26,10 @@ public class Paralysis : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+    public string DescriptionText(Effect effect)
+    {
+        return $"Paralysis \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
     }
 }

@@ -6,6 +6,7 @@ public class SampleCard : MonoBehaviour
 {
     [SerializeField] private List<Card> cards = new List<Card>();
     [SerializeField] private List<Vector3> positions = new List<Vector3>();
+    [SerializeField] private EffectsActivatedUI effectsActivatedUI;
 
     private bool isEnlarged = false;
     private Card card;
@@ -27,6 +28,7 @@ public class SampleCard : MonoBehaviour
         this.card = card;
         isEnlarged = true;
         EnlargeCard(card, 0, positions[0]);
+        effectsActivatedUI.ShowEffectsActivated(card.StatModifier);
 
         if (card.GetEquipmentCounts() > 0)
         {
@@ -63,6 +65,7 @@ public class SampleCard : MonoBehaviour
 
     public void ResetSize()
     {
+        effectsActivatedUI.HideEffectsActivated();
         for (int i = 0; i < cards.Count; i++)
         {
             if (!cards[i].gameObject.activeSelf)

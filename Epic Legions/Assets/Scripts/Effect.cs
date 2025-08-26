@@ -23,6 +23,11 @@ public class Effect
     public int durability;
     public int elapsedTurns;
 
+    private string effectDescription;
+
+    public int Durability => durability % DuelManager.NumberOfTurns > 0 ? 
+        durability / DuelManager.NumberOfTurns + 1 : durability / DuelManager.NumberOfTurns;
+
     public Effect(CardEffect cardEffect, Card hero)
     {
         moveEffect = cardEffect;
@@ -32,6 +37,7 @@ public class Effect
         {
             this.absorbDamage = absorbDamage.Amount;
             durability = absorbDamage.NumberTurns;
+            effectDescription = absorbDamage.DescriptionText(this);
         }
         else if(cardEffect is ModifyDefense modifyDefense)
         {
@@ -39,6 +45,7 @@ public class Effect
             currentDefense = amount;
             durability = modifyDefense.NumberTurns;
             isNegative = !modifyDefense.IsIncrease;
+            effectDescription = modifyDefense.DescriptionText(this);
         }
         else if(cardEffect is TransferDamage transferDamage)
         {
@@ -46,39 +53,41 @@ public class Effect
             durability = transferDamage.NumberTurns;
             hasProtector = true;
             isRemovable = false;
+            effectDescription = transferDamage.DescriptionText(this);
         }
         else if(cardEffect is ModifySpeed modifySpeed)
         {
             amount = modifySpeed.IsIncrease ? modifySpeed.Amount : -modifySpeed.Amount;
             durability = modifySpeed.NumberTurns;
             isNegative = !modifySpeed.IsIncrease;
+            effectDescription = modifySpeed.DescriptionText(this);
         }
         else if(cardEffect is ModifyAttack modifyAttack)
         {
             amount = modifyAttack.IsIncrease ? modifyAttack.Amount : -modifyAttack.Amount;
             durability = modifyAttack.NumberTurns;
             isNegative = !modifyAttack.IsIncrease;
-        }
-        else if(cardEffect is IgnoredDefense ignoredDefense)
-        {
-            amount = ignoredDefense.Amount;
+            effectDescription = modifyAttack.DescriptionText(this);
         }
         else if(cardEffect is Stun stun)
         {
             isStunned = true;
             durability = DuelManager.NumberOfTurns;
             isNegative = true;
+            effectDescription = stun.DescriptionText();
         }
         else if(cardEffect is Poison poison)
         {
             durability = poison.NumberTurns;
             amount = poison.Amount;
             isNegative = true;
+            effectDescription = poison.DescriptionText();
         }
         else if(cardEffect is Antivenom antivenom)
         {
             casterHero = antivenom.Caster;
             durability = 1;
+            effectDescription = antivenom.DescriptionText();
         }
         else if( cardEffect is Counterattack counterattack)
         {
@@ -86,46 +95,55 @@ public class Effect
             amount = counterattack.Amount;
             durability = 1;
             isRemovable = false;
+            effectDescription = counterattack.DescriptionText();
         }
         else if(cardEffect is ToxicContact poisonedcounterattack)
         {
             durability = poisonedcounterattack.NumberTurns;
+            effectDescription = poisonedcounterattack.DescriptionText(this);
         }
         else if(cardEffect is Lethargy lethargy)
         {
             durability = lethargy.NumberTurns;
+            effectDescription = lethargy.DescriptionText(this);
         }
         else if(cardEffect is ParasiteSeed parasiteSeed)
         {
             casterHero = parasiteSeed.Caster;
             durability = parasiteSeed.NumberTurns;
             isNegative = true;
+            effectDescription = parasiteSeed.DescriptionText(this);
         }
         else if(cardEffect is FullDamageReflection fulldamageReflection)
         {
             durability = fulldamageReflection.NumberTurns;
+            effectDescription = fulldamageReflection.DescriptionText(this);
         }
         else if(cardEffect is NoHealing noHealing)
         {
             durability = noHealing.NumberTurns;
             isNegative = true;
+            effectDescription = noHealing.DescriptionText(this);
         }
         else if (cardEffect is HeroControl heroControl)
         {
             casterHero = heroControl.Caster;
             durability = 1;
             isNegative = true;
+            effectDescription = heroControl.DescriptionText();
         }
         else if (cardEffect is Paralysis paralysis)
         {
             durability = paralysis.NumberTurns;
             isNegative = true;
+            effectDescription = paralysis.DescriptionText(this);
         }
         else if (cardEffect is Burn burn)
         {
             isBurned = true;
             durability = 1;
             isNegative = true;
+            effectDescription = burn.DescriptionText();
         }
 
         if (!isNegative)
@@ -224,5 +242,15 @@ public class Effect
     public bool IsRemovable()
     {
         return isRemovable;
+    }
+
+    public void SetEffectDescription(string description)
+    {
+        effectDescription = description;
+    }
+
+    public string GetEffectDescription()
+    {
+        return effectDescription;
     }
 }

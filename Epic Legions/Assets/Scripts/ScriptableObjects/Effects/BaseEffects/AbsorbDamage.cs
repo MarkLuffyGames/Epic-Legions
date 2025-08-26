@@ -21,6 +21,7 @@ public class AbsorbDamage : CardEffect
         {
             Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position, Quaternion.identity);
             card.AddEffect(new Effect(this, card));
+
         }
     }
 
@@ -32,5 +33,12 @@ public class AbsorbDamage : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         if (!isPermanent) effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+
+    public string DescriptionText(Effect effect)
+    {
+        var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
+        return "Absorb " + amount + " damage" + (!isPermanent ? s : "");
     }
 }

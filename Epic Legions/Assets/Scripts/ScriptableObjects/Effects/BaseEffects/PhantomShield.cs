@@ -26,4 +26,8 @@ public class PhantomShield : CardEffect
     {
 
     }
+     public string DescriptionText()
+    {
+        return $"Absorb all damage";
+    }
 }

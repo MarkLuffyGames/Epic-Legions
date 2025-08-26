@@ -398,7 +398,7 @@ public class CardSelector : MonoBehaviour
 
         currentFieldPosition = null;
 
-        if (card.cardSO is HeroCardSO)
+        if (card.cardSO is HeroCardSO || card.cardSO is EquipmentCardSO)
         {
             handCardHandler.ShowHandCard();
         }

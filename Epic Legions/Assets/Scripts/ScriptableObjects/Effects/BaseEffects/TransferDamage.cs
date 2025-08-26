@@ -38,6 +38,7 @@ public class TransferDamage : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
     }
 
     public override void DeactivateEffect(Effect effect)
@@ -73,5 +74,10 @@ public class TransferDamage : CardEffect
 
         this.caster = caster;
         target.AddEffect(new Effect(this, target));
+    }
+
+    public string DescriptionText(Effect effect)
+    {
+        return $"Transfer all damage received to {caster.cardSO.CardName} for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
     }
 }

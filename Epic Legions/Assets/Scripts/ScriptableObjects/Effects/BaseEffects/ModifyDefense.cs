@@ -35,5 +35,12 @@ public class ModifyDefense : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         if (!isPermanent) effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+
+    public string DescriptionText(Effect effect)
+    {
+        var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
+        return $"{(isIncrease ? "+" : "-")}{amount} defense{(!isPermanent ? s : "")}";
     }
 }

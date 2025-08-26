@@ -1572,21 +1572,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1000724910659399924, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1293205258825124019, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
       propertyPath: m_Name
       value: Duel Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 1293205258825124019, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 2776714980010758147, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2776714980010758147, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758044689308104401, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758044689308104401, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758044689308104401, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6857497794995147550, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 7821186208896386969, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2862535368
-      objectReference: {fileID: 0}
-    - target: {fileID: 7821186208896386969, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
-      propertyPath: SceneMigrationSynchronization
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9032284547816904992, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
       propertyPath: m_LocalPosition.x

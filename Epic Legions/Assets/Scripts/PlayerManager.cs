@@ -63,6 +63,7 @@ public class PlayerManager : MonoBehaviour
             card.Add(cardComponent);
             card[i].SetNewCard(deck[i], duelManager);
             cardComponent.ShowFront(cardComponent.isVisible);
+            cardComponent.ShowCardBorder(false);
         }
 
         if (isPlayer || duelManager.IsSinglePlayer)

@@ -23,4 +23,8 @@ public class Stun : CardEffect
     {
 
     }
+    public string DescriptionText()
+    {
+        return $"Stunned";
+    }
 }

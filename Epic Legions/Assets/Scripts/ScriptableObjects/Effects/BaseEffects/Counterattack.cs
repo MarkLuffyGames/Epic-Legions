@@ -29,4 +29,8 @@ public class Counterattack : CardEffect
     {
         
     }
+    public string DescriptionText()
+    {
+        return $"Counterattack for {amount} damage";
+    }
 }

@@ -36,4 +36,8 @@ public class Poison : CardEffect
             effect.elapsedTurns = 0;
         }
     }
+    public string DescriptionText()
+    {
+        return $"Take {amount} poison damage per turn.";
+    }
 }

@@ -729,6 +729,10 @@ public class DuelManager : NetworkBehaviour
 
     public PlayerManager GetPlayerManagerForCard(Card card)
     {
+        if (card.cardSO is EquipmentCardSO)
+        {
+            card = card.HeroOwner; // Si la carta es un equipo, se obtiene el héroe propietario del equipo
+        }
         // Verifica si el héroe está en el campo del jugador 1
         if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition) || player1Manager.SpellFieldPosition == card.FieldPosition 
             || player1Manager.GetHandCardHandler().GetCardInHandList().Contains(card))

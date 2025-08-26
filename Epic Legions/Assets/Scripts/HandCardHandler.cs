@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,11 +8,35 @@ public class HandCardHandler : MonoBehaviour
 {
     [SerializeField] private List<Card> cardsList = new List<Card>();
     [SerializeField] private float maxDistanceCards = 1.5f;
-    [SerializeField] private bool IsPlayer;
+    [SerializeField] private DuelManager duelManager;
+    [SerializeField] private PlayerManager playerManager;
     [SerializeField] private GameObject hideCardButton;
 
     public bool isHideCards;
 
+    private void Awake()
+    {
+        duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
+        duelManager.OnChangeTurn += DuelManager_OnChangeTurn;
+    }
+    private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
+    {
+        if (!playerManager.isPlayer)
+        {
+            duelManager.duelPhase.OnValueChanged -= OnDuelPhaseChanged;
+            duelManager.OnChangeTurn -= DuelManager_OnChangeTurn;
+            return;
+        }
+
+        if (newValue == DuelPhase.Preparation || newValue == DuelPhase.Battle)
+        {
+            ShowCardBorder();
+        }
+    }
+    private void DuelManager_OnChangeTurn(object sender, EventArgs e)
+    {
+        ShowCardBorder();
+    }
     /// <summary>
     /// Establece las posiciones de las cartas en la mano
     /// </summary>
@@ -19,12 +44,12 @@ public class HandCardHandler : MonoBehaviour
     {
         if (cardsList.Count == 0)
         {
-            if (IsPlayer) hideCardButton.SetActive(false);
+            if (playerManager.isPlayer) hideCardButton.SetActive(false);
             return;
         }
         else
         {
-            if(IsPlayer)hideCardButton.SetActive(!isHideCards);
+            if(playerManager.isPlayer) hideCardButton.SetActive(!isHideCards);
             for (int i = 0; i < cardsList.Count; i++)
             {
                 if(cardsList[i].IsDragging())continue;
@@ -37,11 +62,21 @@ public class HandCardHandler : MonoBehaviour
                 x -= (distance * (cardsList.Count - 1)) / 2f;
                 StartCoroutine(cardsList[i].MoveToPosition(new Vector3(x, i * 0.001f, isHideCards ? -1.1f : 0), Card.cardMovementSpeed, isHideCards ? true : false, true));
 
-                var rotationX = IsPlayer ? 53 : -90;
+                var rotationX = playerManager.isPlayer ? 53 : -90;
                 cardsList[i].RotateToAngle(new Vector3(rotationX, 0, 0), Card.cardMovementSpeed, false);
 
                 cardsList[i].SetSortingOrder(i + 100);
+
+                ShowCardBorder();
             }
+        }
+    }
+
+    private void ShowCardBorder()
+    {
+        foreach (Card card in cardsList)
+        {
+            card.ShowCardBorder(playerManager.isPlayer && card.UsableCard(playerManager));
         }
     }
 
@@ -53,7 +88,7 @@ public class HandCardHandler : MonoBehaviour
     {
         cardsList.Add(card);
         card.transform.parent = transform;
-        if(IsPlayer)card.isVisible = true;
+        if(playerManager.isPlayer) card.isVisible = true;
         Invoke("SetCardsPosition", 0.2f);
         //SetCardsPosition();
     }
@@ -64,6 +99,7 @@ public class HandCardHandler : MonoBehaviour
     /// <param name="card">Carta que se quiere quitar</param>
     public void QuitCard(Card card)
     {
+        card.ShowCardBorder(false);
         cardsList.Remove(card);
         SetCardsPosition();
     }

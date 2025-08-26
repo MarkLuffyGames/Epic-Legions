@@ -24,5 +24,10 @@ public class FullDamageReflection : CardEffect
     public override void UpdateEffect(Effect effect)
     {
         effect.durability--;
+        effect.SetEffectDescription(DescriptionText(effect));
+    }
+    public string DescriptionText(Effect effect)
+    {
+        return $"Reflect all damage received for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}.";
     }
 }
