@@ -12,4 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0756b474481c9c14b9eec580579fed49, type: 3}
   m_Name: Recharge
   m_EditorClassIdentifier: 
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   amount: 10
+  duration: 0.5
+  archHeight: 1.5
+  particlePrefab: {fileID: 8283537605138782889, guid: 3e376ce9f09ebb844a1d19189bc49f72, type: 3}
+  sparkPrefab: {fileID: 8328595195474014645, guid: 9e10cf7facc9f7d45ae9a6dc7cb9c753, type: 3}

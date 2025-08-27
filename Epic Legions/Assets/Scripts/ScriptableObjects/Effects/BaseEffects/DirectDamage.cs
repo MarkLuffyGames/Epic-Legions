@@ -8,7 +8,7 @@ public class DirectDamage : CardEffect
     public override void ActivateEffect(Card caster, Card target)
     {
         Debug.Log("Activado");
-        caster.GetDuelManager().GetOpposingPlayerManager(caster.GetDuelManager().GetPlayerManagerForCard(caster)).ReceiveDamage(amount);
+        caster.DuelManager.GetOpposingPlayerManager(caster.DuelManager.GetPlayerManagerForCard(caster)).ReceiveDamage(amount);
     }
 
     public override void ActivateEffect(Card caster, List<Card> target)

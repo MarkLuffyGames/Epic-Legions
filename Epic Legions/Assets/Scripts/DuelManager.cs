@@ -88,9 +88,6 @@ public class DuelManager : NetworkBehaviour
     {
         UpdateDuelPhaseText();
 
-        player1Manager.isReady = false;
-        player2Manager.isReady = false;
-
         if (newPhase == DuelPhase.PreparingDuel)
         {
             SetDecks();
@@ -479,6 +476,8 @@ public class DuelManager : NetworkBehaviour
         
         if(player1Manager.isReady && player2Manager.isReady)
         {
+            player1Manager.isReady = false;
+            player2Manager.isReady = false;
             ChangePhase();
         }
     }

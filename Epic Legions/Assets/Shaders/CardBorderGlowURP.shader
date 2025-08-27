@@ -2,6 +2,9 @@ Shader "Hemera/CardBorderGlowURP"
 {
     Properties
     {
+        // Dummy para evitar errores en UI.Image / RawImage
+        _MainTex ("UI MainTex (unused)", 2D) = "white" {}
+
         _MaskTex    ("Border Mask", 2D) = "white" {}
         _NoiseTex   ("Flow Noise", 2D) = "gray" {}
         _RampTex    ("Glow Ramp (U)", 2D) = "white" {}
@@ -35,11 +38,15 @@ Shader "Hemera/CardBorderGlowURP"
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
+            // Dummy MainTex (nunca lo usamos pero Unity UI lo busca)
+            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+
             TEXTURE2D(_MaskTex);  SAMPLER(sampler_MaskTex);
             TEXTURE2D(_NoiseTex); SAMPLER(sampler_NoiseTex);
             TEXTURE2D(_RampTex);  SAMPLER(sampler_RampTex);
 
             CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST; // Dummy para RawImage/UI
                 float4 _MaskTex_ST;
                 float4 _NoiseTex_ST;
                 float4 _RampTex_ST;
@@ -77,7 +84,6 @@ Shader "Hemera/CardBorderGlowURP"
 
             float2 expand_uv(float2 uv, float expandAmount)
             {
-                // scale around center (0.5,0.5) to "inflate" the mask
                 return (uv - 0.5) * (1.0 - expandAmount) + 0.5;
             }
 
@@ -101,7 +107,7 @@ Shader "Hemera/CardBorderGlowURP"
                 float2 uvMask = expand_uv(uvDist, _Expand);
                 float mask = SAMPLE_TEXTURE2D(_MaskTex, sampler_MaskTex, uvMask).r;
 
-                // Ramp (grayscale) para controlar la intensidad
+                // Ramp
                 float ramp = SAMPLE_TEXTURE2D(_RampTex, sampler_RampTex, float2(flow, 0.0)).r;
 
                 // Pulse

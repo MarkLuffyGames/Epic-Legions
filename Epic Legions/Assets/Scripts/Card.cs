@@ -59,6 +59,8 @@ public class Card : MonoBehaviour
     private bool isMoving;
     private int sortingOrder;
     public static int cardMovementSpeed = 20;
+
+
     [RuntimeInitializeOnLoadMethod]
     private static void InitializeOnLoad()
     {
@@ -119,7 +121,7 @@ public class Card : MonoBehaviour
         this.cardSO = cardSO;
         this.duelManager = duelManager;
 
-        var cardImage = cardBorder.GetComponentInChildren<Image>();
+        var cardImage = cardBorder.GetComponentInChildren<RawImage>();
         borderMaterial =  new Material(cardImage.material);
         cardImage.material = borderMaterial;
 
@@ -1270,8 +1272,6 @@ public class Card : MonoBehaviour
         ReceivePoisonDamage(amount);
         ActivateVisualEffects();
     }
-
-    public DuelManager GetDuelManager() { return duelManager; }
 
     public IEnumerator Counter(Card card)
     {

@@ -72,11 +72,11 @@ public class HandCardHandler : MonoBehaviour
         }
     }
 
-    private void ShowCardBorder()
+    private void ShowCardBorder(bool show = true)
     {
         foreach (Card card in cardsList)
         {
-            card.ShowCardBorder(playerManager.isPlayer && card.UsableCard(playerManager));
+            card.ShowCardBorder(playerManager.isPlayer && card.UsableCard(playerManager) && show && !playerManager.isReady);
         }
     }
 
@@ -159,6 +159,7 @@ public class HandCardHandler : MonoBehaviour
             isHideCards = true;
 
             SetCardsPosition();
+            ShowCardBorder(false);
         }
     }
 
