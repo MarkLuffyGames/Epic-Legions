@@ -9,9 +9,11 @@ public class ParasiteSeed : CardEffect
     private Card caster;
 
     public Card Caster => caster;
+    public int Amount => amount;
     public int NumberTurns => numberTurns * DuelManager.NumberOfTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
+        this.caster = caster;
         target.AddEffect(new Effect(this, target));
     }
 

@@ -14,16 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Muro de Piedra
   damage: 0
-  energyCost: 15
+  energyCost: 20
   moveEffect: {fileID: 11400000, guid: eec7afefde9565540abd19d681a55f03, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  targetsCondition: {fileID: 0}
-  alwaysActive: 0
-  needTarget: 1
+  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  needTarget: 0
   onMyself: 0
   moveType: 2
   targetsType: 1
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Una barrera s\xF3lida que protege a los aliados absorviendo
-    20 de da\xF1o durante 3 turnos."
+  effectDescription: "Una barrera s\xF3lida que protege a los aliados en su misma
+    linea absorviendo 20 de da\xF1o durante 3 turnos."

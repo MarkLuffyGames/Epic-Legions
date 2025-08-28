@@ -223,7 +223,7 @@ public class Card : MonoBehaviour
         move1EnergyCostText.text = movement.MoveSO.EnergyCost.ToString();
         move1DamageText.text = movement.MoveSO.Damage.ToString();
         move1DescriptionText.text = movement.MoveSO.EffectDescription;
-        if (movement.MoveSO.Damage == 0)
+        if (movement.MoveSO.Damage < 1)
         {
             move1DamageText.enabled = false;
             move1DamageImage.enabled = false;
@@ -236,7 +236,7 @@ public class Card : MonoBehaviour
         move2EnergyCostText.text = movement.MoveSO.EnergyCost.ToString();
         move2DamageText.text = movement.MoveSO.Damage.ToString();
         move2DescriptionText.text = movement.MoveSO.EffectDescription;
-        if (movement.MoveSO.Damage == 0)
+        if (movement.MoveSO.Damage < 1)
         {
             move2DamageText.enabled = false;
             move2DamageImage.enabled = false;
@@ -1377,6 +1377,8 @@ public class Card : MonoBehaviour
     public int GetAttackModifier()
     {
         int attackModifier = 0;
+
+        if(statModifier == null) return attackModifier;
 
         foreach (Effect effect in statModifier)
         {

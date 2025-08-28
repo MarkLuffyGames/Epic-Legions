@@ -18,6 +18,7 @@ public class SampleCard : MonoBehaviour
     {
         foreach (var card in cards)
         {
+            card.CleanCard();
             card.gameObject.SetActive(false);
         }
     }
@@ -147,6 +148,7 @@ public class SampleCard : MonoBehaviour
             }
             else
             {
+                cards[GetCardInPosition(positions[3])].CleanCard();
                 cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
             }
         }
@@ -177,6 +179,7 @@ public class SampleCard : MonoBehaviour
             }
             else
             {
+                cards[GetCardInPosition(positions[3])].CleanCard();
                 cards[GetCardInPosition(positions[3])].gameObject.SetActive(false);
             }
         }
@@ -200,6 +203,7 @@ public class SampleCard : MonoBehaviour
         if (card != null)
         {
             cardToSet.gameObject.SetActive(true);
+            cardToSet.CleanCard();
             SetCard(cardToSet, cardToCopy, cardToCopy.DuelManager);
             cardToSet.transform.localScale = Vector3.one;
             cardToSet.transform.localPosition = positions[positionIndex];
@@ -221,6 +225,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[2];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -234,6 +239,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[0];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -246,6 +252,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[3];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -258,6 +265,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[1];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -275,6 +283,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[1];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -287,6 +296,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[3];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -300,6 +310,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[0];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }
@@ -312,6 +323,7 @@ public class SampleCard : MonoBehaviour
             else
             {
                 card.transform.localPosition = positions[2];
+                card.CleanCard();
                 card.gameObject.SetActive(false);
             }
         }

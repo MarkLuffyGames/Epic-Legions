@@ -111,6 +111,7 @@ public class Effect
         {
             casterHero = parasiteSeed.Caster;
             durability = parasiteSeed.NumberTurns;
+            amount = parasiteSeed.Amount;
             isNegative = true;
             effectDescription = parasiteSeed.DescriptionText(this);
         }
