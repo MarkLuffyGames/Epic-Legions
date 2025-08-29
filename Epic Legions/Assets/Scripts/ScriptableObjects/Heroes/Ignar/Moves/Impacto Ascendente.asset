@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: Impacto Ascendente
   damage: 25
   energyCost: 15
+  element: 1
   moveEffect: {fileID: 11400000, guid: 8492e7280f8578342aba425f1f2ed99d, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}

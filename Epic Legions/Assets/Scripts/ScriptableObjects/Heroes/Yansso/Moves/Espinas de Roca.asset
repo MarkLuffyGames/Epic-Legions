@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: Espinas de Roca
   damage: 20
   energyCost: 10
+  element: 4
   moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
   effectCondition: {fileID: 11400000, guid: d23d390840908954aacf94b6e82fc5e8, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 0}
   needTarget: 1
+  onMyself: 0
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}

@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: Descenso Celestial
   damage: 30
   energyCost: 15
+  element: 6
   moveEffect: {fileID: 11400000, guid: 2a708e632d2bbca43889564efc055308, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}

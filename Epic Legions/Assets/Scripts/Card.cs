@@ -213,6 +213,8 @@ public class Card : MonoBehaviour
             
             ActivateMoveText2(false);
             ActivateHeroStats(false);
+
+            elementIcon.enabled = true;
             description.text = equipmentCardSO.Description;
         }
     }
@@ -849,7 +851,8 @@ public class Card : MonoBehaviour
 
         if(movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
         {
-            yield return MoveToPosition(lastPosition + Vector3.back, cardMovementSpeed, true, true);
+            if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect,
+                transform.position + Vector3.up, Quaternion.Euler(Vector3.zero));
         }
         else
         {
@@ -1495,7 +1498,7 @@ public class Card : MonoBehaviour
     {
         HeroCardSO HCSO = cardSO as HeroCardSO;
 
-        return equipmentCard.SupportedClasses.Contains(HCSO.HeroClass) && !IsEquipped(equipmentCard.EquipmentType); // La carta a queipar es compatible con el heroe y no esta equipada ya otra carta del mismo tipo
+        return equipmentCard.SupportedClasses.Contains(HCSO.HeroClass) && !IsEquipped(equipmentCard.EquipmentType); // La carta a equipar es compatible con el heroe y no esta equipada ya otra carta del mismo tipo
     }
 
     public void ActivatePassiveSkills(PassiveSkillActivationPhase passiveSkillActivationPhase)
@@ -1516,7 +1519,8 @@ public class Card : MonoBehaviour
         }
     }
 
-    public bool IsEquipped(EquipmentType equipmentType)
+
+    public EquipmentCardSO IsEquipped(EquipmentType equipmentType)
     {
         foreach (var item in equipmentCard)
         {
@@ -1524,12 +1528,23 @@ public class Card : MonoBehaviour
             {
                 if (equipmentCardSO.EquipmentType == equipmentType)
                 {
-                    return true;
+                    return equipmentCardSO;
                 }
             }
         }
 
-        return false;
+        return null;
+    }
+
+    public CardElement GetElement()
+    {
+        var equipedCard = IsEquipped(EquipmentType.Armor);
+        if (equipedCard)
+        {
+            return equipedCard.CardElemnt;
+        }
+
+        return cardSO.CardElemnt;
     }
 }
 

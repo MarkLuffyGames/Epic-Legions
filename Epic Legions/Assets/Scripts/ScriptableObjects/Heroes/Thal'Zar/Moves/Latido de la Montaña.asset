@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: "Latido de la Monta\xF1a"
   damage: 35
   energyCost: 20
+  element: 4
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 0}
   needTarget: 0
+  onMyself: 0
   moveType: 1
   targetsType: 2
   visualEffect: {fileID: 0}

@@ -16,8 +16,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerManager rivalPlayerManager;
     [SerializeField] private GameObject nextPhaseButton;
     [SerializeField] private GameObject waitTextGameObject;
-    [SerializeField] private TextMeshProUGUI playerHealtText;
-    [SerializeField] private TextMeshProUGUI playerEnergyText;
+    [SerializeField] private PlayerDuelUI playerDuelUI;
 
     private int playerHealt;
     private int playerEnergy;
@@ -316,8 +315,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void UpdateUI()
     {
-        playerHealtText.text = $"{playerHealt}";
-        playerEnergyText.text = $"{playerEnergy}";
+        playerDuelUI.UpdateUI(playerHealt, playerEnergy);
     }
 
     public bool ReceiveDamage(int damage)

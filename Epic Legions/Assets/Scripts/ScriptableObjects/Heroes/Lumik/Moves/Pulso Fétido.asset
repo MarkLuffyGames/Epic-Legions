@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: "Pulso F\xE9tido"
   damage: 20
   energyCost: 10
+  element: 8
   moveEffect: {fileID: 11400000, guid: 2c003f1c5a2423e4b87e4bf6ad6a5fa0, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}

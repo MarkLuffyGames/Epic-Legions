@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: Corte Solar
   damage: 30
   energyCost: 10
+  element: 7
   moveEffect: {fileID: 11400000, guid: 384cb772cce81654580ad2fd3cefa779, type: 2}
   effectCondition: {fileID: 11400000, guid: 0220f26f2b8cc8148aa9e1b02991b9a2, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

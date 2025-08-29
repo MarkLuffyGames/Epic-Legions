@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: "Fuerza Volc\xE1nica"
   damage: 35
   energyCost: 30
+  element: 1
   moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
   effectCondition: {fileID: 11400000, guid: d23d390840908954aacf94b6e82fc5e8, type: 2}
   targetsCondition: {fileID: 0}

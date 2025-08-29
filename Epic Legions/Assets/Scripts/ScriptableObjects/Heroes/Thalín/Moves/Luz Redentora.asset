@@ -15,10 +15,10 @@ MonoBehaviour:
   moveName: Luz Redentora
   damage: 0
   energyCost: 10
+  element: 7
   moveEffect: {fileID: 11400000, guid: efbbdc338fa803446bd0db920cb8e5af, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
-  alwaysActive: 0
   needTarget: 1
   onMyself: 0
   moveType: 2

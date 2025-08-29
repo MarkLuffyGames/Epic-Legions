@@ -15,10 +15,10 @@ MonoBehaviour:
   moveName: Corte de Aire
   damage: -1
   energyCost: 10
+  element: 6
   moveEffect: {fileID: 11400000, guid: 2effe30549329d34c9a1b03000fb62fd, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 1
   needTarget: 1
   onMyself: 0
   moveType: 1

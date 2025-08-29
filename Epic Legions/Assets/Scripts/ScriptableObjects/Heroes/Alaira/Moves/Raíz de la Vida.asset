@@ -15,10 +15,10 @@ MonoBehaviour:
   moveName: "Ra\xEDz de la Vida"
   damage: 0
   energyCost: 50
+  element: 3
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 0}
   targetsCondition: {fileID: 0}
-  alwaysActive: 0
   needTarget: 0
   onMyself: 0
   moveType: 2

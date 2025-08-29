@@ -322,11 +322,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: e4cfc00fc1a1fc742a966799fa114b4c, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -676,6 +676,10 @@ MonoBehaviour:
   duelManager: {fileID: 1328336599689875757}
   isReady: {fileID: 1075954333174351733}
   isPlayer: 0
+  playerHealtText: {fileID: 9097073174477908043}
+  playerEnergyText: {fileID: 926718695717193241}
+  healtBar: {fileID: 4482023511440732949}
+  energytBar: {fileID: 3433123943945823607}
 --- !u!1 &1075954333174351733
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2675592557
+  GlobalObjectIdHash: 2862535368
   InScenePlacedSourceGlobalObjectIdHash: 2675592557
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1815,7 +1819,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000091552734}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2523071081423728324
@@ -1959,11 +1963,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: e4cfc00fc1a1fc742a966799fa114b4c, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -2474,8 +2478,7 @@ MonoBehaviour:
   rivalPlayerManager: {fileID: 7240668214990470102}
   nextPhaseButton: {fileID: 0}
   waitTextGameObject: {fileID: 0}
-  playerHealtText: {fileID: 9097073174477908043}
-  playerEnergyText: {fileID: 926718695717193241}
+  playerDuelUI: {fileID: 636671341881954379}
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
   isReady: 0
   isPlayer: 0
@@ -2706,8 +2709,7 @@ MonoBehaviour:
   rivalPlayerManager: {fileID: 6511605509360802617}
   nextPhaseButton: {fileID: 1810634410124334763}
   waitTextGameObject: {fileID: 4114043887252851380}
-  playerHealtText: {fileID: 6559516330479722163}
-  playerEnergyText: {fileID: 3737172893370178585}
+  playerDuelUI: {fileID: 1072447034699925666}
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
   isReady: 0
   isPlayer: 1
@@ -3895,11 +3897,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: e4cfc00fc1a1fc742a966799fa114b4c, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -4106,11 +4108,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: e4cfc00fc1a1fc742a966799fa114b4c, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -4582,6 +4584,10 @@ MonoBehaviour:
   duelManager: {fileID: 1328336599689875757}
   isReady: {fileID: 6138172312202970770}
   isPlayer: 1
+  playerHealtText: {fileID: 6559516330479722163}
+  playerEnergyText: {fileID: 3737172893370178585}
+  healtBar: {fileID: 6495043085251793381}
+  energytBar: {fileID: 6611699265921669731}
 --- !u!1 &8639808629920520717
 GameObject:
   m_ObjectHideFlags: 0

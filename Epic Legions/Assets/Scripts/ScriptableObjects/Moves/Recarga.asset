@@ -22,6 +22,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 7761031033666763820, guid: 1eb833340b41fb444b576c4dced8d4dc, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: 

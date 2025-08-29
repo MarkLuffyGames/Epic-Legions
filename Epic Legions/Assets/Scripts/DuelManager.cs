@@ -1422,9 +1422,6 @@ public class DuelManager : NetworkBehaviour
         // Inicia la animación de ataque.
         yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
-        // Espera un breve tiempo antes de continuar.
-        yield return new WaitForSeconds(0.3f);
-
         // Si el ataque causa daño, se aplica a la carta objetivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
         {
@@ -1476,9 +1473,6 @@ public class DuelManager : NetworkBehaviour
             }
 
             attackerCard.lastDamageInflicted = 0;
-
-            // Espera un breve momento para completar la animación.
-            yield return new WaitForSeconds(1);
         }
 
         // Restaura la posición de la carta atacante luego del movimiento.
@@ -1521,6 +1515,7 @@ public class DuelManager : NetworkBehaviour
         int damage = attackerCard.Moves[movementToUseIndex].MoveSO.Damage;
         damage += attackerCard.GetAttackModifier(); // Añade el bono de ataque del héroe, si lo tiene.
         damage += attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IncreaseAttackDamage attackModifier ? attackModifier.Amount : 0; // Añade el modificador de ataque del movimiento, si lo tiene.
+        damage += CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
 
         return damage;
     }

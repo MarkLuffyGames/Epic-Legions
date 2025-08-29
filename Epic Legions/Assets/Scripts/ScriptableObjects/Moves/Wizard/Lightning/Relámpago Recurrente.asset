@@ -15,10 +15,10 @@ MonoBehaviour:
   moveName: "Rel\xE1mpago Recurrente"
   damage: 25
   energyCost: 10
+  element: 5
   moveEffect: {fileID: 11400000, guid: 43971a6313ddf85498209bf7e65bbc1a, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
   needTarget: 1
   onMyself: 0
   moveType: 1

@@ -37,4 +37,23 @@ public class CardSO : ScriptableObject
         }
     }
 #endif
+
+    private static readonly int[,] typeChart =
+    {
+        //         NON FIR WAT GRA GRO ELE WIN LIG DAR 
+        /* NON */ {  0,  0,  0,  0,  0,  0,  0,  0,  0},
+        /* FIR */ {  0,  0,-20, 20,  0,  0,  0,  0,  0},
+        /* WAT */ {  0, 20,  0,-20,  0,  0,  0,  0,  0},
+        /* GRA */ {  0,-20, 20,  0,  0,  0,  0,  0,  0},
+        /* GRO */ {  0,  0,  0,  0,  0, 20,-20,  0,  0},
+        /* ELE */ {  0,  0,  0,  0,-20,  0, 20,  0,  0},
+        /* WIN */ {  0,  0,  0,  0, 20,-20,  0,  0,  0},
+        /* LIG */ {  0,  0,  0,  0,  0,  0,  0,  0, 20},
+        /* DAR */ {  0,  0,  0,  0,  0,  0,  0, 20,  0},
+    };
+
+    public static int GetEffectiveness(CardElement attacker, CardElement defender)
+    {
+        return typeChart[(int)attacker, (int)defender];
+    }
 }

@@ -15,6 +15,7 @@ MonoBehaviour:
   moveName: Corriente Acelerada
   damage: 20
   energyCost: 10
+  element: 2
   moveEffect: {fileID: 11400000, guid: f8c8cc14b89489f4888966d3efec0bd2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}

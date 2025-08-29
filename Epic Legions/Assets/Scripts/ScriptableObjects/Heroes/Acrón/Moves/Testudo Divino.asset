@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: Testudo Divino
   damage: 0
   energyCost: 10
+  element: 7
   moveEffect: {fileID: 11400000, guid: de8e8f3968ff3544da45295b9abeb9e0, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 0}
   needTarget: 0
+  onMyself: 0
   moveType: 2
   targetsType: 1
   visualEffect: {fileID: 676203148132386820, guid: be87b79a8b3898647853b8caf52d5f78, type: 3}

@@ -15,10 +15,10 @@ MonoBehaviour:
   moveName: Disparo Preciso
   damage: 25
   energyCost: 10
+  element: 7
   moveEffect: {fileID: 11400000, guid: a96b6949253b99144bb3a4d509d6015c, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 1
   needTarget: 1
   onMyself: 0
   moveType: 1

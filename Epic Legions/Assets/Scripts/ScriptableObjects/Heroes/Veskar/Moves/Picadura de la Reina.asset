@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: Picadura de la Reina
   damage: 30
   energyCost: 15
+  element: 3
   moveEffect: {fileID: 11400000, guid: 0b7b2c5e450f1ce4b8b76df18c779c08, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 0}
   needTarget: 1
+  onMyself: 0
   moveType: 3
   targetsType: 0
   visualEffect: {fileID: 0}

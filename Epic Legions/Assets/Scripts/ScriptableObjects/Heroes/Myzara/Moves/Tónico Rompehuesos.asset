@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: "T\xF3nico Rompehuesos"
   damage: 20
   energyCost: 10
+  element: 1
   moveEffect: {fileID: 11400000, guid: 4f6dbf23164b3994fa64cdec711a5e0e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 0}
   needTarget: 1
+  onMyself: 0
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}

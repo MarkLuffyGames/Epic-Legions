@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: Golpe Escudado
   damage: 25
   energyCost: 15
+  element: 7
   moveEffect: {fileID: 11400000, guid: 190b3caee139b0e45bf4398d584daf03, type: 2}
   effectCondition: {fileID: 11400000, guid: d23d390840908954aacf94b6e82fc5e8, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 0}
   needTarget: 1
+  onMyself: 0
   moveType: 0
   targetsType: 0
   visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}

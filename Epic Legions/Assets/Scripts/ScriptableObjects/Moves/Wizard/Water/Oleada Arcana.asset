@@ -15,10 +15,10 @@ MonoBehaviour:
   moveName: Oleada Arcana
   damage: 20
   energyCost: 10
+  element: 2
   moveEffect: {fileID: 11400000, guid: 80ea3db986bf12b49b85f1eba75021bc, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
   needTarget: 1
   onMyself: 0
   moveType: 1

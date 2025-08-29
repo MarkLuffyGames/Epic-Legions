@@ -7,6 +7,7 @@ public class MoveSO : ScriptableObject
     [SerializeField] private string moveName;
     [SerializeField] private int damage;
     [SerializeField] private int energyCost;
+    [SerializeField] private CardElement element;
     [SerializeField] private CardEffect moveEffect;
     [SerializeField] private Condition effectCondition;
     [SerializeField] private Condition targetsCondition;
@@ -21,6 +22,7 @@ public class MoveSO : ScriptableObject
     public string MoveName => moveName;
     public int Damage => damage;
     public int EnergyCost => energyCost;
+    public CardElement Element => element;
     public CardEffect MoveEffect => moveEffect;
     public Condition EffectCondition => effectCondition;
     public Condition TargetsCondition => targetsCondition;
