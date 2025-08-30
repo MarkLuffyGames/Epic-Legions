@@ -18,11 +18,11 @@ MonoBehaviour:
   element: 1
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  targetsCondition: {fileID: 0}
+  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 0
   onMyself: 0
   moveType: 1
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 2212644222100735201, guid: 95275e8de7edf8f48a651550a9ac40d3, type: 3}
   effectDescription: "Desata una tormenta ardiente que da\xF1a a todos los enemigos."

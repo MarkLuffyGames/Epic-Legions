@@ -31,8 +31,6 @@ public class DuelManager : NetworkBehaviour
     [SerializeField] private EndDuelUI endDuelUI;
     [SerializeField] private int energyGainedPerTurn = 20;
 
-    [SerializeField] private int[] deckCardIds;
-
     private Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
     private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
 
@@ -208,7 +206,7 @@ public class DuelManager : NetworkBehaviour
         }
         else
         {
-            ReceiveAndStoreDeckServerRpc(NetworkManager.Singleton.LocalClientId, deckCardIds);
+            ReceiveAndStoreDeckServerRpc(NetworkManager.Singleton.LocalClientId, Loader.player1deckCardIds.ToArray());
         }
     }
 
@@ -221,11 +219,6 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ReceiveAndStoreDeckServerRpc(ulong clientId, int[] deckCardIds)
     {
-        deckCardIds = new int[40];
-        for (int i = 0; i < 40; i++)
-        {
-            deckCardIds[i] = CardDatabase.GetRandomCards();
-        }
         // Validar si el mazo es válido
         if (deckCardIds == null || deckCardIds.Length == 0)
         {
@@ -1419,8 +1412,7 @@ public class DuelManager : NetworkBehaviour
         // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.EndTurn();
 
-        // Inicia la animación de ataque.
-        yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
+        
 
         // Si el ataque causa daño, se aplica a la carta objetivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
@@ -1428,6 +1420,9 @@ public class DuelManager : NetworkBehaviour
             // Animación de daño para un objetivo único.
             if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
+                // Inicia la animación de ataque.
+                yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
+
                 cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
@@ -1440,13 +1435,15 @@ public class DuelManager : NetworkBehaviour
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
                 foreach (var card in targets)
                 {
+                    // Inicia la animación de ataque.
+                    yield return attackerCard.AttackAnimation(player, card, attackerCard.Moves[movementToUseIndex]);
                     card.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
                 }
 
                 foreach (var card in targets)
                 {
                     // Aplica el daño a todos los objetivos.
-                    attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
+                    attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, card),
                         attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
                 }
             }

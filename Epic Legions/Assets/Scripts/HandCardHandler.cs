@@ -76,7 +76,7 @@ public class HandCardHandler : MonoBehaviour
     {
         foreach (Card card in cardsList)
         {
-            card.ShowCardBorder(playerManager.isPlayer && card.UsableCard(playerManager) && show && !playerManager.isReady);
+            card.ShowCardBorder(show && playerManager.isPlayer && !playerManager.isReady && card.UsableCard(playerManager));
         }
     }
 

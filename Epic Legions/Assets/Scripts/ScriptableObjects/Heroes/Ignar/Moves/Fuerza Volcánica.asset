@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
-  visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
+  visualEffect: {fileID: 5942177893964023165, guid: 438c0b7b02dcafa4996592b62d22671f, type: 3}
+  visualEffectHit: {fileID: 5234300454871195321, guid: 6f8783ce4d86e7046bc62dc10ffdbbf7, type: 3}
   effectDescription: Un golpe devastador que puede aturdir si rompe la defensa del
     objetivo.

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -35,9 +36,16 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
+        duelManager.OnPlayerNotReady += DuelManager_OnPlayerNotReady;
         SetPlayerHealt(100);
         SetPlayerEnergy(100);
     }
+
+    private void DuelManager_OnPlayerNotReady(object sender, EventArgs e)
+    {
+        isReady = false;
+    }
+
     public void AddCardToPlayerDeck(CardSO cardSO, int numberOfCards)
     {
         deck.Add(cardSO);

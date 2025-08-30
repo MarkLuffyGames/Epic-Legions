@@ -54,6 +54,7 @@ public class CardSO : ScriptableObject
 
     public static int GetEffectiveness(CardElement attacker, CardElement defender)
     {
+        Debug.Log($"Attacker: {attacker}, Defender: {defender}, Effectiveness: {typeChart[(int)attacker, (int)defender]}");
         return typeChart[(int)attacker, (int)defender];
     }
 }

@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 1435070486616384899, guid: dc271cdeddd897d47b55b968f7cd24e7, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: Aumenta el poder de ataque del usuario en 20 durante 2 turnos.

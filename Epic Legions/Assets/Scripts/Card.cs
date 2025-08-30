@@ -851,8 +851,7 @@ public class Card : MonoBehaviour
 
         if(movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
         {
-            if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect,
-                transform.position + Vector3.up, Quaternion.Euler(Vector3.zero));
+            yield return Atttack(false, cardToAttack.transform.position, Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffectHit, 1);
         }
         else
         {
@@ -862,26 +861,30 @@ public class Card : MonoBehaviour
                 {
                     if (player == 1)
                     {
-                        yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed, true, false);
-                        if(movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
+                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
+                            Vector3.forward + Vector3.up * 0.1f,
+                            Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 1);
                     }
                     else
                     {
-                        yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed, true, false);
-                        if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
+                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
+                            Vector3.back + Vector3.up * 0.1f,
+                            Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 1);
                     }
                 }
                 else
                 {
                     if (player == 1)
                     {
-                        yield return MoveToPosition(cardToAttack.transform.position + new Vector3(0, 0.5f, 3), cardMovementSpeed * 10, true, false);
-                        if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward + Vector3.up * 0.1f, Quaternion.Euler(new Vector3(0, 180, 0)));
+                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
+                            Vector3.forward + Vector3.up * 0.1f,
+                            Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 10);
                     }
                     else
                     {
-                        yield return MoveToPosition(cardToAttack.gameObject.transform.position + new Vector3(0, 0.5f, -3), cardMovementSpeed * 10, true, false);
-                        if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back + Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero));
+                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
+                            Vector3.back + Vector3.up * 0.1f,
+                            Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 10);
                     }
                 }
                 
@@ -890,16 +893,32 @@ public class Card : MonoBehaviour
             {
                 if (player == 1)
                 {
-                    yield return MoveToPosition(new Vector3(0, 0.5f, 5), cardMovementSpeed, true, false);
-                    if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.forward, Quaternion.Euler(Vector3.zero));
+                    yield return Atttack(true, new Vector3(0, 0.5f, 5),
+                            Vector3.forward + Vector3.up * 0.1f,
+                            Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 1);
                 }
                 else
                 {
+                    yield return Atttack(true, new Vector3(0, 0.5f, -5),
+                            Vector3.back + Vector3.up * 0.1f,
+                            Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 1);
+
                     yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
                     if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
                 }
             }
         }
+    }
+
+    private IEnumerator Atttack(bool isMelee, Vector3 targetPosition, Vector3 effectPosition, Quaternion effectRotation, GameObject visualEffect, int speedMultiplier)
+    {
+        if(isMelee) yield return MoveToPosition(targetPosition, cardMovementSpeed * speedMultiplier, true, false);
+        yield return new WaitForSeconds(0.2f);
+
+        if (visualEffect == null) yield break;
+
+        var particle = Instantiate(visualEffect, isMelee ? transform.position + effectPosition : targetPosition + effectPosition, effectRotation);
+        yield return new WaitForSeconds(particle.GetComponent<ParticleSystem>().main.duration);
     }
 
     /// <summary>
@@ -908,12 +927,6 @@ public class Card : MonoBehaviour
     /// <param name="movement"></param>
     public void AnimationReceivingMovement(Movement movement)
     {
-        //Efecto de daño.
-        if (movement.MoveSO.VisualEffectHit != null)
-        {
-            Instantiate(movement.MoveSO.VisualEffectHit, transform.position, Quaternion.identity);
-        }
-
         var protector = HasProtector();
         if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)
         {
@@ -1538,6 +1551,7 @@ public class Card : MonoBehaviour
 
     public CardElement GetElement()
     {
+        Debug.Log(cardSO.CardElemnt);
         var equipedCard = IsEquipped(EquipmentType.Armor);
         if (equipedCard)
         {
