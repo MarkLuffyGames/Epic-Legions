@@ -1412,7 +1412,9 @@ public class DuelManager : NetworkBehaviour
         // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.EndTurn();
 
-        
+
+        // Inicia la animación de ataque.
+        yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
         // Si el ataque causa daño, se aplica a la carta objetivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
@@ -1420,10 +1422,7 @@ public class DuelManager : NetworkBehaviour
             // Animación de daño para un objetivo único.
             if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
-                // Inicia la animación de ataque.
-                yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
-
-                cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+                yield return cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
                 attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
@@ -1433,11 +1432,16 @@ public class DuelManager : NetworkBehaviour
             {
                 // Si el ataque tiene múltiples objetivos, obtiene todos los objetivos y aplica el daño.
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
-                foreach (var card in targets)
+                for (var i = 0; i < targets.Count; i++)
                 {
-                    // Inicia la animación de ataque.
-                    yield return attackerCard.AttackAnimation(player, card, attackerCard.Moves[movementToUseIndex]);
-                    card.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+                    if (targets[i] == targets[targets.Count - 1])
+                    {
+                        yield return targets[i].AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+                    }
+                    else
+                    {
+                        StartCoroutine(targets[i].AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]));
+                    }
                 }
 
                 foreach (var card in targets)
@@ -1459,13 +1463,21 @@ public class DuelManager : NetworkBehaviour
             // Animación de efecto para un solo objetivo o varios, dependiendo del tipo de movimiento.
             if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
             {
-                cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+                yield return cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
             }
             else
             {
-                foreach (var card in GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex))
+                var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
+                for (var i = 0; i < targets.Count; i++)
                 {
-                    card.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+                    if(targets[i] == targets[targets.Count - 1])
+                    {
+                        yield return targets[i].AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
+                    }
+                    else
+                    {
+                        StartCoroutine(targets[i].AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]));
+                    }
                 }
             }
 
@@ -1512,7 +1524,7 @@ public class DuelManager : NetworkBehaviour
         int damage = attackerCard.Moves[movementToUseIndex].MoveSO.Damage;
         damage += attackerCard.GetAttackModifier(); // Añade el bono de ataque del héroe, si lo tiene.
         damage += attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IncreaseAttackDamage attackModifier ? attackModifier.Amount : 0; // Añade el modificador de ataque del movimiento, si lo tiene.
-        damage += CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
+        if(cardToAttack != null) damage += CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
 
         return damage;
     }

@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 2
   targetsType: 2
-  visualEffect: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
-  visualEffectHit: {fileID: 0}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
   effectDescription: "Invoca la esencia m\xE1s pura de la naturaleza, restaurando
     toda la vida de todos los aliados."

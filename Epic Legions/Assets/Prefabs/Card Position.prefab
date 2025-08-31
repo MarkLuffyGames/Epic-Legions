@@ -131,6 +131,7 @@ MonoBehaviour:
   positionIndex: 0
   objRenderer: {fileID: 9159041310725063233}
   intensity: 2
+  cardSetEffect: {fileID: 3351778568062321757, guid: e8459e0a14644be4bb7ee8045b23fd0a, type: 3}
 --- !u!1001 &7571513841479321900
 PrefabInstance:
   m_ObjectHideFlags: 0

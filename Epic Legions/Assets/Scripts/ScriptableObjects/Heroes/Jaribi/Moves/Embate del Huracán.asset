@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 1
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6499939531436011285, guid: 9cfca7654d8403340a0622f8e4e2879d, type: 3}
   effectDescription: Un torbellino de viento golpea a todos los enemigos en la misma
     fila.

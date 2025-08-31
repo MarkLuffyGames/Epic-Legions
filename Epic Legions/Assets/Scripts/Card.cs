@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class Card : MonoBehaviour
 {
@@ -166,7 +167,7 @@ public class Card : MonoBehaviour
 
             if (moves[0] != null)
             {
-                move1NameText.rectTransform.localPosition = new Vector3(0.041f, -0.499f, -0.0001f);
+                move1NameText.rectTransform.localPosition = new Vector3(-0.048f, -0.499f, -0.0001f);
                 move1Button.transform.localPosition = new Vector3(0.0123f, -0.544f, 0.0f);
 
                 SetMovement1UI(moves[0]);
@@ -201,7 +202,7 @@ public class Card : MonoBehaviour
             {
                 ActivateMoveText1(true);
 
-                move1NameText.rectTransform.localPosition = new Vector3(0.041f, -0.601f, -0.0001f);
+                move1NameText.rectTransform.localPosition = new Vector3(-0.048f, -0.601f, -0.0001f);
                 move1Button.transform.localPosition = new Vector3(0.0123f, -0.63f, 0.0f);
                 SetMovement1UI(moves[0]);
             }
@@ -214,6 +215,7 @@ public class Card : MonoBehaviour
             ActivateMoveText2(false);
             ActivateHeroStats(false);
 
+            elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
             elementIcon.enabled = true;
             description.text = equipmentCardSO.Description;
         }
@@ -851,7 +853,7 @@ public class Card : MonoBehaviour
 
         if(movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
         {
-            yield return Atttack(false, cardToAttack.transform.position, Vector3.up * 0.1f, Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffectHit, 1);
+            yield return RangedAttack(Vector3.up, Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect);
         }
         else
         {
@@ -861,13 +863,13 @@ public class Card : MonoBehaviour
                 {
                     if (player == 1)
                     {
-                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
+                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
                             Vector3.forward + Vector3.up * 0.1f,
                             Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 1);
                     }
                     else
                     {
-                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
+                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
                             Vector3.back + Vector3.up * 0.1f,
                             Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 1);
                     }
@@ -876,13 +878,13 @@ public class Card : MonoBehaviour
                 {
                     if (player == 1)
                     {
-                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
+                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
                             Vector3.forward + Vector3.up * 0.1f,
                             Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 10);
                     }
                     else
                     {
-                        yield return Atttack(true, cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
+                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
                             Vector3.back + Vector3.up * 0.1f,
                             Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 10);
                     }
@@ -893,45 +895,57 @@ public class Card : MonoBehaviour
             {
                 if (player == 1)
                 {
-                    yield return Atttack(true, new Vector3(0, 0.5f, 5),
+                    yield return MeleeAttack(new Vector3(0, 0.5f, 5),
                             Vector3.forward + Vector3.up * 0.1f,
                             Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 1);
                 }
                 else
                 {
-                    yield return Atttack(true, new Vector3(0, 0.5f, -5),
+                    yield return MeleeAttack( new Vector3(0, 0.5f, -5),
                             Vector3.back + Vector3.up * 0.1f,
                             Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 1);
-
-                    yield return MoveToPosition(new Vector3(0, 0.5f, -5), cardMovementSpeed, true, false);
-                    if (movement.MoveSO.VisualEffect != null) Instantiate(movement.MoveSO.VisualEffect, transform.position + Vector3.back, Quaternion.Euler(new Vector3(0, 180, 0)));
                 }
             }
         }
     }
 
-    private IEnumerator Atttack(bool isMelee, Vector3 targetPosition, Vector3 effectPosition, Quaternion effectRotation, GameObject visualEffect, int speedMultiplier)
+    private IEnumerator MeleeAttack(Vector3 targetPosition, Vector3 effectPosition, Quaternion effectRotation, GameObject visualEffect, int speedMultiplier)
     {
-        if(isMelee) yield return MoveToPosition(targetPosition, cardMovementSpeed * speedMultiplier, true, false);
+        yield return MoveToPosition(targetPosition, cardMovementSpeed * speedMultiplier, true, false);
         yield return new WaitForSeconds(0.2f);
 
         if (visualEffect == null) yield break;
 
-        var particle = Instantiate(visualEffect, isMelee ? transform.position + effectPosition : targetPosition + effectPosition, effectRotation);
+        var particle = Instantiate(visualEffect, transform.position + effectPosition, effectRotation);
         yield return new WaitForSeconds(particle.GetComponent<ParticleSystem>().main.duration);
+    }
+
+    private IEnumerator RangedAttack(Vector3 effectPosition, Quaternion effectRotation, GameObject visualEffect)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (visualEffect == null) yield break;
+
+        var particle = Instantiate(visualEffect, transform.position + effectPosition, effectRotation);
+        yield return visualEffect.name == "Teleport" ? null : new WaitForSeconds(particle.GetComponent<ParticleSystem>().main.duration);
     }
 
     /// <summary>
     /// Realiza la animacion de recibir Movimiento.
     /// </summary>
     /// <param name="movement"></param>
-    public void AnimationReceivingMovement(Movement movement)
+    public IEnumerator AnimationReceivingMovement(Movement movement)
     {
         var protector = HasProtector();
         if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)
         {
             protector.casterHero.ProtectAlly(fieldPosition);
         }
+
+        if (movement.MoveSO.VisualEffectHit == null) yield break;
+
+        var particle = Instantiate(movement.MoveSO.VisualEffectHit, transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(particle.GetComponent<ParticleSystem>().main.duration + 0.2f);
     }
 
     /// <summary>

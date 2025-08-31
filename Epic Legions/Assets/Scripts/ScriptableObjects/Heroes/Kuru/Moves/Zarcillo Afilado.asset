@@ -21,9 +21,9 @@ MonoBehaviour:
   targetsCondition: {fileID: 0}
   needTarget: 1
   onMyself: 0
-  moveType: 1
+  moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 1004038278230665889, guid: 4a3f5dad39cb5084e982602bb505a400, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "Un tallo espinoso se dispara desde el suelo y corta al enemigo
     con precisi\xF3n ignorando su defensa."

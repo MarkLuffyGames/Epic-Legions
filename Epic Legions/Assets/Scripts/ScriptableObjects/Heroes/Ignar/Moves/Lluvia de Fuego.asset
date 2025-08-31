@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 1
   targetsType: 2
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 6909558239123690525, guid: 19cd59d8e0c317946adbbdea19d4d9cb, type: 3}
   visualEffectHit: {fileID: 2212644222100735201, guid: 95275e8de7edf8f48a651550a9ac40d3, type: 3}
   effectDescription: "Desata una tormenta ardiente que da\xF1a a todos los enemigos."

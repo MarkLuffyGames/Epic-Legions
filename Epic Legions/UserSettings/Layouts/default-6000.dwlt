@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Multiplayer Play Mode
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 332}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 1106
+  controlID: 21199
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 1107
+  controlID: 21161
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 1108
+  controlID: 21162
   draggingID: 0
 --- !u!114 &8
 MonoBehaviour:
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -221,14 +221,14 @@ MonoBehaviour:
     height: 472.8
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
-  m_ActualView: {fileID: 12}
+  m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
   - {fileID: 12}
   - {fileID: 16}
   - {fileID: 17}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -248,15 +248,15 @@ MonoBehaviour:
     y: 472.8
     width: 1071.2
     height: 244
-  m_MinSize: {x: 231, y: 276}
-  m_MaxSize: {x: 10001, y: 10026}
-  m_ActualView: {fileID: 18}
+  m_MinSize: {x: 101, y: 126}
+  m_MaxSize: {x: 4001, y: 4026}
+  m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 18}
   - {fileID: 19}
   - {fileID: 20}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -355,7 +355,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -428,7 +428,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 7641feff0e0fffff5c10ffffdefaffff
+      m_ExpandedIDs: 0273efff2073efffd276efff5281efff7881efffb281efffd083efffdefafffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -500,7 +500,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/NamuFX/Simple Stylized Slash/Prefabs
+    - Assets/NamuFX/Stylized VFX Doodles/Prefabs
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -510,16 +510,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/NamuFX/Simple Stylized Slash/Prefabs
+  - Assets/NamuFX/Stylized VFX Doodles/Prefabs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
     scrollPos: {x: 0, y: 133.20001}
-    m_SelectedIDs: b8ca0200
-    m_LastClickedID: 182968
-    m_ExpandedIDs: 00000000b4150100b6150100b8150100ba150100bc150100be150100c0150100c2150100c4150100
+    m_SelectedIDs: 6c160100
+    m_LastClickedID: 71276
+    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100ca150100cc150100ce150100d0150100d2150100d4150100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -548,7 +548,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000b4150100b6150100b8150100ba150100bc150100be150100c0150100c2150100c4150100
+    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100ca150100cc150100ce150100d0150100d2150100d4150100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -574,8 +574,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: be140300
-    m_LastClickedInstanceID: 201918
+    m_SelectedInstanceIDs: 58460100
+    m_LastClickedInstanceID: 83544
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
@@ -594,7 +594,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 8}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -627,8 +627,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 304.80002
-    y: 79.200005
+    x: 305.8
+    y: 24
     width: 764.39996
     height: 446.8
   m_SerializedDataModeController:
@@ -880,7 +880,7 @@ MonoBehaviour:
       sizeOverridden: 0
     - dockPosition: 0
       containerId: Floating
-      displayed: 1
+      displayed: 0
       id: Scene View/Particles
       index: 2
       contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":true,"m_FloatingSnapOffset":{"x":-232.0009765625,"y":-208.0001220703125},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
@@ -1129,9 +1129,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -0.11847872, y: 1.6063575, z: 2.8103526}
+    m_Target: {x: 0.9449007, y: 2.590247, z: -3.3197567}
     speed: 2
-    m_Value: {x: -0.11847872, y: 1.6063575, z: 2.8103526}
+    m_Value: {x: 0.9449007, y: 2.590247, z: -3.3197567}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1177,9 +1177,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.37610465, y: 0.062071286, z: -0.025632756, w: -0.9244839}
+    m_Target: {x: -0.2620084, y: 0.034658164, z: -0.009699725, w: -0.9647268}
     speed: 2
-    m_Value: {x: -0.37610465, y: 0.062071282, z: -0.025632756, w: -0.9244839}
+    m_Value: {x: -0.2620084, y: 0.034658164, z: -0.009699724, w: -0.9647268}
   m_Size:
     m_Target: 0.8660254
     speed: 2
@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 496.8
+    y: 552
     width: 1070.2
     height: 218
   m_SerializedDataModeController:
@@ -1960,7 +1960,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs
+    - Assets/Scripts/ScriptableObjects/Heroes/Ignar/Moves
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1970,16 +1970,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Prefabs
+  - Assets/Scripts/ScriptableObjects/Heroes/Ignar/Moves
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 467}
-    m_SelectedIDs: 80340100
-    m_LastClickedID: 78976
-    m_ExpandedIDs: 00000000b4150100b6150100b8150100ba150100bc150100be150100c0150100c2150100c4150100
+    scrollPos: {x: 0, y: 767}
+    m_SelectedIDs: 88160100
+    m_LastClickedID: 71304
+    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100ca150100cc150100ce150100d0150100d2150100d4150100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2008,7 +2008,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000b4150100b6150100b8150100ba150100bc150100be150100c0150100c2150100c4150100
+    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100ca150100cc150100ce150100d0150100d2150100d4150100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2034,8 +2034,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: 56f00000
+    m_LastClickedInstanceID: 61526
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300008eef000072e600003ef6000064150100bcfd0000aafd0000befd0000d2060100200c010068f200008c0e01004e0201007ce8f9ff00000000
     m_RenameOverlay:
@@ -2088,7 +2088,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 552
+    y: 496.8
     width: 1070.2
     height: 218
   m_SerializedDataModeController:

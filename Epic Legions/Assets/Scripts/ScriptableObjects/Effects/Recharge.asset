@@ -21,5 +21,5 @@ MonoBehaviour:
   amount: 10
   duration: 1
   archHeight: 3
-  particlePrefab: {fileID: 8283537605138782889, guid: 3e376ce9f09ebb844a1d19189bc49f72, type: 3}
+  particlePrefab: {fileID: 8283537605138782889, guid: c58d353a4f19ce9499adb372b04c6782, type: 3}
   sparkPrefab: {fileID: 8328595195474014645, guid: 9e10cf7facc9f7d45ae9a6dc7cb9c753, type: 3}

@@ -111,7 +111,7 @@ Shader "Hemera/CardBorderGlowURP"
                 float ramp = SAMPLE_TEXTURE2D(_RampTex, sampler_RampTex, float2(flow, 0.0)).r;
 
                 // Pulse
-                float pulse = 0.6 + 0.4 * sin(t * _PulseSpeed);
+                float pulse = 0.5 + 0.4 * sin(t * _PulseSpeed);
 
                 // Emission color
                 float3 emission = ramp * _GlowColor.rgb * mask * _GlowIntensity * pulse;
