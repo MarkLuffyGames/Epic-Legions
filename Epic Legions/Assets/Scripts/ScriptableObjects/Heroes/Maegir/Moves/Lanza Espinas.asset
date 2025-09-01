@@ -24,5 +24,5 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 3493053977072154573, guid: 9444c74036af9384f9761e6a4ac03d86, type: 3}
   effectDescription: "Dispara una r\xE1faga de espinas afiladas contra el enemigo."

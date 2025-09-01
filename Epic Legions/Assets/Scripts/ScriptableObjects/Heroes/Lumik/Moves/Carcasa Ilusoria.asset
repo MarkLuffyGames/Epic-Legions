@@ -19,11 +19,11 @@ MonoBehaviour:
   moveEffect: {fileID: 11400000, guid: 66b8df2b0a62ec74ebfcb6a92ace14e5, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
-  needTarget: 1
+  needTarget: 0
   onMyself: 0
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6424583148328831481, guid: ce8f43249bb72a34a91470560c6e2245, type: 3}
   effectDescription: "El enemigo ataca una c\xE1scara vac\xEDa mientras el h\xE9roe
     permanece oculto."

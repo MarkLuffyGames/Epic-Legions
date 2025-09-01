@@ -141,7 +141,7 @@ public class HandCardHandler : MonoBehaviour
     /// <summary>
     /// Oculta las cartas de la mano
     /// </summary>
-    public void HideHandCard()
+    public void HideHandCards()
     {
         if (!isHideCards)
         {

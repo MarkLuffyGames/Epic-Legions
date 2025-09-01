@@ -996,7 +996,7 @@ public class Card : MonoBehaviour
         return damageInflicted;
     }
 
-    public void ReceivePoisonDamage(int amount)
+    private void ReceivePoisonDamage(int amount)
     {
         int damageInflicted = currentHealt > amount ? amount : currentHealt;
         ShowTextDamage(false, damageInflicted);
@@ -1150,7 +1150,7 @@ public class Card : MonoBehaviour
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)
     {
-        if(effect.MoveEffect is not Poison ||  statModifier.All(x => x.MoveEffect is not Antivenom))
+        if(effect.MoveEffect is not Poison || statModifier.All(x => x.MoveEffect is not Antivenom))
         {
             ShowIcon(effect.MoveEffect.iconSprite);
             statModifier.Add(effect);
@@ -1195,7 +1195,6 @@ public class Card : MonoBehaviour
     public void ActivateVisualEffects()
     {
         if(stunEffect != null)stunEffect.SetActive(IsStunned());
-        //TODO: Activar efecto visual de envenenamiento.
     }
 
 
@@ -1565,7 +1564,6 @@ public class Card : MonoBehaviour
 
     public CardElement GetElement()
     {
-        Debug.Log(cardSO.CardElemnt);
         var equipedCard = IsEquipped(EquipmentType.Armor);
         if (equipedCard)
         {

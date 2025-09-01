@@ -50,6 +50,7 @@ public class DuelManager : NetworkBehaviour
     private bool settingAttackTarget;
     private Card cardSelectingTarget;
     public SampleCard sampleCard;
+    [SerializeField] private AttackExecutedUI attackExecutedUI;
 
     private DuelPhase oldDuelPhase;
     public PlayerManager Player1Manager => player1Manager;
@@ -118,7 +119,7 @@ public class DuelManager : NetworkBehaviour
 
                 if (IsClient || isSinglePlayer)
                 {
-                    player1Manager.GetHandCardHandler().HideHandCard();
+                    player1Manager.GetHandCardHandler().HideHandCards();
                 }
             }
             else
@@ -144,7 +145,7 @@ public class DuelManager : NetworkBehaviour
         else if(newPhase == DuelPhase.PlayingSpellCard)
         {
             oldDuelPhase = oldPhase;
-            player1Manager.GetHandCardHandler().HideHandCard();
+            player1Manager.GetHandCardHandler().HideHandCards();
         }
     }
 
@@ -1077,8 +1078,16 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Una enumeración de la corrutina.</returns>
     private IEnumerator HeroDirectAttack(int player, Card cardUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
+        sampleCard.ResetSize();
+        player1Manager.GetHandCardHandler().HideHandCards();
         // Marca la carta atacante como lista para la acción y termina su turno.
         cardUsesTheAttack.EndTurn();
+
+        StartCoroutine(cardUsesTheAttack.MoveToPosition(Vector3.back, Card.cardMovementSpeed, true, true));
+        yield return attackExecutedUI.SetAttackText(cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.MoveName, cardUsesTheAttack.transform.position);
+        cardUsesTheAttack.MoveToLastPosition();
+
+        
 
         // Iniciar la animación del ataque dependiendo del tipo de movimiento (cuerpo a cuerpo o a distancia)
         yield return cardUsesTheAttack.AttackAnimation(player, null, cardUsesTheAttack.Moves[movementToUseIndex]);
@@ -1409,9 +1418,14 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Un IEnumerator para controlar el flujo del ataque de manera asíncrona.</returns>
     private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
     {
+        sampleCard.ResetSize();
+        player1Manager.GetHandCardHandler().HideHandCards();
         // Marca la carta atacante como lista para la acción y termina su turno.
         attackerCard.EndTurn();
 
+        StartCoroutine(attackerCard.MoveToPosition(Vector3.back, Card.cardMovementSpeed, true, true));
+        yield return attackExecutedUI.SetAttackText(attackerCard.Moves[movementToUseIndex].MoveSO.MoveName, attackerCard.transform.position);
+        attackerCard.MoveToLastPosition();
 
         // Inicia la animación de ataque.
         yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);

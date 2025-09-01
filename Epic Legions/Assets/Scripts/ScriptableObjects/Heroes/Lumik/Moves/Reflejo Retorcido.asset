@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 5607819269926399345, guid: a522f6eb05ccb8241a6a174842f7a27d, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "Durante este turno, el da\xF1o que reciba tambi\xE9n lo recibe
     el enemigo que lo caus\xF3."

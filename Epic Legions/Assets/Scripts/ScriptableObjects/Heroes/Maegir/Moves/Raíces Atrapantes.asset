@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6855955652325114174, guid: f8dc879bd6649cb4782409815764d676, type: 3}
   effectDescription: "Invoca ra\xEDces que emergen del suelo y atrapan al enemigo,
     reduciendo su velocidad en 20 durante los proximos 2 turnos."

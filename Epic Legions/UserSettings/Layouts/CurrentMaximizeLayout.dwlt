@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 221293
+  controlID: 33583
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -47,9 +47,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 316.80002
+    x: 251.2
     y: 79.200005
-    width: 793.2
+    width: 892.39996
     height: 446.8
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -106,23 +106,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 793.2
+      width: 892.39996
       height: 425.8
     m_Scale: {x: 0.49282405, y: 0.49282405}
-    m_Translation: {x: 396.6, y: 212.9}
+    m_Translation: {x: 446.19998, y: 212.9}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -804.7497
+      x: -905.3941
       y: -432
-      width: 1609.4994
+      width: 1810.7882
       height: 864
     m_MinimalGUI: 1
   m_defaultScale: 0.49282405
-  m_LastWindowPixelSize: {x: 991.5, y: 558.5}
+  m_LastWindowPixelSize: {x: 1115.5, y: 558.5}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -148,12 +148,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1112
+    width: 1145.6
     height: 716.8
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 221294
+  controlID: 33584
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -174,12 +174,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1112
+    width: 1145.6
     height: 472.8
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 221295
+  controlID: 33585
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -198,7 +198,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 316.8
+    width: 251.2
     height: 472.8
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
@@ -231,7 +231,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 79.200005
-    width: 315.8
+    width: 250.2
     height: 446.8
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -247,9 +247,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: c20edaff
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 3818daffc81bdbffd01bdbffd61bdbff1c20dbff94d1dcffe855dfff7857dfff0859dfff985adfff285cdfffb85ddfff485fdfffd860dfff6862dffff863dfff8865dfff1867dfffa868dfff386adfffc86bdfff586ddfffe86edfff7870dfff0872dfff9873dfff2875dfffb876dfff4878dfffd879dfff687bdffff87cdfff887edfff1880dfffa881dfff3883dfffc884dfff5886dfffe887dfff7889dfff088bdfff988cdfff288edfffb88fdfff4891dfffd892dfff6894dffff895dfff8897dfff1899dfffa89adfff389cdfffc89ddfff589fdfffe8a0dfff78a2dfff6ca7dfffa4a7dfff2ea8dfff36a8dfff3ca8dfff48aadfff52aadfffb6aadfff26abdfff34abdfff82acdfff84acdfff425ae0ffd0f6f0ff6cf7f0ff38b1f7ff94b2f7ff42b8f7ff2a6ffeffdefafffff4ffffff
+      m_ExpandedIDs: 4eeae4ff6086efffd48fefff3026f0ff58baf2ffaccff2ffaecff2ffd859f3ffceddf3ff42e7f3ffdabcf7ff4ec6f7ff720cf9ffe615f9fffe15f9ff00e5ffff18e5ffffbae8ffffeef2ffff04f3ffff2ef3ffff3ef5ffffdefafffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -297,7 +297,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 79.200005
-    width: 303.8
+    width: 376.6
     height: 446.8
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/NamuFX/Simple Stylized Slash vol2/Prefabs
+    - Assets/Prefabs
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -331,16 +331,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/NamuFX/Simple Stylized Slash vol2/Prefabs
+  - Assets/Prefabs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 415}
-    m_SelectedIDs: 361c0100
-    m_LastClickedID: 72758
-    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100cc150100d0150100d2150100d41501001c1c01005a1c01005e1c0100601c0100621c0100
+    scrollPos: {x: 0, y: 9.200012}
+    m_SelectedIDs: ee180100
+    m_LastClickedID: 71918
+    m_ExpandedIDs: 0000000004180100061801000a1801000c1801001018010014180100161801001a1801001c1801001e1801002018010022180100241801002618010028180100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -369,7 +369,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100cc150100d0150100d2150100d41501001c1c01005a1c01005e1c0100601c0100621c0100
+    m_ExpandedIDs: 0000000004180100061801000a1801000c1801001018010014180100161801001a1801001c1801001e1801002018010022180100241801002618010028180100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -395,9 +395,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 0cf60100
-    m_LastClickedInstanceID: 128524
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: c88a0100
+    m_LastClickedInstanceID: 101064
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -442,9 +442,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 316.8
+    x: 251.2
     y: 0
-    width: 795.2
+    width: 894.39996
     height: 472.8
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
@@ -477,9 +477,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 316.80002
+    x: 251.2
     y: 79.200005
-    width: 793.2
+    width: 892.39996
     height: 446.8
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -732,7 +732,7 @@ MonoBehaviour:
       containerId: Floating
       displayed: 0
       id: Scene View/Particles
-      index: 2
+      index: 0
       contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":true,"m_FloatingSnapOffset":{"x":-232.0009765625,"y":-198.4010009765625},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 1
       collapsed: 0
@@ -816,11 +816,11 @@ MonoBehaviour:
       containerId: Floating
       displayed: 0
       id: Scene View/TrailRenderer
-      index: 0
-      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":true,"m_FloatingSnapOffset":{"x":-232.0009765625,"y":-233.60000610351563},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      index: 2
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":true,"m_FloatingSnapOffset":{"x":-232.0009765625,"y":-208.80001831054688},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 1
       collapsed: 0
-      snapOffset: {x: -232.00098, y: -233.6}
+      snapOffset: {x: -232.00098, y: -208.80002}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 3
       layout: 4
@@ -979,9 +979,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 0.69786894, y: 6.133337, z: -5.852538}
+    m_Target: {x: -0.6026513, y: 3.2347996, z: -1.9886292}
     speed: 2
-    m_Value: {x: 0.69786894, y: 6.133337, z: -5.852538}
+    m_Value: {x: -0.6026513, y: 3.2347996, z: -1.9886292}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1027,13 +1027,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.3079474, y: -0.09249593, z: 0.029508948, w: -0.9468101}
+    m_Target: {x: -0.29848045, y: -0.26369777, z: 0.08555588, w: -0.9136541}
     speed: 2
-    m_Value: {x: -0.30783856, y: -0.09246324, z: 0.029498518, w: -0.9464755}
+    m_Value: {x: -0.29848042, y: -0.26369777, z: 0.08555588, w: -0.913654}
   m_Size:
-    m_Target: 1.3043147
+    m_Target: 3.058435
     speed: 2
-    m_Value: 1.3043147
+    m_Value: 3.058435
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1051,7 +1051,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.50185037, y: -0.057210777, z: 0.032880906, w: -0.8627929}
+  m_LastSceneViewRotation: {x: -0.0044476134, y: -0.9695052, z: 0.24466819, w: -0.017449092}
   m_LastSceneViewOrtho: 0
   m_Viewpoint:
     m_SceneView: {fileID: 9}
@@ -1780,7 +1780,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 472.8
-    width: 1112
+    width: 1145.6
     height: 244
   m_MinSize: {x: 231, y: 276}
   m_MaxSize: {x: 10001, y: 10026}
@@ -1814,7 +1814,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 552
-    width: 1111
+    width: 1144.6
     height: 218
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1852,12 +1852,12 @@ MonoBehaviour:
   m_LastFoldersGridSize: 46
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
-    m_IsLocked: 1
+    m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 213.99985}
-    m_SelectedIDs: 4a1c0100
-    m_LastClickedID: 72778
-    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100cc150100d0150100d2150100d41501001c1c01005a1c01005e1c0100601c0100621c0100
+    scrollPos: {x: 0, y: 253.99985}
+    m_SelectedIDs: ee180100
+    m_LastClickedID: 71918
+    m_ExpandedIDs: 0000000004180100061801000a1801000c1801001018010014180100161801001a1801001c1801001e1801002018010022180100241801002618010028180100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1886,7 +1886,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c0150100c2150100c4150100c6150100c8150100cc150100d0150100d2150100d41501001c1c01005a1c01005e1c0100601c0100621c0100
+    m_ExpandedIDs: 0000000004180100061801000a1801000c1801001018010014180100161801001a1801001c1801001e1801002018010022180100241801002618010028180100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1912,9 +1912,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: c20edaff
-    m_LastClickedInstanceID: -2486590
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300008eef000072e600003ef6000064150100bcfd0000aafd0000befd0000d2060100200c010068f200008c0e01004e0201007ce8f9ff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1967,7 +1967,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 552
-    width: 1111
+    width: 1144.6
     height: 218
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -2018,7 +2018,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 218012
+  m_LastSelectedObjectID: -1079726
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -2034,9 +2034,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1112
+    x: 1145.6
     y: 0
-    width: 424
+    width: 390.40002
     height: 716.8
   m_MinSize: {x: 276, y: 76}
   m_MaxSize: {x: 4001, y: 4026}
@@ -2067,9 +2067,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1112
+    x: 1145.6
     y: 79.200005
-    width: 423
+    width: 389.40002
     height: 690.8
   m_SerializedDataModeController:
     m_DataMode: 0

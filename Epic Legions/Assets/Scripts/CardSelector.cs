@@ -282,7 +282,7 @@ public class CardSelector : MonoBehaviour
             if (heldTime > clickHoldTime)
             {
                 playerManager.ShowAvailablePositions(card);
-                handCardHandler.HideHandCard();
+                handCardHandler.HideHandCards();
                 DetectPositionForPlaceCard();
             }
         }
@@ -404,7 +404,7 @@ public class CardSelector : MonoBehaviour
         }
         else if (card.cardSO is SpellCardSO)
         {
-            handCardHandler.HideHandCard();
+            handCardHandler.HideHandCards();
         }
     }
 }

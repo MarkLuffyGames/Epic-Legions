@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85750c9a9c41bd498d93bf849d00223, type: 3}
   m_Name: Absorb Damage Rock 20, 3
   m_EditorClassIdentifier: 
-  visualEffectCardEffect: {fileID: 8311459063502482091, guid: 8dacfdd4b629d9647ad22c8bfca8c6ea, type: 3}
+  visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: b81ff0aa63ecc134db12e088c741207f, type: 3}
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   amount: 20
   numberTurns: 3

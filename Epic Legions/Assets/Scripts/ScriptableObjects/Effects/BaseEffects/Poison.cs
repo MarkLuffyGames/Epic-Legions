@@ -10,6 +10,7 @@ public class Poison : CardEffect
     public int NumberTurns => numberTurns;
     public override void ActivateEffect(Card caster, Card target)
     {
+        if (visualEffectCardEffect) Instantiate(visualEffectCardEffect, target.FieldPosition.transform.position + Vector3.up * 0.1f, Quaternion.identity);
         target.AddEffect(new Effect(this, target));
     }
 
@@ -17,6 +18,7 @@ public class Poison : CardEffect
     {
         foreach (Card card in target)
         {
+            if (visualEffectCardEffect) Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position + Vector3.up * 0.1f, Quaternion.identity);
             card.AddEffect(new Effect(this, card));
         }
     }

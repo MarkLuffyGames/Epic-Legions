@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85750c9a9c41bd498d93bf849d00223, type: 3}
   m_Name: Absorb Damage 15
   m_EditorClassIdentifier: 
-  visualEffectCardEffect: {fileID: 676203148132386820, guid: be87b79a8b3898647853b8caf52d5f78, type: 3}
+  visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: b81ff0aa63ecc134db12e088c741207f, type: 3}
   effectScore: 1
   isPermanent: 1

@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6424583148328831481, guid: ce8f43249bb72a34a91470560c6e2245, type: 3}
   effectDescription: "Cubre a todos los aliados con un velo enga\xF1oso. El pr\xF3ximo
     ataque contra ellos fallar\xE1."

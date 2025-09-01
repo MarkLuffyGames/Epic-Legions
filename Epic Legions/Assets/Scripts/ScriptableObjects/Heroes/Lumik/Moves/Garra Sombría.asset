@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
-  visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
-  effectDescription: "Desgarra con sus afiladas garras, causando da\xF1o directo."
+  visualEffect: {fileID: 6438811975416736645, guid: 9f9e5972d4aa84545b6da5d63c048d25, type: 3}
+  visualEffectHit: {fileID: 0}
+  effectDescription: "Ataca con sus afiladas garras, causando da\xF1o directo."

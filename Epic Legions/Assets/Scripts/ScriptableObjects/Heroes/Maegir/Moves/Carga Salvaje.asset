@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
-  visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
+  visualEffect: {fileID: 7611201976539897820, guid: 39706049c667f7d4bbca965b63cd3bec, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: Embiste con fuerza, debilitando en 10 puntos la defensa del
     enemigo.
