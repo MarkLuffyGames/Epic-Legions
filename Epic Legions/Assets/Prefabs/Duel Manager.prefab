@@ -1129,8 +1129,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 4.03, y: 0.51}
+  m_AnchoredPosition: {x: 0, y: -0.06}
+  m_SizeDelta: {x: 4.03, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7598511118170549892
 CanvasRenderer:
@@ -1160,7 +1160,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Embate Sagrado
+  m_text: "Bendici\xF3n del \xC1rbol Eterno"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f871b0aa7dfd1ae4281cfceaab85a1a9, type: 2}
   m_sharedMaterial: {fileID: 1573015003938768419, guid: f871b0aa7dfd1ae4281cfceaab85a1a9, type: 2}
@@ -1193,7 +1193,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 19
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1435,7 +1435,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 5679681744472100564}
         m_TargetAssemblyTypeName: HandCardHandler, Assembly-CSharp
-        m_MethodName: HideHandCard
+        m_MethodName: HideHandCards
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3352,7 +3352,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5679681744472100564}
         m_TargetAssemblyTypeName: HandCardHandler, Assembly-CSharp
-        m_MethodName: HideHandCard
+        m_MethodName: HideHandCards
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

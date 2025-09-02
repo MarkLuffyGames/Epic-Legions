@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 3
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 7611201976539897820, guid: 39706049c667f7d4bbca965b63cd3bec, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "Drena vida del objetivo igual al da\xF1o directo infligido "

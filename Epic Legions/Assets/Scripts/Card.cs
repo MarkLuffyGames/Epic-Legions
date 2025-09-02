@@ -41,7 +41,7 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private GameObject energyPopUpPrefab;
     [SerializeField] private GameObject defencePopUpPrefab;
-    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private GameObject teleportEffect;
     [SerializeField] private GameObject stunEffect;
     [SerializeField] private GameObject regenerateDefenseEffect;
     [SerializeField] private Vector3 focusPosition = new Vector3(0, 7.05f, -6.4f);
@@ -878,14 +878,15 @@ public class Card : MonoBehaviour
                 {
                     if (player == 1)
                     {
-                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, 3),
-                            Vector3.forward + Vector3.up * 0.1f,
+
+                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, 2),
+                            Vector3.back + Vector3.up * 0.1f,
                             Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 10);
                     }
                     else
                     {
-                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, -3),
-                            Vector3.back + Vector3.up * 0.1f,
+                        yield return MeleeAttack(cardToAttack.transform.position + new Vector3(0, 0.5f, -2),
+                            Vector3.forward + Vector3.up * 0.1f,
                             Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 10);
                     }
                 }
@@ -911,6 +912,8 @@ public class Card : MonoBehaviour
 
     private IEnumerator MeleeAttack(Vector3 targetPosition, Vector3 effectPosition, Quaternion effectRotation, GameObject visualEffect, int speedMultiplier)
     {
+        if(speedMultiplier > 1) Instantiate(teleportEffect, transform.position + Vector3.up, effectRotation);
+
         yield return MoveToPosition(targetPosition, cardMovementSpeed * speedMultiplier, true, false);
         yield return new WaitForSeconds(0.2f);
 

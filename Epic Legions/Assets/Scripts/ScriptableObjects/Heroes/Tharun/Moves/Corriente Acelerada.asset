@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 1
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
-  visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 5551718882146614446, guid: ca5678a67971360408484fc2051d9d2e, type: 3}
   effectDescription: Golpea al enemigo y aumenta la velocidad en 10 por 2 turnos.

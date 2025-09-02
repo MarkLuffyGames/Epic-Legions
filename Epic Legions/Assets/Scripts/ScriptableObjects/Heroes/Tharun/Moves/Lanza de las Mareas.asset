@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
-  visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
+  visualEffect: {fileID: 3533896497101703157, guid: 46c6677acc09125439befccd2d07f387, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: "Una estocada impulsada por el flujo del oc\xE9ano."

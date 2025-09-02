@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 3
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 8587560481101609250, guid: 346406abd46c6534bbc49ca43a53bed0, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "Se desplaza detr\xE1s de la l\xEDnea enemiga y ataca desde
     las sombras"

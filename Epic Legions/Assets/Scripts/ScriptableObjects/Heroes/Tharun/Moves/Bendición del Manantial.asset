@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 2
   targetsType: 2
-  visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffect: {fileID: 6261345114989098648, guid: f66e2be959a7d4e4e8b050df54d1af73, type: 3}
+  visualEffectHit: {fileID: 2485276936549234680, guid: a500764f1a0d3654db7718249e73c3d3, type: 3}
   effectDescription: Agua sanadora fluye entre los aliados, restaurando 20 puntos
     de vida.

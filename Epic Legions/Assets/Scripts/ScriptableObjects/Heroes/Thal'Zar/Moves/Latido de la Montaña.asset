@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 176822597162087251, guid: ac0b546a4524a3c4bbc82bb48709fcda, type: 3}
   effectDescription: El golem golpea el suelo y hace brotar picos de roca que desgarran
     a todos los enemigos.

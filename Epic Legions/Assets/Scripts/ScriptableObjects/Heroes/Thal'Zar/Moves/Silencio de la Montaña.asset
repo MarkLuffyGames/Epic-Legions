@@ -23,7 +23,7 @@ MonoBehaviour:
   onMyself: 0
   moveType: 2
   targetsType: 0
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 4359607285572960429, guid: 36e647ab46f4a634ba6e44440ea8597f, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: "El h\xE9roe entra en letargo, volvi\xE9ndose inmune al da\xF1o,
     pero quedando inactivo durante 3 turnos."

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: "Poci\xF3n Corrosiva"
   m_EditorClassIdentifier: 
   moveName: "Poci\xF3n Corrosiva"
-  damage: 30
+  damage: 20
   energyCost: 10
   element: 1
-  moveEffect: {fileID: 0}
+  moveEffect: {fileID: 11400000, guid: abcc03a1a223de94ab0fc6aa83bbfc9d, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   needTarget: 1
@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 1435070486616384899, guid: dc271cdeddd897d47b55b968f7cd24e7, type: 3}
   effectDescription: "Lanza una poci\xF3n burbujeante que quema al enemigo con \xE1cidos
-    m\xE1gicos, causando da\xF1o directo."
+    m\xE1gicos."

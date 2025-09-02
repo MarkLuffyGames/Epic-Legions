@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
   effectDescription: "Rodea a un aliado con agua densa que bloquea el pr\xF3ximo
     ataque."

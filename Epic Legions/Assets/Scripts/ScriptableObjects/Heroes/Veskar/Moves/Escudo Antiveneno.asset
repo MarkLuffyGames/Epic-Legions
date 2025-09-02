@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6424583148328831481, guid: f02508217a8deb544bc0ba603bcbebb9, type: 3}
   effectDescription: "Otorga inmunidad al veneno a todos los aliados mientras est\xE9
     en el campo"

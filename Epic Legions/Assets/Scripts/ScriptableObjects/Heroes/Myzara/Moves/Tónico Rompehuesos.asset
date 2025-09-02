@@ -24,5 +24,5 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  visualEffectHit: {fileID: 5234300454871195321, guid: 6f8783ce4d86e7046bc62dc10ffdbbf7, type: 3}
   effectDescription: "Reduce la defensa del enemigo y causa da\xF1o directo."

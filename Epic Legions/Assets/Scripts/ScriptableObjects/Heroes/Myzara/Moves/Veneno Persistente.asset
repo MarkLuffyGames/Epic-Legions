@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 8960550792083637929, guid: d0fe5c41c0985b044a2c2d30cce73c6d, type: 3}
+  visualEffectHit: {fileID: 7658744058932303410, guid: 7139f4df7095b4048b7d550335291de8, type: 3}
   effectDescription: "Aplica veneno al enemigo, causando 10 de da\xF1o adicional
     por turno."

@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 4994997792314849709, guid: 3dd50886582244645be87adb42aa8528, type: 3}
   effectDescription: Lanza una roca a un enemigo y reduce la velocidad del objetivo
     en 10 puntos durante 1 turno.

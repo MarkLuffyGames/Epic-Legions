@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6424583148328831481, guid: ce8f43249bb72a34a91470560c6e2245, type: 3}
   effectDescription: "Su cuerpo se endurece como la roca, reduciendo el da\xF1o en
     20 durante los proximos 3 turnos."

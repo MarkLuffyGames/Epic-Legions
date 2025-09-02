@@ -24,5 +24,5 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 418540983303527424, guid: 022d970fdd7676c4186ba3e6ec6d31ba, type: 3}
   effectDescription: Aumenta el ataque de un aliado en 20 durante 2 turnos.

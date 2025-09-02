@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6424583148328831481, guid: d2ffbc8b168cdf74a9dbb7c6c1cfdf2f, type: 3}
   effectDescription: Envuelve a un aliado en una barrera de luz, aumentando su defensa
     en 30 durante 3 turnos.

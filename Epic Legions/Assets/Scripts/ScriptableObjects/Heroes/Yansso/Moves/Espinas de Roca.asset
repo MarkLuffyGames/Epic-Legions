@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 176822597162087251, guid: ac0b546a4524a3c4bbc82bb48709fcda, type: 3}
   effectDescription: Rocas afiladas emergen del suelo, dejando aturdido al enemigo
     si este no tiene defensas.

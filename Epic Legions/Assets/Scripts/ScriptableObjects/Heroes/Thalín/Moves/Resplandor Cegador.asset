@@ -21,9 +21,9 @@ MonoBehaviour:
   targetsCondition: {fileID: 0}
   needTarget: 1
   onMyself: 0
-  moveType: 1
+  moveType: 0
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 3915307300718007911, guid: 432121862024c074fbdf4af11819a2d5, type: 3}
   effectDescription: Un destello cegador ralentiza los movimientos del enemigo, reduciendo
     su velocidad en 20 durante 1 turno.
