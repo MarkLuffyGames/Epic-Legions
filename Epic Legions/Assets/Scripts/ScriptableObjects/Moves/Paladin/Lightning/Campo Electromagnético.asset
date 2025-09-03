@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 3810655815515945650, guid: 409711f06b552b74f8c0c9f3cd091e78, type: 3}
   effectDescription: "Reduce en 20 el da\xF1o recibido por todos los aliados durante
     2 turno."

@@ -24,5 +24,5 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 4994997792314849709, guid: 3dd50886582244645be87adb42aa8528, type: 3}
   effectDescription: Reduce la defensa del objetivo en 30 durante 2 turnos.

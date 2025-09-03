@@ -24,5 +24,5 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6499939531436011285, guid: 787b8ffbf50b5284baa9df898b1ff818, type: 3}
   effectDescription: Roba la vida al obvjetivo.

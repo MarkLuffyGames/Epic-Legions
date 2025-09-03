@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 1
   moveType: 0
   targetsType: 0
-  visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
-  visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
+  visualEffect: {fileID: 6389406066330802589, guid: 5ef8d476ac4025a4e85cc5e7c5004889, type: 3}
+  visualEffectHit: {fileID: 0}
   effectDescription: Recupera 20 de vida al usuario.

@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 2
   targetsType: 2
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 4359607285572960429, guid: 36e647ab46f4a634ba6e44440ea8597f, type: 3}
   effectDescription: Aumenta 20 puntos de defensa al usuario y todos sus aliados
     en el campo durante 2 turnos.

@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 3810655815515945650, guid: 409711f06b552b74f8c0c9f3cd091e78, type: 3}
   effectDescription: "Descarga el\xE9ctrica que deja paralizado al enmeigo durante
     1 turno."
