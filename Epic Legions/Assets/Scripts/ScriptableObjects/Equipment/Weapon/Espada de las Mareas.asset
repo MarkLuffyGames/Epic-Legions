@@ -20,6 +20,6 @@ MonoBehaviour:
   equipmentType: 0
   supportedClasses: 000000000100000002000000030000000400000005000000060000000700000008000000
   moves:
-  - {fileID: 11400000, guid: 329744afc972cc44faf04e1f225a1556, type: 2}
+  - {fileID: 11400000, guid: 64e8d85a2c05e4843a24ac978fc058dc, type: 2}
   effect: {fileID: 0}
   description: 

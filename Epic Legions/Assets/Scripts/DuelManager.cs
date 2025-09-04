@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
 public class DuelManager : NetworkBehaviour
@@ -30,6 +29,7 @@ public class DuelManager : NetworkBehaviour
     [SerializeField] private PlayerManager player2Manager;
     [SerializeField] private EndDuelUI endDuelUI;
     [SerializeField] private int energyGainedPerTurn = 20;
+    [SerializeField] private GameObject CancelAttackButton;
 
     private Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
     private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
@@ -580,6 +580,9 @@ public class DuelManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public virtual void PlaceCardOnFieldServerRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
     {
+        // Notifica a los clientes para que actualicen la posición de la carta en el campo
+        PlaceCardOnTheFieldClientRpc(cardIndex, fieldPositionIdex, clientId);
+
         // Verifica el rol del jugador y coloca la carta en el campo del jugador correspondiente
         if (playerRoles[clientId] == 1)
         {
@@ -589,9 +592,6 @@ public class DuelManager : NetworkBehaviour
         {
             PlaceCardInField(player2Manager, false, cardIndex, fieldPositionIdex);
         }
-
-        // Notifica a los clientes para que actualicen la posición de la carta en el campo
-        PlaceCardOnTheFieldClientRpc(cardIndex, fieldPositionIdex, clientId);
     }
 
 
@@ -646,6 +646,8 @@ public class DuelManager : NetworkBehaviour
 
         // Consume la energía correspondiente para usar la carta
         playerManager.ConsumeEnergy(card.cardSO is HeroCardSO hero ? hero.Energy : 0);
+
+
     }
 
 
@@ -874,7 +876,8 @@ public class DuelManager : NetworkBehaviour
     {
         movementToUse = movementToUseIndex;
         settingAttackTarget = true;
-        cardSelectingTarget = attackingCard;
+        cardSelectingTarget = attackingCard; 
+        CancelAttackButton.SetActive(true);
 
         // Obtiene los posibles objetivos para el movimiento
         var targets = ObtainTargets(attackingCard, movementToUseIndex);
@@ -929,6 +932,10 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
+    public void CancelSelectingTarget()
+    {
+        DisableAttackableTargets();
+    }
 
     /// <summary>
     /// Desactiva los objetivos que pueden ser seleccionados para un ataque.
@@ -957,6 +964,7 @@ public class DuelManager : NetworkBehaviour
         // Resetea las variables de selección
         settingAttackTarget = false;
         cardSelectingTarget = null;
+        CancelAttackButton.SetActive(false);
     }
 
 
@@ -1055,7 +1063,7 @@ public class DuelManager : NetworkBehaviour
         if (position != null && position != card)
         {
             if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
-                    && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.ActivateEffect(card, position))
+                    && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.CheckCondition(card, position))
             {
                 targets.Add(position);
             }
@@ -1537,7 +1545,9 @@ public class DuelManager : NetworkBehaviour
 
         int damage = attackerCard.Moves[movementToUseIndex].MoveSO.Damage;
         damage += attackerCard.GetAttackModifier(); // Añade el bono de ataque del héroe, si lo tiene.
-        damage += attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IncreaseAttackDamage attackModifier ? attackModifier.Amount : 0; // Añade el modificador de ataque del movimiento, si lo tiene.
+
+        var move = attackerCard.Moves[movementToUseIndex].MoveSO;
+        damage += move.MoveEffect is IncreaseAttackDamage attackModifier ? (move.EffectCondition.CheckCondition(attackerCard, cardToAttack) ? attackModifier.Amount : 0) : 0; // Añade el modificador de ataque del movimiento, si lo tiene.
         if(cardToAttack != null) damage += CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
 
         return damage;

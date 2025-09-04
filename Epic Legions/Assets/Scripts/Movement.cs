@@ -14,7 +14,7 @@ public class Movement
 
     public void ActivateEffect(Card caster, Card target)
     {
-        if (moveSO.EffectCondition.ActivateEffect(caster, target))
+        if (moveSO.EffectCondition.CheckCondition(caster, target))
         {
             if (moveSO.MoveEffect != null)
             {
@@ -34,7 +34,7 @@ public class Movement
         List<Card> targets = new List<Card>();
         foreach (Card card in target)
         {
-            if (moveSO.EffectCondition.ActivateEffect(caster, card))
+            if (moveSO.EffectCondition.CheckCondition(caster, card))
             {
                 targets.Add(card);
             }

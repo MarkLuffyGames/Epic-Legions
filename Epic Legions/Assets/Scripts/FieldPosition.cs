@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FieldPosition : MonoBehaviour
 {
-    private Card card;
+    [SerializeField] private Card card;
     [SerializeField] private Color originalColor;
     [SerializeField] private Color isFreeColor;
     [SerializeField] private Color isbusyColor;

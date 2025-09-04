@@ -15,7 +15,7 @@ MonoBehaviour:
   moveName: "Corte del Vac\xEDo"
   damage: 20
   energyCost: 10
-  element: 4
+  element: 8
   moveEffect: {fileID: 11400000, guid: e917014a10e430547b135701e83cfcb5, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

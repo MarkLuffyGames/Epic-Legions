@@ -3,5 +3,5 @@ using UnityEngine;
 
 public abstract class Condition : ScriptableObject
 {
-    public abstract bool ActivateEffect(Card caster, Card target);
+    public abstract bool CheckCondition(Card caster, Card target);
 }
