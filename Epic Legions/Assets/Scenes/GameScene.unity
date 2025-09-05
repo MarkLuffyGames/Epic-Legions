@@ -1281,6 +1281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDrawSound: {fileID: 8300000, guid: 51fc906b0d7392b4385727f70b902386, type: 3}
   cardPlacingSound: {fileID: 8300000, guid: 78a9b0762c58768449bf137663aaca6f, type: 3}
+  spellPlacingSound: {fileID: 8300000, guid: 8681513af4097f2488d5fd503e918c39, type: 3}
   cardDestroySound: {fileID: 8300000, guid: e57671f52aea2e043ad0fa3439e496d0, type: 3}
   phaseChangedSound: {fileID: 8300000, guid: 795d4a7fcc3ee8c47812d7130a0ede7f, type: 3}
 --- !u!1 &1272818055
@@ -1587,6 +1588,22 @@ PrefabInstance:
     - target: {fileID: 2776714980010758147, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758044689308104401, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758044689308104401, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758044689308104401, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5121328473592501548, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6857497794995147550, guid: e19b7bc926db47642bad5e47cc871190, type: 3}
       propertyPath: m_AnchoredPosition.y

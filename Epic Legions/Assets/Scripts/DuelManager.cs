@@ -622,7 +622,9 @@ public class DuelManager : NetworkBehaviour
             {
                 if (IsServer) duelPhase.Value = DuelPhase.PlayingSpellCard;
             }
-            
+
+            AudioManager.Instance.PlaySpellPlacing();
+
             if (isPlayer || IsSinglePlayer) UseMovement(0, card);
         }
         else// Si la carta se coloca en una posición en el campo
@@ -638,7 +640,6 @@ public class DuelManager : NetworkBehaviour
                 playerManager.GetFieldPositionList()[fieldPositionIdex].Card.AddEquipment(card);
                 AudioManager.Instance.PlayCardPlacing();
             }
-            
         }
 
         // Marca la carta como lista para el servidor
