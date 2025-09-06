@@ -7993,14 +7993,62 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2697154731438799724, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 3100777055475348296, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
     - target: {fileID: 3283895096360196753, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: effectsActivatedUI
       value: 
       objectReference: {fileID: 40987554105466381}
+    - target: {fileID: 3932347245083002369, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 4312493903638449503, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 4373477465138618964, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 4977169138523238627, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 5731736870292521477, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
     - target: {fileID: 6094107271579088076, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
       propertyPath: m_Name
       value: SampleCard
       objectReference: {fileID: 0}
+    - target: {fileID: 8220769970438190707, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 8592478409948411139, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 8731845130980062135, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 8735266089948864223, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
+    - target: {fileID: 9105102235778345294, guid: 00a39235b1971da438cb987ad1aabfa8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ccbc72817fbd4745adde99efb38e800, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

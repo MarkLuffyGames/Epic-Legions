@@ -37,19 +37,27 @@ public class CardSO : ScriptableObject
         }
     }
 #endif
+    
+    [Tooltip("Damage Effectiveness Modifier")] public static int DEM = 20;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Initializee()
+    {
+        DEM = 20;
+    }
 
     private static readonly int[,] typeChart =
     {
         //         NON FIR WAT GRA GRO ELE WIN LIG DAR 
-        /* NON */ {  0,  0,  0,  0,  0,  0,  0,  0,  0},
-        /* FIR */ {  0,  0,-20, 20,  0,  0,  0,  0,  0},
-        /* WAT */ {  0, 20,  0,-20,  0,  0,  0,  0,  0},
-        /* GRA */ {  0,-20, 20,  0,  0,  0,  0,  0,  0},
-        /* GRO */ {  0,  0,  0,  0,  0, 20,-20,  0,  0},
-        /* ELE */ {  0,  0,  0,  0,-20,  0, 20,  0,  0},
-        /* WIN */ {  0,  0,  0,  0, 20,-20,  0,  0,  0},
-        /* LIG */ {  0,  0,  0,  0,  0,  0,  0,  0, 20},
-        /* DAR */ {  0,  0,  0,  0,  0,  0,  0, 20,  0},
+        /* NON */ {   0,   0,   0,   0,   0,   0,   0,   0,   0},
+        /* FIR */ {   0,   0,-DEM, DEM,   0,   0,   0,   0,   0},
+        /* WAT */ {   0, DEM,   0,-DEM,   0,   0,   0,   0,   0},
+        /* GRA */ {   0,-DEM, DEM,   0,   0,   0,   0,   0,   0},
+        /* GRO */ {   0,   0,   0,   0,   0, DEM,-DEM,   0,   0},
+        /* ELE */ {   0,   0,   0,   0,-DEM,   0, DEM,   0,   0},
+        /* WIN */ {   0,   0,   0,   0, DEM,-DEM,   0,   0,   0},
+        /* LIG */ {   0,   0,   0,   0,   0,   0,   0,   0, DEM},
+        /* DAR */ {   0,   0,   0,   0,   0,   0,   0, DEM,   0},
     };
 
     public static int GetEffectiveness(CardElement attacker, CardElement defender)

@@ -900,6 +900,7 @@ public class DuelManager : NetworkBehaviour
                     else
                     {
                         card.ActiveSelectableTargets(Color.red);
+                        card.ShowEffectiveness(attackingCard.Moves[movementToUseIndex].MoveSO.Element);
                     }
                 }
                 else if(card.FieldPosition != null)
@@ -1134,10 +1135,6 @@ public class DuelManager : NetworkBehaviour
 
         // Resetear el índice del movimiento utilizado y otras variables de estado
         movementToUseIndex = -1;
-
-        // Desactivar la selección de objetivos y el estado de ataque
-        settingAttackTarget = false;
-        cardSelectingTarget = null;
 
         heroInTurn.Remove(cardUsesTheAttack);
             
@@ -1408,12 +1405,6 @@ public class DuelManager : NetworkBehaviour
 
             yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
         }
-
-        // Restablece las variables relacionadas con la selección de objetivo y el estado de ataque después de completar el ataque.
-        settingAttackTarget = false;
-        cardSelectingTarget = null;
-
-
     }
 
     /// <summary>
@@ -1787,10 +1778,6 @@ public class DuelManager : NetworkBehaviour
             if (!attackerCard.Moves[movementToUseIndex].MoveSO.NeedTarget) card = attackerCard;
             yield return HeroAttack(card, playerRole, attackerCard, movementToUseIndex, lastMove);
         }
-
-        // Restablece las variables de selección de objetivo.
-        settingAttackTarget = false;
-        cardSelectingTarget = null;
     }
 
 

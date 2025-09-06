@@ -123,7 +123,7 @@ public class Card : MonoBehaviour
         this.duelManager = duelManager;
 
         var cardImage = cardBorder.GetComponentInChildren<RawImage>();
-        borderMaterial =  new Material(cardImage.material);
+        borderMaterial = new Material(cardImage.material);
         cardImage.material = borderMaterial;
 
         SetCard();
@@ -171,12 +171,12 @@ public class Card : MonoBehaviour
                 move1Button.transform.localPosition = new Vector3(0.0123f, -0.544f, 0.0f);
 
                 SetMovement1UI(moves[0]);
-                
+
             }
             if (moves[1] != null)
             {
                 SetMovement2UI(moves[1]);
-                
+
             }
 
             statModifier = new List<Effect>();
@@ -211,7 +211,7 @@ public class Card : MonoBehaviour
                 ActivateMoveText1(false);
             }
 
-            
+
             ActivateMoveText2(false);
             ActivateHeroStats(false);
 
@@ -319,16 +319,16 @@ public class Card : MonoBehaviour
         card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.SetEquipmentOwner(this);
-        if(card.moves.Count > 0)
+        if (card.moves.Count > 0)
         {
             foreach (var move in card.moves)
             {
                 moves.Add(move);
             }
         }
-        if(card.cardSO is EquipmentCardSO equipment)
-        { 
-            if(equipment.Effect != null && !equipment.Effect.isPassive) equipment.Effect.ActivateEffect(card, this); 
+        if (card.cardSO is EquipmentCardSO equipment)
+        {
+            if (equipment.Effect != null && !equipment.Effect.isPassive) equipment.Effect.ActivateEffect(card, this);
         }
     }
 
@@ -353,7 +353,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void UpdateText()
     {
-        if (cardSO is HeroCardSO) 
+        if (cardSO is HeroCardSO)
         {
             healtText.color = currentHealt < maxHealt ? Color.red : Color.yellow;
             defenceText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
@@ -362,7 +362,7 @@ public class Card : MonoBehaviour
             healtText.text = (currentHealt > 0 ? currentHealt : 0).ToString();
             defenceText.text = CurrentDefensePoints.ToString();
             speedText.text = CurrentSpeedPoints.ToString();
-            energyText.text = energy.ToString(); 
+            energyText.text = energy.ToString();
         }
     }
 
@@ -426,7 +426,7 @@ public class Card : MonoBehaviour
         }
 
         isMoving = false;
-        
+
     }
 
     /// <summary>
@@ -444,7 +444,7 @@ public class Card : MonoBehaviour
     /// <param name="speed">Velocidad a la que se quiere rotar la carta</param>
     public void RotateToAngle(Vector3 targetRotation, float speed, bool temporalRotation)
     {
-        if(rotateCoroutine != null)
+        if (rotateCoroutine != null)
             StopCoroutine(rotateCoroutine);
 
         rotateCoroutine = StartCoroutine(RotateSmoothly(targetRotation, speed, temporalRotation));
@@ -569,7 +569,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    public bool  UsableMovement(int moveIndex, PlayerManager playerManager)
+    public bool UsableMovement(int moveIndex, PlayerManager playerManager)
     {
         PlayerManager otherPlayerManager = playerManager == duelManager.Player1Manager ? duelManager.Player2Manager : duelManager.Player1Manager;
 
@@ -607,7 +607,7 @@ public class Card : MonoBehaviour
     public void ChangedSortingOrder(int sortingOrder)
     {
         canvasFront.sortingOrder = sortingOrder;
-        if(canvasBack != null) canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
+        if (canvasBack != null) canvasBack.sortingOrder = isVisible ? sortingOrder - 1 : sortingOrder + 1;
         if (cardBorder != null) cardBorder.sortingOrder = sortingOrder;
         cardActions.sortingOrder = sortingOrder + 1;
     }
@@ -618,10 +618,10 @@ public class Card : MonoBehaviour
     }
     public void ShowBack(bool showFront)
     {
-        if(canvasBack != null) canvasBack.gameObject.SetActive(showFront);
+        if (canvasBack != null) canvasBack.gameObject.SetActive(showFront);
     }
 
-    
+
     private float fadeDuration = 0.3f;
     private Coroutine fadeRoutine;
 
@@ -656,7 +656,7 @@ public class Card : MonoBehaviour
     public void StartDragging(float heldTime)
     {
         this.heldTime = heldTime;
-        if (isDragging)return;
+        if (isDragging) return;
 
         isDragging = true;
         offset = transform.position - GetMouseWorldPosition();
@@ -681,7 +681,7 @@ public class Card : MonoBehaviour
     {
         if (isDragging && !isTemporalPosition)
         {
-            if(heldTime > CardSelector.clickHoldTime) RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed * 2, true);
+            if (heldTime > CardSelector.clickHoldTime) RotateToAngle(new Vector3(angleHeldCard, 0, 0), cardMovementSpeed * 2, true);
             Vector3 newPosition = GetMouseWorldPosition() + offset;
             newPosition = new Vector3(newPosition.x, heldCardHeight, newPosition.z);
 
@@ -700,13 +700,13 @@ public class Card : MonoBehaviour
     {
         if (cardSO is HeroCardSO heroCardSO)
         {
-            if(duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation &&
+            if (duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation &&
                 heroCardSO.Energy <= playerManager.PlayerEnergy)
             {
                 return true;
             }
         }
-        else if( cardSO is SpellCardSO spellCardSO)
+        else if (cardSO is SpellCardSO spellCardSO)
         {
             if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation) &&
                 spellCardSO.Move.EnergyCost <= playerManager.PlayerEnergy &&
@@ -729,12 +729,12 @@ public class Card : MonoBehaviour
                         return true;
                     }
                 }
-                
+
                 return false;
             }
         }
 
-            return false;
+        return false;
     }
 
     /// <summary>
@@ -814,7 +814,7 @@ public class Card : MonoBehaviour
     /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
-        duelManager.UseMovement(cardSO is EquipmentCardSO e ? movementNumber + 3 : movementNumber, cardSO is EquipmentCardSO eq ? copiedCard.HeroOwner: copiedCard);
+        duelManager.UseMovement(cardSO is EquipmentCardSO e ? movementNumber + 3 : movementNumber, cardSO is EquipmentCardSO eq ? copiedCard.HeroOwner : copiedCard);
         cardActions.enabled = false;
         duelManager.sampleCard.ResetSize();
     }
@@ -843,6 +843,7 @@ public class Card : MonoBehaviour
         {
             fieldPosition.RestoreOriginalColor();
         }
+        HideEffectiveness();
 
         isAttackable = false;
     }
@@ -851,7 +852,7 @@ public class Card : MonoBehaviour
     {
         yield return new WaitWhile(() => isMoving);
 
-        if(movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
+        if (movement.MoveSO.MoveType == MoveType.PositiveEffect || movement.MoveSO.MoveType == MoveType.RangedAttack)
         {
             yield return RangedAttack(Vector3.up, Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect);
         }
@@ -859,7 +860,7 @@ public class Card : MonoBehaviour
         {
             if (cardToAttack != null)
             {
-                if(movement.MoveSO.MoveType == MoveType.MeleeAttack)
+                if (movement.MoveSO.MoveType == MoveType.MeleeAttack)
                 {
                     if (player == 1)
                     {
@@ -890,7 +891,7 @@ public class Card : MonoBehaviour
                             Quaternion.Euler(Vector3.zero), movement.MoveSO.VisualEffect, 10);
                     }
                 }
-                
+
             }
             else
             {
@@ -902,7 +903,7 @@ public class Card : MonoBehaviour
                 }
                 else
                 {
-                    yield return MeleeAttack( new Vector3(0, 0.5f, -5),
+                    yield return MeleeAttack(new Vector3(0, 0.5f, -5),
                             Vector3.back + Vector3.up * 0.1f,
                             Quaternion.Euler(new Vector3(0, 180, 0)), movement.MoveSO.VisualEffect, 1);
                 }
@@ -912,7 +913,7 @@ public class Card : MonoBehaviour
 
     private IEnumerator MeleeAttack(Vector3 targetPosition, Vector3 effectPosition, Quaternion effectRotation, GameObject visualEffect, int speedMultiplier)
     {
-        if(speedMultiplier > 1) Instantiate(teleportEffect, transform.position + Vector3.up, effectRotation);
+        if (speedMultiplier > 1) Instantiate(teleportEffect, transform.position + Vector3.up, effectRotation);
 
         yield return MoveToPosition(targetPosition, cardMovementSpeed * speedMultiplier, true, false);
         yield return new WaitForSeconds(0.2f);
@@ -985,7 +986,7 @@ public class Card : MonoBehaviour
         ignoredDefense = Mathf.Min(ignoredDefense, amountDamage);
         int remainingDamage = ReceiveDamageToShield(amountDamage - ignoredDefense) + ignoredDefense;
 
-        if(remainingDamage > 0)
+        if (remainingDamage > 0)
         {
             damageInflicted = currentHealt > remainingDamage ? remainingDamage : currentHealt;
             ShowTextDamage(false, damageInflicted);
@@ -1012,7 +1013,7 @@ public class Card : MonoBehaviour
     /// <param name="position"></param>
     public void ProtectAlly(FieldPosition position)
     {
-        StartCoroutine(MoveToPosition(position.transform.position + Vector3.up * 0.1f, cardMovementSpeed, true,false));
+        StartCoroutine(MoveToPosition(position.transform.position + Vector3.up * 0.1f, cardMovementSpeed, true, false));
     }
 
     /// <summary>
@@ -1095,7 +1096,7 @@ public class Card : MonoBehaviour
         List<Effect> effects = new List<Effect>();
         foreach (var effect in statModifier)
         {
-            if(effect.durability <= 0)
+            if (effect.durability <= 0)
             {
                 effects.Add(effect);
             }
@@ -1105,7 +1106,7 @@ public class Card : MonoBehaviour
 
         foreach (var effect in effects)
         {
-            if(statModifier.All(x => x.MoveEffect != effect.MoveEffect))
+            if (statModifier.All(x => x.MoveEffect != effect.MoveEffect))
             {
                 HideIcon(effect.MoveEffect.iconSprite);
             }
@@ -1118,7 +1119,7 @@ public class Card : MonoBehaviour
     /// </summary>
     private void CancelAllEffects()
     {
-        if(cardSO is HeroCardSO)
+        if (cardSO is HeroCardSO)
         {
             if (stunEffect != null) stunEffect.SetActive(false);
             foreach (var effect in statModifier)
@@ -1135,15 +1136,15 @@ public class Card : MonoBehaviour
     /// </summary>
     public void RegenerateDefense()
     {
-        if(currentDefense < defense)
+        if (currentDefense < defense)
         {
             currentDefense = defense;
             foreach (Effect statModifier in statModifier)
             {
                 statModifier.RegenerateDefense();
             }
-            if(regenerateDefenseEffect != null) Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
-            UpdateText();   
+            if (regenerateDefenseEffect != null) Instantiate(regenerateDefenseEffect, transform.position, Quaternion.identity);
+            UpdateText();
         }
     }
 
@@ -1153,12 +1154,12 @@ public class Card : MonoBehaviour
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)
     {
-        if(effect.MoveEffect is not Poison || statModifier.All(x => x.MoveEffect is not Antivenom))
+        if (effect.MoveEffect is not Poison || statModifier.All(x => x.MoveEffect is not Antivenom))
         {
             ShowIcon(effect.MoveEffect.iconSprite);
             statModifier.Add(effect);
         }
-        
+
         UpdateText();
     }
 
@@ -1166,7 +1167,7 @@ public class Card : MonoBehaviour
     {
         foreach (GameObject icon in statsIcons)
         {
-            if(!icon.activeInHierarchy)
+            if (!icon.activeInHierarchy)
             {
                 icon.SetActive(true);
                 icon.GetComponentInChildren<Image>().sprite = sprite;
@@ -1174,7 +1175,7 @@ public class Card : MonoBehaviour
             }
             else
             {
-                if(icon.GetComponentInChildren<Image>().sprite == sprite)
+                if (icon.GetComponentInChildren<Image>().sprite == sprite)
                 {
                     break;
                 }
@@ -1197,7 +1198,7 @@ public class Card : MonoBehaviour
 
     public void ActivateVisualEffects()
     {
-        if(stunEffect != null)stunEffect.SetActive(IsStunned());
+        if (stunEffect != null) stunEffect.SetActive(IsStunned());
     }
 
 
@@ -1208,15 +1209,15 @@ public class Card : MonoBehaviour
     /// <returns>Cantidad de daño que no pudo proteger el escudo.</returns>
     private int ReceiveDamageToShield(int damage)
     {
-        if(CurrentDefensePoints <= damage)
+        if (CurrentDefensePoints <= damage)
         {
-            if(CurrentDefensePoints != 0)ShowTextDamage(true, CurrentDefensePoints);
+            if (CurrentDefensePoints != 0) ShowTextDamage(true, CurrentDefensePoints);
 
             var remainingDamage = CurrentDefensePoints - damage;
             currentDefense = 0;
             foreach (Effect statModifier in statModifier)
             {
-                if(statModifier.GetCurrentDefence() > 0)
+                if (statModifier.GetCurrentDefence() > 0)
                 {
                     statModifier.SetCurrentDefence(0);
                 }
@@ -1228,18 +1229,18 @@ public class Card : MonoBehaviour
             ShowTextDamage(true, damage);
             var remainingDamage = damage - currentDefense;
             currentDefense -= damage;
-            if(currentDefense < 0) currentDefense = 0;
+            if (currentDefense < 0) currentDefense = 0;
             damage = remainingDamage;
 
-            if (damage <= 0) 
+            if (damage <= 0)
             {
-                return 0; 
+                return 0;
             }
             else
             {
                 foreach (Effect statModifier in statModifier)
                 {
-                    if(statModifier.GetCurrentDefence() > 0)
+                    if (statModifier.GetCurrentDefence() > 0)
                     {
                         remainingDamage = damage - statModifier.GetCurrentDefence();
                         statModifier.SetCurrentDefence(statModifier.GetCurrentDefence() - damage);
@@ -1252,7 +1253,7 @@ public class Card : MonoBehaviour
 
         }
 
-        return 0;   
+        return 0;
     }
 
     /// <summary>
@@ -1261,11 +1262,11 @@ public class Card : MonoBehaviour
     /// <param name="amount">Cantidad a sanar.</param>
     public void ToHeal(int amount)
     {
-        if (statModifier.Any(x => x.MoveEffect is NoHealing))amount = 0;
+        if (statModifier.Any(x => x.MoveEffect is NoHealing)) amount = 0;
 
         ShowTextToHeal(maxHealt - currentHealt < amount ? maxHealt - currentHealt : amount);
         currentHealt += amount;
-        if(currentHealt > maxHealt)currentHealt = maxHealt;
+        if (currentHealt > maxHealt) currentHealt = maxHealt;
         UpdateText();
     }
 
@@ -1275,7 +1276,7 @@ public class Card : MonoBehaviour
     /// <param name="amount"></param>
     private void ShowTextToHeal(int amount)
     {
-        if(amount <= 0) return;
+        if (amount <= 0) return;
 
         var position = healtText.transform.position;
         position += Vector3.up;
@@ -1291,11 +1292,11 @@ public class Card : MonoBehaviour
         var player = IsControlled() ? duelManager.GetOpposingPlayerManager(duelManager.GetPlayerManagerForCard(this)) : duelManager.GetPlayerManagerForCard(this);
         if (player != null)
         {
-            player.RechargeEnergy(amount); 
+            player.RechargeEnergy(amount);
         }
         else
         {
-            Debug.LogError("Jugador no encontrado"); 
+            Debug.LogError("Jugador no encontrado");
         }
     }
 
@@ -1309,13 +1310,13 @@ public class Card : MonoBehaviour
     {
         foreach (var item in statModifier)
         {
-            if(item.MoveEffect is Counterattack counterattack)
+            if (item.MoveEffect is Counterattack counterattack)
             {
                 yield return duelManager.Counterattack(item.casterHero, card, item.GetCounterattackDamage());
                 statModifier.Remove(item);
                 break;
             }
-            else if(item.MoveEffect is ToxicContact poisonedcounterattack)
+            else if (item.MoveEffect is ToxicContact poisonedcounterattack)
             {
                 var poison = poisonedcounterattack.PoisonEffect;
                 poison.ActivateEffect(item.casterHero, card);
@@ -1380,7 +1381,7 @@ public class Card : MonoBehaviour
 
         foreach (Effect effect in statModifier)
         {
-            if(effect.MoveEffect is ModifyDefense) defenceModifier += effect.GetCurrentDefence();
+            if (effect.MoveEffect is ModifyDefense) defenceModifier += effect.GetCurrentDefence();
         }
 
         return defenceModifier;
@@ -1410,7 +1411,7 @@ public class Card : MonoBehaviour
     {
         int attackModifier = 0;
 
-        if(statModifier == null) return attackModifier;
+        if (statModifier == null) return attackModifier;
 
         foreach (Effect effect in statModifier)
         {
@@ -1438,7 +1439,7 @@ public class Card : MonoBehaviour
 
     public Card GetController()
     {
-        if(statModifier == null) return null;
+        if (statModifier == null) return null;
 
         foreach (Effect effect in statModifier)
         {
@@ -1532,7 +1533,7 @@ public class Card : MonoBehaviour
 
     public void ActivatePassiveSkills(PassiveSkillActivationPhase passiveSkillActivationPhase)
     {
-        if(IsEquipped(EquipmentType.Accessory))
+        if (IsEquipped(EquipmentType.Accessory))
         {
             foreach (var item in equipmentCard)
             {
@@ -1540,7 +1541,7 @@ public class Card : MonoBehaviour
                 {
                     if (equipmentCardSO.EquipmentType == EquipmentType.Accessory)
                     {
-                        if(passiveSkillActivationPhase == equipmentCardSO.Effect.passiveSkillActivationPhase)
+                        if (passiveSkillActivationPhase == equipmentCardSO.Effect.passiveSkillActivationPhase)
                             equipmentCardSO.Effect.ActivateEffect(this, this);
                     }
                 }
@@ -1574,6 +1575,20 @@ public class Card : MonoBehaviour
         }
 
         return cardSO.CardElemnt;
+    }
+
+    [SerializeField] private EffectivenessUI effectivenessUI;
+    public void ShowEffectiveness(CardElement moveElement)
+    {
+        int effectiveness = CardSO.GetEffectiveness(moveElement, GetElement());  
+        if (effectiveness == 0) HideEffectiveness();
+
+        effectivenessUI.Activate(effectiveness == CardSO.DEM ? true : false);
+    }
+
+    public void HideEffectiveness()
+    {
+        effectivenessUI.Deactivate();
     }
 }
 
