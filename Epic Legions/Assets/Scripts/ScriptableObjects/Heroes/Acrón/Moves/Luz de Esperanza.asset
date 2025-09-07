@@ -25,4 +25,4 @@ MonoBehaviour:
   targetsType: 2
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: Cura ligeramente a todos los aliados en el campo.
+  effectDescription: Cura 20 puntos de vida a todos los aliados en el campo.

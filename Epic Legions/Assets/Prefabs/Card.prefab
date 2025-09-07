@@ -111,7 +111,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.365, y: 0}
-  m_SizeDelta: {x: 0.061705884, y: 0.061647058}
+  m_SizeDelta: {x: 0.061705884, y: 0.06170588}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7816846181417580115
 CanvasRenderer:
@@ -484,6 +484,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7006326078639534143}
+  - component: {fileID: 6702136563771843692}
   - component: {fileID: 5189040006146972977}
   - component: {fileID: 3020894858418228820}
   m_Layer: 5
@@ -512,9 +513,28 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.004999999, y: -0.654}
+  m_AnchoredPosition: {x: -0.048, y: -0.654}
   m_SizeDelta: {x: 0.65, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6702136563771843692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408011167351228107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d094e74e3000a5043beaae80050f8577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveNameText: {fileID: 3020894858418228820}
+  moveEnergyImage: {fileID: 7326928933548500587}
+  moveEnergyCostText: {fileID: 4065045022660279603}
+  moveDamageImage: {fileID: 5862495410732588793}
+  moveDamageText: {fileID: 5345837758713070604}
+  moveDescriptionText: {fileID: 7786888700075625512}
+  moveButton: {fileID: 8855211243749122795}
 --- !u!222 &5189040006146972977
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1437,6 +1457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5326239270882820075}
+  - component: {fileID: 2050672153512666521}
   - component: {fileID: 6382867386717002059}
   - component: {fileID: 2059784032325631284}
   m_Layer: 5
@@ -1465,9 +1486,28 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.005, y: -0.499}
+  m_AnchoredPosition: {x: -0.048, y: -0.499}
   m_SizeDelta: {x: 0.65, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2050672153512666521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3245010859240163045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d094e74e3000a5043beaae80050f8577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveNameText: {fileID: 2059784032325631284}
+  moveEnergyImage: {fileID: 1767500822776611648}
+  moveEnergyCostText: {fileID: 1261675997226494615}
+  moveDamageImage: {fileID: 5427162488662670834}
+  moveDamageText: {fileID: 5736113030742330728}
+  moveDescriptionText: {fileID: 5368696133612444724}
+  moveButton: {fileID: 2651439469424710317}
 --- !u!222 &6382867386717002059
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3255,8 +3295,8 @@ MonoBehaviour:
   canvasBack: {fileID: 3031764172891635044}
   cardActions: {fileID: 4191007347987392996}
   cardBorder: {fileID: 3826953853095130043}
-  move1Button: {fileID: 2651439469424710317}
-  move2Button: {fileID: 8855211243749122795}
+  movementUI1: {fileID: 2050672153512666521}
+  movementUI2: {fileID: 6702136563771843692}
   rechargeButton: {fileID: 6639967436386170854}
   cardImage: {fileID: 8462960837391840768}
   classIcon: {fileID: 9114775604932404488}
@@ -3267,18 +3307,6 @@ MonoBehaviour:
   defenceText: {fileID: 7366237707526491110}
   speedText: {fileID: 1106663729349222624}
   energyText: {fileID: 6153432091646338378}
-  move1NameText: {fileID: 2059784032325631284}
-  move1EnergyImage: {fileID: 1767500822776611648}
-  move1EnergyCostText: {fileID: 1261675997226494615}
-  move1DamageImage: {fileID: 5427162488662670834}
-  move1DamageText: {fileID: 5736113030742330728}
-  move1DescriptionText: {fileID: 5368696133612444724}
-  move2NameText: {fileID: 3020894858418228820}
-  move2EnergyImage: {fileID: 7326928933548500587}
-  move2EnergyCostText: {fileID: 4065045022660279603}
-  move2DamageImage: {fileID: 5862495410732588793}
-  move2DamageText: {fileID: 5345837758713070604}
-  move2DescriptionText: {fileID: 7786888700075625512}
   description: {fileID: 5824128363118659634}
   energyPopUpPrefab: {fileID: 2889455318098897411, guid: 0a429e1aecab39e4bb0daf0347e1de43, type: 3}
   defencePopUpPrefab: {fileID: 8420613145126704882, guid: a9577b953ab201649a62ac17265edfa7, type: 3}
@@ -3343,7 +3371,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.365, y: 0}
-  m_SizeDelta: {x: 0.061705884, y: 0.061647058}
+  m_SizeDelta: {x: 0.06170588, y: 0.06170588}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &997284014796364456
 CanvasRenderer:
@@ -3373,7 +3401,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d695286c2f69ff941b8cbb39edf1115f, type: 3}
+  m_Sprite: {fileID: 723716962, guid: 1eec5652195a9f34abc80831fe9045de, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -25,5 +25,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
   visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
-  effectDescription: "Un ataque cuerpo a cuerpo que inflige da\xF1o adicional contra
-    enemigos oscuros."
+  effectDescription: Un ataque cuerpo a cuerpo que golpea al enemigo con su escudo.

@@ -12,8 +12,10 @@ public class CardDatabase : MonoBehaviour
 
     public List<HeroClassIcon> classIcons;
     public List<HeroElementIcon> elementIcons;
+    public List<MoveTypeIcon> moveTypeIcons;
     private static Dictionary<HeroClass, Sprite> _iconClassDictionary;
     private static Dictionary<CardElement, Sprite> _iconElementDictionary;
+    private static Dictionary<MoveType, Sprite> _iconMoveTypeDictionary;
 
     // Método para buscar una carta por su ID.  
     public static CardSO GetCardById(int cardId)
@@ -47,6 +49,11 @@ public class CardDatabase : MonoBehaviour
             if (!_iconElementDictionary.ContainsKey(item.heroElement))
                 _iconElementDictionary.Add(item.heroElement, item.icon);
         }
+        foreach (var item in moveTypeIcons)
+        {
+            if (!_iconMoveTypeDictionary.ContainsKey(item.moveType))
+                _iconMoveTypeDictionary.Add(item.moveType, item.icon);
+        }
         DontDestroyOnLoad(gameObject);
     }
 
@@ -62,6 +69,7 @@ public class CardDatabase : MonoBehaviour
         allCards = new Dictionary<int, CardSO>();
         _iconClassDictionary = new Dictionary<HeroClass, Sprite>();
         _iconElementDictionary = new Dictionary<CardElement, Sprite>();
+        _iconMoveTypeDictionary = new Dictionary<MoveType, Sprite>();
     }
 
     public static int[] ShuffleArray(int[] array)
@@ -98,6 +106,13 @@ public class CardDatabase : MonoBehaviour
         public CardElement heroElement;
         public Sprite icon;
     }
+
+    [System.Serializable]
+    public class MoveTypeIcon
+    {
+        public MoveType moveType;
+        public Sprite icon;
+    }
     public static Sprite GetClassIcon(HeroClass heroClass)
     {
         if (_iconClassDictionary.TryGetValue(heroClass, out Sprite icon))
@@ -113,6 +128,14 @@ public class CardDatabase : MonoBehaviour
             return icon;
 
         Debug.LogWarning($"No icon found for class {heroElement}");
+        return null;
+    }
+
+    public static Sprite GetMoveTypeIcon(MoveType moveType)
+    {
+        if (_iconMoveTypeDictionary.TryGetValue(moveType, out Sprite icon))
+            return icon;
+        Debug.LogWarning($"No icon found for class {moveType}");
         return null;
     }
 }

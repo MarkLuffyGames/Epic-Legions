@@ -171,3 +171,12 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 783fe6a6daa443a4e981f9b7742c6741, type: 3}
   - heroElement: 8
     icon: {fileID: 21300000, guid: c825bb1d99423b343a0927d9feda391c, type: 3}
+  moveTypeIcons:
+  - moveType: 0
+    icon: {fileID: 21300000, guid: d695286c2f69ff941b8cbb39edf1115f, type: 3}
+  - moveType: 1
+    icon: {fileID: 21300000, guid: 1eec5652195a9f34abc80831fe9045de, type: 3}
+  - moveType: 2
+    icon: {fileID: 21300000, guid: ed3b9c47b66255e408799100ec986eec, type: 3}
+  - moveType: 3
+    icon: {fileID: 21300000, guid: 92e382fc18caa8f4e9051d2f6c895494, type: 3}

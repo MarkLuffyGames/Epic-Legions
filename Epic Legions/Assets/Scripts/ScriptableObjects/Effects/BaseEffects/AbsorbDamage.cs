@@ -19,7 +19,7 @@ public class AbsorbDamage : CardEffect
     {
         foreach (Card card in target)
         {
-            Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position, Quaternion.identity);
+            if (visualEffectCardEffect) Instantiate(visualEffectCardEffect, card.FieldPosition.transform.position, Quaternion.identity);
             card.AddEffect(new Effect(this, card));
 
         }

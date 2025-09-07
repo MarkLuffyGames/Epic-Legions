@@ -14,8 +14,8 @@ public class Card : MonoBehaviour
     [SerializeField] private Canvas canvasBack;
     [SerializeField] private Canvas cardActions;
     [SerializeField] private Canvas cardBorder;
-    [SerializeField] private Button move1Button;
-    [SerializeField] private Button move2Button;
+    [SerializeField] private MovementUI movementUI1;
+    [SerializeField] private MovementUI movementUI2;
     [SerializeField] private Button rechargeButton;
     [SerializeField] private Image cardImage;
     [SerializeField] private Image classIcon;
@@ -26,18 +26,6 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI defenceText;
     [SerializeField] private TextMeshProUGUI speedText;
     [SerializeField] private TextMeshProUGUI energyText;
-    [SerializeField] private TextMeshProUGUI move1NameText;
-    [SerializeField] private Image move1EnergyImage;
-    [SerializeField] private TextMeshProUGUI move1EnergyCostText;
-    [SerializeField] private Image move1DamageImage;
-    [SerializeField] private TextMeshProUGUI move1DamageText;
-    [SerializeField] private TextMeshProUGUI move1DescriptionText;
-    [SerializeField] private TextMeshProUGUI move2NameText;
-    [SerializeField] private Image move2EnergyImage;
-    [SerializeField] private TextMeshProUGUI move2EnergyCostText;
-    [SerializeField] private Image move2DamageImage;
-    [SerializeField] private TextMeshProUGUI move2DamageText;
-    [SerializeField] private TextMeshProUGUI move2DescriptionText;
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private GameObject energyPopUpPrefab;
     [SerializeField] private GameObject defencePopUpPrefab;
@@ -160,24 +148,9 @@ public class Card : MonoBehaviour
 
             classIcon.sprite = CardDatabase.GetClassIcon(heroCardSO.HeroClass);
             elementIcon.sprite = CardDatabase.GetElementIcon(heroCardSO.CardElemnt);
-            ActivateMoveText1(true);
-            ActivateMoveText2(true);
+
             ActivateHeroStats(true);
             description.text = "";
-
-            if (moves[0] != null)
-            {
-                move1NameText.rectTransform.localPosition = new Vector3(-0.048f, -0.499f, -0.0001f);
-                move1Button.transform.localPosition = new Vector3(0.0123f, -0.544f, 0.0f);
-
-                SetMovement1UI(moves[0]);
-
-            }
-            if (moves[1] != null)
-            {
-                SetMovement2UI(moves[1]);
-
-            }
 
             statModifier = new List<Effect>();
             UpdateText();
@@ -186,9 +159,6 @@ public class Card : MonoBehaviour
         {
             moves.Add(new Movement(spellCardSO.Move));
             description.text = spellCardSO.Move.EffectDescription;
-
-            ActivateMoveText1(false);
-            ActivateMoveText2(false);
             ActivateHeroStats(false);
         }
         else if (cardSO is EquipmentCardSO equipmentCardSO)
@@ -198,72 +168,16 @@ public class Card : MonoBehaviour
                 moves.Add(new Movement(move));
             }
 
-            if (moves.Count > 0 && moves[0] != null)
-            {
-                ActivateMoveText1(true);
-
-                move1NameText.rectTransform.localPosition = new Vector3(-0.048f, -0.601f, -0.0001f);
-                move1Button.transform.localPosition = new Vector3(0.0123f, -0.63f, 0.0f);
-                SetMovement1UI(moves[0]);
-            }
-            else
-            {
-                ActivateMoveText1(false);
-            }
-
-
-            ActivateMoveText2(false);
             ActivateHeroStats(false);
 
             elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
             elementIcon.enabled = true;
             description.text = equipmentCardSO.Description;
         }
-    }
 
-    private void SetMovement1UI(Movement movement)
-    {
-        move1NameText.text = movement.MoveSO.MoveName;
-        move1EnergyCostText.text = movement.MoveSO.EnergyCost.ToString();
-        move1DamageText.text = movement.MoveSO.Damage.ToString();
-        move1DescriptionText.text = movement.MoveSO.EffectDescription;
-        if (movement.MoveSO.Damage < 1)
-        {
-            move1DamageText.enabled = false;
-            move1DamageImage.enabled = false;
-        }
-    }
 
-    private void SetMovement2UI(Movement movement)
-    {
-        move2NameText.text = movement.MoveSO.MoveName;
-        move2EnergyCostText.text = movement.MoveSO.EnergyCost.ToString();
-        move2DamageText.text = movement.MoveSO.Damage.ToString();
-        move2DescriptionText.text = movement.MoveSO.EffectDescription;
-        if (movement.MoveSO.Damage < 1)
-        {
-            move2DamageText.enabled = false;
-            move2DamageImage.enabled = false;
-        }
-    }
-
-    private void ActivateMoveText1(bool activate)
-    {
-        move1NameText.enabled = activate;
-        move1EnergyImage.enabled = activate;
-        move1EnergyCostText.enabled = activate;
-        move1DamageImage.enabled = activate;
-        move1DamageText.enabled = activate;
-        move1DescriptionText.enabled = activate;
-    }
-    private void ActivateMoveText2(bool activate)
-    {
-        move2NameText.enabled = activate;
-        move2EnergyImage.enabled = activate;
-        move2EnergyCostText.enabled = activate;
-        move2DamageImage.enabled = activate;
-        move2DamageText.enabled = activate;
-        move2DescriptionText.enabled = activate;
+        movementUI1.SetMoveUI(moves.Count > 0 ? moves[0] : null, moves.Count < 2, 1);
+        movementUI2.SetMoveUI(moves.Count > 1 ? moves[1] : null, moves.Count < 2, 2);
     }
 
     private void ActivateHeroStats(bool activate)
@@ -546,20 +460,12 @@ public class Card : MonoBehaviour
         {
             if (moves.Count > 0)
             {
-                move1Button.gameObject.SetActive(copiedCard.UsableMovement(0, duelManager.Player1Manager));
-            }
-            else
-            {
-                move1Button.gameObject.SetActive(false);
+                movementUI1.SetButtonInteractable(moves.Count > 0 ? copiedCard.UsableMovement(0, duelManager.Player1Manager) : false);
             }
 
             if (moves.Count > 1)
             {
-                move2Button.gameObject.SetActive(copiedCard.UsableMovement(1, duelManager.Player1Manager));
-            }
-            else
-            {
-                move2Button.gameObject.SetActive(false);
+                movementUI2.SetButtonInteractable(moves.Count > 0 ? copiedCard.UsableMovement(1, duelManager.Player1Manager) : false);
             }
 
             if (cardSO is not HeroCardSO)
@@ -1581,7 +1487,7 @@ public class Card : MonoBehaviour
     public void ShowEffectiveness(CardElement moveElement)
     {
         int effectiveness = CardSO.GetEffectiveness(moveElement, GetElement());  
-        if (effectiveness == 0) HideEffectiveness();
+        if (effectiveness == 0) return;
 
         effectivenessUI.Activate(effectiveness == CardSO.DEM ? true : false);
     }
