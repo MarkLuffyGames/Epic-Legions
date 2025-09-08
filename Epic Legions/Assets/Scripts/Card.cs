@@ -458,15 +458,8 @@ public class Card : MonoBehaviour
         cardActions.enabled = enable;
         if (cardActions.isActiveAndEnabled)
         {
-            if (moves.Count > 0)
-            {
-                movementUI1.SetButtonInteractable(moves.Count > 0 ? copiedCard.UsableMovement(0, duelManager.Player1Manager) : false);
-            }
-
-            if (moves.Count > 1)
-            {
-                movementUI2.SetButtonInteractable(moves.Count > 0 ? copiedCard.UsableMovement(1, duelManager.Player1Manager) : false);
-            }
+            movementUI1.SetButtonInteractable(moves.Count > 0 ? copiedCard.UsableMovement(0, duelManager.Player1Manager) : false);
+            movementUI2.SetButtonInteractable(moves.Count > 1 ? copiedCard.UsableMovement(1, duelManager.Player1Manager) : false);
 
             if (cardSO is not HeroCardSO)
             {
