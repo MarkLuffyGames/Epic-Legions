@@ -14,6 +14,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button multiplayerButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private TextMeshProUGUI versionText;
+    [SerializeField] private Animator imageAnimator;
+    [SerializeField] private Animator cameraAnimator;
     private void Awake()
     {
         versionText.text = $"v{Application.version}";
@@ -22,12 +24,15 @@ public class MainMenu : MonoBehaviour
         InitializeUnityAuthentication();
         singlePlayerButton.onClick.AddListener(() =>
         {
-            StartSinglePlayer();
+            StartAnimation();
+            Invoke(nameof(StartSinglePlayer), 0.6f);
         });
 
         multiplayerButton.onClick.AddListener(() =>
         {
-            SceneManager.LoadScene("LobbyScene");
+            StartAnimation();
+            Invoke(nameof(StartCasualMultiplayer), 0.6f);
+            
         });
 
         exitButton.onClick.AddListener(() =>
@@ -93,5 +98,16 @@ public class MainMenu : MonoBehaviour
         Loader.sceneToLoad = "GameScene";
         SceneManager.LoadScene("LoadingScene");
         //SceneManager.LoadScene("GameScene");
+    }
+
+    private void StartCasualMultiplayer()
+    {
+        SceneManager.LoadScene("LobbyScene");
+    }
+
+    private void StartAnimation()
+    {
+        imageAnimator.SetTrigger("Activate");
+        cameraAnimator.SetTrigger("Activate");
     }
 }

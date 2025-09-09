@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class LoadingScreen : MonoBehaviour
 {
     public Slider progressBar;
+    public Animator imageAnimator;
 
     private void Start()
     {
@@ -36,7 +37,8 @@ public class LoadingScreen : MonoBehaviour
             if (operation.progress >= 0.9f)
             {
                 yield return new WaitForSeconds(1f); // Delay opcional
-
+                imageAnimator.SetTrigger("Activate");
+                yield return new WaitForSeconds(0.6f); // Espera a que termine la animación
                 operation.allowSceneActivation = true;
             }
 
