@@ -986,7 +986,7 @@ public class DuelManager : NetworkBehaviour
         // Si el movimiento no es un efecto positivo, buscamos enemigos en el campo del jugador contrario
         if (card.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
-            if (card.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Direct)
+            if (card.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.DIRECT)
             {
                 targets.Add(card);
             }
@@ -1105,7 +1105,7 @@ public class DuelManager : NetworkBehaviour
         // Esperar un breve tiempo antes de aplicar el daño
         yield return new WaitForSeconds(0.3f);
 
-        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Direct)
+        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.DIRECT)
         {
             cardUsesTheAttack.Moves[movementToUseIndex].ActivateEffect(cardUsesTheAttack, (Card)null);
         }
@@ -1434,7 +1434,7 @@ public class DuelManager : NetworkBehaviour
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
         {
             // Animación de daño para un objetivo único.
-            if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
+            if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
             {
                 yield return cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
@@ -1475,7 +1475,7 @@ public class DuelManager : NetworkBehaviour
         else // Si el ataque no causa daño, es un ataque de efecto.
         {
             // Animación de efecto para un solo objetivo o varios, dependiendo del tipo de movimiento.
-            if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
+            if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
             {
                 yield return cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
             }
@@ -1502,7 +1502,7 @@ public class DuelManager : NetworkBehaviour
         attackerCard.MoveToLastPosition();
 
         // Aplica efectos adicionales del ataque si no es un efecto pasivo.
-        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SingleTarget)
+        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
         {
             attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
         }
@@ -1605,21 +1605,19 @@ public class DuelManager : NetworkBehaviour
     private List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
     {
         // Si el tipo de objetivo es una línea (TargetLine).
-        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetLine)
+        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.ADJACENT)
         {
-            // Devuelve la línea de cartas asociada a la carta objetivo.
             if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
-                return player1Manager.GetLineForCard(cardToAttack);
+                return player1Manager.GetAdjacentForCard(cardToAttack);
             }
             else
             {
-                return player2Manager.GetLineForCard(cardToAttack);
+                return player2Manager.GetAdjacentForCard(cardToAttack);
             }
         }
-        else if(attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.TargetColumn)
+        else if(attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.COLUMN)
         {
-            // Devuelve la línea de cartas asociada a la carta objetivo.
             if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
                 return player1Manager.GetColumnForCard(cardToAttack, 3);
@@ -1630,7 +1628,7 @@ public class DuelManager : NetworkBehaviour
             }
         }
         // Si el tipo de objetivo es el campo medio (Midfield).
-        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.Midfield)
+        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.FIELD)
         {
             // Verifica si la carta atacante está en el campo de jugador 1 o jugador 2 y decide los objetivos según el tipo de movimiento.
             if (player1Manager.GetFieldPositionList().Contains(attackerCard.FieldPosition))
@@ -1658,7 +1656,7 @@ public class DuelManager : NetworkBehaviour
                 }
             }
         }
-        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.FrontBack)
+        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.PIERCE)
         {
             // Devuelve la línea de cartas asociada a la carta objetivo.
             if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
@@ -1670,9 +1668,20 @@ public class DuelManager : NetworkBehaviour
                 return player2Manager.GetColumnForCard(cardToAttack, 2);
             }
         }
+        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.CONE)
+        {
+            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            {
+                return player1Manager.GetColumnForCard(cardToAttack, 2);
+            }
+            else
+            {
+                return player2Manager.GetColumnForCard(cardToAttack, 2);
+            }
+        }
 
-            // Si no hay un tipo de objetivo válido, devuelve null.
-            return null;
+        // Si no hay un tipo de objetivo válido, devuelve null.
+        return null;
     }
 
 

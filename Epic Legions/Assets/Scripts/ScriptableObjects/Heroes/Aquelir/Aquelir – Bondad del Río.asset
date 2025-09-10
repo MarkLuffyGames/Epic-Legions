@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: "Acr\xF3n - Palad\xEDn Testudo 3"
+  m_Name: "Aquelir \u2013 Bondad del R\xEDo"
   m_EditorClassIdentifier: 
-  cardId: 1036
-  cardName: "Acr\xF3n"
-  cardLastName: "Palad\xEDn Testudo"
-  cardSprite: {fileID: 21300000, guid: e81327ae025dd004dad290afc4f3a30b, type: 3}
-  cardElemnt: 7
-  heroClass: 1
-  healt: 65
-  defence: 50
-  speed: 40
-  energy: 60
+  cardId: 1097
+  cardName: Aquelir
+  cardLastName: "Bondad del R\xEDo"
+  cardSprite: {fileID: 21300000, guid: 2a4e9e80e1cbd734091b4aaa5908ebc8, type: 3}
+  cardElemnt: 2
+  heroClass: 6
+  healt: 40
+  defence: 25
+  speed: 55
+  energy: 40
   moves:
-  - {fileID: 11400000, guid: 0eebf4ad0cdf8ac408423c790731c2c4, type: 2}
-  - {fileID: 11400000, guid: 2309d573b4c4b104eb70e69b1d8028f8, type: 2}
+  - {fileID: 11400000, guid: e798dbe35fd9c884485afccd193cab42, type: 2}
+  - {fileID: 11400000, guid: 3637f455b8cf80745981c60893d789e5, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

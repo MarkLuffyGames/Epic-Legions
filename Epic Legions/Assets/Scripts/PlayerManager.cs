@@ -231,19 +231,20 @@ public class PlayerManager : MonoBehaviour
         return graveyard;
     }
 
-    public List<Card> GetLineForCard(Card card)
+    public List<Card> GetAdjacentForCard(Card card)
     {
-        if (card.FieldPosition.PositionIndex < 5)
+        int target = card.FieldPosition.PositionIndex;
+        if (target < 5)
         {
-            return GetLineForIndex(0, 5);
+            return GetAdjacentForIndex(0, 5, target);
         }
-        else if(card.FieldPosition.PositionIndex < 10)
+        else if(target < 10)
         {
-            return GetLineForIndex(5, 10);
+            return GetAdjacentForIndex(5, 10, target);
         }
         else
         {
-            return GetLineForIndex(10, 15);
+            return GetAdjacentForIndex(10, 15, target);
         }
     }
 
@@ -252,16 +253,34 @@ public class PlayerManager : MonoBehaviour
         return GetColumnForIndex(card.FieldPosition.PositionIndex, amountTargets);
     }
 
-    private List<Card> GetLineForIndex(int startLine, int endLine)
+    public List<Card> GetConeForCard(Card card)
     {
-        List<Card> cards = new List<Card>();
-
-        for (int i = startLine; i < endLine; i++)
+        int target = card.FieldPosition.PositionIndex;
+        if (target < 5)
         {
-            if (fieldPositionList[i].Card != null)
-            {
-                cards.Add(fieldPositionList[i].Card);
-            }
+            return GetConeForIndex(5, 10, target);
+        }
+        else if (target < 10)
+        {
+            return GetConeForIndex(10, 15, target);
+        }
+        else
+        {
+            return new List<Card>(target);
+        }
+    }
+
+    private List<Card> GetAdjacentForIndex(int startLine, int endLine, int target)
+    {
+        List<Card> cards = new List<Card>(target);
+
+        if (target - 1 >= startLine && fieldPositionList[target - 1].Card != null)
+        {
+            cards.Add(fieldPositionList[target - 1].Card);
+        }
+        if (target + 1 < endLine && fieldPositionList[target + 1].Card != null)
+        {
+            cards.Add(fieldPositionList[target + 1].Card);
         }
 
         return cards;
@@ -277,6 +296,26 @@ public class PlayerManager : MonoBehaviour
                 cards.Add(fieldPositionList[targetIndex + cardIndex].Card);
             }
             cardIndex += 5;
+        }
+
+        return cards;
+    }
+
+    private List<Card> GetConeForIndex(int startLine, int endLine, int target)
+    {
+        List<Card> cards = new List<Card>(target);
+
+        if (target + 4 >= startLine && fieldPositionList[target + 4].Card != null)
+        {
+            cards.Add(fieldPositionList[target + 4].Card);
+        }
+        if (target + 6 < endLine && fieldPositionList[target + 6].Card != null)
+        {
+            cards.Add(fieldPositionList[target + 6].Card);
+        }
+        if (fieldPositionList[target + 5].Card != null)
+        {
+            cards.Add(fieldPositionList[target + 5].Card);
         }
 
         return cards;

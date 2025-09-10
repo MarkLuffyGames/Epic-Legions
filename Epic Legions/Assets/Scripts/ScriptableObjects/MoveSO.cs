@@ -42,6 +42,6 @@ public enum MoveType
 
 public enum TargetsType
 {
-    SingleTarget, TargetLine, Midfield, Direct, TargetColumn, FrontBack
+    SINGLE, ADJACENT, FIELD, DIRECT, COLUMN, PIERCE, CONE, SURROUND
 }
 
