@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
-  m_Name: "Espadazo \xCDgneo"
+  m_Name: "Luz del R\xEDo"
   m_EditorClassIdentifier: 
-  moveName: "Espadazo \xCDgneo"
-  damage: 25
-  energyCost: 20
-  element: 1
-  moveEffect: {fileID: 11400000, guid: abcc03a1a223de94ab0fc6aa83bbfc9d, type: 2}
+  moveName: "Luz del R\xEDo"
+  damage: 0
+  energyCost: 25
+  element: 2
+  moveEffect: {fileID: 11400000, guid: 8aef7e6ce52ceb94497000ad7338b408, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  needTarget: 1
+  needTarget: 0
   onMyself: 0
-  moveType: 0
-  targetsType: 0
-  visualEffect: {fileID: 5942177893964023165, guid: 438c0b7b02dcafa4996592b62d22671f, type: 3}
-  visualEffectHit: {fileID: 0}
-  effectDescription: Aplica quemadura al objetivo.
+  moveType: 2
+  targetsType: 2
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 5677146271477980658, guid: cc8d45c46bbc49d42974a1472586890b, type: 3}
+  effectDescription: Cura 25 puntos de vida de todos los aliados y elimina los efectos
+    negativos.

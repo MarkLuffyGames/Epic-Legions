@@ -856,7 +856,7 @@ public class Card : MonoBehaviour
     /// </summary>
     /// <param name="amountDamage"></param>
     /// <returns>Cantidad de vida perdida por el heroe</returns>
-    public int ReceiveDamage(int amountDamage, int ignoredDefense, Card attacker)
+    public int ReceiveDamage(int amountDamage, int ignoredDefense, Card attacker, MoveType moveType)
     {
         if (attacker != null)
         {
@@ -864,11 +864,11 @@ public class Card : MonoBehaviour
 
             if (attacker.cardSO is HeroCardSO && HasFullDamageReflection())
             {
-                attacker.ReceiveDamage(amountDamage, ignoredDefense, null);
+                attacker.ReceiveDamage(amountDamage, ignoredDefense, null, moveType);
             }
         }
 
-        if (IsInLethargy() || HasPhantomShield())
+        if (IsInLethargy() || HasPhantomShield() || (moveType == MoveType.RangedAttack && HasRangedImmunity()))
         {
             amountDamage = 0;
         }
@@ -877,7 +877,7 @@ public class Card : MonoBehaviour
         var protector = HasProtector();
         if (protector != null && protector.HasProtector())
         {
-            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense, attacker);
+            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense, attacker, moveType);
         }
         amountDamage -= GetDamageAbsorbed();
         if (amountDamage < 0) amountDamage = 0;
@@ -1259,6 +1259,18 @@ public class Card : MonoBehaviour
             if (effect.MoveEffect is PhantomShield phantomShield)
             {
                 effect.MoveEffect.DeactivateEffect(effect);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool HasRangedImmunity()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is RangedImmunity rangedImmunity)
+            {
                 return true;
             }
         }

@@ -1433,6 +1433,7 @@ public class DuelManager : NetworkBehaviour
         // Si el ataque causa daño, se aplica a la carta objetivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
         {
+            var moveType = attackerCard.Moves[movementToUseIndex].MoveSO.MoveType;
             // Animación de daño para un objetivo único.
             if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
             {
@@ -1440,7 +1441,7 @@ public class DuelManager : NetworkBehaviour
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
                 attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
-                    attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
+                    attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard, moveType);
             }
             else
             {
@@ -1462,7 +1463,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     // Aplica el daño a todos los objetivos.
                     attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, card),
-                        attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard);
+                        attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard, moveType);
                 }
             }
 
@@ -1563,6 +1564,7 @@ public class DuelManager : NetworkBehaviour
     public IEnumerator Counterattack(Card attackerCard, Card cardToAttack, int damage)
     {
         int movementToUseIndex = -1;
+        var movemetType = attackerCard.Moves;
         for (int i = 0; i < attackerCard.Moves.Count; i++)
         {
             if(attackerCard.Moves[i].MoveSO.MoveEffect is Counterattack counterattack)
@@ -1575,7 +1577,7 @@ public class DuelManager : NetworkBehaviour
 
         if(movementToUseIndex == -1)
         {
-            cardToAttack.ReceiveDamage(damage, 0, null);
+            cardToAttack.ReceiveDamage(damage, 0, null, MoveType.MeleeAttack);
         }
         else
         {
@@ -1587,7 +1589,8 @@ public class DuelManager : NetworkBehaviour
             cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
             // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-            cardToAttack.ReceiveDamage(damage, attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null);
+            cardToAttack.ReceiveDamage(damage, attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null, 
+                attackerCard.Moves[movementToUseIndex].MoveSO.MoveType);
 
             attackerCard.MoveToLastPosition();
         }

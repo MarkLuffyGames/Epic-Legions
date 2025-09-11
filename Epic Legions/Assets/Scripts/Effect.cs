@@ -146,6 +146,11 @@ public class Effect
             isNegative = true;
             effectDescription = burn.DescriptionText();
         }
+        else if (cardEffect is RangedImmunity rangedImmunity)
+        {
+            durability = rangedImmunity.NumberTurns;
+            effectDescription = rangedImmunity.DescriptionText(this);
+        }
 
         if (!isNegative)
         {
@@ -218,7 +223,7 @@ public class Effect
 
     public void DrainHelat()
     {
-        affectedHero.ReceiveDamage(amount, amount, null);
+        affectedHero.ReceiveDamage(amount, amount, null, MoveType.PositiveEffect);
         casterHero.ToHeal(amount);
     }
 

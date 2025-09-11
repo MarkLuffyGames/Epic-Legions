@@ -15,7 +15,7 @@ MonoBehaviour:
   moveName: "Aliento de Drag\xF3n"
   damage: 40
   energyCost: 35
-  element: 0
+  element: 1
   moveEffect: {fileID: 11400000, guid: 4f6dbf23164b3994fa64cdec711a5e0e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 0
   targetsType: 6
-  visualEffect: {fileID: 0}
+  visualEffect: {fileID: 2212644222100735201, guid: 95275e8de7edf8f48a651550a9ac40d3, type: 3}
   visualEffectHit: {fileID: 0}
   effectDescription: Reduce en 10 la defensa a los enemigos golpeados durante 2 turnos.

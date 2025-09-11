@@ -135,6 +135,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7483c71c99d9c494cad862f1827a0a46, type: 2}
   - {fileID: 11400000, guid: 1bf88e5c7ad485c4793412ba7f037d0f, type: 2}
   - {fileID: 11400000, guid: fc922966c81e212479bed10df4592c10, type: 2}
+  - {fileID: 11400000, guid: e717733bbbe844149bfc0b0bbfd504ca, type: 2}
+  - {fileID: 11400000, guid: 235a690486e02e144a8e822454d01dd8, type: 2}
+  - {fileID: 11400000, guid: ddb553dc78626834c859783368463ea6, type: 2}
+  - {fileID: 11400000, guid: 9ffd289fc1d02f144ad1073ae68e7f2c, type: 2}
+  - {fileID: 11400000, guid: 352b01385b3189d4db454dd4d710d399, type: 2}
   classIcons:
   - heroClass: 0
     icon: {fileID: 21300000, guid: 708f829855bba4949b50535bfd08e2b9, type: 3}
@@ -175,7 +180,7 @@ MonoBehaviour:
   - moveType: 0
     icon: {fileID: 21300000, guid: d695286c2f69ff941b8cbb39edf1115f, type: 3}
   - moveType: 1
-    icon: {fileID: 21300000, guid: 1eec5652195a9f34abc80831fe9045de, type: 3}
+    icon: {fileID: 723716962, guid: 1eec5652195a9f34abc80831fe9045de, type: 3}
   - moveType: 2
     icon: {fileID: 21300000, guid: ed3b9c47b66255e408799100ec986eec, type: 3}
   - moveType: 3
