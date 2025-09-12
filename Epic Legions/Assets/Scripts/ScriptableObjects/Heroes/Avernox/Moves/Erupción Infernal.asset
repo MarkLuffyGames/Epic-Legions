@@ -16,7 +16,7 @@ MonoBehaviour:
   damage: 40
   energyCost: 40
   element: 1
-  moveEffect: {fileID: 11400000, guid: ed04b1553edf7b94cb808bd21366c76c, type: 2}
+  moveEffect: {fileID: 11400000, guid: caeffb6fdca16454fb0032c9e75e94c8, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 0

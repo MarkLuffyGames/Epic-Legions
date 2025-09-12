@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
-  m_Name: "Se\xF1or del Vac\xEDo"
+  m_Name: "Kael'Thor - Se\xF1or del Ocaso Ardiente"
   m_EditorClassIdentifier: 
-  cardId: 1022
-  cardName: "Se\xF1or del Vac\xEDo"
-  cardLastName: 
-  cardSprite: {fileID: 21300000, guid: f5fd504de2e55624c8b4355bee9b1b6c, type: 3}
-  cardElemnt: 8
+  cardId: 1039
+  cardName: Kael'Thor
+  cardLastName: "Se\xF1or del Ocaso Ardiente"
+  cardSprite: {fileID: 21300000, guid: 5b4d971e10d5a1142b6649e646b78296, type: 3}
+  cardElemnt: 4
   heroClass: 8
-  healt: 35
-  defence: 25
-  speed: 25
-  energy: 40
+  healt: 70
+  defence: 45
+  speed: 30
+  energy: 80
   moves:
   - {fileID: 11400000, guid: ede20ffe472059e4294ad587edca2142, type: 2}
-  - {fileID: 11400000, guid: dcfc7c77fac237346992e306cf56439d, type: 2}
+  - {fileID: 11400000, guid: 6b6ac5960243b474a8931a291003e55e, type: 2}
   - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

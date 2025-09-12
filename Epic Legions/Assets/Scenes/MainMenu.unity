@@ -6103,26 +6103,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
-      propertyPath: AllCards.Array.size
-      value: 93
-      objectReference: {fileID: 0}
-    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
-      propertyPath: 'AllCards.Array.data[90]'
-      value: 
-      objectReference: {fileID: 11400000, guid: e717733bbbe844149bfc0b0bbfd504ca, type: 2}
-    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
-      propertyPath: 'AllCards.Array.data[91]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 235a690486e02e144a8e822454d01dd8, type: 2}
-    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
-      propertyPath: 'AllCards.Array.data[92]'
-      value: 
-      objectReference: {fileID: 11400000, guid: ddb553dc78626834c859783368463ea6, type: 2}
-    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
-      propertyPath: moveTypeIcons.Array.data[1].icon
-      value: 
-      objectReference: {fileID: 723716962, guid: 1eec5652195a9f34abc80831fe9045de, type: 3}
     - target: {fileID: 7755612899893852066, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: m_Name
       value: CardDatabase
