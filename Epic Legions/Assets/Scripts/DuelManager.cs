@@ -648,7 +648,7 @@ public class DuelManager : NetworkBehaviour
         // Consume la energía correspondiente para usar la carta
         playerManager.ConsumeEnergy(card.cardSO is HeroCardSO hero ? hero.Energy : 0);
 
-
+        playerManager.GetHandCardHandler().ShowCardBorder();
     }
 
 
@@ -1441,7 +1441,7 @@ public class DuelManager : NetworkBehaviour
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
                 attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
-                    attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard, moveType);
+                    CalculateDefenseIgnored(attackerCard, movementToUseIndex), attackerCard, moveType);
             }
             else
             {
@@ -1463,7 +1463,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     // Aplica el daño a todos los objetivos.
                     attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, card),
-                        attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, attackerCard, moveType);
+                        CalculateDefenseIgnored(attackerCard, movementToUseIndex), attackerCard, moveType);
                 }
             }
 
@@ -1546,6 +1546,22 @@ public class DuelManager : NetworkBehaviour
         return damage;
     }
 
+    private int CalculateDefenseIgnored(Card attackerCard, int movementToUseIndex)
+    {
+        var move = attackerCard.Moves[movementToUseIndex].MoveSO;
+        if (move.MoveEffect is IgnoredDefense ignored)
+        {
+            if(ignored.Amount == move.Damage)
+            {
+                return ignored.Amount + attackerCard.GetAttackModifier();
+            }
+
+            return ignored.Amount;
+        }
+
+        return 0;
+    }
+
     private void DestroySpell(Card spellCard)
     {
         if (spellCard.cardSO is SpellCardSO)
@@ -1589,7 +1605,7 @@ public class DuelManager : NetworkBehaviour
             cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
             // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-            cardToAttack.ReceiveDamage(damage, attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is IgnoredDefense ignored ? ignored.Amount : 0, null, 
+            cardToAttack.ReceiveDamage(damage, CalculateDefenseIgnored(attackerCard, movementToUseIndex), null, 
                 attackerCard.Moves[movementToUseIndex].MoveSO.MoveType);
 
             attackerCard.MoveToLastPosition();

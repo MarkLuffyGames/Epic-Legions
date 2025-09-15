@@ -23,7 +23,7 @@ public class Card : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI lastNameText;
     [SerializeField] private TextMeshProUGUI healtText;
-    [SerializeField] private TextMeshProUGUI defenceText;
+    [SerializeField] private TextMeshProUGUI defenseText;
     [SerializeField] private TextMeshProUGUI speedText;
     [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI description;
@@ -183,7 +183,7 @@ public class Card : MonoBehaviour
     private void ActivateHeroStats(bool activate)
     {
         healtText.enabled = activate;
-        defenceText.enabled = activate;
+        defenseText.enabled = activate;
         speedText.enabled = activate;
         energyText.enabled = activate;
         classIcon.enabled = activate;
@@ -270,11 +270,11 @@ public class Card : MonoBehaviour
         if (cardSO is HeroCardSO)
         {
             healtText.color = currentHealt < maxHealt ? Color.red : Color.yellow;
-            defenceText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
+            defenseText.color = currentDefense < defense ? Color.red : CurrentDefensePoints > defense ? Color.green : Color.yellow;
             speedText.color = CurrentSpeedPoints < speed ? Color.red : CurrentSpeedPoints > speed ? Color.green : Color.yellow;
 
             healtText.text = (currentHealt > 0 ? currentHealt : 0).ToString();
-            defenceText.text = CurrentDefensePoints.ToString();
+            defenseText.text = CurrentDefensePoints.ToString();
             speedText.text = CurrentSpeedPoints.ToString();
             energyText.text = energy.ToString();
         }
@@ -487,13 +487,13 @@ public class Card : MonoBehaviour
             if (defaultValue)
             {
                 healtText.gameObject.transform.localScale = Vector3.one;
-                defenceText.gameObject.transform.localScale = Vector3.one;
+                defenseText.gameObject.transform.localScale = Vector3.one;
                 speedText.gameObject.transform.localScale = Vector3.one;
             }
             else if (fieldPosition != null)
             {
                 healtText.gameObject.transform.localScale = Vector3.one * 5;
-                defenceText.gameObject.transform.localScale = Vector3.one * 5;
+                defenseText.gameObject.transform.localScale = Vector3.one * 5;
                 speedText.gameObject.transform.localScale = Vector3.one * 5;
             }
         }
@@ -946,7 +946,7 @@ public class Card : MonoBehaviour
     /// <param name="amountDamage"></param>
     private void ShowTextDamage(bool isDefence, int amountDamage)
     {
-        var position = isDefence ? defenceText.transform.position : healtText.transform.position;
+        var position = isDefence ? defenseText.transform.position : healtText.transform.position;
         position += Vector3.up;
 
         var popUp = Instantiate(isDefence ? defencePopUpPrefab : energyPopUpPrefab, position, Quaternion.identity);

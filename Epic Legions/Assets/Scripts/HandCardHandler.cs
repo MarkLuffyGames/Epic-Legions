@@ -72,7 +72,7 @@ public class HandCardHandler : MonoBehaviour
         }
     }
 
-    private void ShowCardBorder(bool show = true)
+    public void ShowCardBorder(bool show = true)
     {
         foreach (Card card in cardsList)
         {

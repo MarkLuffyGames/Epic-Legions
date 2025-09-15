@@ -3304,7 +3304,7 @@ MonoBehaviour:
   nameText: {fileID: 8397680356145545021}
   lastNameText: {fileID: 5998372238065985793}
   healtText: {fileID: 4516886441853098544}
-  defenceText: {fileID: 7366237707526491110}
+  defenseText: {fileID: 7366237707526491110}
   speedText: {fileID: 1106663729349222624}
   energyText: {fileID: 6153432091646338378}
   description: {fileID: 5824128363118659634}

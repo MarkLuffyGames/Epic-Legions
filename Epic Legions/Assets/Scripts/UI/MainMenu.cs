@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Button singlePlayerButton;
     [SerializeField] private Button multiplayerButton;
-    [SerializeField] private Button exitButton;
+    [SerializeField] private Button collectionButton;
     [SerializeField] private TextMeshProUGUI versionText;
     [SerializeField] private Animator imageAnimator;
     [SerializeField] private Animator cameraAnimator;
@@ -35,9 +35,9 @@ public class MainMenu : MonoBehaviour
             
         });
 
-        exitButton.onClick.AddListener(() =>
+        collectionButton.onClick.AddListener(() =>
         {
-            Application.Quit();
+            
         });
 
         if (NetworkManager.Singleton != null)

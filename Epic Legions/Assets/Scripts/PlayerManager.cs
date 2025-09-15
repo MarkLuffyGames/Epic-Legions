@@ -272,7 +272,9 @@ public class PlayerManager : MonoBehaviour
 
     private List<Card> GetAdjacentForIndex(int startLine, int endLine, int target)
     {
-        List<Card> cards = new List<Card>(target);
+        List<Card> cards = new List<Card>();
+
+        cards.Add(fieldPositionList[target].Card);
 
         if (target - 1 >= startLine && fieldPositionList[target - 1].Card != null)
         {
@@ -303,7 +305,9 @@ public class PlayerManager : MonoBehaviour
 
     private List<Card> GetConeForIndex(int startLine, int endLine, int target)
     {
-        List<Card> cards = new List<Card>(target);
+        List<Card> cards = new List<Card>();
+
+        cards.Add(fieldPositionList[target].Card);
 
         if (target + 4 >= startLine && fieldPositionList[target + 4].Card != null)
         {
