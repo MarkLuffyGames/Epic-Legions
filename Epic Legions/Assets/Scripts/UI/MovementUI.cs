@@ -26,12 +26,12 @@ public class MovementUI : MonoBehaviour
         if (center)
         {
             moveNameText.rectTransform.localPosition = new Vector3(-0.048f, -0.601f, -0.0001f);
-            moveButton.transform.localPosition = new Vector3(0.0123f, -0.63f, 0.0f);
+            if(moveButton) moveButton.transform.localPosition = new Vector3(0.0123f, -0.63f, 0.0f);
         }
         else
         {
             moveNameText.rectTransform.localPosition = new Vector3(-0.048f, moveNumber == 1 ? - 0.499f : -0.654f, -0.0001f);
-            moveButton.transform.localPosition = new Vector3(0.0123f, moveNumber == 1 ? -0.544f : -0.704f, 0.0f);
+            if (moveButton) moveButton.transform.localPosition = new Vector3(0.0123f, moveNumber == 1 ? -0.544f : -0.704f, 0.0f);
         }
 
         moveNameText.text = movement.MoveSO.MoveName;

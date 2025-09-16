@@ -37,7 +37,8 @@ public class MainMenu : MonoBehaviour
 
         collectionButton.onClick.AddListener(() =>
         {
-            
+            StartAnimation();
+            Invoke(nameof(Collection), 0.6f);
         });
 
         if (NetworkManager.Singleton != null)
@@ -97,7 +98,12 @@ public class MainMenu : MonoBehaviour
         Loader.isSinglePlayer = true;
         Loader.sceneToLoad = "GameScene";
         SceneManager.LoadScene("LoadingScene");
-        //SceneManager.LoadScene("GameScene");
+    }
+    private void Collection()
+    {
+        Loader.isSinglePlayer = true;
+        Loader.sceneToLoad = "CollectionScene";
+        SceneManager.LoadScene("LoadingScene");
     }
 
     private void StartCasualMultiplayer()

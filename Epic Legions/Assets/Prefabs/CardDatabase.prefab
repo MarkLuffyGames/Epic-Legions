@@ -159,7 +159,11 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 4a4f20cf972ad824eba532d33e389340, type: 3}
   - heroClass: 8
     icon: {fileID: 21300000, guid: 9251e48175bd66a47a96bed3613e759c, type: 3}
+  - heroClass: 9
+    icon: {fileID: 21300000, guid: 789447735dc53a244bc057144cf7bfc6, type: 3}
   elementIcons:
+  - heroElement: 0
+    icon: {fileID: 21300000, guid: 81e0d22149cad2d43817955be4862609, type: 3}
   - heroElement: 1
     icon: {fileID: 21300000, guid: ae9869ce6b6aca743bb4d7e843fa0c52, type: 3}
   - heroElement: 2

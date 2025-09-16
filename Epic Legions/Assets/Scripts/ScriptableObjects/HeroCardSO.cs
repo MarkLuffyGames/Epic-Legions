@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum HeroClass { Warrior, Paladin, Wizard, Hunter, Assassin, Druid, Beast, Colossus, Necromancer }
+public enum HeroClass { Warrior, Paladin, Wizard, Hunter, Assassin, Druid, Beast, Colossus, Necromancer, None }
 
 [CreateAssetMenu(fileName = "New Hero Card", menuName = "Hemera Legions/Hero Card")]
 public class HeroCardSO : CardSO
