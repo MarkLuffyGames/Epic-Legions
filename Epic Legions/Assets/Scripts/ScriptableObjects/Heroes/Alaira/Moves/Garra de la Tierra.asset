@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Garra de la Tierra
   m_EditorClassIdentifier: 
   moveName: Garra de la Tierra
-  damage: 15
+  damage: 20
   energyCost: 15
   element: 3
   moveEffect: {fileID: 11400000, guid: 80ea3db986bf12b49b85f1eba75021bc, type: 2}
@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6855955652325114174, guid: f8dc879bd6649cb4782409815764d676, type: 3}
   effectDescription: "Ra\xEDces salvajes azotan al enemigo, causando da\xF1o y reduciendo
     su velocidad en 20 durante 2 turnos."

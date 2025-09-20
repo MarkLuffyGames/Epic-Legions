@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "T\xF3nico Rompehuesos"
   m_EditorClassIdentifier: 
   moveName: "T\xF3nico Rompehuesos"
-  damage: 20
+  damage: 25
   energyCost: 10
   element: 1
   moveEffect: {fileID: 11400000, guid: 4f6dbf23164b3994fa64cdec711a5e0e, type: 2}

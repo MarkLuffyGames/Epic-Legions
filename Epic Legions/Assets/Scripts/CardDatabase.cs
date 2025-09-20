@@ -57,11 +57,6 @@ public class CardDatabase : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        Loader.SetDecks();
-    }
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeCardDatabase()
     {

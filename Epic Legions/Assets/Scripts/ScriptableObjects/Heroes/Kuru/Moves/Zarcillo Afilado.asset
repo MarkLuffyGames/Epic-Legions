@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Zarcillo Afilado
   m_EditorClassIdentifier: 
   moveName: Zarcillo Afilado
-  damage: 20
+  damage: 30
   energyCost: 20
   element: 3
-  moveEffect: {fileID: 11400000, guid: 5c9c6dbba6d23bb4b8f07a24903d0ea8, type: 2}
+  moveEffect: {fileID: 11400000, guid: 0d643badef5e56d4d9952d21f5ca772e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   needTarget: 1

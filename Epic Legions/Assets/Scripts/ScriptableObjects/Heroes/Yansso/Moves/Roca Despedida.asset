@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Roca Despedida
   m_EditorClassIdentifier: 
   moveName: Roca Despedida
-  damage: 20
+  damage: 25
   energyCost: 10
   element: 4
   moveEffect: {fileID: 11400000, guid: 2a708e632d2bbca43889564efc055308, type: 2}

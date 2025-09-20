@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Destello Sagrado
   m_EditorClassIdentifier: 
   moveName: Destello Sagrado
-  damage: 20
+  damage: 35
   energyCost: 15
   element: 7
   moveEffect: {fileID: 11400000, guid: 4f6dbf23164b3994fa64cdec711a5e0e, type: 2}

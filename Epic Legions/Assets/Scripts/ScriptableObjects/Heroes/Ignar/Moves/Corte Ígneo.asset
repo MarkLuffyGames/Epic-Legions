@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Corte \xCDgneo"
   m_EditorClassIdentifier: 
   moveName: "Corte \xCDgneo"
-  damage: 20
+  damage: 30
   energyCost: 15
   element: 1
   moveEffect: {fileID: 11400000, guid: abcc03a1a223de94ab0fc6aa83bbfc9d, type: 2}

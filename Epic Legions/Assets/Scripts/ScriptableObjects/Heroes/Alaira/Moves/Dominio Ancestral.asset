@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Dominio Ancestral
   damage: 0
-  energyCost: 30
+  energyCost: 20
   element: 3
   moveEffect: {fileID: 11400000, guid: a071d2124f23581429d22a2d136a6b36, type: 2}
-  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  targetsCondition: {fileID: 11400000, guid: 0220f26f2b8cc8148aa9e1b02991b9a2, type: 2}
+  effectCondition: {fileID: 11400000, guid: 0220f26f2b8cc8148aa9e1b02991b9a2, type: 2}
+  targetsCondition: {fileID: 11400000, guid: f266624ea7f37414cab3d23ce87a0acd, type: 2}
   needTarget: 1
   onMyself: 0
   moveType: 1

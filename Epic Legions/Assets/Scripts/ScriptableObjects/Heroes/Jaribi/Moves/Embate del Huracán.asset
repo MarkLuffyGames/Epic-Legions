@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: "Embate del Hurac\xE1n"
   m_EditorClassIdentifier: 
   moveName: "Embate del Hurac\xE1n"
-  damage: 30
-  energyCost: 25
+  damage: 35
+  energyCost: 20
   element: 6
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

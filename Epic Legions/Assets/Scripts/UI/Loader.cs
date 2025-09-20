@@ -26,13 +26,8 @@ public static class Loader
         {
             player1deckCardIds[i] = CardDatabase.allCards[1036].CardID;
         }*/
-        for (int i = 0; i < 40; i++)
-        {
-            player1deckCardIds[i] = CardDatabase.GetRandomCards();
-        }
-        for (int i = 0; i < 40; i++)
-        {
-            player2deckCardIds[i] = CardDatabase.GetRandomCards();
-        }
+        player1deckCardIds = GameData.Instance.CurrentDeck.cardsIds.ToArray();
+
+        player2deckCardIds = GameData.Instance.CurrentDeck.cardsIds.ToArray();
     }
 }

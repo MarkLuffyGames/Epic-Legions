@@ -3,267 +3,39 @@
     "m_SelectedProcess": {
         "deviceId": "85Z9KBVCHIRKEMCY",
         "name": "com.MarkLuffyGames.HemeraLegions",
-        "processId": 27315,
+        "processId": 28767,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownProcessesForSerialization": [
         {
             "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.mi.android.globallauncher",
-            "processId": 10760,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 29647,
+            "processId": 18458,
             "exited": true
         },
         {
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 23012,
+            "processId": 20301,
             "exited": true
         },
         {
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 2048,
-            "exited": false
+            "processId": 24846,
+            "exited": true
         },
         {
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 11209,
-            "exited": false
+            "processId": 27650,
+            "exited": true
         },
         {
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 30536,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 32079,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 9179,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 25544,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 28176,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 5944,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 19599,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 21382,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 15025,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 10970,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 27128,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 31304,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 10306,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 11795,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 559,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 8220,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 21402,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 2932,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 10071,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 29321,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 663,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 27759,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 5368,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 8643,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 11270,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 19228,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 19981,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 10337,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 3462,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 12639,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 22626,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 24343,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 25720,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 25372,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 26184,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 28867,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 26512,
-            "exited": false
-        },
-        {
-            "deviceId": "85Z9KBVCHIRKEMCY",
-            "name": "com.MarkLuffyGames.HemeraLegions",
-            "processId": 27315,
+            "processId": 28767,
             "exited": false
         }
     ],

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Espinas Salvajes
   m_EditorClassIdentifier: 
   moveName: Espinas Salvajes
-  damage: 20
+  damage: 30
   energyCost: 10
   element: 3
   moveEffect: {fileID: 0}

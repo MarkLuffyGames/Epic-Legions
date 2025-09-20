@@ -25,5 +25,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 4634121758534943757, guid: 3afef3aecbaff8d458af34daf839718b, type: 3}
-  effectDescription: Susurra palabras prohibidas que debilitan la resistencia de
-    su enemigo.
+  effectDescription: Reduce en -10 la defensa del objetivo

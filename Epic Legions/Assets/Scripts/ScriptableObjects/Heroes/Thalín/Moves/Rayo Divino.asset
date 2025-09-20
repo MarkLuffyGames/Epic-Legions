@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Rayo Divino
   m_EditorClassIdentifier: 
   moveName: Rayo Divino
-  damage: 30
-  energyCost: 15
+  damage: 35
+  energyCost: 10
   element: 7
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

@@ -21,9 +21,13 @@ public class CardUI : MonoBehaviour
     [SerializeField] private MovementUI movementUI1;
     [SerializeField] private MovementUI movementUI2;
 
+    private CardSO currentCard;
+    public CardSO CurrentCard => currentCard;
+
     List<Movement> moves = new List<Movement>();
     public void SetCard(CardSO cardSO)
     {
+        currentCard = cardSO;
         nameText.text = cardSO.CardName;
         lastNameText.text = cardSO.CardLastName;
 
@@ -34,7 +38,6 @@ public class CardUI : MonoBehaviour
             foreach (var move in heroCardSO.Moves)
             {
                 moves.Add(new Movement(move));
-                //if (move.AlwaysActive) moves[moves.Count - 1].ActivateEffect(this, this);
             }
 
             classIcon.sprite = CardDatabase.GetClassIcon(heroCardSO.HeroClass);

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Enredo Ancestral
   damage: 0
-  energyCost: 15
+  energyCost: 25
   element: 3
   moveEffect: {fileID: 11400000, guid: e53e649879ac198498df5cfc273bafae, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
@@ -24,6 +24,6 @@ MonoBehaviour:
   moveType: 1
   targetsType: 0
   visualEffect: {fileID: 0}
-  visualEffectHit: {fileID: 0}
+  visualEffectHit: {fileID: 6855955652325114174, guid: f8dc879bd6649cb4782409815764d676, type: 3}
   effectDescription: "Ra\xEDces ancestrales emergen del suelo e inmovilizan al enemigo
     durante 3 turnos."

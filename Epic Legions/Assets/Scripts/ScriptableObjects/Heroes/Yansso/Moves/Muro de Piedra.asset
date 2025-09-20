@@ -25,5 +25,5 @@ MonoBehaviour:
   targetsType: 1
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 6424583148328831481, guid: ce8f43249bb72a34a91470560c6e2245, type: 3}
-  effectDescription: "Una barrera s\xF3lida que protege a los aliados en su misma
-    linea absorviendo 20 de da\xF1o durante 3 turnos."
+  effectDescription: "Una barrera s\xF3lida que protege a todos los aliados absorviendo
+    20 de da\xF1o durante 3 turnos."

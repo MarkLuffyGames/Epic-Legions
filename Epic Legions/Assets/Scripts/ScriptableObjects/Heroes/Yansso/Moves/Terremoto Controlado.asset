@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Terremoto Controlado
   m_EditorClassIdentifier: 
   moveName: Terremoto Controlado
-  damage: 25
-  energyCost: 40
+  damage: 35
+  energyCost: 15
   element: 4
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

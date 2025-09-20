@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Remolino Travesura
   m_EditorClassIdentifier: 
   moveName: Remolino Travesura
-  damage: 20
+  damage: 25
   energyCost: 15
   element: 2
   moveEffect: {fileID: 11400000, guid: 43971a6313ddf85498209bf7e65bbc1a, type: 2}

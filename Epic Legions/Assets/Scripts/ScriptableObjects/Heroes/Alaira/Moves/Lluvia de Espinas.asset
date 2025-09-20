@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lluvia de Espinas
   m_EditorClassIdentifier: 
   moveName: Lluvia de Espinas
-  damage: 15
+  damage: 25
   energyCost: 10
   element: 3
   moveEffect: {fileID: 0}
@@ -25,5 +25,4 @@ MonoBehaviour:
   targetsType: 1
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "Invoca una lluvia de espinas que causa da\xF1o a todos los
-    enemigos en una linea."
+  effectDescription: "Invoca una lluvia de espinas que causa da\xF1o a los objetivos."

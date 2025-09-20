@@ -16,13 +16,13 @@ MonoBehaviour:
   damage: 30
   energyCost: 15
   element: 7
-  moveEffect: {fileID: 0}
-  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  targetsCondition: {fileID: 0}
+  moveEffect: {fileID: 11400000, guid: 9e3197afc195ee846bad7605f4801ee0, type: 2}
+  effectCondition: {fileID: 11400000, guid: c8d3306884120b74d949a640a5a01cd6, type: 2}
+  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 1
   onMyself: 0
   moveType: 0
   targetsType: 0
   visualEffect: {fileID: 215931009399532182, guid: 5742c87c4f4a0e74f9262231f9fcf160, type: 3}
   visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
-  effectDescription: Un ataque cuerpo a cuerpo que golpea al enemigo con su escudo.
+  effectDescription: "Golpe que inflige +20 da\xF1o a enemigos oscuros."

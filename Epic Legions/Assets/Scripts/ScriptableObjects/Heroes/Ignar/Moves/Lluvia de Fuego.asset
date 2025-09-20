@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Lluvia de Fuego
   m_EditorClassIdentifier: 
   moveName: Lluvia de Fuego
-  damage: 20
-  energyCost: 25
+  damage: 25
+  energyCost: 10
   element: 1
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

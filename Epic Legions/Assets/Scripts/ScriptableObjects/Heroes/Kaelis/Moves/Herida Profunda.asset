@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Herida Profunda
   m_EditorClassIdentifier: 
   moveName: Herida Profunda
-  damage: 25
+  damage: 30
   energyCost: 15
   element: 8
   moveEffect: {fileID: 11400000, guid: efad936f7e25dd04d86d8a4cced6b4a6, type: 2}

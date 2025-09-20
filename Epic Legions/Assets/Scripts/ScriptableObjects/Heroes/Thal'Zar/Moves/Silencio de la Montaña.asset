@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: "Silencio de la Monta\xF1a"
   damage: 0
-  energyCost: 20
+  energyCost: 15
   element: 4
   moveEffect: {fileID: 11400000, guid: 89e6e69a483eab4419f4346899cb613e, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

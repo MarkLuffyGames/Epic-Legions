@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Garra Sombr\xEDa"
   m_EditorClassIdentifier: 
   moveName: "Garra Sombr\xEDa"
-  damage: 20
+  damage: 30
   energyCost: 10
   element: 8
   moveEffect: {fileID: 11400000, guid: 5c9c6dbba6d23bb4b8f07a24903d0ea8, type: 2}

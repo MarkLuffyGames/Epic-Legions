@@ -25,4 +25,4 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 7658744058932303410, guid: 7139f4df7095b4048b7d550335291de8, type: 3}
-  effectDescription: Aplica veneno, -10<sprite=3> por turno
+  effectDescription: Aplica veneno al objetivo.

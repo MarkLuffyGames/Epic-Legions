@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: "Espadazo \xCDgneo"
   m_EditorClassIdentifier: 
   moveName: "Espadazo \xCDgneo"
-  damage: 25
-  energyCost: 20
+  damage: 30
+  energyCost: 15
   element: 1
   moveEffect: {fileID: 11400000, guid: abcc03a1a223de94ab0fc6aa83bbfc9d, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

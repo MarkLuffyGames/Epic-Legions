@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lanza de las Mareas
   m_EditorClassIdentifier: 
   moveName: Lanza de las Mareas
-  damage: 25
+  damage: 35
   energyCost: 10
   element: 2
   moveEffect: {fileID: 0}

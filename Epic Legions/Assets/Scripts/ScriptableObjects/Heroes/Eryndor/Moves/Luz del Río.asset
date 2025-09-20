@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: "Luz del R\xEDo"
   damage: 0
-  energyCost: 25
+  energyCost: 15
   element: 2
-  moveEffect: {fileID: 11400000, guid: 8aef7e6ce52ceb94497000ad7338b408, type: 2}
+  moveEffect: {fileID: 11400000, guid: 9f8c28e33bc41eb40b6f354b324cd33f, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   needTarget: 0

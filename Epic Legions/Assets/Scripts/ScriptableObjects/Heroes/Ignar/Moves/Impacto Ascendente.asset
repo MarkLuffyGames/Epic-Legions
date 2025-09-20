@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Impacto Ascendente
   m_EditorClassIdentifier: 
   moveName: Impacto Ascendente
-  damage: 25
+  damage: 30
   energyCost: 15
   element: 1
   moveEffect: {fileID: 11400000, guid: 8492e7280f8578342aba425f1f2ed99d, type: 2}

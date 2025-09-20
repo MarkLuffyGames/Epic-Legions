@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Filo Flam\xEDgero"
   m_EditorClassIdentifier: 
   moveName: "Filo Flam\xEDgero"
-  damage: 20
+  damage: 25
   energyCost: 20
   element: 1
   moveEffect: {fileID: 11400000, guid: abcc03a1a223de94ab0fc6aa83bbfc9d, type: 2}

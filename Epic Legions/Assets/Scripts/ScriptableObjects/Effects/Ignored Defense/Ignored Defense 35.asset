@@ -9,7 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6c226ef305ee9740a44420d9c2972c0, type: 3}
-  m_Name: Cleanse And Regen
+  m_Script: {fileID: 11500000, guid: 246e2b2d25e29e144a8ecf5cc8946dc4, type: 3}
+  m_Name: Ignored Defense 35
   m_EditorClassIdentifier: 
-  amount: 20
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
+  amount: 35

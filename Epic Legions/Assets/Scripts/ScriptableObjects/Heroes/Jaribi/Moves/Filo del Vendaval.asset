@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Filo del Vendaval
   m_EditorClassIdentifier: 
   moveName: Filo del Vendaval
-  damage: 30
-  energyCost: 15
+  damage: 35
+  energyCost: 20
   element: 6
-  moveEffect: {fileID: 11400000, guid: 0d643badef5e56d4d9952d21f5ca772e, type: 2}
+  moveEffect: {fileID: 11400000, guid: f6597c848a0e23f4db04893a2fdb73c6, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
   targetsCondition: {fileID: 0}
   needTarget: 1
