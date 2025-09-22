@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "85Z9KBVCHIRKEMCY",
         "name": "com.MarkLuffyGames.HemeraLegions",
-        "processId": 28767,
+        "processId": 4105,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -36,6 +36,18 @@
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
             "processId": 28767,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 10048,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 4105,
             "exited": false
         }
     ],

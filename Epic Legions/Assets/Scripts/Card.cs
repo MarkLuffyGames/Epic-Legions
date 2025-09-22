@@ -172,11 +172,13 @@ public class Card : MonoBehaviour
 
             elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
             elementIcon.enabled = true;
+            classIcon.sprite = CardDatabase.GetClassIcon(equipmentCardSO.SupportedClasses[0]);
+            classIcon.enabled = true;
             description.text = equipmentCardSO.Description;
         }
 
 
-        movementUI1.SetMoveUI(moves.Count > 0 ? moves[0] : null, moves.Count < 2, 1);
+        movementUI1.SetMoveUI(moves.Count > 0 ? (cardSO is SpellCardSO ? null : moves[0]) : null, moves.Count < 2, 1);
         movementUI2.SetMoveUI(moves.Count > 1 ? moves[1] : null, moves.Count < 2, 2);
     }
 
@@ -607,10 +609,9 @@ public class Card : MonoBehaviour
         }
         else if (cardSO is SpellCardSO spellCardSO)
         {
-            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation) &&
-                spellCardSO.Move.EnergyCost <= playerManager.PlayerEnergy &&
+            if ((duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation)&&
                 !duelManager.SettingAttackTarget &&
-                duelManager.ObtainTargets(this, 0).Count > 0)
+                duelManager.ObtainTargets(this, 0).Count > 0 && spellCardSO.Move.EffectCondition)
             {
                 return true;
             }
@@ -1161,12 +1162,17 @@ public class Card : MonoBehaviour
     /// <param name="amount">Cantidad a sanar.</param>
     public void ToHeal(int amount)
     {
-        if (statModifier.Any(x => x.MoveEffect is NoHealing)) amount = 0;
+        if (!CanReceiveHealing()) amount = 0;
 
         ShowTextToHeal(maxHealt - currentHealt < amount ? maxHealt - currentHealt : amount);
         currentHealt += amount;
         if (currentHealt > maxHealt) currentHealt = maxHealt;
         UpdateText();
+    }
+
+    public bool CanReceiveHealing()
+    {
+        return !statModifier.Any(x => x.MoveEffect is NoHealing);
     }
 
     /// <summary>

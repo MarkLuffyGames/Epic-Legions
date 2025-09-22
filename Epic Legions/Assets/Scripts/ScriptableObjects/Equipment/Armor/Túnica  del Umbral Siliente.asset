@@ -18,7 +18,7 @@ MonoBehaviour:
   cardSprite: {fileID: 21300000, guid: 6f7e944a01a86074383607f1f0bd32df, type: 3}
   cardElemnt: 8
   equipmentType: 1
-  supportedClasses: 0000000001000000020000000300000004000000
+  supportedClasses: 02000000
   moves: []
   effect: {fileID: 11400000, guid: acef66adfc569f0499eddca2246d3314, type: 2}
   description: "Absorbe  15 de da\xF1o de cada ataque recibido."

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -69,7 +70,8 @@ public class HemeraLegionAI : MonoBehaviour
     /// <returns></returns>
     private IEnumerator PlayCardsHand()
     {
-        while(NeedsMoreHeroes() && GetPlayableHeroes().Count > 0)
+        Debug.Log("Turno AI: " + turn);
+        while (NeedsMoreHeroes() && GetPlayableHeroes().Count > 0)
         {
             yield return new WaitForSeconds(1);
             if(!PlayHeroCard()) break;
@@ -109,7 +111,36 @@ public class HemeraLegionAI : MonoBehaviour
 
     private bool NeedsMoreHeroes()
     {
-        return true;
+        if(turn <= 1 || GetAttackPower() < GetAverageDefenseRival() * 1.5f)
+        {
+            Debug.Log("Necesita mas heroes");
+            return true;
+        }
+        Debug.Log("No necesita mas heroes");
+        return false;
+    }
+
+    private int GetAttackPower()
+    {
+        int power = 0;
+        foreach (var card in playerManager.GetAllCardInField())
+        {
+            power +=  card.Moves.Select(m => m.MoveSO.Damage).DefaultIfEmpty(0).Max();
+        }
+
+        return power;
+    }
+
+    private int GetAverageDefenseRival()
+    {
+        int average = 0;
+        var rivalCards = duelManager.GetOpposingPlayerManager(playerManager).GetAllCardInField();
+        if(rivalCards.Count == 0) return 0;
+        foreach (var card in rivalCards)
+        {
+            average += card.CurrentDefensePoints;
+        }
+        return average / rivalCards.Count;
     }
 
     /// <summary>
@@ -125,6 +156,7 @@ public class HemeraLegionAI : MonoBehaviour
             if (card.cardSO is HeroCardSO && card.UsableCard(playerManager)) usableHeroesCards.Add(card);
         }
 
+        Debug.Log("Heroes jugables: " + usableHeroesCards.Count);
         return usableHeroesCards;
     }
 
@@ -251,6 +283,7 @@ public class HemeraLegionAI : MonoBehaviour
     /// <returns></returns>
     private int ChoosePositionFieldIndex(Card heroToPlay, bool random)
     {
+        HeroClass heroClass = (heroToPlay.cardSO as HeroCardSO).HeroClass;
         List<FieldPosition> availablePositions = new List<FieldPosition>();
 
         foreach (var field in playerManager.GetFieldPositionList())
@@ -263,11 +296,11 @@ public class HemeraLegionAI : MonoBehaviour
             return availablePositions[Random.Range(0, availablePositions.Count)].PositionIndex;
         }
 
-        if (heroToPlay.CurrentDefensePoints >= 40)
+        if (heroClass == HeroClass.Warrior || heroClass == HeroClass.Paladin || heroClass == HeroClass.Colossus || (heroClass == HeroClass.Beast && heroToPlay.CurrentDefensePoints >= 50))
         {
             availablePositions.RemoveAll(p => p.PositionIndex > 4);
         }
-        else if(heroToPlay.CurrentDefensePoints >= 20 && heroToPlay.CurrentDefensePoints < 40)
+        else if(heroClass == HeroClass.Wizard || heroClass == HeroClass.Necromancer || heroClass == HeroClass.Beast)
         {
             availablePositions.RemoveAll(p => p.PositionIndex < 5);
             availablePositions.RemoveAll(p => p.PositionIndex > 9);
@@ -277,11 +310,45 @@ public class HemeraLegionAI : MonoBehaviour
             availablePositions.RemoveAll(p => p.PositionIndex < 10);
         }
 
-        if(availablePositions.Count > 0)
+        List<FieldPosition> protectedPositions = new List<FieldPosition>();
+        if (availablePositions.Count > 0)
+        {
+            foreach (var position in availablePositions)
+            {
+                if(position.PositionIndex - 5 >= 0 && 
+                    playerManager.GetFieldPositionList()[position.PositionIndex - 5].Card != null)
+                {
+                    protectedPositions.Add(position);
+                }
+                else if(position.PositionIndex - 10 >= 0 &&
+                    playerManager.GetFieldPositionList()[position.PositionIndex - 10].Card != null)
+                {
+                    protectedPositions.Add(position);
+                }
+                else if (position.PositionIndex + 5 < 15 &&
+                    playerManager.GetFieldPositionList()[position.PositionIndex + 5].Card != null
+                    && (heroClass == HeroClass.Warrior || heroClass == HeroClass.Paladin || heroClass == HeroClass.Colossus || (heroClass == HeroClass.Beast && heroToPlay.CurrentDefensePoints >= 50)))
+                {
+                    protectedPositions.Add(position);
+                }
+                else if (position.PositionIndex + 10 < 15 &&
+                    playerManager.GetFieldPositionList()[position.PositionIndex + 10].Card != null
+                    && (heroClass == HeroClass.Warrior || heroClass == HeroClass.Paladin || heroClass == HeroClass.Colossus || (heroClass == HeroClass.Beast && heroToPlay.CurrentDefensePoints >= 50)))
+                {
+                    protectedPositions.Add(position);
+                }
+            }
+        }
+
+        if(protectedPositions.Count > 0)
+        {
+            return protectedPositions[Random.Range(0, protectedPositions.Count)].PositionIndex;
+        }
+        else if(availablePositions.Count > 0)
         {
             return availablePositions[Random.Range(0, availablePositions.Count)].PositionIndex;
         }
-
+        
         return ChoosePositionFieldIndex(heroToPlay, true);
     }
 
@@ -428,7 +495,7 @@ public class HemeraLegionAI : MonoBehaviour
 
             foreach (var card in combinations[i])
             {
-                damage += card.Hero.Moves[0].MoveSO.Damage;
+                damage += card.Hero.Moves[card.Attack].MoveSO.Damage;
             }
 
             if (damage > totalDamage)

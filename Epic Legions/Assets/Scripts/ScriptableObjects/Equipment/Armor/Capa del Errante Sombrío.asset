@@ -18,7 +18,7 @@ MonoBehaviour:
   cardSprite: {fileID: 21300000, guid: 998c92eb811cfc54a8f6724bec5103fd, type: 3}
   cardElemnt: 8
   equipmentType: 1
-  supportedClasses: 0000000001000000020000000300000004000000
+  supportedClasses: 04000000
   moves: []
   effect: {fileID: 11400000, guid: c9f88c7a915ca684fbcc8c9e1f269f96, type: 2}
   description: El portador gana 20 de velocidad.

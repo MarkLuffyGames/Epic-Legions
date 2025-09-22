@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Golpe Celeste
   m_EditorClassIdentifier: 
   moveName: Golpe Celeste
-  damage: 25
-  energyCost: 10
+  damage: 40
+  energyCost: 20
   element: 6
   moveEffect: {fileID: 0}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}

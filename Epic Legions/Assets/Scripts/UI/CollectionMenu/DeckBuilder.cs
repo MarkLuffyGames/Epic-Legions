@@ -136,7 +136,7 @@ public class DeckBuilder : MonoBehaviour
 
         currentState = DeckBuilderState.CreatingDeck;
         deckName.text = "Nuevo Mazo";
-        UpdateUI();
+        StartCoroutine(UpdateUI());
         yield return MoveView(deckEditView, true);
     }
 
@@ -176,13 +176,13 @@ public class DeckBuilder : MonoBehaviour
     public void AddCardToDeck(GameObject card)
     {
         cardsInDeck.Add(card);
-        UpdateUI();
+        StartCoroutine(UpdateUI());
     }
 
     public void RemoveCardFromDeck(GameObject card)
     {
         cardsInDeck.Remove(card);
-        UpdateUI();
+        StartCoroutine(UpdateUI());
     }
 
     IEnumerator ShowDecksViewToSelect()
@@ -270,7 +270,7 @@ public class DeckBuilder : MonoBehaviour
             cardsInDeck.Add(cardGO);
         }
         deckName.text = deck.deckName;
-        UpdateUI();
+        StartCoroutine(UpdateUI());
         yield return MoveView(deckEditView, true);
 
     }
@@ -333,8 +333,9 @@ public class DeckBuilder : MonoBehaviour
             view.SetActive(false);
     }
 
-    private void UpdateUI()
+    private IEnumerator UpdateUI()
     {
+        yield return null; // Wait a frame to ensure all changes are applied
         cardCountText.text = $"{cardsInDeck.Count}/40";
         heroCountText.text = $"{cardsInDeck.FindAll(c => c.GetComponent<CardUI>().CurrentCard is HeroCardSO).Count}";
         equipmentCountText.text = $"{cardsInDeck.FindAll(c => c.GetComponent<CardUI>().CurrentCard is EquipmentCardSO).Count}";

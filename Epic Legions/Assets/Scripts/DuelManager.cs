@@ -115,7 +115,7 @@ public class DuelManager : NetworkBehaviour
 
                 InitializeBattleTurns();
 
-                BeginHeroTurn();
+                StartHeroTurn();
 
                 if (IsClient || isSinglePlayer)
                 {
@@ -381,7 +381,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Inicia el turno de los héroes en la fase actual, gestionando efectos y verificando estados.
     /// </summary>
-    private void BeginHeroTurn()
+    private void StartHeroTurn()
     {
         // Actualiza el texto de la fase del duelo
         UpdateDuelPhaseText();
@@ -1060,18 +1060,18 @@ public class DuelManager : NetworkBehaviour
         return targets;
     }
 
-    private void TryAddTarget(Card position, Card card, int movementToUseIndex, List<Card> targets)
+    private void TryAddTarget(Card cardPosition, Card card, int movementToUseIndex, List<Card> targets)
     {
-        if (position != null && position != card)
+        if (cardPosition != null && cardPosition != card)
         {
             if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
-                    && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.CheckCondition(card, position))
+                    && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.CheckCondition(card, cardPosition))
             {
-                targets.Add(position);
+                targets.Add(cardPosition);
             }
             else if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition == null)
             {
-                targets.Add(position); // Si no hay condición, se agrega directamente
+                targets.Add(cardPosition); // Si no hay condición, se agrega directamente
             }
         }
     }
@@ -1233,7 +1233,6 @@ public class DuelManager : NetworkBehaviour
         // Si el cliente actual es el host (servidor), no se realiza ninguna acción (el host ya maneja la energía)
         if (IsHost) return;
 
-        Debug.Log($"Consumir energía: {amount} para el cliente {clientId}");
         // Verificar si el cliente que ejecuta esta función es el cliente local
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
@@ -1441,7 +1440,7 @@ public class DuelManager : NetworkBehaviour
 
                 // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
                 attackerCard.lastDamageInflicted = cardToAttack.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, cardToAttack),
-                    CalculateDefenseIgnored(attackerCard, movementToUseIndex), attackerCard, moveType);
+                    CalculateDefenseIgnored(attackerCard, cardToAttack, movementToUseIndex), attackerCard, moveType);
             }
             else
             {
@@ -1463,7 +1462,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     // Aplica el daño a todos los objetivos.
                     attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, card),
-                        CalculateDefenseIgnored(attackerCard, movementToUseIndex), attackerCard, moveType);
+                        CalculateDefenseIgnored(attackerCard, cardToAttack, movementToUseIndex), attackerCard, moveType);
                 }
             }
 
@@ -1546,14 +1545,14 @@ public class DuelManager : NetworkBehaviour
         return damage;
     }
 
-    private int CalculateDefenseIgnored(Card attackerCard, int movementToUseIndex)
+    private int CalculateDefenseIgnored(Card attackerCard,Card cardToAttack, int movementToUseIndex)
     {
         var move = attackerCard.Moves[movementToUseIndex].MoveSO;
         if (move.MoveEffect is IgnoredDefense ignored)
         {
             if(ignored.Amount == move.Damage)
             {
-                return ignored.Amount + attackerCard.GetAttackModifier();
+                return ignored.Amount + attackerCard.GetAttackModifier() + CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
             }
 
             return ignored.Amount;
@@ -1605,7 +1604,7 @@ public class DuelManager : NetworkBehaviour
             cardToAttack.AnimationReceivingMovement(attackerCard.Moves[movementToUseIndex]);
 
             // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
-            cardToAttack.ReceiveDamage(damage, CalculateDefenseIgnored(attackerCard, movementToUseIndex), null, 
+            cardToAttack.ReceiveDamage(damage, CalculateDefenseIgnored(attackerCard, cardToAttack, movementToUseIndex), null, 
                 attackerCard.Moves[movementToUseIndex].MoveSO.MoveType);
 
             attackerCard.MoveToLastPosition();
@@ -1823,7 +1822,7 @@ public class DuelManager : NetworkBehaviour
         {
             heroesInTurnIndex++; // Avanzar al siguiente héroe en turno.
             StartHeroTurnClientRpc(heroesInTurnIndex); // Notificar a los clientes sobre el cambio de turno.
-            BeginHeroTurn(); // Iniciar el turno del nuevo héroe.
+            StartHeroTurn(); // Iniciar el turno del nuevo héroe.
         }
         else // Si hemos llegado al último héroe, reiniciar el ciclo de turnos.
         {
@@ -1853,7 +1852,7 @@ public class DuelManager : NetworkBehaviour
         this.heroesInTurnIndex = heroesInTurnIndex;
 
         // Inicia el turno del héroe en el cliente.
-        BeginHeroTurn();
+        StartHeroTurn();
     }
 
 

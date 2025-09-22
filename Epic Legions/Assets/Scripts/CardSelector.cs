@@ -168,7 +168,7 @@ public class CardSelector : MonoBehaviour
         {
             return; // Si la carta es nula, no hacer nada
         }
-        //Cuando se suelta el click y se cuplen las condiciones coloca la carta en la pocion en el campo.
+        //Cuando se suelta el click y se cumplen las condiciones coloca la carta en la pocion en el campo.
         if (currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard)
             && currentFieldPosition.IsFree(currentCard.cardSO) && card.UsableCard(playerManager)
             && !playerManager.isReady)

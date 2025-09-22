@@ -68,6 +68,7 @@ public class Effect
             durability = modifyAttack.NumberTurns;
             isNegative = !modifyAttack.IsIncrease;
             effectDescription = modifyAttack.DescriptionText(this);
+            durability++;
         }
         else if(cardEffect is Stun stun)
         {
@@ -155,8 +156,8 @@ public class Effect
         if (!isNegative)
         {
             ActivateEffect();
-            durability++;
         }
+
     }
 
     public void ActivateEffect()

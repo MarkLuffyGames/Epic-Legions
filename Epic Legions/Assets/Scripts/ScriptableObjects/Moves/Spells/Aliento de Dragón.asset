@@ -15,10 +15,12 @@ MonoBehaviour:
   moveName: "Aliento de Drag\xF3n"
   damage: 0
   energyCost: 0
+  element: 0
   moveEffect: {fileID: 11400000, guid: 730a7991269a7fa45a0167faa5d4b1c2, type: 2}
   effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  alwaysActive: 0
+  targetsCondition: {fileID: 11400000, guid: 7c35fe93074203846b9aefacb09f250f, type: 2}
   needTarget: 1
+  onMyself: 0
   moveType: 2
   targetsType: 0
   visualEffect: {fileID: 0}

@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 1
   targetsType: 0
-  visualEffect: {fileID: 5551718882146614446, guid: ca5678a67971360408484fc2051d9d2e, type: 3}
-  visualEffectHit: {fileID: 0}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 5551718882146614446, guid: ca5678a67971360408484fc2051d9d2e, type: 3}
   effectDescription: Paraliza al objetivo si tiene menos de 40 puntos de velocidad.

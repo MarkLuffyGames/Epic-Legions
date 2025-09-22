@@ -18,7 +18,7 @@ MonoBehaviour:
   cardSprite: {fileID: 21300000, guid: 33fd9514a0552f0468ce8227dc5271bb, type: 3}
   cardElemnt: 4
   equipmentType: 0
-  supportedClasses: 000000000100000002000000030000000400000005000000060000000700000008000000
+  supportedClasses: 01000000
   moves:
   - {fileID: 11400000, guid: 8d214217eab5949449f863193dd3611e, type: 2}
   effect: {fileID: 0}

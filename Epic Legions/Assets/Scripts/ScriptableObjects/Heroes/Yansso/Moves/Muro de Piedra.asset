@@ -22,7 +22,7 @@ MonoBehaviour:
   needTarget: 0
   onMyself: 0
   moveType: 2
-  targetsType: 1
+  targetsType: 2
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 6424583148328831481, guid: ce8f43249bb72a34a91470560c6e2245, type: 3}
   effectDescription: "Una barrera s\xF3lida que protege a todos los aliados absorviendo

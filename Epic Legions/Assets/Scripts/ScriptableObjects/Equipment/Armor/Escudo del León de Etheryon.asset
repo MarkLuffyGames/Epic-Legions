@@ -18,7 +18,7 @@ MonoBehaviour:
   cardSprite: {fileID: 21300000, guid: d2339469e071b7b478fd6c627b92c88f, type: 3}
   cardElemnt: 1
   equipmentType: 1
-  supportedClasses: 0000000001000000020000000300000004000000
+  supportedClasses: 01000000
   moves: []
   effect: {fileID: 11400000, guid: c0138d3281235ce46ab867df9523d906, type: 2}
   description: Aumenta en 30 la defensa del portador.
