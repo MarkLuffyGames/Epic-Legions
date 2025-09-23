@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum DuelPhase { PreparingDuel, Starting, DrawingCards, Preparation, PlayingSpellCard, Battle, EndDuel, None }
@@ -115,7 +116,7 @@ public class DuelManager : NetworkBehaviour
 
                 InitializeBattleTurns();
 
-                StartHeroTurn();
+                StartCoroutine(StartHeroTurn());
 
                 if (IsClient || isSinglePlayer)
                 {
@@ -146,6 +147,7 @@ public class DuelManager : NetworkBehaviour
         {
             oldDuelPhase = oldPhase;
             player1Manager.GetHandCardHandler().HideHandCards();
+            player1Manager.HideNextPhaseButton();
         }
     }
 
@@ -381,7 +383,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Inicia el turno de los héroes en la fase actual, gestionando efectos y verificando estados.
     /// </summary>
-    private void StartHeroTurn()
+    private IEnumerator StartHeroTurn()
     {
         // Actualiza el texto de la fase del duelo
         UpdateDuelPhaseText();
@@ -392,8 +394,9 @@ public class DuelManager : NetworkBehaviour
         // Si no hay héroes en el turno actual, avanza al siguiente turno
         if (turns[heroesInTurnIndex].Count == 0)
         {
-            if (IsServer || IsSinglePlayer) NextTurn();
-            return;
+            if (IsClient) SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
+            if (isSinglePlayer) NextTurn();
+            yield break;
         }
 
         // Reinicia la lista de héroes que participarán en este turno
@@ -878,7 +881,7 @@ public class DuelManager : NetworkBehaviour
         movementToUse = movementToUseIndex;
         settingAttackTarget = true;
         cardSelectingTarget = attackingCard; 
-        CancelAttackButton.SetActive(true);
+        if(attackingCard.cardSO is not SpellCardSO) CancelAttackButton.SetActive(true);
 
         // Obtiene los posibles objetivos para el movimiento
         var targets = ObtainTargets(attackingCard, movementToUseIndex);
@@ -1822,7 +1825,7 @@ public class DuelManager : NetworkBehaviour
         {
             heroesInTurnIndex++; // Avanzar al siguiente héroe en turno.
             StartHeroTurnClientRpc(heroesInTurnIndex); // Notificar a los clientes sobre el cambio de turno.
-            StartHeroTurn(); // Iniciar el turno del nuevo héroe.
+            StartCoroutine(StartHeroTurn()); // Iniciar el turno del nuevo héroe.
         }
         else // Si hemos llegado al último héroe, reiniciar el ciclo de turnos.
         {
@@ -1852,7 +1855,7 @@ public class DuelManager : NetworkBehaviour
         this.heroesInTurnIndex = heroesInTurnIndex;
 
         // Inicia el turno del héroe en el cliente.
-        StartHeroTurn();
+        StartCoroutine(StartHeroTurn());
     }
 
 

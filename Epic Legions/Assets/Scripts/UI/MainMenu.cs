@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button singlePlayerButton;
     [SerializeField] private Button multiplayerButton;
     [SerializeField] private Button collectionButton;
+    [SerializeField] private Button tutorialButton;
     [SerializeField] private TextMeshProUGUI versionText;
     [SerializeField] private Animator imageAnimator;
     [SerializeField] private Animator cameraAnimator;
@@ -39,6 +40,12 @@ public class MainMenu : MonoBehaviour
         {
             StartAnimation();
             Invoke(nameof(Collection), 0.6f);
+        });
+
+        tutorialButton.onClick.AddListener(() =>
+        {
+            StartAnimation();
+            Invoke(nameof(StartTutorial), 0.6f);
         });
 
         if (NetworkManager.Singleton != null)
@@ -109,6 +116,13 @@ public class MainMenu : MonoBehaviour
     private void StartCasualMultiplayer()
     {
         SceneManager.LoadScene("LobbyScene");
+    }
+
+    private void StartTutorial()
+    {
+        Loader.isSinglePlayer = true;
+        Loader.sceneToLoad = "TutorialScene";
+        SceneManager.LoadScene("LoadingScene");
     }
 
     private void StartAnimation()
