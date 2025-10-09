@@ -15,7 +15,7 @@ public class LoadingScreen : MonoBehaviour
 
     private IEnumerator LoadSceneAsync()
     {
-        string sceneName = Loader.sceneToLoad;
+        string sceneName = Loader.SceneToLoad;
 
         if (string.IsNullOrEmpty(sceneName))
         {

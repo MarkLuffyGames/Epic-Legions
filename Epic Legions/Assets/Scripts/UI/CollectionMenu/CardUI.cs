@@ -33,6 +33,7 @@ public class CardUI : MonoBehaviour
 
         cardImage.sprite = cardSO.CardSprite;
 
+        bool isSpell = false;
         if (cardSO is HeroCardSO heroCardSO)
         {
             foreach (var move in heroCardSO.Moves)
@@ -53,6 +54,7 @@ public class CardUI : MonoBehaviour
         }
         else if (cardSO is SpellCardSO spellCardSO)
         {
+            isSpell = true;
             moves.Add(new Movement(spellCardSO.Move));
             description.text = spellCardSO.Move.EffectDescription;
             ActivateHeroStats(false);
@@ -71,8 +73,7 @@ public class CardUI : MonoBehaviour
             description.text = equipmentCardSO.Description;
         }
 
-
-        movementUI1.SetMoveUI(moves.Count > 0 ? moves[0] : null, moves.Count < 2, 1);
+        movementUI1.SetMoveUI(moves.Count > 0 ? isSpell ? null : moves[0] : null, moves.Count < 2, 1);
         movementUI2.SetMoveUI(moves.Count > 1 ? moves[1] : null, moves.Count < 2, 2);
     }
 
@@ -84,5 +85,23 @@ public class CardUI : MonoBehaviour
         energyText.enabled = activate;
         classIcon.enabled = activate;
         elementIcon.enabled = activate;
+    }
+
+    public void ClearCard()
+    {
+        currentCard = null;
+        nameText.text = "";
+        lastNameText.text = "";
+        healtText.text = "";
+        defenseText.text = "";
+        speedText.text = "";
+        energyText.text = "";
+        description.text = "";
+        cardImage.sprite = null;
+        classIcon.sprite = null;
+        elementIcon.sprite = null;
+        movementUI1.SetMoveUI(null, false, 1);
+        movementUI2.SetMoveUI(null, false, 2);
+        moves.Clear();
     }
 }

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.GPUSort;
 
 public enum DeckBuilderState
 {
@@ -52,6 +51,9 @@ public class DeckBuilder : MonoBehaviour
     public DeckBuilderState currentState = DeckBuilderState.ViewingCollection;
 
     private Deck selectedDeck;
+
+    public bool isEnlargedCard;
+    [SerializeField] private EnlargedCardHolder enlargedCardHolder;
 
     private void Awake()
     {
@@ -340,5 +342,16 @@ public class DeckBuilder : MonoBehaviour
         heroCountText.text = $"{cardsInDeck.FindAll(c => c.GetComponent<CardUI>().CurrentCard is HeroCardSO).Count}";
         equipmentCountText.text = $"{cardsInDeck.FindAll(c => c.GetComponent<CardUI>().CurrentCard is EquipmentCardSO).Count}";
         spellCountText.text = $"{cardsInDeck.FindAll(c => c.GetComponent<CardUI>().CurrentCard is SpellCardSO).Count}";
+    }
+
+    public void EnlargeCard(CardUI card)
+    {
+        isEnlargedCard = true;
+        enlargedCardHolder.ShowCard(card.CurrentCard);
+    }
+
+    public void ResizeCard()
+    {
+        isEnlargedCard = false;
     }
 }

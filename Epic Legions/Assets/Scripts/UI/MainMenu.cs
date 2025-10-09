@@ -102,27 +102,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<int> deckCardIds;
     private void StartSinglePlayer()
     {
-        Loader.isSinglePlayer = true;
-        Loader.sceneToLoad = "GameScene";
-        SceneManager.LoadScene("LoadingScene");
+        Loader.LoadScene("GameScene", true);
     }
     private void Collection()
     {
-        Loader.isSinglePlayer = true;
-        Loader.sceneToLoad = "CollectionScene";
-        SceneManager.LoadScene("LoadingScene");
+        Loader.LoadScene("CollectionScene", true);
     }
 
     private void StartCasualMultiplayer()
     {
-        SceneManager.LoadScene("LobbyScene");
+        Loader.LoadScene("LobbyScene", true);
     }
 
     private void StartTutorial()
     {
-        Loader.isSinglePlayer = true;
-        Loader.sceneToLoad = "TutorialScene";
-        SceneManager.LoadScene("LoadingScene");
+        Loader.LoadScene("TutorialScene", true);
     }
 
     private void StartAnimation()

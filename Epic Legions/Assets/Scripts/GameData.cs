@@ -6,6 +6,8 @@ public class GameData : MonoBehaviour
     public static GameData Instance;
 
     public DeckSO defaultDeck;
+    public DeckSO tutorialDeck1;
+    public DeckSO tutorialDeck2;
     public List<Deck> decks = new List<Deck>();
     public Deck CurrentDeck;
 

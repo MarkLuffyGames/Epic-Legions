@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public static class Loader
 {
-    public static string sceneToLoad;
+    static string sceneToLoad;
+    public static string SceneToLoad { get { return sceneToLoad; } }
     public static int[] player1deckCardIds, player2deckCardIds;
 
     public static bool isSinglePlayer;
@@ -19,6 +20,22 @@ public static class Loader
         isSinglePlayer = false;
     }
 
+    public static void LoadScene(string sceneName, bool SinglePlayer)
+    {
+        sceneToLoad = sceneName;
+        isSinglePlayer = SinglePlayer;
+
+        if (sceneName == "GameScene" || sceneName == "TutorialScene")
+        {
+            SetDecks();
+            SceneManager.LoadScene("LoadingScene");
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+    }
+
     public static void SetDecks()
     {
         /*player1deckCardIds = new int[60];
@@ -29,5 +46,11 @@ public static class Loader
         player1deckCardIds = GameData.Instance.CurrentDeck.cardsIds.ToArray();
 
         player2deckCardIds = GameData.Instance.CurrentDeck.cardsIds.ToArray();
+
+        if(sceneToLoad == "TutorialScene")
+        {
+            player1deckCardIds = GameData.Instance.tutorialDeck1.cardsIds.ToArray();
+            player2deckCardIds = GameData.Instance.tutorialDeck2.cardsIds.ToArray();
+        }
     }
 }

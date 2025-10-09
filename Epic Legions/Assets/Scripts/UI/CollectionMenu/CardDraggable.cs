@@ -66,8 +66,9 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     // ========== IDrag ==========
     public void OnDrag(PointerEventData eventData)
     {
-        if (DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
-            && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck) return;
+        if ((DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
+            && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck)
+            || DeckBuilder.Instance.isEnlargedCard) return;
         if (isClone) return; // los clones no se pueden arrastrar
         FollowPointer(eventData);
     }
@@ -75,8 +76,9 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     // ========== IEndDrag ==========
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
-            && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck) return;
+        if ((DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
+            && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck)
+            || DeckBuilder.Instance.isEnlargedCard) return;
         if (isClone) return; // los clones no se pueden arrastrar
         // 7) Al soltar: destruimos el clon y restauramos la carta original
         if (ghost) Destroy(ghost);
@@ -150,7 +152,8 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        if (DeckBuilder.Instance.isEnlargedCard) return;
+        DeckBuilder.Instance.EnlargeCard(GetComponent<CardUI>());
     }
 }
 

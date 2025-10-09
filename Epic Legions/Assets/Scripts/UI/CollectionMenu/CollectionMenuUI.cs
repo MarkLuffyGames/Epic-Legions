@@ -153,7 +153,6 @@ public class CollectionMenuUI : MonoBehaviour
 
     public void BackToMenu()
     {
-        Loader.sceneToLoad = "MainMenu";
-        SceneManager.LoadScene("LoadingScene");
+        Loader.LoadScene("MainMenu", false);
     }
 }

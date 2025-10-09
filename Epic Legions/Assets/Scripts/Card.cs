@@ -98,6 +98,7 @@ public class Card : MonoBehaviour
     public Card HeroOwner => heroOwner;
     public FieldPosition FieldPosition => fieldPosition;
     public DuelManager DuelManager => duelManager;
+    public bool IsMoving => isMoving;
 
     Coroutine moveCoroutine;
     Coroutine rotateCoroutine;
@@ -430,10 +431,7 @@ public class Card : MonoBehaviour
         ChangedSortingOrder(sortingOrder);
     }
 
-    /// <summary>
-    /// Posiciona la carta en un punto delante de la pantalla para verla detalladamente.
-    /// </summary>
-    /// <returns>Retorna true si la carta fue agrandada correctamente.</returns>
+    
     public void Enlarge()
     {
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)

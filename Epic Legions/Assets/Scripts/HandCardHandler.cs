@@ -10,7 +10,8 @@ public class HandCardHandler : MonoBehaviour
     [SerializeField] private float maxDistanceCards = 1.5f;
     [SerializeField] private DuelManager duelManager;
     [SerializeField] private PlayerManager playerManager;
-    [SerializeField] private GameObject hideCardButton;
+    [SerializeField] private Button hideCardsButton;
+    public bool ShowingCards = true;
 
     public bool isHideCards;
 
@@ -18,6 +19,12 @@ public class HandCardHandler : MonoBehaviour
     {
         duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
         duelManager.OnChangeTurn += DuelManager_OnChangeTurn;
+
+        if(hideCardsButton != null)hideCardsButton.onClick.AddListener(() =>
+        {
+            HideHandCards();
+            ShowingCards = false;
+        });
     }
     private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
     {
@@ -44,12 +51,12 @@ public class HandCardHandler : MonoBehaviour
     {
         if (cardsList.Count == 0)
         {
-            if (playerManager.isPlayer) hideCardButton.SetActive(false);
+            if (playerManager.isPlayer) hideCardsButton.gameObject.SetActive(false);
             return;
         }
         else
         {
-            if(playerManager.isPlayer) hideCardButton.SetActive(!isHideCards);
+            if(playerManager.isPlayer) hideCardsButton.gameObject.SetActive(!isHideCards);
             for (int i = 0; i < cardsList.Count; i++)
             {
                 if(cardsList[i].IsDragging())continue;
@@ -121,17 +128,7 @@ public class HandCardHandler : MonoBehaviour
     {
         if (isHideCards)
         {
-            /*foreach (Card card in cardsList)
-            {
-                if (!card.IsDragging())
-                {
-                    StartCoroutine(card.MoveToPosition(new Vector3(
-                        card.transform.localPosition.x, card.transform.localPosition.y, 0), 20, false, true));
-                    if (card.IsHighlight()) card.RemoveHighlight();
-                }
-            }*/
-
-            hideCardButton.SetActive(true);
+            hideCardsButton.gameObject.SetActive(true);
             isHideCards = false;
 
             SetCardsPosition();
@@ -145,17 +142,7 @@ public class HandCardHandler : MonoBehaviour
     {
         if (!isHideCards)
         {
-            /*foreach (Card card in cardsList)
-            {
-                if (!card.IsDragging())
-                {
-                    StartCoroutine(card.MoveToPosition(new Vector3(
-                        card.transform.localPosition.x, card.transform.localPosition.y, -1.3f), 20, true, true));
-                    if(card.IsHighlight())card.RemoveHighlight();
-                }
-            }*/
-
-            hideCardButton.SetActive(false);
+            hideCardsButton.gameObject.SetActive(false);
             isHideCards = true;
 
             SetCardsPosition();

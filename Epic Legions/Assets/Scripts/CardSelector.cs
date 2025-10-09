@@ -44,7 +44,11 @@ public class CardSelector : MonoBehaviour
         if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)))
         {
             OnMouseDownCard();
-            if (currentCard != null) isHoldingCard = true;
+            if (currentCard != null)
+            {
+                isHoldingCard = true;
+                CursorThemeHL.Instance.Apply(HLCursorStyle.Hand);
+            } 
             isClicking = true;
         }
 
@@ -180,6 +184,7 @@ public class CardSelector : MonoBehaviour
             else if (currentCard != null && isHoldingCard)
             {
                 isHoldingCard = false;
+                CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
                 if (handCardHandler.CardInThePlayerHand(card))
                 {
                     card.StopDragging(true);
@@ -190,6 +195,7 @@ public class CardSelector : MonoBehaviour
         else if (isHoldingCard)
         {
             isHoldingCard = false;
+            CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
             if (handCardHandler.CardInThePlayerHand(card))
             {
                 card.StopDragging(true);
@@ -199,9 +205,10 @@ public class CardSelector : MonoBehaviour
 
         if (!duelManager.SettingAttackTarget) playerManager.HideAvailablePositions();
         //Si la carta que se solto no esta pocisionada en el campo mostrar las cartas de la mano.
-        if (handCardHandler.GetCardInHandList().Contains(card))
+        if (handCardHandler.GetCardInHandList().Contains(card) && !duelManager.sampleCard.IsEnlarged)
         {
-            handCardHandler.ShowHandCard();
+            if(handCardHandler.isHideCards) handCardHandler.ShowingCards = true;
+            if (handCardHandler.ShowingCards)handCardHandler.ShowHandCard();
         }
     }
 
@@ -210,6 +217,13 @@ public class CardSelector : MonoBehaviour
     /// </summary>
     private void OnQuickClick(Card card)
     {
+        isHoldingCard = false;
+        CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
+        if (handCardHandler.CardInThePlayerHand(card))
+        {
+            card.StopDragging(true);
+        }
+
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
         if (duelManager.SettingAttackTarget && card != null)
         {
@@ -255,13 +269,13 @@ public class CardSelector : MonoBehaviour
         {
             card.RemoveHighlight();
             card.Enlarge();
+            handCardHandler.HideHandCards();
         }
         //Si hay una carta enfocada desenfocar la carta.
         else if (duelManager.sampleCard.IsEnlarged)
         {
             duelManager.sampleCard.OnClick(currentCard);
-            //card.ResetSize();
-            //isAnyFocusedCard = false;
+            if(!duelManager.sampleCard.CardWasClicked(currentCard) && handCardHandler.ShowingCards) handCardHandler.ShowHandCard();
         }
     }
 
@@ -382,6 +396,7 @@ public class CardSelector : MonoBehaviour
     {
         card.waitForServer = true;
         isHoldingCard = false;
+        CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
         card.StopDragging(false);
 
         if (duelManager.IsSinglePlayer)

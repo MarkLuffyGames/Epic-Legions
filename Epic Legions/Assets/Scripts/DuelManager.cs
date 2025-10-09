@@ -26,34 +26,34 @@ public class DuelManager : NetworkBehaviour
 
     public event EventHandler OnChangeTurn;
 
-    [SerializeField] private PlayerManager player1Manager;
-    [SerializeField] private PlayerManager player2Manager;
-    [SerializeField] private EndDuelUI endDuelUI;
-    [SerializeField] private int energyGainedPerTurn = 20;
-    [SerializeField] private GameObject CancelAttackButton;
+    [SerializeField] protected PlayerManager player1Manager;
+    [SerializeField] protected PlayerManager player2Manager;
+    [SerializeField] protected EndDuelUI endDuelUI;
+    [SerializeField] protected int energyGainedPerTurn = 50;
+    [SerializeField] protected GameObject CancelAttackButton;
 
-    private Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
-    private Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
+    protected Dictionary<ulong, int> playerRoles = new Dictionary<ulong, int>();
+    protected Dictionary<int, ulong> playerId = new Dictionary<int, ulong>();
 
-    private Dictionary<ulong, List<int>> playerDecks = new Dictionary<ulong, List<int>>();
-    private Dictionary<ulong, bool> playerReady = new Dictionary<ulong, bool>();
+    protected Dictionary<ulong, List<int>> playerDecks = new Dictionary<ulong, List<int>>();
+    protected Dictionary<ulong, bool> playerReady = new Dictionary<ulong, bool>();
 
 
     public NetworkVariable<DuelPhase> duelPhase = new NetworkVariable<DuelPhase>(DuelPhase.None);
 
-    private List<Card> HeroCardsOnTheField = new List<Card>();
-    private List<Card>[] turns = new List<Card>[NumberOfTurns];
-    private int heroesInTurnIndex;
+    protected List<Card> HeroCardsOnTheField = new List<Card>();
+    protected List<Card>[] turns = new List<Card>[NumberOfTurns];
+    protected int heroesInTurnIndex;
 
-    [SerializeField] private TextMeshProUGUI duelPhaseText;
-    private List<Card> heroInTurn = new List<Card>();
-    private int movementToUse;
-    private bool settingAttackTarget;
-    private Card cardSelectingTarget;
+    [SerializeField] protected TextMeshProUGUI duelPhaseText;
+    protected List<Card> heroInTurn = new List<Card>();
+    protected int movementToUse;
+    protected bool settingAttackTarget;
+    protected Card cardSelectingTarget;
     public SampleCard sampleCard;
-    [SerializeField] private AttackExecutedUI attackExecutedUI;
+    [SerializeField] protected AttackExecutedUI attackExecutedUI;
 
-    private DuelPhase oldDuelPhase;
+    protected DuelPhase oldDuelPhase;
     public PlayerManager Player1Manager => player1Manager;
     public PlayerManager Player2Manager => player2Manager;
     public List<Card> HeroInTurn => heroInTurn;
@@ -61,7 +61,7 @@ public class DuelManager : NetworkBehaviour
     public bool SettingAttackTarget => settingAttackTarget;
     public Card CardSelectingTarget => cardSelectingTarget;
 
-    private bool isSinglePlayer;
+    protected bool isSinglePlayer;
     public bool IsSinglePlayer => isSinglePlayer;
 
     private void Awake()
@@ -84,7 +84,7 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    private void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
+    protected void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
     {
         UpdateDuelPhaseText();
 
@@ -101,10 +101,8 @@ public class DuelManager : NetworkBehaviour
         {
             player1Manager.HideWaitTextGameObject();
             player1Manager.ShowNextPhaseButton();
-            if (oldPhase == DuelPhase.DrawingCards)
-            {
-                player1Manager.GetHandCardHandler().ShowHandCard();
-            }
+            player1Manager.GetHandCardHandler().ShowHandCard();
+            player1Manager.GetHandCardHandler().ShowingCards = true;
         }
         else if(newPhase == DuelPhase.Battle)
         {
@@ -200,7 +198,7 @@ public class DuelManager : NetworkBehaviour
         InitializeDuel();
     }
 
-    private void SetDecks()
+    protected void SetDecks()
     {
         if (isSinglePlayer)
         {
@@ -220,7 +218,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="clientId">ID del jugador que envía el mazo.</param>
     /// <param name="deckCardIds">Lista de IDs de cartas en el mazo del jugador.</param>
     [ServerRpc(RequireOwnership = false)]
-    private void ReceiveAndStoreDeckServerRpc(ulong clientId, int[] deckCardIds)
+    protected void ReceiveAndStoreDeckServerRpc(ulong clientId, int[] deckCardIds)
     {
         // Validar si el mazo es válido
         if (deckCardIds == null || deckCardIds.Length == 0)
@@ -242,7 +240,7 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    private void ValidateDeck(int player, List<int> deckCardIds)
+    protected void ValidateDeck(int player, List<int> deckCardIds)
     {
         // Validar si el mazo es válido
         if (deckCardIds == null || deckCardIds.Count == 0)
@@ -263,7 +261,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="targetClientId">ID del jugador que recibe el mazo.</param>
     /// <param name="deckCardIds">Lista de IDs de cartas en el mazo.</param>
     [ClientRpc]
-    private void DistributeDeckToClientsClientRpc(ulong targetClientId, int[] deckCardIds)
+    protected void DistributeDeckToClientsClientRpc(ulong targetClientId, int[] deckCardIds)
     {
         // Verifica si la fase de duelo es la correcta para recibir el mazo
         if (duelPhase.Value != DuelPhase.PreparingDuel)
@@ -283,7 +281,7 @@ public class DuelManager : NetworkBehaviour
     /// </summary>
     /// <param name="targetClientId">ID del jugador al que se le asignará el mazo.</param>
     /// <param name="deckCardIds">Lista de IDs de cartas en el mazo.</param>
-    private void AssignDeckToPlayer(ulong targetClientId, int[] deckCardIds)
+    protected void AssignDeckToPlayer(ulong targetClientId, int[] deckCardIds)
     {
         // Verifica si el jugador es el cliente local o el oponente y asigna el mazo en consecuencia
         if (NetworkManager.Singleton.LocalClientId == targetClientId)
@@ -303,7 +301,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="targetClientId">ID del jugador que recibirá el mazo.</param>
     /// <param name="deckCardIds">Lista de IDs de cartas en el mazo.</param>
     /// <returns>Corrutina que espera hasta que la fase de duelo sea la correcta.</returns>
-    private IEnumerator WaitForPreparationPhaseAndAssignDeck(ulong targetClientId, int[] deckCardIds)
+    protected IEnumerator WaitForPreparationPhaseAndAssignDeck(ulong targetClientId, int[] deckCardIds)
     {
         // Espera hasta que la fase de duelo sea 'Preparación'
         yield return new WaitUntil(() => duelPhase.Value == DuelPhase.PreparingDuel);
@@ -318,7 +316,7 @@ public class DuelManager : NetworkBehaviour
     /// </summary>
     /// <param name="playerRole">Rol del jugador (1 para el jugador 1, 2 para el jugador 2).</param>
     /// <param name="deckCardIds">Lista de IDs de cartas que componen el mazo.</param>
-    private void AssignDeckToRole(int playerRole, int[] deckCardIds)
+    protected void AssignDeckToRole(int playerRole, int[] deckCardIds)
     {
         foreach (var cardId in deckCardIds)
         {
@@ -339,7 +337,7 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    private void AssignDeckToRole(PlayerManager playerManager, List<int> deckCardIds)
+    protected void AssignDeckToRole(PlayerManager playerManager, List<int> deckCardIds)
     {
         foreach (var cardId in deckCardIds)
         {
@@ -359,7 +357,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Establece el orden de turnos en la batalla basado en la velocidad de los héroes en el campo.
     /// </summary>
-    private void InitializeBattleTurns()
+    protected void InitializeBattleTurns()
     {
         // Limpia las listas de turnos previos
         foreach (var list in turns)
@@ -383,7 +381,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Inicia el turno de los héroes en la fase actual, gestionando efectos y verificando estados.
     /// </summary>
-    private IEnumerator StartHeroTurn()
+    protected IEnumerator StartHeroTurn()
     {
         // Actualiza el texto de la fase del duelo
         UpdateDuelPhaseText();
@@ -430,7 +428,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Configura el turno de los héroes que están listos para actuar en el campo.
     /// </summary>
-    private void InitializeHeroTurn()
+    protected void InitializeHeroTurn()
     {
 
         OnChangeTurn?.Invoke(this, EventArgs.Empty);
@@ -479,7 +477,7 @@ public class DuelManager : NetworkBehaviour
         }
     }
 
-    private void ChangePhase()
+    protected void ChangePhase()
     {
         // Transiciones entre las fases del duelo según la fase actual
         if (duelPhase.Value == DuelPhase.PreparingDuel)
@@ -547,7 +545,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Inicia el duelo configurando la fase inicial como "Preparación del Duelo".
     /// </summary>
-    private void InitializeDuel()
+    protected void InitializeDuel()
     {
         // Establece la fase del duelo a "Preparando el Duelo"
         duelPhase.Value = DuelPhase.PreparingDuel;
@@ -556,7 +554,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Actualiza el texto que muestra la fase actual del duelo.
     /// </summary>
-    private void UpdateDuelPhaseText()
+    protected void UpdateDuelPhaseText()
     {
         duelPhaseText.text = $"{duelPhase.Value.ToString()}{(duelPhase.Value == DuelPhase.Battle ? $" {heroesInTurnIndex + 1}" : "")}";
     }
@@ -660,7 +658,7 @@ public class DuelManager : NetworkBehaviour
     /// </summary>
     /// <param name="heroCards">La lista de cartas de héroes donde se va a insertar la nueva carta.</param>
     /// <param name="newCard">La nueva carta que se va a insertar en la lista.</param>
-    private void InsertCardInOrder(List<Card> heroCards, Card newCard)
+    protected void InsertCardInOrder(List<Card> heroCards, Card newCard)
     {
         // Encuentra la posición donde insertar la nueva carta, comparando con la velocidad de las cartas existentes
         int insertIndex = heroCards.FindLastIndex(card => card.CurrentSpeedPoints >= newCard.CurrentSpeedPoints);
@@ -685,7 +683,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="fieldPositionIdex">Índice de la posición en el campo donde se colocará la carta.</param>
     /// <param name="clientId">ID del cliente que solicita la acción de colocar la carta.</param>
     [ClientRpc]
-    private void PlaceCardOnTheFieldClientRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
+    protected void PlaceCardOnTheFieldClientRpc(int cardIndex, int fieldPositionIdex, ulong clientId)
     {
         // Verifica si el servidor está ejecutando esta función, en cuyo caso no realiza ninguna acción.
         if (NetworkManager.Singleton.IsHost) return;
@@ -708,7 +706,7 @@ public class DuelManager : NetworkBehaviour
     /// </summary>
     /// <param name="heroCard">La carta de héroe cuyo ID de cliente se desea obtener.</param>
     /// <returns>El ID del cliente al que pertenece el héroe, o 0 si no se encuentra el héroe en ningún jugador.</returns>
-    private ulong GetClientIdForHero(Card heroCard)
+    protected ulong GetClientIdForHero(Card heroCard)
     {
         // Verifica si el héroe está en el campo del jugador 1
         if (player1Manager.GetFieldPositionList().Contains(heroCard.FieldPosition))
@@ -749,7 +747,7 @@ public class DuelManager : NetworkBehaviour
         return null;
     }
 
-    private PlayerManager GetPlayerManagerRival(Card card)
+    protected PlayerManager GetPlayerManagerRival(Card card)
     {
         if(card.cardSO is EquipmentCardSO)
         {
@@ -789,7 +787,7 @@ public class DuelManager : NetworkBehaviour
     /// <remarks>
     /// Esta función recorre todos los héroes en el campo, aplica los efectos correspondientes y actualiza los textos asociados a sus estados.
     /// </remarks>
-    private void ManageEffects()
+    protected void ManageEffects()
     {
         // Itera sobre todos los héroes en el campo
         foreach (var hero in HeroCardsOnTheField)
@@ -810,7 +808,7 @@ public class DuelManager : NetworkBehaviour
     /// <remarks>
     /// Esta función recorre todos los héroes en el campo y activa sus efectos correspondientes, si los tienen.
     /// </remarks>
-    private void ActiveEffect()
+    protected void ActiveEffect()
     {
         // Itera sobre todos los héroes en el campo y activa sus efectos
         foreach (var hero in HeroCardsOnTheField)
@@ -1063,7 +1061,7 @@ public class DuelManager : NetworkBehaviour
         return targets;
     }
 
-    private void TryAddTarget(Card cardPosition, Card card, int movementToUseIndex, List<Card> targets)
+    protected void TryAddTarget(Card cardPosition, Card card, int movementToUseIndex, List<Card> targets)
     {
         if (cardPosition != null && cardPosition != card)
         {
@@ -1089,7 +1087,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="movementToUseIndex">El índice del movimiento que se va a utilizar.</param>
     /// <param name="lastMove">Indica si este es el último movimiento de la fase actual.</param>
     /// <returns>Una enumeración de la corrutina.</returns>
-    private IEnumerator HeroDirectAttack(int player, Card cardUsesTheAttack, int movementToUseIndex, bool lastMove)
+    protected IEnumerator HeroDirectAttack(int player, Card cardUsesTheAttack, int movementToUseIndex, bool lastMove)
     {
         sampleCard.ResetSize();
         player1Manager.GetHandCardHandler().HideHandCards();
@@ -1149,8 +1147,8 @@ public class DuelManager : NetworkBehaviour
     }
 
 
-    private List<HeroAction> attackActions = new List<HeroAction>();
-    private List<HeroAction> effectActions = new List<HeroAction>();
+    protected List<HeroAction> attackActions = new List<HeroAction>();
+    protected List<HeroAction> effectActions = new List<HeroAction>();
 
     [ServerRpc(RequireOwnership = false)]
     /// <summary>
@@ -1231,7 +1229,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="clientId">El ID del cliente que está realizando la acción.</param>
     /// <param name="amount">La cantidad de energía a consumir.</param>
     [ClientRpc]
-    private void ConsumeEnergyClientRpc(ulong clientId, int amount)
+    protected void ConsumeEnergyClientRpc(ulong clientId, int amount)
     {
         // Si el cliente actual es el host (servidor), no se realiza ninguna acción (el host ya maneja la energía)
         if (IsHost) return;
@@ -1256,7 +1254,7 @@ public class DuelManager : NetworkBehaviour
     /// 2. Luego, se ejecutan los ataques normales.
     /// </summary>
     /// <returns>Una coroutine que ejecuta las acciones en orden.</returns>
-    private IEnumerator StartActions()
+    protected IEnumerator StartActions()
     {
         // Ejecutar todas las acciones que tienen prioridad (efectos)
         for (int i = 0; i < effectActions.Count; i++)
@@ -1303,7 +1301,7 @@ public class DuelManager : NetworkBehaviour
     /// Finaliza las acciones en curso, activando efectos y enviando cartas al cementerio según la fase del duelo.
     /// </summary>
     /// <returns>Una coroutine que maneja la finalización de acciones.</returns>
-    private IEnumerator FinishActions()
+    protected IEnumerator FinishActions()
     {
         // Activar cualquier efecto pendiente antes de finalizar la fase de acciones.
         ActiveEffect();
@@ -1366,7 +1364,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="movementToUseIndex">Índice del movimiento que se está utilizando para el ataque.</param>
     /// <param name="lastMove">Indica si es el último movimiento en la secuencia de ataques.</param>
     /// <returns>Un IEnumerator que permite la ejecución secuencial del ataque en el servidor.</returns>
-    IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
+    protected IEnumerator HeroAttackServer(int heroToAttackPositionIndex, ulong clientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
     {
         // Determina qué carta está realizando el ataque (héroe o hechizo).
         Card attackerCard = isHero ?
@@ -1418,7 +1416,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="movementToUseIndex">Índice del movimiento a usar para el ataque.</param>
     /// <param name="lastMove">Indica si este es el último movimiento de la fase.</param>
     /// <returns>Un IEnumerator para controlar el flujo del ataque de manera asíncrona.</returns>
-    private IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
+    protected IEnumerator HeroAttack(Card cardToAttack, int player, Card attackerCard, int movementToUseIndex, bool lastMove)
     {
         sampleCard.ResetSize();
         player1Manager.GetHandCardHandler().HideHandCards();
@@ -1531,7 +1529,7 @@ public class DuelManager : NetworkBehaviour
         if (lastMove) yield return FinishActions();
     }
 
-    private int CalculateAttackDamage(Card attackerCard, int movementToUseIndex, Card cardToAttack)
+    protected int CalculateAttackDamage(Card attackerCard, int movementToUseIndex, Card cardToAttack)
     {
         if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is DestroyDefense)
         {
@@ -1548,7 +1546,7 @@ public class DuelManager : NetworkBehaviour
         return damage;
     }
 
-    private int CalculateDefenseIgnored(Card attackerCard,Card cardToAttack, int movementToUseIndex)
+    protected int CalculateDefenseIgnored(Card attackerCard,Card cardToAttack, int movementToUseIndex)
     {
         var move = attackerCard.Moves[movementToUseIndex].MoveSO;
         if (move.MoveEffect is IgnoredDefense ignored)
@@ -1564,7 +1562,7 @@ public class DuelManager : NetworkBehaviour
         return 0;
     }
 
-    private void DestroySpell(Card spellCard)
+    protected void DestroySpell(Card spellCard)
     {
         if (spellCard.cardSO is SpellCardSO)
         {
@@ -1623,7 +1621,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="attackerCard">Carta que realiza el ataque.</param>
     /// <param name="movementToUseIndex">Índice del movimiento a usar para determinar los objetivos.</param>
     /// <returns>Una lista de cartas que representan los objetivos del ataque.</returns>
-    private List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
+    protected List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
     {
         // Si el tipo de objetivo es una línea (TargetLine).
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.ADJACENT)
@@ -1714,7 +1712,7 @@ public class DuelManager : NetworkBehaviour
     /// y en caso afirmativo, destruye la carta y la coloca en el cementerio correspondiente. Para el jugador 1, las cartas se envían
     /// al cementerio de ese jugador, y para el jugador 2, se hace lo mismo.
     /// </remarks>
-    private void SendCardsToGraveyard()
+    protected void SendCardsToGraveyard()
     {
         // Recorre las cartas del jugador 1 en el campo.
         foreach (var target in player1Manager.GetFieldPositionList())
@@ -1753,7 +1751,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="heroUsesTheAttack">El índice del héroe que está usando el ataque (si es un héroe).</param>
     /// <param name="lastMove">Un valor booleano que indica si este es el último movimiento a ejecutar.</param>
     [ClientRpc]
-    private void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId, int movementToUseIndex, bool isHero, int heroUsesTheAttack, bool lastMove, bool isControlledHero)
+    protected void HeroAttackClientRpc(int fieldPositionIndex, ulong attackerClientId, int movementToUseIndex, bool isHero, int heroUsesTheAttack, bool lastMove, bool isControlledHero)
     {
         // Inicia la corrutina para ejecutar el ataque en el cliente correspondiente.
         StartCoroutine(HeroAttackClient(fieldPositionIndex, attackerClientId, isHero, heroUsesTheAttack, movementToUseIndex, lastMove, isControlledHero));
@@ -1773,7 +1771,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="heroUsesTheAttack">El índice del héroe que está usando el ataque (si es un héroe).</param>
     /// <param name="movementToUseIndex">El índice del movimiento que se está utilizando para el ataque.</param>
     /// <param name="lastMove">Indica si este es el último movimiento a ejecutar.</param>
-    private IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
+    protected IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
     {
         // Si este cliente es el host, no se ejecuta la lógica en él.
         if (IsHost) yield break;
@@ -1818,7 +1816,7 @@ public class DuelManager : NetworkBehaviour
     /// Esta función gestiona el avance del turno en el juego, incrementando el índice del héroe en turno y comenzando el siguiente turno para ese héroe. 
     /// Si todos los héroes han terminado su turno, se resetean las cartas destruidas, se regeneran las defensas y se pasa a la fase de robar cartas.
     /// </remarks>
-    private void NextTurn()
+    protected void NextTurn()
     {
         // Si no hemos llegado al final del arreglo de héroes, avanzar al siguiente héroe en turno.
         if (heroesInTurnIndex < turns.Length - 1)
@@ -1846,7 +1844,7 @@ public class DuelManager : NetworkBehaviour
     /// La función actualiza el índice del héroe en turno y llama a la función para iniciar dicho turno en el cliente.
     /// </remarks>
     [ClientRpc]
-    private void StartHeroTurnClientRpc(int heroesInTurnIndex)
+    protected void StartHeroTurnClientRpc(int heroesInTurnIndex)
     {
         // Si el cliente es el host, no realiza ninguna acción.
         if (IsHost) return;
@@ -1867,7 +1865,7 @@ public class DuelManager : NetworkBehaviour
     /// cuyo `FieldPosition` es nulo (lo que indica que ya no están en el campo).
     /// Después de eliminar las cartas destruidas en el lado del servidor, llama a un RPC para notificar a los clientes.
     /// </remarks>
-    private void RemoveDestroyedCards()
+    protected void RemoveDestroyedCards()
     {
         // Elimina todas las cartas que no tienen una posición en el campo (es decir, cartas destruidas).
         HeroCardsOnTheField.RemoveAll(card => card.FieldPosition == null);
@@ -1886,7 +1884,7 @@ public class DuelManager : NetworkBehaviour
     /// que no tienen una posición en el campo (lo que indica que han sido destruidas).
     /// </remarks>
     [ClientRpc]
-    private void RemoveDestroyedCardsClientRpc()
+    protected void RemoveDestroyedCardsClientRpc()
     {
         // Asegúrate de que solo los clientes (no el host) ejecuten esta función.
         if (IsHost) return;
@@ -1903,7 +1901,7 @@ public class DuelManager : NetworkBehaviour
     /// con los clientes llamando a un RPC (Remote Procedure Call). Esto asegura que todos los jugadores vean la actualización
     /// de la defensa de las cartas al final de su turno o en momentos relevantes del juego.
     /// </remarks>
-    private void RegenerateDefense()
+    protected void RegenerateDefense()
     {
         // Recorre todas las cartas en el campo de batalla.
         foreach (var card in HeroCardsOnTheField)
@@ -1927,7 +1925,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="fieldPositionIndex">Índice de la posición del campo donde se encuentra la carta cuyo defensa será regenerada.</param>
     /// <param name="ownerClientId">ID del cliente propietario de la carta cuya defensa será regenerada.</param>
     [ClientRpc]
-    private void RegenerateDefenseClientRpc(int fieldPositionIndex, ulong ownerClientId)
+    protected void RegenerateDefenseClientRpc(int fieldPositionIndex, ulong ownerClientId)
     {
         // Si el cliente es el host, no se hace nada, ya que el host maneja la lógica del servidor.
         if (IsHost) return;
@@ -1955,7 +1953,7 @@ public class DuelManager : NetworkBehaviour
     /// Finaliza el duelo y muestra la interfaz de usuario correspondiente al resultado del duelo.
     /// </summary>
     /// <param name="playerVictory">Indica si el jugador ha ganado el duelo. True si el jugador ha ganado, false si ha perdido.</param>
-    private void EndDuel(bool playerVictory)
+    protected void EndDuel(bool playerVictory)
     {
         // Muestra la interfaz de usuario de finalización del duelo, indicando si el jugador ha ganado o perdido.
         endDuelUI.Show(playerVictory);

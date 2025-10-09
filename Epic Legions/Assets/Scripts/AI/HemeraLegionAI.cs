@@ -485,7 +485,7 @@ public class HemeraLegionAI : MonoBehaviour
         if(playerManager.GetAllCardInField().Count == 0) return null;
 
         var combinations = GenerateMoveCombinations();
-        var totalDamage = 0;
+        var totalDamage = -1;
 
         var combinationIndex = -1;
 
@@ -506,6 +506,7 @@ public class HemeraLegionAI : MonoBehaviour
         }
         var combination = new List<(Card, int)>();
 
+        if(combinationIndex == -1) return combination;
         foreach (var card in combinations[combinationIndex])
         {
             combination.Add(card);

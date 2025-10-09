@@ -59,17 +59,13 @@ public class DuelPrepariationLobbyUI : MonoBehaviour
 
     IEnumerator CountDown()
     {
-        int count = 5;
+        int count = 3;
         for (int i = 0; i < count; i++)
         {
             countdown.text = (count - i).ToString();
             yield return new WaitForSeconds(1);
         }
-        //countdown.text = "Loading...";
-        //SceneManager.LoadScene("GameScene");
-        Loader.isSinglePlayer = false;
-        Loader.sceneToLoad = "GameScene";
-        SceneManager.LoadScene("LoadingScene");
+        Loader.LoadScene("GameScene", false);
     }
 
     private void Singleton_OnClientDisconnectCallback(ulong clientID)

@@ -1556,6 +1556,7 @@ MonoBehaviour:
   dragCanvas: {fileID: 0}
   ghostPrefab: {fileID: 0}
   ghostAlpha: 1
+  isClone: 0
 --- !u!114 &5837726720854553973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1625,7 +1626,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &7061449853073516523
 MonoBehaviour:
   m_ObjectHideFlags: 0
