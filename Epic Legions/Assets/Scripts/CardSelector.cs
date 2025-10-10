@@ -177,7 +177,8 @@ public class CardSelector : MonoBehaviour
             && currentFieldPosition.IsFree(currentCard.cardSO) && card.UsableCard(playerManager)
             && !playerManager.isReady)
         {
-            if (playerManager.GetFieldPositionList().Contains(currentFieldPosition) || playerManager.SpellFieldPosition == currentFieldPosition)
+            if ((playerManager.GetFieldPositionList().Contains(currentFieldPosition) || playerManager.SpellFieldPosition == currentFieldPosition)
+                && heldTime > clickHoldTime * 2)
             {
                 PlaceCardOnTheField(card);
             }

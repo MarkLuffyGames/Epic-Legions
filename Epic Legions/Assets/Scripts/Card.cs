@@ -229,11 +229,11 @@ public class Card : MonoBehaviour
     public void AddEquipment(Card card)
     {
         equipmentCard[Array.FindIndex(equipmentCard, c => c == null)] = card;
-        card.isVisible = true;
+        card.isVisible = isVisible;
         card.transform.parent = transform;
         card.transform.localScale = Vector3.one;
         StartCoroutine(card.MoveToPosition(Vector3.back * -0.05f, cardMovementSpeed, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer ? 0 : 0), cardMovementSpeed, false);
+        card.RotateToAngle(new Vector3(isVisible ? 90 : -90, -90, -90), cardMovementSpeed, false);
         card.SetSortingOrder(0);
         card.SetEquipmentOwner(this);
         if (card.moves.Count > 0)
@@ -281,6 +281,21 @@ public class Card : MonoBehaviour
             speedText.text = CurrentSpeedPoints.ToString();
             energyText.text = energy.ToString();
         }
+    }
+
+    public IEnumerator FlipCard()
+    {
+        yield return MoveToPosition(Vector3.back * 1.2f, 20, true, true);
+        RotateToAngle(defaultRotation, cardMovementSpeed, false);
+        yield return new WaitForSeconds(0.01f);
+        isVisible = true;
+        SetSortingOrder(0);
+        foreach(var card in equipmentCard)
+        {
+            if (card != null) card.isVisible = true;
+            card?.SetSortingOrder(0);
+        }
+        MoveToLastPosition();
     }
 
     /// <summary>
@@ -437,19 +452,6 @@ public class Card : MonoBehaviour
         if (Vector3.Distance(lastPosition, transform.localPosition) < 0.2f)
         {
             duelManager.sampleCard.Enlarge(this);
-        }
-    }
-
-    public void EnlargeEquipment()
-    {
-        for (int i = 0; i < equipmentCard.Length; i++)
-        {
-            if (equipmentCard[i] != null)
-            {
-                equipmentCard[i].StartCoroutine(MoveToPosition(focusPosition + Vector3.right * (i * 0.25f) + new Vector3(-0.25f, 0, 0), cardMovementSpeed, true, false));
-                equipmentCard[i].RotateToAngle(Vector3.right * 53, cardMovementSpeed, true);
-                equipmentCard[i].ChangedSortingOrder(110);
-            }
         }
     }
 

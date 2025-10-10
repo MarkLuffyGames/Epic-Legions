@@ -59,13 +59,13 @@ public class FieldPosition : MonoBehaviour
     public void SetCard(Card card, bool isPlayer)
     {
         this.card = card;
-        card.isVisible = true;
+        card.isVisible = isPlayer;
         card.transform.parent = transform;
         card.RemoveHighlight();
         StartCoroutine(card.MoveToPosition(Vector3.back * 0.01f, Card.cardMovementSpeed, false, true));
-        card.RotateToAngle(new Vector3(90, 0, isPlayer? 0 : 0), Card.cardMovementSpeed, false);
+        card.RotateToAngle(new Vector3(isPlayer ? 90 : -90, -90, -90), Card.cardMovementSpeed, false);
         card.SetSortingOrder(0);
-        card.SetFieldPosition(this, new Vector3(90, 0, isPlayer ? 0 : 0));
+        card.SetFieldPosition(this, new Vector3(90, 0, 0));
         ChangeEmission(isbusyColor, intensity);
     }
 

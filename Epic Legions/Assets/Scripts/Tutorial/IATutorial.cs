@@ -28,7 +28,7 @@ public class IATutorial : MonoBehaviour
     {
         if (newValue == DuelPhase.Preparation)
         {
-            turnCount++;
+            if(previousValue != DuelPhase.PlayingSpellCard) turnCount++;
             StartCoroutine(PlayCardsHand());
         }
         else if (newValue == DuelPhase.Battle)
@@ -68,6 +68,12 @@ public class IATutorial : MonoBehaviour
         {
             duelManager.UseMovement(2, heroesInTurn[0]);
         }
+        else if (turnCount == 3 || turnCount == 4)
+        {
+            duelManager.UseMovement(1, heroesInTurn[0], 2);
+        }
+
+
     }
 
     private void SummonHero(Card heroToPlay, int positionIndex)

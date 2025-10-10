@@ -108,6 +108,7 @@ public class DuelManager : NetworkBehaviour
         {
             if (oldPhase != DuelPhase.PlayingSpellCard)
             {
+                FlipCardsInFiled();
                 AudioManager.Instance.PlayPhaseChanged();
 
                 player1Manager.HideWaitTextGameObject();
@@ -697,6 +698,15 @@ public class DuelManager : NetworkBehaviour
         {
             // Si no, coloca la carta en el campo del jugador 2
             PlaceCardInField(player2Manager, false, cardIndex, fieldPositionIdex);
+        }
+    }
+
+    protected void FlipCardsInFiled()
+    {
+        foreach (var card in HeroCardsOnTheField)
+        {
+            if(card.isVisible) continue;
+            StartCoroutine(card.FlipCard());
         }
     }
 

@@ -103,6 +103,8 @@ public class Tutorial : DuelManager
         {
             if (oldPhase != DuelPhase.PlayingSpellCard)
             {
+                FlipCardsInFiled();
+
                 AudioManager.Instance.PlayPhaseChanged();
 
                 player1Manager.HideWaitTextGameObject();
@@ -231,7 +233,7 @@ public class Tutorial : DuelManager
         sampleCard.enabled = false;
         explanationTextsBoxs[index].SetActive(true);
         var text = explanationTextsBoxs[index].GetComponentInChildren<TextMeshProUGUI>();
-        yield return SetText(text, text.text);
+        //yield return SetText(text, text.text);
         yield return new WaitWhile(() => !onClick);
         explanationTextsBoxs[index].SetActive(false);
         onClick = false;
