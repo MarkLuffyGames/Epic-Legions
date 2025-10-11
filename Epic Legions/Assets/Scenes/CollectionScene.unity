@@ -1241,6 +1241,7 @@ MonoBehaviour:
   - {fileID: 1411533505}
   - {fileID: 379057039}
   closeButton: {fileID: 477597736}
+  cardCountText: {fileID: 1919128877}
 --- !u!1 &198202813
 GameObject:
   m_ObjectHideFlags: 0

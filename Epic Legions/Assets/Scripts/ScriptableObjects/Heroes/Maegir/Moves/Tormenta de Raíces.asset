@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "Tormenta de Ra\xEDces"
   m_EditorClassIdentifier: 
   moveName: "Tormenta de Ra\xEDces"
-  damage: 45
+  damage: 50
   energyCost: 30
   element: 3
   moveEffect: {fileID: 0}

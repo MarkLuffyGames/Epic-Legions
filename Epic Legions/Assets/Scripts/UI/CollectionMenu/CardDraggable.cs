@@ -20,9 +20,11 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private RectTransform ghostRect;
     private Canvas effectiveCanvas;          // canvas realmente usado para el drag
     private CanvasGroup originalCg;          // para bajar/subir alpha mientras arrastras
+    private CardUI cardUI;
 
     void Awake()
     {
+        cardUI = GetComponent<CardUI>();
         originalCg = GetComponent<CanvasGroup>();
         if (!originalCg) originalCg = gameObject.AddComponent<CanvasGroup>();
     }
@@ -30,9 +32,12 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     // ========== IBeginDrag ==========
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
-            && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck) return;
-        if (isClone) return; // los clones no se pueden arrastrar
+        if((DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
+            && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck)
+            || DeckBuilder.Instance.isEnlargedCard
+            || (!DeckBuilder.Instance.CanAddCardToDeck(cardUI.CurrentCard)
+            && !GetComponentInParent<DeckDropZone>().isDeck)) return;
+        if (isClone) return;
         EnsureDragCanvas();
 
         // 1) Elegimos la fuente del clon (prefab o la propia carta)

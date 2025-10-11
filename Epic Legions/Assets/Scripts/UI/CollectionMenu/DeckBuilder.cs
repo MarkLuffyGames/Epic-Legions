@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,6 +18,9 @@ public enum DeckBuilderState
 public class DeckBuilder : MonoBehaviour
 {
     public static DeckBuilder Instance;
+
+    public event EventHandler OnEditDeck;
+    public event EventHandler OnCancellingDeckEdit;
 
     [SerializeField] private GameObject deckEditView;
     [SerializeField] private GameObject decksView;
@@ -51,6 +55,8 @@ public class DeckBuilder : MonoBehaviour
     public DeckBuilderState currentState = DeckBuilderState.ViewingCollection;
 
     private Deck selectedDeck;
+    private Deck selectedDeckEdit;
+    public Deck SelectedDeck => selectedDeck;
 
     public bool isEnlargedCard;
     [SerializeField] private EnlargedCardHolder enlargedCardHolder;
@@ -137,7 +143,9 @@ public class DeckBuilder : MonoBehaviour
             yield break;
 
         currentState = DeckBuilderState.CreatingDeck;
+        OnEditDeck?.Invoke(this, EventArgs.Empty);
         deckName.text = "Nuevo Mazo";
+        selectedDeckEdit = new Deck { deckName = "Nuevo Mazo", cardsIds = new List<int>() };
         StartCoroutine(UpdateUI());
         yield return MoveView(deckEditView, true);
     }
@@ -148,6 +156,7 @@ public class DeckBuilder : MonoBehaviour
             yield break;
 
         currentState = DeckBuilderState.ViewingCollection;
+        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
         GameData.Instance.SaveNewDeck(deckName.text, GetCardIndicesInDeck());
         yield return MoveView(deckEditView, false);
         ClearDeckCards();
@@ -171,6 +180,7 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.CreatingDeck && currentState != DeckBuilderState.EditingDeck)
             yield break;
         currentState = DeckBuilderState.ViewingCollection;
+        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
         yield return MoveView(deckEditView, false);
         ClearDeckCards();
     }
@@ -178,12 +188,14 @@ public class DeckBuilder : MonoBehaviour
     public void AddCardToDeck(GameObject card)
     {
         cardsInDeck.Add(card);
+        selectedDeckEdit.cardsIds.Add(card.GetComponent<CardUI>().CurrentCard.CardID);
         StartCoroutine(UpdateUI());
     }
 
     public void RemoveCardFromDeck(GameObject card)
     {
         cardsInDeck.Remove(card);
+        selectedDeckEdit.cardsIds.Remove(card.GetComponent<CardUI>().CurrentCard.CardID);
         StartCoroutine(UpdateUI());
     }
 
@@ -192,6 +204,7 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.ViewingCollection)
             yield break;
         currentState = DeckBuilderState.SelectingDeck;
+        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
         ShowDecks();
         menuName.text = "Seleccionar Mazo";
         yield return MoveView(decksView, true);
@@ -202,6 +215,7 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.ViewingCollection)
             yield break;
         currentState = DeckBuilderState.EditingDeckView;
+        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
         ShowDecks();
         menuName.text = "Editar Mazo";
         yield return MoveView(decksView, true);
@@ -211,7 +225,8 @@ public class DeckBuilder : MonoBehaviour
     {
         if (currentState != DeckBuilderState.ViewingCollection)
             yield break;
-        currentState = DeckBuilderState.DeletingDeck; 
+        currentState = DeckBuilderState.DeletingDeck;
+        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
         ShowDecks();
         menuName.text = "Eliminar Mazo";
         yield return MoveView(decksView, true);
@@ -229,6 +244,7 @@ public class DeckBuilder : MonoBehaviour
     public void SelectDeck(Deck deck, DeckUI deckUI)
     {
         selectedDeck = deck;
+        selectedDeckEdit = new Deck { deckName = deck.deckName, cardsIds = new List<int>(deck.cardsIds) };
         if (currentState == DeckBuilderState.EditingDeckView)
         {
             StartCoroutine(EditingDeck(deck));
@@ -263,6 +279,7 @@ public class DeckBuilder : MonoBehaviour
 
         StartCoroutine(HideDecks());
         currentState = DeckBuilderState.EditingDeck;
+        OnEditDeck?.Invoke(this, EventArgs.Empty);
         foreach (var cardId in deck.cardsIds)
         {
             var cardGO = Instantiate(cardPrefab, cardContent.transform);
@@ -353,5 +370,36 @@ public class DeckBuilder : MonoBehaviour
     public void ResizeCard()
     {
         isEnlargedCard = false;
+    }
+
+    public bool CanAddCardToDeck(CardSO cardSO)
+    {
+        if (cardsInDeck.Count >= 40) return false;
+
+        int count = GetCardCountInDeck(cardSO);    
+
+        if (cardSO is SpellCardSO)
+        {
+            if (count >= 4) return false;
+        }
+        else
+        {
+            if (count >= 1) return false;
+        }
+
+        return true;
+    }
+
+    public int GetCardCountInDeck(CardSO cardSO)
+    {
+        int count = 0;
+        foreach (var c in selectedDeckEdit.cardsIds)
+        {
+            if (c == cardSO.CardID)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 }

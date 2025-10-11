@@ -25,6 +25,7 @@ public class DeckDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         var draggedGO = eventData.pointerDrag;
         if (!draggedGO || !draggedGO.GetComponent<CardUI>()) return;
         if(deckContainer == draggedGO.transform.parent) return; // No te puedes dropear a ti mismo
+        
 
         // ¿Qué instanciamos en el mazo?
         GameObject prefab = deckItemPrefab ? deckItemPrefab : draggedGO;
@@ -33,12 +34,15 @@ public class DeckDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
 
         if (isDeck)
         {
+            if (!DeckBuilder.Instance.CanAddCardToDeck(draggedGO.GetComponent<CardUI>().CurrentCard)) return;
+
             // Instanciar dentro del contenedor del mazo
             var instance = Instantiate(prefab, deckContainer);
-            DeckBuilder.Instance.AddCardToDeck(instance);
             instance.GetComponent<CardUI>().SetCard(draggedGO.GetComponent<CardUI>().CurrentCard);
             var rect = instance.transform as RectTransform;
             rect.localScale = Vector3.one * 100;
+
+            DeckBuilder.Instance.AddCardToDeck(instance);
 
             // Asegurar anclas/pivote razonables (centro)
             rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
