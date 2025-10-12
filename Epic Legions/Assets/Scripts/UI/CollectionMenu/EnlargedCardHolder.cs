@@ -9,7 +9,9 @@ public class EnlargedCardHolder : MonoBehaviour
     [SerializeField] private Button closeButton;
     [SerializeField] private TextMeshProUGUI cardCountText;
 
-    private CardSO card;
+    private CardUI origCard;
+
+    public CardUI CardUI => cardUI;
     private void Awake()
     {
         closeButton.onClick.AddListener(HideCard);
@@ -19,10 +21,10 @@ public class EnlargedCardHolder : MonoBehaviour
     {
         HideCard();
     }
-    public void ShowCard(CardSO card)
+    public void ShowCard(CardUI card)
     {
-        this.card = card;
-        cardUI.SetCard(card);
+        origCard = card;
+        cardUI.SetCard(card.CurrentCard);
         ShowMenuCard();
     }
 
@@ -46,16 +48,16 @@ public class EnlargedCardHolder : MonoBehaviour
         DeckBuilder.Instance.ResizeCard();
     }
 
-    private void UpdateCardCount()
+    public void UpdateCardCount()
     {
         if(DeckBuilder.Instance.currentState == DeckBuilderState.CreatingDeck 
             || DeckBuilder.Instance.currentState == DeckBuilderState.EditingDeck)
         {
-            cardCountText.text = $"{DeckBuilder.Instance.GetCardCountInDeck(card)}/{(card is SpellCardSO spell ? 4 : 1)}";
+            cardCountText.text = $"{DeckBuilder.Instance.GetCardCountInDeck(origCard.CurrentCard)}/{(origCard.CurrentCard is SpellCardSO spell ? 4 : 1)}";
         }
         else
         {
-            cardCountText.text = "99";
+            cardCountText.text = "1";
         }
     }
 }

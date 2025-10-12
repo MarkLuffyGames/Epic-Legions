@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,8 +20,8 @@ public class DeckBuilder : MonoBehaviour
 {
     public static DeckBuilder Instance;
 
-    public event EventHandler OnEditDeck;
-    public event EventHandler OnCancellingDeckEdit;
+
+    [SerializeField] private CollectionMenuUI collectionMenu;
 
     [SerializeField] private GameObject deckEditView;
     [SerializeField] private GameObject decksView;
@@ -45,6 +46,8 @@ public class DeckBuilder : MonoBehaviour
     [SerializeField] private Button HideDecksButton;
     [SerializeField] private Button setDeckNameButton;
     [SerializeField] private Button confirmDeckEditingButton;
+    [SerializeField] private Button addCardButton;
+    [SerializeField] private Button RemoveCardButton;
 
     [SerializeField] private TextMeshProUGUI menuName;
     [SerializeField] private TextMeshProUGUI cardCountText;
@@ -60,6 +63,7 @@ public class DeckBuilder : MonoBehaviour
 
     public bool isEnlargedCard;
     [SerializeField] private EnlargedCardHolder enlargedCardHolder;
+    [SerializeField] private DeckDropZone deckDropZone;
 
     private void Awake()
     {
@@ -121,6 +125,21 @@ public class DeckBuilder : MonoBehaviour
             StartCoroutine(ShowDecksViewToDelete());
         });
 
+        addCardButton.onClick.AddListener(() =>
+        {
+            deckDropZone.AddCardToDeck(enlargedCardHolder.CardUI.gameObject, enlargedCardHolder.CardUI);
+            enlargedCardHolder.UpdateCardCount();
+        });
+
+        RemoveCardButton.onClick.AddListener(() =>
+        {
+            var cardToRemove = cardsInDeck.FirstOrDefault(
+                c => c.GetComponent<CardUI>().CurrentCard.CardID == enlargedCardHolder.CardUI.CurrentCard.CardID)?.GetComponent<CardUI>();
+
+            if(cardToRemove) deckDropZone.RemoveCardFromDeck(cardToRemove);
+            enlargedCardHolder.UpdateCardCount();
+        });
+
 
         deckEditViewScrollRect = deckEditView.GetComponentInChildren<ScrollRect>();
         deckViewScrollRect = decksView.GetComponentInChildren<ScrollRect>();
@@ -129,6 +148,15 @@ public class DeckBuilder : MonoBehaviour
 
         deckEditView.SetActive(false);
         decksView.SetActive(false);
+
+        collectionMenu = FindFirstObjectByType<CollectionMenuUI>();
+        collectionMenu.onChangeCollection += (s, e) =>
+        {
+            if (currentState == DeckBuilderState.CreatingDeck || currentState == DeckBuilderState.EditingDeck)
+            {
+                UnblockAllCards();
+            }
+        };
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -143,7 +171,6 @@ public class DeckBuilder : MonoBehaviour
             yield break;
 
         currentState = DeckBuilderState.CreatingDeck;
-        OnEditDeck?.Invoke(this, EventArgs.Empty);
         deckName.text = "Nuevo Mazo";
         selectedDeckEdit = new Deck { deckName = "Nuevo Mazo", cardsIds = new List<int>() };
         StartCoroutine(UpdateUI());
@@ -156,7 +183,8 @@ public class DeckBuilder : MonoBehaviour
             yield break;
 
         currentState = DeckBuilderState.ViewingCollection;
-        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
+        blockedCards.Clear();
+        UnblockAllCards();
         GameData.Instance.SaveNewDeck(deckName.text, GetCardIndicesInDeck());
         yield return MoveView(deckEditView, false);
         ClearDeckCards();
@@ -180,7 +208,8 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.CreatingDeck && currentState != DeckBuilderState.EditingDeck)
             yield break;
         currentState = DeckBuilderState.ViewingCollection;
-        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
+        blockedCards.Clear();
+        UnblockAllCards();
         yield return MoveView(deckEditView, false);
         ClearDeckCards();
     }
@@ -188,14 +217,27 @@ public class DeckBuilder : MonoBehaviour
     public void AddCardToDeck(GameObject card)
     {
         cardsInDeck.Add(card);
-        selectedDeckEdit.cardsIds.Add(card.GetComponent<CardUI>().CurrentCard.CardID);
+        var cardUI = card.GetComponent<CardUI>();
+        selectedDeckEdit.cardsIds.Add(cardUI.CurrentCard.CardID);
+
+        if(cardsInDeck.Count >= 40)
+            BlockAllCards();
+        else
+            BlockCard(cardUI);
+
         StartCoroutine(UpdateUI());
     }
 
-    public void RemoveCardFromDeck(GameObject card)
+    public void RemoveCardFromDeck(CardUI cardUI)
     {
-        cardsInDeck.Remove(card);
-        selectedDeckEdit.cardsIds.Remove(card.GetComponent<CardUI>().CurrentCard.CardID);
+        cardsInDeck.Remove(cardUI.gameObject);
+        selectedDeckEdit.cardsIds.Remove(cardUI.CurrentCard.CardID);
+
+        UnblockCard(cardUI);
+        if (cardsInDeck.Count == 39)
+            UnblockAllCards();
+            
+
         StartCoroutine(UpdateUI());
     }
 
@@ -204,7 +246,8 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.ViewingCollection)
             yield break;
         currentState = DeckBuilderState.SelectingDeck;
-        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
+        blockedCards.Clear();
+        UnblockAllCards();
         ShowDecks();
         menuName.text = "Seleccionar Mazo";
         yield return MoveView(decksView, true);
@@ -215,7 +258,8 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.ViewingCollection)
             yield break;
         currentState = DeckBuilderState.EditingDeckView;
-        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
+        blockedCards.Clear();
+        UnblockAllCards();
         ShowDecks();
         menuName.text = "Editar Mazo";
         yield return MoveView(decksView, true);
@@ -226,7 +270,8 @@ public class DeckBuilder : MonoBehaviour
         if (currentState != DeckBuilderState.ViewingCollection)
             yield break;
         currentState = DeckBuilderState.DeletingDeck;
-        OnCancellingDeckEdit?.Invoke(this, EventArgs.Empty);
+        blockedCards.Clear();
+        UnblockAllCards();
         ShowDecks();
         menuName.text = "Eliminar Mazo";
         yield return MoveView(decksView, true);
@@ -244,7 +289,6 @@ public class DeckBuilder : MonoBehaviour
     public void SelectDeck(Deck deck, DeckUI deckUI)
     {
         selectedDeck = deck;
-        selectedDeckEdit = new Deck { deckName = deck.deckName, cardsIds = new List<int>(deck.cardsIds) };
         if (currentState == DeckBuilderState.EditingDeckView)
         {
             StartCoroutine(EditingDeck(deck));
@@ -279,14 +323,18 @@ public class DeckBuilder : MonoBehaviour
 
         StartCoroutine(HideDecks());
         currentState = DeckBuilderState.EditingDeck;
-        OnEditDeck?.Invoke(this, EventArgs.Empty);
+
+        selectedDeckEdit = new Deck { deckName = deck.deckName, cardsIds = new List<int>(deck.cardsIds) };
+
         foreach (var cardId in deck.cardsIds)
         {
             var cardGO = Instantiate(cardPrefab, cardContent.transform);
             var rect = cardGO.transform as RectTransform;
             rect.localScale = Vector3.one * 100;
-            cardGO.GetComponent<CardUI>().SetCard(CardDatabase.GetCardById(cardId));
+            var cardUI = cardGO.GetComponent<CardUI>();
+            cardUI.SetCard(CardDatabase.GetCardById(cardId));
             cardsInDeck.Add(cardGO);
+            BlockCard(cardUI);
         }
         deckName.text = deck.deckName;
         StartCoroutine(UpdateUI());
@@ -364,7 +412,7 @@ public class DeckBuilder : MonoBehaviour
     public void EnlargeCard(CardUI card)
     {
         isEnlargedCard = true;
-        enlargedCardHolder.ShowCard(card.CurrentCard);
+        enlargedCardHolder.ShowCard(card);
     }
 
     public void ResizeCard()
@@ -374,18 +422,8 @@ public class DeckBuilder : MonoBehaviour
 
     public bool CanAddCardToDeck(CardSO cardSO)
     {
-        if (cardsInDeck.Count >= 40) return false;
-
-        int count = GetCardCountInDeck(cardSO);    
-
-        if (cardSO is SpellCardSO)
-        {
-            if (count >= 4) return false;
-        }
-        else
-        {
-            if (count >= 1) return false;
-        }
+        if (cardsInDeck.Count >= 40 || blockedCards.Contains(cardSO.CardID))
+            return false;
 
         return true;
     }
@@ -402,4 +440,58 @@ public class DeckBuilder : MonoBehaviour
         }
         return count;
     }
+
+    List<int> blockedCards = new List<int>();
+    public void BlockCard(CardUI cardUI)
+    {
+        if(cardUI.CurrentCard is SpellCardSO)
+        {
+            int count = GetCardCountInDeck(cardUI.CurrentCard);
+            if (count >= 4)
+            {
+                collectionMenu.Cards.FirstOrDefault(c => c.CurrentCard.CardID == cardUI.CurrentCard.CardID)?.cardDraggable.SetAlpha(0.3f);
+                blockedCards.Add(cardUI.CurrentCard.CardID);
+            }
+        }
+        else
+        {
+            collectionMenu.Cards.FirstOrDefault(c => c.CurrentCard.CardID == cardUI.CurrentCard.CardID)?.cardDraggable.SetAlpha(0.3f);
+            blockedCards.Add(cardUI.CurrentCard.CardID);
+        }
+            
+    }
+
+    public void BlockCards(List<CardUI> cardUIs)
+    {
+        foreach (var cardUI in cardUIs)
+        {
+            BlockCard(cardUI);
+        }
+    }
+
+    public void UnblockCard(CardUI cardUI)
+    {
+        collectionMenu.Cards.FirstOrDefault(c => c.CurrentCard.CardID == cardUI.CurrentCard.CardID)?.cardDraggable.SetAlpha(1f);
+        blockedCards.Remove(cardUI.CurrentCard.CardID);
+    }
+    public void BlockAllCards()
+    {
+        foreach (var card in collectionMenu.Cards)
+        {
+            card.cardDraggable.SetAlpha(0.3f);
+        }
+    }
+
+    public void UnblockAllCards()
+    {
+        foreach (var card in collectionMenu.Cards)
+        {
+            if(blockedCards.Contains(card.CurrentCard.CardID))
+                BlockCard(card);
+            else
+                card.cardDraggable.SetAlpha(1f);
+        }
+    }
+
+    
 }

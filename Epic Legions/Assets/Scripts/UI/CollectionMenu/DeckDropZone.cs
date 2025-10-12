@@ -26,7 +26,6 @@ public class DeckDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         if (!draggedGO || !draggedGO.GetComponent<CardUI>()) return;
         if(deckContainer == draggedGO.transform.parent) return; // No te puedes dropear a ti mismo
         
-
         // ¿Qué instanciamos en el mazo?
         GameObject prefab = deckItemPrefab ? deckItemPrefab : draggedGO;
 
@@ -34,31 +33,41 @@ public class DeckDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
 
         if (isDeck)
         {
-            if (!DeckBuilder.Instance.CanAddCardToDeck(draggedGO.GetComponent<CardUI>().CurrentCard)) return;
-
-            // Instanciar dentro del contenedor del mazo
-            var instance = Instantiate(prefab, deckContainer);
-            instance.GetComponent<CardUI>().SetCard(draggedGO.GetComponent<CardUI>().CurrentCard);
-            var rect = instance.transform as RectTransform;
-            rect.localScale = Vector3.one * 100;
-
-            DeckBuilder.Instance.AddCardToDeck(instance);
-
-            // Asegurar anclas/pivote razonables (centro)
-            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.pivot = new Vector2(0.5f, 0.5f);
-
-            // (Opcional) apaga el highlight
-            if (highlight) highlight.enabled = false;
+            AddCardToDeck(prefab, draggedGO.GetComponent<CardUI>());
         }
         else
         {
-            DeckBuilder.Instance.RemoveCardFromDeck(draggedGO);
-            Destroy(draggedGO, 0.01f);
+            RemoveCardFromDeck(draggedGO.GetComponent<CardUI>());
         }
 
 
         // Aquí podrías: actualizar contadores, validar reglas, reproducir sonido, etc.
+    }
+
+    public void AddCardToDeck(GameObject prefab, CardUI cardUI)
+    {
+        if (!DeckBuilder.Instance.CanAddCardToDeck(cardUI.CurrentCard)) return;
+
+        // Instanciar dentro del contenedor del mazo
+        var instance = Instantiate(prefab, deckContainer);
+        instance.GetComponent<CardUI>().SetCard(cardUI.CurrentCard);
+        var rect = instance.transform as RectTransform;
+        rect.localScale = Vector3.one * 100;
+
+        DeckBuilder.Instance.AddCardToDeck(instance);
+
+        // Asegurar anclas/pivote razonables (centro)
+        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+
+        // (Opcional) apaga el highlight
+        if (highlight) highlight.enabled = false;
+    }
+
+    public void RemoveCardFromDeck(CardUI cardUI)
+    {
+        DeckBuilder.Instance.RemoveCardFromDeck(cardUI);
+        Destroy(cardUI.gameObject, 0.01f);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

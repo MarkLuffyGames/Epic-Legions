@@ -21,12 +21,18 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private Canvas effectiveCanvas;          // canvas realmente usado para el drag
     private CanvasGroup originalCg;          // para bajar/subir alpha mientras arrastras
     private CardUI cardUI;
+    private DeckDropZone deckDropZone;
 
     void Awake()
     {
         cardUI = GetComponent<CardUI>();
         originalCg = GetComponent<CanvasGroup>();
         if (!originalCg) originalCg = gameObject.AddComponent<CanvasGroup>();
+    }
+
+    private void Start()
+    {
+        deckDropZone = GetComponentInParent<DeckDropZone>();
     }
 
     // ========== IBeginDrag ==========
@@ -36,7 +42,7 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck)
             || DeckBuilder.Instance.isEnlargedCard
             || (!DeckBuilder.Instance.CanAddCardToDeck(cardUI.CurrentCard)
-            && !GetComponentInParent<DeckDropZone>().isDeck)) return;
+            && !deckDropZone.isDeck)) return;
         if (isClone) return;
         EnsureDragCanvas();
 
@@ -60,7 +66,7 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         ghost.GetComponent<CardDraggable>().isClone = true;
 
         // 5) Dejamos la carta original un poco translúcida (feedback)
-        originalCg.alpha = 0.6f;
+        originalCg.alpha = 0.3f;
 
         originalCg.blocksRaycasts = false;
 
@@ -90,7 +96,7 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         ghost = null;
         ghostRect = null;
 
-        originalCg.alpha = 1f;
+        originalCg.alpha = deckDropZone.isDeck ? 1f : (DeckBuilder.Instance.CanAddCardToDeck(cardUI.CurrentCard) ? 1f : 0.3f);
         originalCg.blocksRaycasts = true;
     }
 
@@ -159,6 +165,11 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (DeckBuilder.Instance.isEnlargedCard) return;
         DeckBuilder.Instance.EnlargeCard(GetComponent<CardUI>());
+    }
+
+    public void SetAlpha(float alpha)
+    {
+        originalCg.alpha = alpha;
     }
 }
 

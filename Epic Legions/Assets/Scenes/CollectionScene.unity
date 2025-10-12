@@ -5459,6 +5459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755c3921bdef33343ab0db1d2a5053af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectionMenu: {fileID: 0}
   deckEditView: {fileID: 1996349637}
   decksView: {fileID: 1100394041}
   deckEditViewScrollRect: {fileID: 0}
@@ -5477,6 +5478,8 @@ MonoBehaviour:
   HideDecksButton: {fileID: 1246985989}
   setDeckNameButton: {fileID: 1350128462}
   confirmDeckEditingButton: {fileID: 2075802239}
+  addCardButton: {fileID: 379057040}
+  RemoveCardButton: {fileID: 1411533507}
   menuName: {fileID: 1571542138}
   cardCountText: {fileID: 749464506}
   heroCountText: {fileID: 198202815}
@@ -5485,6 +5488,7 @@ MonoBehaviour:
   currentState: 0
   isEnlargedCard: 0
   enlargedCardHolder: {fileID: 195999994}
+  deckDropZone: {fileID: 1996349642}
 --- !u!1 &1143030506
 GameObject:
   m_ObjectHideFlags: 0

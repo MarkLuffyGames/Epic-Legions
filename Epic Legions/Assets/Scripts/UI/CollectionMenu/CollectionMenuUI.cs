@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 
 public class CollectionMenuUI : MonoBehaviour
 {
+    public event EventHandler onChangeCollection;
     enum CardCategory { Heroes, Equipment, Spells }
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Transform cardsParent;
@@ -20,7 +22,8 @@ public class CollectionMenuUI : MonoBehaviour
     [SerializeField] private Image classFilterImage;
 
 
-    private List<GameObject> cards = new List<GameObject>();
+    private List<CardUI> cards = new List<CardUI>();
+    public IReadOnlyList<CardUI> Cards => cards;
     private bool descendingOrder;
     private CardCategory category;
     private CardElement elementFilter = CardElement.None;
@@ -45,12 +48,13 @@ public class CollectionMenuUI : MonoBehaviour
                     && (elementFilter == CardElement.None || elementFilter == hero.CardElemnt)
                     && (classFilter == HeroClass.None || classFilter == hero.HeroClass))
                 {
-                    var card = Instantiate(cardPrefab, cardsParent);
-                    card.GetComponent<CardUI>().SetCard(cardSO);
+                    var card = Instantiate(cardPrefab, cardsParent).GetComponent<CardUI>();
+                    card.SetCard(cardSO);
                     cards.Add(card);
                 }
             }
         }
+        onChangeCollection?.Invoke(this, EventArgs.Empty);
     }
 
     public void SetEquipment()
@@ -66,12 +70,13 @@ public class CollectionMenuUI : MonoBehaviour
                     && (elementFilter == CardElement.None || elementFilter == equip.CardElemnt)
                     && (classFilter == HeroClass.None || equip.SupportedClasses.Contains(classFilter)))
                 {
-                    var card = Instantiate(cardPrefab, cardsParent);
-                    card.GetComponent<CardUI>().SetCard(cardSO);
+                    var card = Instantiate(cardPrefab, cardsParent).GetComponent<CardUI>();
+                    card.SetCard(cardSO);
                     cards.Add(card);
                 }
             }
         }
+        onChangeCollection?.Invoke(this, EventArgs.Empty);
     }
 
     public void SetSpells()
@@ -86,19 +91,20 @@ public class CollectionMenuUI : MonoBehaviour
                 if (searchTerm == "" || spell.CardName.Contains(searchTerm)
                     && (elementFilter == CardElement.None || elementFilter == spell.CardElemnt))
                 {
-                    var card = Instantiate(cardPrefab, cardsParent);
-                    card.GetComponent<CardUI>().SetCard(cardSO);
+                    var card = Instantiate(cardPrefab, cardsParent).GetComponent<CardUI>();
+                    card.SetCard(cardSO);
                     cards.Add(card);
                 }
             }
         }
+        onChangeCollection?.Invoke(this, EventArgs.Empty);
     }
 
     public void ClearCards()
     {
         foreach (var card in cards)
         {
-            Destroy(card);
+            Destroy(card.gameObject);
         }
         cards.Clear();
         scrollRect.verticalNormalizedPosition = 1f;

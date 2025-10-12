@@ -25,6 +25,13 @@ public class CardUI : MonoBehaviour
     public CardSO CurrentCard => currentCard;
 
     List<Movement> moves = new List<Movement>();
+
+    public CardDraggable cardDraggable;
+
+    private void Awake()
+    {
+        cardDraggable = GetComponent<CardDraggable>();
+    }
     public void SetCard(CardSO cardSO)
     {
         currentCard = cardSO;
