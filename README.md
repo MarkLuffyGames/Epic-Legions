@@ -184,9 +184,9 @@ Cada partida es una **batalla estratégica** en el continente de **Etheryon**, u
 - 🎉 Eventos especiales con condiciones alternativas
 
 
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/UI/LoadScreen.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/UI/Logo%%202.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/UI/LoadScreen.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/UI/Logo%202.png)
 ![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/lord%20final.png)
 ![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Spells/Poción%20de%20vitalidad.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Reverse%20Card%20v3.1.png)
+![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Reverse%20Card%20v3.1.png)
 
