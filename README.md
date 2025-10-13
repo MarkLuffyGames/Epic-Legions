@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="Epic%20Legions/Assets/Sprites/UI/Logo%202.png">
-    <img src="Epic%20Legions/Assets/Sprites/UI/Logo%202.png" alt="Logo" width="160">
+    <img src="Epic%20Legions/Assets/Sprites/UI/Logo%202.png" alt="Logo" width="320">
   </a>
 </p>
 
