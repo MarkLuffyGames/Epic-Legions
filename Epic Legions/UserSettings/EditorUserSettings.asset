@@ -24,10 +24,10 @@ EditorUserSettings:
       value: 0100050203570c580e0c5b2642210f44144e4c782e2c71367b781f67b1b43760
       flags: 0
     RecentlyUsedSceneGuid-5:
-      value: 5a08575f5207595a0f5d59741173094444164f7d7d2a23317c7a4465bbe1646d
+      value: 5a53030051010f0e54565e7013740a44144f1b2874717f627b7f1961e4b0313a
       flags: 0
     RecentlyUsedSceneGuid-6:
-      value: 5a53030051010f0e54565e7013740a44144f1b2874717f627b7f1961e4b0313a
+      value: 5a08575f5207595a0f5d59741173094444164f7d7d2a23317c7a4465bbe1646d
       flags: 0
     RecentlyUsedSceneGuid-7:
       value: 0004510206065109080c5a774127074446164a2b7a7971622b7e4c66b4e33161
@@ -37,6 +37,15 @@ EditorUserSettings:
       flags: 0
     RecentlyUsedSceneGuid-9:
       value: 5b07515457530a5e595b597542720c444f164d2e7a2c74347d2c4560b6e3376d
+      flags: 0
+    UIBuilder.DisableMouseWheelZooming:
+      value: 2550581500
+      flags: 0
+    UIBuilder.EditorExtensionModeKey:
+      value: 2550581500
+      flags: 0
+    UIToolkit.EnableEventDebugger:
+      value: 2550581500
       flags: 0
     UnityEditor.ShaderGraph.Blackboard:
       value: 18135939215a0a5004000b0e15254b524c030a3f2964643d120d1230e9e93a3fd6e826abbd2e2d293c4ead313b08042de6030a0afa240c0d020be94c4baf5e435d8715fa32c70d15d11612dacc11fee5d3c5d1fe9ab1b68a908fecb0f9cfddf1eff4e7a1b1eae482f0fdaee1e1928b86d888ed909c968797a7cf

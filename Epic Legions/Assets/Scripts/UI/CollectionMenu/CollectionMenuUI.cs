@@ -23,6 +23,7 @@ public class CollectionMenuUI : MonoBehaviour
 
 
     private List<CardUI> cards = new List<CardUI>();
+    public List<CardUI> CardsList => cards;
     public IReadOnlyList<CardUI> Cards => cards;
     private bool descendingOrder;
     private CardCategory category;

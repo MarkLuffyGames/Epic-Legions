@@ -22,6 +22,7 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private CanvasGroup originalCg;          // para bajar/subir alpha mientras arrastras
     private CardUI cardUI;
     private DeckDropZone deckDropZone;
+    public DeckDropZone DeckDropZone => deckDropZone;
 
     void Awake()
     {
@@ -33,12 +34,14 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private void Start()
     {
         deckDropZone = GetComponentInParent<DeckDropZone>();
+        EnsureDragCanvas();
     }
 
     // ========== IBeginDrag ==========
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if((DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
+        if(effectiveCanvas.transform.childCount > 0) return; // ya hay algo arrastrándose
+        if ((DeckBuilder.Instance.currentState != DeckBuilderState.CreatingDeck
             && DeckBuilder.Instance.currentState != DeckBuilderState.EditingDeck)
             || DeckBuilder.Instance.isEnlargedCard
             || (!DeckBuilder.Instance.CanAddCardToDeck(cardUI.CurrentCard)
@@ -163,6 +166,7 @@ public class CardDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (effectiveCanvas.transform.childCount > 0) return;
         if (DeckBuilder.Instance.isEnlargedCard) return;
         DeckBuilder.Instance.EnlargeCard(GetComponent<CardUI>());
     }

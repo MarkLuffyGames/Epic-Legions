@@ -48,6 +48,8 @@ public class DeckBuilder : MonoBehaviour
     [SerializeField] private Button confirmDeckEditingButton;
     [SerializeField] private Button addCardButton;
     [SerializeField] private Button RemoveCardButton;
+    [SerializeField] private Button nextCardButton;
+    [SerializeField] private Button previousCardButton;
 
     [SerializeField] private TextMeshProUGUI menuName;
     [SerializeField] private TextMeshProUGUI cardCountText;
@@ -62,8 +64,12 @@ public class DeckBuilder : MonoBehaviour
     public Deck SelectedDeck => selectedDeck;
 
     public bool isEnlargedCard;
+    int currentEnlargedCardIndex = -1;
+
     [SerializeField] private EnlargedCardHolder enlargedCardHolder;
     [SerializeField] private DeckDropZone deckDropZone;
+
+    private Canvas canvas;
 
     private void Awake()
     {
@@ -76,6 +82,8 @@ public class DeckBuilder : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        canvas = GetComponent<Canvas>();
     }
     private void Start()
     {
@@ -140,6 +148,15 @@ public class DeckBuilder : MonoBehaviour
             enlargedCardHolder.UpdateCardCount();
         });
 
+        nextCardButton.onClick.AddListener(() =>
+        {
+            ChangeEnlargedCard(true);
+        });
+        previousCardButton.onClick.AddListener(() =>
+        {
+            ChangeEnlargedCard(false);
+        });
+
 
         deckEditViewScrollRect = deckEditView.GetComponentInChildren<ScrollRect>();
         deckViewScrollRect = decksView.GetComponentInChildren<ScrollRect>();
@@ -154,7 +171,10 @@ public class DeckBuilder : MonoBehaviour
         {
             if (currentState == DeckBuilderState.CreatingDeck || currentState == DeckBuilderState.EditingDeck)
             {
-                UnblockAllCards();
+                if (cardsInDeck.Count >= 40)
+                    BlockAllCards();
+                else
+                    UnblockAllCards();
             }
         };
     }
@@ -175,6 +195,8 @@ public class DeckBuilder : MonoBehaviour
         selectedDeckEdit = new Deck { deckName = "Nuevo Mazo", cardsIds = new List<int>() };
         StartCoroutine(UpdateUI());
         yield return MoveView(deckEditView, true);
+        canvas.sortingOrder = 1001;
+        
     }
 
     IEnumerator ConfirmDeckCreation()
@@ -186,7 +208,9 @@ public class DeckBuilder : MonoBehaviour
         blockedCards.Clear();
         UnblockAllCards();
         GameData.Instance.SaveNewDeck(deckName.text, GetCardIndicesInDeck());
+        enlargedCardHolder.HideCard();
         yield return MoveView(deckEditView, false);
+        canvas.sortingOrder = 0;
         ClearDeckCards();
     }
 
@@ -210,7 +234,9 @@ public class DeckBuilder : MonoBehaviour
         currentState = DeckBuilderState.ViewingCollection;
         blockedCards.Clear();
         UnblockAllCards();
+        enlargedCardHolder.HideCard();
         yield return MoveView(deckEditView, false);
+        canvas.sortingOrder = 0;
         ClearDeckCards();
     }
 
@@ -220,12 +246,13 @@ public class DeckBuilder : MonoBehaviour
         var cardUI = card.GetComponent<CardUI>();
         selectedDeckEdit.cardsIds.Add(cardUI.CurrentCard.CardID);
 
-        if(cardsInDeck.Count >= 40)
+        if (cardsInDeck.Count >= 40)
             BlockAllCards();
         else
             BlockCard(cardUI);
 
         StartCoroutine(UpdateUI());
+        StartCoroutine(ScrollDeckEditingView());
     }
 
     public void RemoveCardFromDeck(CardUI cardUI)
@@ -237,6 +264,18 @@ public class DeckBuilder : MonoBehaviour
         if (cardsInDeck.Count == 39)
             UnblockAllCards();
             
+        if(cardsInDeck.Count == 0 
+            && enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck)
+        {
+            enlargedCardHolder.HideCard();
+            StartCoroutine(UpdateUI());
+            return;
+        }
+        if (enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck)
+        {
+            currentEnlargedCardIndex--;
+            ChangeEnlargedCard(true);
+        }
 
         StartCoroutine(UpdateUI());
     }
@@ -336,10 +375,13 @@ public class DeckBuilder : MonoBehaviour
             cardsInDeck.Add(cardGO);
             BlockCard(cardUI);
         }
+        if(cardsInDeck.Count >= 40)
+            BlockAllCards();
+
         deckName.text = deck.deckName;
         StartCoroutine(UpdateUI());
         yield return MoveView(deckEditView, true);
-
+        canvas.sortingOrder = 1001;
     }
 
     IEnumerator ConfirmDeckEditing()
@@ -349,7 +391,9 @@ public class DeckBuilder : MonoBehaviour
 
         currentState = DeckBuilderState.ViewingCollection;
         GameData.Instance.UpdateDeck(selectedDeck, deckName.text, GetCardIndicesInDeck());
+        enlargedCardHolder.HideCard();
         yield return MoveView(deckEditView, false);
+        canvas.sortingOrder = 0;
         ClearDeckCards();
     }
     IEnumerator HideDecks()
@@ -409,9 +453,32 @@ public class DeckBuilder : MonoBehaviour
         spellCountText.text = $"{cardsInDeck.FindAll(c => c.GetComponent<CardUI>().CurrentCard is SpellCardSO).Count}";
     }
 
+    IEnumerator ScrollDeckEditingView()
+    {
+        yield return null; // Wait a frame to ensure all changes are applied
+        float duration = 0.2f;
+        float elapsedTime = 0f;
+        Vector2 startingPos = new Vector2(deckEditViewScrollRect.verticalNormalizedPosition, 0);
+        Vector2 targetPos = new Vector2(-0f, 0f);
+        while (elapsedTime < duration)
+        {
+            deckEditViewScrollRect.verticalNormalizedPosition = Vector2.Lerp(startingPos, targetPos, (elapsedTime / duration)).x;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        deckEditViewScrollRect.verticalNormalizedPosition = targetPos.x;
+    }
+
     public void EnlargeCard(CardUI card)
     {
         isEnlargedCard = true;
+
+        if(card.cardDraggable.DeckDropZone.isDeck)
+            currentEnlargedCardIndex = cardsInDeck.IndexOf(card.gameObject);
+        else
+            currentEnlargedCardIndex = collectionMenu.CardsList.IndexOf(card);
+
         enlargedCardHolder.ShowCard(card);
     }
 
@@ -493,5 +560,17 @@ public class DeckBuilder : MonoBehaviour
         }
     }
 
-    
+    private void ChangeEnlargedCard(bool increase)
+    {
+        if (enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck)
+        {
+            currentEnlargedCardIndex = (currentEnlargedCardIndex + (increase ? 1 : -1 + cardsInDeck.Count)) % cardsInDeck.Count;
+            enlargedCardHolder.ShowCard(cardsInDeck[currentEnlargedCardIndex].GetComponent<CardUI>());
+        }
+        else if (collectionMenu.Cards.Count > 0)
+        {
+            currentEnlargedCardIndex = (currentEnlargedCardIndex + (increase ? 1 : -1 + collectionMenu.Cards.Count)) % collectionMenu.Cards.Count;
+            enlargedCardHolder.ShowCard(collectionMenu.Cards[currentEnlargedCardIndex]);
+        }
+    }
 }

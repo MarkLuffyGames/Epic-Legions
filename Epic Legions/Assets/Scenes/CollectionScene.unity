@@ -1240,6 +1240,9 @@ MonoBehaviour:
   - {fileID: 630203672}
   - {fileID: 1411533505}
   - {fileID: 379057039}
+  buttonObjects:
+  - {fileID: 1411533505}
+  - {fileID: 379057039}
   closeButton: {fileID: 477597736}
   cardCountText: {fileID: 1919128877}
 --- !u!1 &198202813
@@ -5480,6 +5483,8 @@ MonoBehaviour:
   confirmDeckEditingButton: {fileID: 2075802239}
   addCardButton: {fileID: 379057040}
   RemoveCardButton: {fileID: 1411533507}
+  nextCardButton: {fileID: 723392814}
+  previousCardButton: {fileID: 1435071916}
   menuName: {fileID: 1571542138}
   cardCountText: {fileID: 749464506}
   heroCountText: {fileID: 198202815}
