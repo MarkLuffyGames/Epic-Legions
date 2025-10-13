@@ -1,5 +1,11 @@
 # Epic-Legions
 
+<p align="center">
+  <a href="Epic%20Legions/Assets/Sprites/UI/Logo%202.png">
+    <img src="Epic%20Legions/Assets/Sprites/UI/Logo%202.png" alt="Logo" width="160">
+  </a>
+</p>
+
 Documentación generada por IA: https://deepwiki.com/MarkLuffyGames/Epic-Legions
 
 # 🎮 Game Design Document (GDD) – *Hemera Legion*
@@ -185,8 +191,19 @@ Cada partida es una **batalla estratégica** en el continente de **Etheryon**, u
 
 
 ![Game Screenshot](Epic%20Legions/Assets/Sprites/UI/LoadScreen.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/UI/Logo%202.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Heroes/lord%20final.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Spells/Poción%20de%20vitalidad.png)
-![Game Screenshot](Epic%20Legions/Assets/Sprites/Cards/Reverse%20Card%20v3.1.png)
+
+
+<p>
+  <a href="Epic%20Legions/Assets/Sprites/Cards/Heroes/lord%20final.png">
+    <img src="Epic%20Legions/Assets/Sprites/Cards/Heroes/lord%20final.png" alt="Lord" width="240">
+  </a>
+  &nbsp;&nbsp;
+  <a href="Epic%20Legions/Assets/Sprites/Cards/Spells/Poción%20de%20vitalidad.png">
+    <img src="Epic%20Legions/Assets/Sprites/Cards/Spells/Poción%20de%20vitalidad.png" alt="Poción de vitalidad" width="240">
+  </a>
+  &nbsp;&nbsp;
+  <a href="Epic%20Legions/Assets/Sprites/Cards/Reverse%20Card%20v3.1.png">
+    <img src="Epic%20Legions/Assets/Sprites/Cards/Reverse%20Card%20v3.1.png" alt="Reverse Card" width="240">
+  </a>
+</p>
 
