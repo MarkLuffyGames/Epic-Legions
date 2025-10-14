@@ -455,7 +455,7 @@ public class DeckBuilder : MonoBehaviour
 
     IEnumerator ScrollDeckEditingView()
     {
-        yield return null; // Wait a frame to ensure all changes are applied
+        yield return null;
         float duration = 0.2f;
         float elapsedTime = 0f;
         Vector2 startingPos = new Vector2(deckEditViewScrollRect.verticalNormalizedPosition, 0);

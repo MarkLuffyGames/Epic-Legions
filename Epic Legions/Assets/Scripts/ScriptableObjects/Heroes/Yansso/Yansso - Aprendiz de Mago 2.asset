@@ -20,7 +20,7 @@ MonoBehaviour:
   heroClass: 2
   healt: 40
   defence: 20
-  speed: 45
+  speed: 40
   energy: 30
   moves:
   - {fileID: 11400000, guid: 2941125b8f34f4648b458a971ff43b37, type: 2}

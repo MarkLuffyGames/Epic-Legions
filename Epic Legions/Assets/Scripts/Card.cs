@@ -760,7 +760,9 @@ public class Card : MonoBehaviour
         {
             if (cardToAttack != null)
             {
-                if (movement.MoveSO.MoveType == MoveType.MeleeAttack)
+                if (cardToAttack.FieldPosition.PositionIndex < 5 
+                    || duelManager.GetPlayerManagerForCard(cardToAttack).
+                    GetFieldPositionList()[cardToAttack.FieldPosition.PositionIndex - 5].Card == null)
                 {
                     if (player == 1)
                     {
@@ -876,7 +878,7 @@ public class Card : MonoBehaviour
 
         var damageInflicted = 0;
         var protector = HasProtector();
-        if (protector != null && protector.HasProtector())
+        if (protector != null && protector.HasProtector() && attacker.cardSO is HeroCardSO)
         {
             return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense, attacker, moveType);
         }

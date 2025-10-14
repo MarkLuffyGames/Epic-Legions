@@ -6515,6 +6515,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: AllCards.Array.size
+      value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: 'AllCards.Array.data[95]'
+      value: 
+      objectReference: {fileID: 11400000, guid: dba37387123e1674ca4f78ace5b00784, type: 2}
+    - target: {fileID: 1877421973813130386, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
+      propertyPath: moveTypeIcons.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7755612899893852066, guid: 0146d5e76b875214da48921e25cb7405, type: 3}
       propertyPath: m_Name
       value: CardDatabase

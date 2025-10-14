@@ -1007,15 +1007,17 @@ public class DuelManager : NetworkBehaviour
                 var rivalField = new List<FieldPosition>(FieldPositionList);
                 rivalField.Remove(card.FieldPosition);
 
-                if(card.GetController() != null
-                    || card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack)
+                if(card.GetController() != null ||
+                    (card.cardSO is HeroCardSO hero && hero.HeroClass == HeroClass.Hunter 
+                    && card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack))
                 {
                     for (int i = 0; i < rivalField.Count; i++)
                     {
                         TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
                     }
                 }
-                else if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack) 
+                else if (card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack
+                    || card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack) 
                 {
                     for (int i = 0; i < rivalField.Count; i++)
                     {
@@ -1038,17 +1040,28 @@ public class DuelManager : NetworkBehaviour
                                 TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
                             }
                         }
-                    }
-                }
-                else if(card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.Ambush) //Devuelve los heroes en la fila mas atrasada. 
-                {
-                    for (int i = rivalField.Count - 1; i >= 0; i--)
-                    {
-                        TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
 
-                        if (targets.Count > 0 && (i == 0 || i == 5 || i == 10))
+                        if(card.cardSO is HeroCardSO heroCard && heroCard.HeroClass == HeroClass.Assassin)
                         {
-                            return targets;
+                            if (rivalField[i].PositionIndex > 9)
+                            {
+                                TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                            }
+                            else if (rivalField[i].PositionIndex > 4)
+                            {
+                                if (FieldPositionList[rivalField[i].PositionIndex + 5].Card == null)
+                                {
+                                    TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                                }
+                            }
+                            else if (rivalField[i].PositionIndex >= 0)
+                            {
+                                if (FieldPositionList[rivalField[i].PositionIndex + 5].Card == null &&
+                                    FieldPositionList[rivalField[i].PositionIndex + 10].Card == null)
+                                {
+                                    TryAddTarget(rivalField[i].Card, card, movementToUseIndex, targets);
+                                }
+                            }
                         }
                     }
                 }
@@ -1477,8 +1490,7 @@ public class DuelManager : NetworkBehaviour
                 }
             }
 
-            if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack ||
-                attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.Ambush)
+            if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
             {
                 yield return cardToAttack.Counter(attackerCard);
             }

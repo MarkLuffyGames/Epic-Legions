@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Muerte Subita
   m_EditorClassIdentifier: 
   cardId: 1040
-  cardName: "Aniquilaci\xF3n Instant\xE1nea"
-  cardLastName: Muerte Subita
+  cardName: Muerte Subita
+  cardLastName: "Aniquilaci\xF3n Instant\xE1nea"
   cardSprite: {fileID: 21300000, guid: e9015122fc2619d43a2db5ec75aacf3d, type: 3}
   cardElemnt: 0
   move: {fileID: 11400000, guid: 1ab03143c3cccb84c9dbd6d6c4ea0b55, type: 2}

@@ -257,7 +257,7 @@ public class Tutorial : DuelManager
         {
             if(!knowsHeroCards)
                 StartCoroutine(ShowHeroCardExplanation(card));
-            else if(firstAttack && heroInTurn.Contains(player1Manager.GetAllCardInField()[0]))
+            else if(firstAttack && (player1Manager.GetAllCardInField().Count > 0 && heroInTurn.Contains(player1Manager.GetAllCardInField()[0])))
                 StartCoroutine(UseMovementExplanation());
         }
         else if(card.cardSO is EquipmentCardSO && !knowsEquipomentCards)

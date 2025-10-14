@@ -88,7 +88,7 @@
 			],
 			"sysroot" : 
 			{
-				"path" : "D:/Unity Editor/6000.2.6f2/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+				"path" : "D:/Unity Editor/6000.2.7f2/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
 			}
 		}
 	],
@@ -129,7 +129,7 @@
 		"language" : "CXX",
 		"sysroot" : 
 		{
-			"path" : "D:/Unity Editor/6000.2.6f2/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
+			"path" : "D:/Unity Editor/6000.2.7f2/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/windows-x86_64/sysroot"
 		}
 	},
 	"name" : "swappywrapper",

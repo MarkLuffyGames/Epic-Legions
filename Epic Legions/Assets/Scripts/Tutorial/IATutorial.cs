@@ -47,8 +47,12 @@ public class IATutorial : MonoBehaviour
         {
             SummonHero(handCardHandler.GetCardInHandList()[0], 7);
         }
+        else if( turnCount == 4)
+        {
+            SummonHero(handCardHandler.GetCardInHandList()[0], 12);
+        }
 
-        yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1);
 
         playerManager.SetPlayerReady();
     }
@@ -70,8 +74,17 @@ public class IATutorial : MonoBehaviour
         }
         else if (turnCount == 3 || turnCount == 4)
         {
-            duelManager.UseMovement(1, heroesInTurn[0], 2);
+            duelManager.UseMovement(1, heroesInTurn[0], heroesInTurn[0].Moves[1].MoveSO.NeedTarget ? 2 : -1);
         }
+        else if (turnCount == 5)
+        {
+            duelManager.UseMovement(heroesInTurn[0].Moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? 0 : 1, heroesInTurn[0], 3);
+        }
+        else if (turnCount == 6)
+        {
+            duelManager.UseMovement(heroesInTurn[0].Moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? 0 : 1, heroesInTurn[0], 3);
+        }
+
 
 
     }

@@ -23,6 +23,6 @@ MonoBehaviour:
   onMyself: 0
   moveType: 0
   targetsType: 6
-  visualEffect: {fileID: 2212644222100735201, guid: 95275e8de7edf8f48a651550a9ac40d3, type: 3}
-  visualEffectHit: {fileID: 0}
+  visualEffect: {fileID: 0}
+  visualEffectHit: {fileID: 2212644222100735201, guid: 95275e8de7edf8f48a651550a9ac40d3, type: 3}
   effectDescription: Reduce en 10 la defensa a los enemigos golpeados durante 2 turnos.

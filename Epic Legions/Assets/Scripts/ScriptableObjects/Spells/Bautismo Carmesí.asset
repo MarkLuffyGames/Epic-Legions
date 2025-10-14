@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e7e458957e68cc45927b7ff5f83ef41, type: 3}
-  m_Name: "Poci\xF3n de Vitalidad"
-  m_EditorClassIdentifier: 
-  cardId: 1048
-  cardName: "Poci\xF3n de Vitalidad"
-  cardLastName: "Aliento de Drag\xF3n"
-  cardSprite: {fileID: 21300000, guid: 9132c598ccb87004d8046072f8fab875, type: 3}
+  m_Name: "Bautismo Carmes\xED"
+  m_EditorClassIdentifier: Assembly-CSharp::SpellCardSO
+  cardId: 1100
+  cardName: "Bautismo Carmes\xED"
+  cardLastName: Sacrificio de Poder
+  cardSprite: {fileID: 21300000, guid: 10f717c146f398542beecd94b7b9829b, type: 3}
   cardElemnt: 0
-  move: {fileID: 11400000, guid: a569d554e9bd5cb4a9741ec90c25bdeb, type: 2}
+  move: {fileID: 11400000, guid: b6400bf6595d0ce42bed5145072c29c2, type: 2}
