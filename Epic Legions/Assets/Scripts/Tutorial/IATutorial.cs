@@ -41,6 +41,7 @@ public class IATutorial : MonoBehaviour
     {
         if (turnCount == 1)
         {
+            yield return new WaitWhile(() => !duelManager.explanationFinished);
             SummonHero(handCardHandler.GetCardInHandList()[0], 2);
         }
         else if (turnCount == 2)

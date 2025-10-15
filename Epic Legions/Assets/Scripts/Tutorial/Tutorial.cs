@@ -12,6 +12,7 @@ public class Tutorial : DuelManager
     public bool isPauseGame = false;
 
     private bool firstTurn = true;
+    public bool explanationFinished = false;
     private bool firstHero = true;
     private bool firstAttack = true;
     private bool knowsHeroCards = false;
@@ -77,6 +78,7 @@ public class Tutorial : DuelManager
         }
         else if (newPhase == DuelPhase.Starting)
         {
+            yield return new WaitForSeconds(2f);
             yield return FieldExplanation();
             sampleCard.enabled = false;
             player1Manager.DrawStartCards();
@@ -96,7 +98,7 @@ public class Tutorial : DuelManager
             {
                 player1Manager.HideNextPhaseButton();
                 firstTurn = false;
-                yield return HandExplanation();
+                yield return PhaseExplanation();
             }
         }
         else if (newPhase == DuelPhase.Battle)
@@ -168,8 +170,18 @@ public class Tutorial : DuelManager
         yield return ShowExplanation(4);
     }
 
+    IEnumerator PhaseExplanation()
+    {
+        yield return ShowExplanation(27);
+        yield return ShowExplanation(25);
+
+        explanationFinished = true;
+        yield return HandExplanation();
+    }
+
     IEnumerator HandExplanation()
     {
+        yield return ShowExplanation(26);
         yield return ShowExplanation(5);
         yield return ShowExplanation(6);
     }
@@ -232,23 +244,29 @@ public class Tutorial : DuelManager
         isPauseGame = true;
         sampleCard.enabled = false;
         explanationTextsBoxs[index].SetActive(true);
-        var text = explanationTextsBoxs[index].GetComponentInChildren<TextMeshProUGUI>();
-        //yield return SetText(text, text.text);
+        yield return ToggleText(index, Vector3.one);
         yield return new WaitWhile(() => !onClick);
+        yield return ToggleText(index, Vector3.zero);
         explanationTextsBoxs[index].SetActive(false);
         onClick = false;
         sampleCard.enabled = true;
         isPauseGame = false;
     }
 
-    private IEnumerator SetText(TextMeshProUGUI textComponent, string fullText)
+    private IEnumerator ToggleText(int textIndex, Vector3 targetScale)
     {
-        textComponent.text = "";
-        foreach (char c in fullText)
+        explanationTextsBoxs[textIndex].transform.localScale = targetScale == Vector3.zero ? Vector3.one : Vector3.zero;
+        Vector3 initialScale = explanationTextsBoxs[textIndex].transform.localScale;
+        float elapsedTime = 0f;
+        float duration = 0.3f;
+        while (elapsedTime < duration)
         {
-            textComponent.text += c;
-            yield return new WaitForSeconds(0.02f);
+            explanationTextsBoxs[textIndex].transform.localScale = Vector3.Lerp(initialScale, targetScale, (elapsedTime / duration));
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return null;
         }
+        explanationTextsBoxs[textIndex].transform.localScale = targetScale;
+        yield return null;
     }
 
     public void OnEnlargueCard(Card card)
