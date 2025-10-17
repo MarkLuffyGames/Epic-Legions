@@ -11,12 +11,14 @@ public class Tutorial : DuelManager
 
     public bool isPauseGame = false;
 
-    private bool firstTurn = true;
+    int turnCount = 0;
     public bool explanationFinished = false;
     private bool firstHero = true;
     private bool firstAttack = true;
     private bool knowsHeroCards = false;
-    private bool knowsEquipomentCards = false;
+    private bool knowsWeaponCards = false;
+    private bool knowsAttireCards = false;
+    private bool knowsAccessoryCards = false;
     private bool knowsSpellCards = false;
     private bool onClick = false;
     public bool canCardHeld = false;
@@ -88,18 +90,41 @@ public class Tutorial : DuelManager
         {
             player1Manager.HideWaitTextGameObject();
             player1Manager.ShowNextPhaseButton();
+            player1Manager.GetHandCardHandler().ShowHandCard();
+            player1Manager.GetHandCardHandler().ShowingCards = true;
 
-            if (oldPhase == DuelPhase.DrawingCards)
+            if (oldPhase != DuelPhase.PlayingSpellCard)
             {
                 player1Manager.GetHandCardHandler().ShowHandCard();
+                turnCount++;
+
+                if (turnCount == 1)
+                {
+                    player1Manager.HideNextPhaseButton();
+                    yield return PhaseExplanation();
+                }
+                else if (turnCount == 2)
+                {
+                    yield return SecondTurnPlayHero();
+                }
+                else if (turnCount == 3)
+                {
+                    yield return ThirdTurnPlayHero();
+                }
+                else if (turnCount == 4)
+                {
+                    yield return SpellPresentation();
+                }
+            }
+            else
+            {
+                if (turnCount == 4)
+                {
+                    yield return WeaponPresentation();
+                }
             }
 
-            if (firstTurn)
-            {
-                player1Manager.HideNextPhaseButton();
-                firstTurn = false;
-                yield return PhaseExplanation();
-            }
+            
         }
         else if (newPhase == DuelPhase.Battle)
         {
@@ -119,6 +144,15 @@ public class Tutorial : DuelManager
                 {
                     player1Manager.GetHandCardHandler().HideHandCards();
                 }
+
+                if (turnCount == 2)
+                {
+                    yield return SecondTurnActions();
+                }
+                else if (turnCount == 3)
+                {
+                    yield return ThirdTurnActions();
+                }
             }
             else
             {
@@ -133,6 +167,9 @@ public class Tutorial : DuelManager
         }
         else if (newPhase == DuelPhase.DrawingCards)
         {
+            if(turnCount == 1)  yield return DrawCardExplanation();
+            if (turnCount == 3) yield return ThirdTurnFinishedExplanation();
+
             foreach (var item in HeroCardsOnTheField)
             {
                 item.turnCompleted = false;
@@ -163,17 +200,17 @@ public class Tutorial : DuelManager
 
     private IEnumerator FieldExplanation()
     {
-        yield return ShowExplanation(0);
-        yield return ShowExplanation(1);
-        yield return ShowExplanation(2);
-        yield return ShowExplanation(3);
-        yield return ShowExplanation(4);
+        yield return ShowText(0);
+        yield return ShowText(1);
+        yield return ShowText(2);
+        yield return ShowText(3);
+        yield return ShowText(4);
     }
 
     IEnumerator PhaseExplanation()
     {
-        yield return ShowExplanation(27);
-        yield return ShowExplanation(25);
+        yield return ShowText(27);
+        yield return ShowText(25);
 
         explanationFinished = true;
         yield return HandExplanation();
@@ -181,9 +218,9 @@ public class Tutorial : DuelManager
 
     IEnumerator HandExplanation()
     {
-        yield return ShowExplanation(26);
-        yield return ShowExplanation(5);
-        yield return ShowExplanation(6);
+        yield return ShowText(26);
+        yield return ShowText(5);
+        yield return ShowText(6);
     }
 
     private IEnumerator ShowHeroCardExplanation(Card card)
@@ -191,46 +228,134 @@ public class Tutorial : DuelManager
         sampleCard.enabled = false;
         yield return new WaitForSeconds(0.1f);
         player1Manager.GetHandCardHandler().HideHandCards();
-        yield return ShowExplanation(7);
-        yield return ShowExplanation(8);
-        yield return ShowExplanation(9);
-        yield return ShowExplanation(10);
-        yield return ShowExplanation(11);
-        yield return ShowExplanation(12);
-        yield return ShowExplanation(13);
-        yield return ShowExplanation(14);
+        yield return ShowText(7);
+        yield return ShowText(8);
+        yield return ShowText(9);
+        yield return ShowText(10);
+        yield return ShowText(11);
+        yield return ShowText(12);
+        yield return ShowText(13);
+        yield return ShowText(14);
     }
 
     private IEnumerator PlayFirstTurnExplanation()
     {
-        yield return ShowExplanation(15);
-        yield return ShowExplanation(16);
+        yield return ShowText(15);
+        yield return ShowText(16);
     }
 
     private IEnumerator NextPhaseExplanation()
     {
-        yield return ShowExplanation(17);
+        yield return ShowText(17);
         player1Manager.ShowNextPhaseButton();
     }
 
     private IEnumerator ElementExplanation()
     {
-        yield return ShowExplanation(18);
-        yield return ShowExplanation(19);
+        yield return ShowText(18);
+        yield return ShowText(19);
         yield return YourTurnExplanation();
     }
 
     private IEnumerator YourTurnExplanation()
     {
-        yield return ShowExplanation(20);
-        yield return ShowExplanation(21);
+        yield return ShowText(20);
+        yield return ShowText(21);
     }
     private IEnumerator UseMovementExplanation()
     {
         firstAttack = false;
-        yield return ShowExplanation(22);
-        yield return ShowExplanation(23);
+        yield return ShowText(22);
+        yield return ShowText(23);
     }
+
+    private IEnumerator DrawCardExplanation()
+    {
+        yield return ShowText(36);
+        yield return new WaitForSeconds(0.5f);  
+    }
+    private IEnumerator SecondTurnPlayHero()
+    {
+        yield return ShowText(28);
+    }
+    private IEnumerator SecondTurnActions()
+    {
+        yield return ShowText(29);
+    }
+    private IEnumerator ThirdTurnFinishedExplanation()
+    {
+        yield return ShowText(33);
+    }
+
+    private IEnumerator ThirdTurnPlayHero()
+    {
+        yield return ShowText(30);
+        yield return ShowText(31);
+    }
+    private IEnumerator ThirdTurnActions()
+    {
+        yield return ShowText(32);
+    }
+
+    private IEnumerator SpellPresentation()
+    {
+        yield return ShowText(34);
+    }
+
+    private IEnumerator SpellExplanation()
+    {
+        yield return ShowText(35);
+        yield return ShowText(37);
+    }
+
+    private IEnumerator WeaponPresentation()
+    {
+        yield return ShowText(38);
+    }
+
+    private IEnumerator WeaponExplanation()
+    {
+        yield return ShowText(39);
+        yield return ShowText(40);
+        yield return ShowText(41);
+        yield return new WaitUntil(() => player1Manager.GetAllCardInField()[0].GetEquipmentCounts() == 1);
+        StartCoroutine(AttirePresentation());
+    }
+
+    private IEnumerator AttirePresentation()
+    {
+        yield return ShowText(42);
+    }
+
+    private IEnumerator AttireExplanation()
+    {
+        yield return ShowText(43);
+        yield return ShowText(44);
+        yield return ShowText(45);
+        yield return new WaitUntil(() => player1Manager.GetAllCardInField()[0].GetEquipmentCounts() == 2);
+        StartCoroutine(AccessoryPresentation());
+    }
+
+    private IEnumerator AccessoryPresentation()
+    {
+        yield return ShowText(46);
+    }
+
+    private IEnumerator AccessoryExplanation()
+    {
+        yield return ShowText(47);
+        yield return ShowText(48);
+        yield return ShowText(49);
+        yield return new WaitUntil(() => player1Manager.GetAllCardInField()[0].GetEquipmentCounts() == 3);
+        StartCoroutine(EquippableCardExplanation());
+    }
+
+    private IEnumerator EquippableCardExplanation()
+    {
+        yield return ShowText(50);
+        yield return ShowText(51);
+    }
+
     public void OnPlaceCard(Card card)
     {
         if(firstHero && card.cardSO is HeroCardSO)
@@ -239,7 +364,7 @@ public class Tutorial : DuelManager
         }
     }
 
-    private IEnumerator ShowExplanation(int index)
+    private IEnumerator ShowText(int index)
     {
         isPauseGame = true;
         sampleCard.enabled = false;
@@ -276,17 +401,50 @@ public class Tutorial : DuelManager
             if(!knowsHeroCards)
                 StartCoroutine(ShowHeroCardExplanation(card));
             else if(firstAttack && (player1Manager.GetAllCardInField().Count > 0 && heroInTurn.Contains(player1Manager.GetAllCardInField()[0])))
+            {
+
                 StartCoroutine(UseMovementExplanation());
+            }
+            else if(turnCount == 4 && player1Manager.GetAllCardInField().Contains(card) && heroInTurn.Contains(card))
+            {
+                if(card.cardSO.CardID == 1002)
+                {
+                    StartCoroutine(ShowText(52));
+                }
+                else if (card.cardSO.CardID == 1051)
+                {
+                    StartCoroutine(ShowText(53));
+                }
+                else if (card.cardSO.CardID == 1025)
+                {
+                    StartCoroutine(ShowText(54));
+                }
+            }
         }
-        else if(card.cardSO is EquipmentCardSO && !knowsEquipomentCards)
+        else if(card.cardSO is EquipmentCardSO equipmentCard )
         {
-            knowsEquipomentCards = true;
-            StartCoroutine(ShowExplanation(6));
+            if (equipmentCard.EquipmentType == EquipmentType.Weapon && !knowsWeaponCards)
+            {
+                knowsWeaponCards = true;
+                StartCoroutine(WeaponExplanation());
+            }
+            else if (equipmentCard.EquipmentType == EquipmentType.Armor && !knowsAttireCards)
+            {
+                knowsAttireCards = true;
+                StartCoroutine(AttireExplanation());
+            }
+            else if (equipmentCard.EquipmentType == EquipmentType.Accessory && !knowsAccessoryCards)
+            {
+                knowsAccessoryCards = true;
+                StartCoroutine(AccessoryExplanation());
+            }
+                
+            
         }
         else if(card.cardSO is SpellCardSO && !knowsSpellCards)
         {
             knowsSpellCards = true;
-            StartCoroutine(ShowExplanation(7));
+            StartCoroutine(SpellExplanation());
         }
     }
 
