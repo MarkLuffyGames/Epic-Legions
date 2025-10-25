@@ -15,6 +15,6 @@ MonoBehaviour:
   cardId: 1100
   cardName: "Bautismo Carmes\xED"
   cardLastName: Sacrificio de Poder
-  cardSprite: {fileID: 21300000, guid: 10f717c146f398542beecd94b7b9829b, type: 3}
+  cardSprite: {fileID: 21300000, guid: 94c60bda5550512419f9d94526a37e2e, type: 3}
   cardElemnt: 0
   move: {fileID: 11400000, guid: b6400bf6595d0ce42bed5145072c29c2, type: 2}

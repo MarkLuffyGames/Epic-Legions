@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1061
   cardName: Anillo de Eternia
   cardLastName: 
-  cardSprite: {fileID: 21300000, guid: 390beb8b95fdc514f818101dc10b932e, type: 3}
+  cardSprite: {fileID: 21300000, guid: 0da62355d6ba3ec4fa747a0e446d65e1, type: 3}
   cardElemnt: 0
   equipmentType: 2
   supportedClasses: 000000000100000002000000030000000400000005000000060000000700000008000000

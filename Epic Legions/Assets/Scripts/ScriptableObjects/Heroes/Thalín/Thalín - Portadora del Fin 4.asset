@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1044
   cardName: "Thal\xEDn"
   cardLastName: Portadora del Fin
-  cardSprite: {fileID: 21300000, guid: 0a06f46b88f2e494eb82b9a0b9b9edcc, type: 3}
+  cardSprite: {fileID: 21300000, guid: 05d97e38f82b2184da4f8b2e99e90fea, type: 3}
   cardElemnt: 7
   heroClass: 0
   healt: 55

@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1015
   cardName: Espada de las Mareas
   cardLastName: 
-  cardSprite: {fileID: 21300000, guid: fad1e7489335fa64d819af134b33c1b7, type: 3}
+  cardSprite: {fileID: 21300000, guid: 98f5da497af71974aa7fa79c7ea40867, type: 3}
   cardElemnt: 2
   equipmentType: 0
   supportedClasses: 00000000

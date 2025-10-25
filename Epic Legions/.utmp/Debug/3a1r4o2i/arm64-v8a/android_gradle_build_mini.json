@@ -6,14 +6,14 @@
   ],
   "cleanCommandsComponents": [
     [
-      "D:\\Unity Editor\\6000.1.3f1\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "D:\\Unity Editor\\6000.2.7f2\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
       "D:\\MarkLuffyGames\\Projects\\Epic-Legions\\Epic Legions\\.utmp\\Debug\\3a1r4o2i\\arm64-v8a",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
-    "D:\\Unity Editor\\6000.1.3f1\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "D:\\Unity Editor\\6000.2.7f2\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
     "D:\\MarkLuffyGames\\Projects\\Epic-Legions\\Epic Legions\\.utmp\\Debug\\3a1r4o2i\\arm64-v8a",
     "{LIST_OF_TARGETS_TO_BUILD}"

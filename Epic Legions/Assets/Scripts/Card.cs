@@ -10,6 +10,8 @@ using UnityEngine.VFX;
 
 public class Card : MonoBehaviour
 {
+    public event EventHandler onEnableActions;
+
     [SerializeField] private Canvas canvasFront;
     [SerializeField] private Canvas canvasBack;
     [SerializeField] private Canvas cardActions;
@@ -48,6 +50,12 @@ public class Card : MonoBehaviour
     private bool isMoving;
     private int sortingOrder;
     public static int cardMovementSpeed = 20;
+
+    public MovementUI MovementUI1 => movementUI1;
+    public MovementUI MovementUI2 => movementUI2;
+    public Button RechargeButton => rechargeButton;
+
+    public Canvas CardBorder => cardBorder;
 
 
     [RuntimeInitializeOnLoadMethod]
@@ -172,9 +180,9 @@ public class Card : MonoBehaviour
             ActivateHeroStats(false);
 
             elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
-            elementIcon.enabled = true;
+            elementIcon.enabled = equipmentCardSO.CardElemnt != CardElement.None;
             classIcon.sprite = CardDatabase.GetClassIcon(equipmentCardSO.SupportedClasses[0]);
-            classIcon.enabled = true;
+            classIcon.enabled = equipmentCardSO.SupportedClasses[0] != HeroClass.None;
             description.text = equipmentCardSO.Description;
         }
 
@@ -415,6 +423,7 @@ public class Card : MonoBehaviour
     public void Highlight()
     {
         // Aumenta ligeramente el tamaño de la carta.
+        if (isHighlight) return;
         isHighlight = true;
         transform.localScale = new Vector3(1.05f, 1.05f, 1.05f); // Ejemplo: agrandar
         transform.localPosition += Vector3.up * highlighterHeight;
@@ -468,6 +477,7 @@ public class Card : MonoBehaviour
                 rechargeButton.gameObject.SetActive(false);
             }
         }
+        onEnableActions?.Invoke(this, EventArgs.Empty);
     }
 
     public bool UsableMovement(int moveIndex, PlayerManager playerManager)
@@ -714,7 +724,7 @@ public class Card : MonoBehaviour
     /// <param name="movementNumber">Indice del movimiento a utilizar.</param>
     public void UseMovement(int movementNumber)
     {
-        duelManager.UseMovement(cardSO is EquipmentCardSO e ? movementNumber + 3 : movementNumber, cardSO is EquipmentCardSO eq ? copiedCard.HeroOwner : copiedCard);
+        duelManager.UseMovement(cardSO is EquipmentCardSO ? movementNumber + 3 : movementNumber, cardSO is EquipmentCardSO ? copiedCard.HeroOwner : copiedCard);
         cardActions.enabled = false;
         duelManager.sampleCard.ResetSize();
     }
@@ -871,7 +881,8 @@ public class Card : MonoBehaviour
             }
         }
 
-        if (IsInLethargy() || HasPhantomShield() || (moveType == MoveType.RangedAttack && HasRangedImmunity()))
+        if (IsInLethargy() || HasPhantomShield() || 
+            (moveType == MoveType.RangedAttack && HasRangedImmunity()) || (moveType == MoveType.MeleeAttack && HasMeleeImmunity())) 
         {
             amountDamage = 0;
         }
@@ -907,6 +918,19 @@ public class Card : MonoBehaviour
         int damageInflicted = currentHealt > amount ? amount : currentHealt;
         ShowTextDamage(false, damageInflicted);
         currentHealt -= amount;
+    }
+
+    public bool EffectIsApplied(MoveType moveType)
+    {
+        if (IsInLethargy() || HasPhantomShield() 
+            || (moveType == MoveType.RangedAttack && HasRangedImmunity()) 
+            || (moveType == MoveType.MeleeAttack && HasMeleeImmunity())
+            || HasProtector() != null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -1277,9 +1301,23 @@ public class Card : MonoBehaviour
     {
         foreach (Effect effect in statModifier)
         {
-            if (effect.MoveEffect is RangedImmunity rangedImmunity)
+            if (effect.MoveEffect is AttackImmunity rangedImmunity)
             {
-                return true;
+                if(effect.isRanged)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private bool HasMeleeImmunity()
+    {
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is AttackImmunity rangedImmunity)
+            {
+                if (!effect.isRanged)
+                    return true;
             }
         }
         return false;
@@ -1338,6 +1376,20 @@ public class Card : MonoBehaviour
         }
 
         return attackModifier;
+    }
+
+    public int GetEnergyBonus()
+    {
+        int energy = 0;
+
+        if (statModifier == null) return energy;
+
+        foreach (Effect effect in statModifier)
+        {
+            if (effect.MoveEffect is IncreaseEnergy) energy += effect.GetAmount();
+        }
+
+        return energy;
     }
 
     /// <summary>
@@ -1509,5 +1561,7 @@ public class Card : MonoBehaviour
     {
         effectivenessUI.Deactivate();
     }
+
+    
 }
 

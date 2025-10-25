@@ -19,6 +19,7 @@ public class Effect
     private bool hasProtector;
     private bool isNegative;
     private bool isRemovable = true;
+    public bool isRanged;
 
     public int durability;
     public int elapsedTurns;
@@ -147,10 +148,16 @@ public class Effect
             isNegative = true;
             effectDescription = burn.DescriptionText();
         }
-        else if (cardEffect is RangedImmunity rangedImmunity)
+        else if (cardEffect is AttackImmunity rangedImmunity)
         {
             durability = rangedImmunity.NumberTurns;
+            isRanged = rangedImmunity.IsRanged;
             effectDescription = rangedImmunity.DescriptionText(this);
+        }
+        else if(cardEffect is IncreaseEnergy increaseEnergy)
+        {
+            amount = increaseEnergy.Amount;
+            durability = increaseEnergy.NumberTurns;
         }
 
         if (!isNegative)
@@ -193,6 +200,11 @@ public class Effect
     {
         if (isActive) return absorbDamage;
         return 0;
+    }
+
+    public int GetAmount()
+    {
+        return amount;
     }
 
     public bool HasProtector()

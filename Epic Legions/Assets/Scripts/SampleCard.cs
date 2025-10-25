@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SampleCard : MonoBehaviour
 {
@@ -13,9 +14,19 @@ public class SampleCard : MonoBehaviour
 
     public bool IsEnlarged => isEnlarged;
     public Card Card => card;
+    public List<Card> Cards => cards;
 
     private void Awake()
     {
+        if(SceneManager.GetActiveScene().name == "TutorialScene")
+        {
+            foreach (var card in cards)
+            {
+                card.MovementUI1.DisableButton();
+                card.MovementUI2.DisableButton();
+                card.RechargeButton.interactable = false;
+            }
+        }
         foreach (var card in cards)
         {
             card.CleanCard();

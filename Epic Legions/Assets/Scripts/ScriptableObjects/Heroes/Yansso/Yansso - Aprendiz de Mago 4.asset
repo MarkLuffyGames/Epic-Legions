@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1056
   cardName: Yansso
   cardLastName: Aprendiz de Mago
-  cardSprite: {fileID: 21300000, guid: c72e3b9f50b186743bf734458d243c9b, type: 3}
+  cardSprite: {fileID: 21300000, guid: a39d04a9781d8c24bbc356326c78b0ae, type: 3}
   cardElemnt: 4
   heroClass: 2
   healt: 40

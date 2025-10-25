@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae98da6f49cfa94bbb60dd4dd2fbb76, type: 3}
+  m_Name: Lunaria Renaciente
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentCardSO
+  cardId: 1101
+  cardName: Lunaria Renaciente
+  cardLastName: 
+  cardSprite: {fileID: 21300000, guid: 68dc13c38cbfce4468da5adb4298fdc7, type: 3}
+  cardElemnt: 0
+  equipmentType: 2
+  supportedClasses: 000000000100000002000000030000000400000005000000060000000700000008000000
+  moves: []
+  effect: {fileID: 11400000, guid: 8fe385284754ac44da7d7881508086e2, type: 2}
+  description: "Otorga una bonificaci\xF3n de +10 al recargar energ\xEDa."

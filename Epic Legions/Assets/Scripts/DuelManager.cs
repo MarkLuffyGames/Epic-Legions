@@ -64,6 +64,8 @@ public class DuelManager : NetworkBehaviour
     protected bool isSinglePlayer;
     public bool IsSinglePlayer => isSinglePlayer;
 
+    protected bool endDuel;
+
     private void Awake()
     {
         duelPhase.OnValueChanged += OnDuelPhaseChanged;
@@ -86,6 +88,7 @@ public class DuelManager : NetworkBehaviour
 
     protected void OnDuelPhaseChanged(DuelPhase oldPhase, DuelPhase newPhase)
     {
+        if(endDuel) return;
         UpdateDuelPhaseText();
 
         if (newPhase == DuelPhase.PreparingDuel)
@@ -133,6 +136,7 @@ public class DuelManager : NetworkBehaviour
             {
                 item.turnCompleted = false;
             }
+
             if (player1Manager.DrawCard())
             {
                 player1Manager.RechargeEnergy(energyGainedPerTurn);
@@ -158,6 +162,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="clientId2">ID del segundo jugador.</param>
     public void AssignPlayersAndStartDuel(ulong clientId1, ulong clientId2)
     {
+        endDuel = false;
         isSinglePlayer = false;
 
         // Asigna roles a los jugadores
@@ -178,6 +183,7 @@ public class DuelManager : NetworkBehaviour
 
     public void AssignPlayersAndStartDuel(int[] player1deckCardIds, int[] player2deckCardIds)
     {
+        endDuel = false;
         isSinglePlayer = true;
 
         // Asigna roles a los jugadores
@@ -371,10 +377,17 @@ public class DuelManager : NetworkBehaviour
         {
             foreach (var card in HeroCardsOnTheField)
             {
-                if(card.actionIsReady) continue;
+                if(card.turnCompleted) continue;
                 // Calcula el turno basado en la velocidad del héroe
                 int turn = (100 - card.CurrentSpeedPoints) / 5;
-                turns[turn].Add(card);
+                if(turn < heroesInTurnIndex)
+                {
+                    turns[heroesInTurnIndex].Add(card);
+                }
+                else
+                {
+                    turns[turn].Add(card);
+                }
             }
         }
     }
@@ -389,6 +402,8 @@ public class DuelManager : NetworkBehaviour
 
         // Gestiona los efectos activos antes de iniciar el turno
         ManageEffects();
+
+        InitializeBattleTurns();
 
         // Si no hay héroes en el turno actual, avanza al siguiente turno
         if (turns[heroesInTurnIndex].Count == 0)
@@ -631,7 +646,7 @@ public class DuelManager : NetworkBehaviour
         }
         else// Si la carta se coloca en una posición en el campo
         {
-            if(card.cardSO is HeroCardSO heroCardSO) // Si la carta es un heroe
+            if (card.cardSO is HeroCardSO heroCardSO) // Si la carta es un heroe
             {
                 playerManager.GetFieldPositionList()[fieldPositionIdex].SetCard(card, isPlayer);
                 InsertCardInOrder(HeroCardsOnTheField, card);
@@ -650,7 +665,7 @@ public class DuelManager : NetworkBehaviour
         // Consume la energía correspondiente para usar la carta
         playerManager.ConsumeEnergy(card.cardSO is HeroCardSO hero ? hero.Energy : 0);
 
-        playerManager.GetHandCardHandler().ShowCardBorder();
+        playerManager.GetHandCardHandler().ShowCardsBorder();
     }
 
 
@@ -989,7 +1004,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="card">La carta que está realizando el movimiento.</param>
     /// <param name="movementToUseIndex">El índice del movimiento que se va a utilizar.</param>
     /// <returns>Una lista de cartas que pueden ser objetivo del movimiento.</returns>
-    public List<Card> ObtainTargets(Card card, int movementToUseIndex)
+    public virtual List<Card> ObtainTargets(Card card, int movementToUseIndex)
     {
         // Lista que contendrá los objetivos posibles
         List<Card> targets = new List<Card>();
@@ -1065,8 +1080,6 @@ public class DuelManager : NetworkBehaviour
                         }
                     }
                 }
-
-                return targets;
             }
         }
         else
@@ -1329,9 +1342,6 @@ public class DuelManager : NetworkBehaviour
         // Activar cualquier efecto pendiente antes de finalizar la fase de acciones.
         ActiveEffect();
 
-        //Calcular los turnos nuevamente por si algun heroe cambio su velocidad.
-        InitializeBattleTurns();
-
         // Si la fase actual es "PlayingSpellCard" (se está jugando una carta de hechizo),
         // las cartas se envían al cementerio de inmediato.
         if (duelPhase.Value == DuelPhase.PlayingSpellCard)
@@ -1524,15 +1534,9 @@ public class DuelManager : NetworkBehaviour
         // Restaura la posición de la carta atacante luego del movimiento.
         attackerCard.MoveToLastPosition();
 
+
         // Aplica efectos adicionales del ataque si no es un efecto pasivo.
-        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
-        {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
-        }
-        else
-        {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
-        }
+        ActivateEffects(attackerCard, cardToAttack, movementToUseIndex);
 
         // Resetea el índice del movimiento utilizado.
         movementToUseIndex = -1;
@@ -1549,6 +1553,20 @@ public class DuelManager : NetworkBehaviour
 
         // Si es el último movimiento, finaliza las acciones.
         if (lastMove) yield return FinishActions();
+    }
+
+    private void ActivateEffects(Card attackerCard, Card cardToAttack, int movementToUseIndex)
+    {
+        if (!cardToAttack.EffectIsApplied(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType)) return;
+
+        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
+        {
+            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
+        }
+        else
+        {
+            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
+        }
     }
 
     protected int CalculateAttackDamage(Card attackerCard, int movementToUseIndex, Card cardToAttack)
@@ -1970,13 +1988,13 @@ public class DuelManager : NetworkBehaviour
         card.RegenerateDefense();
     }
 
-
     /// <summary>
     /// Finaliza el duelo y muestra la interfaz de usuario correspondiente al resultado del duelo.
     /// </summary>
     /// <param name="playerVictory">Indica si el jugador ha ganado el duelo. True si el jugador ha ganado, false si ha perdido.</param>
-    protected void EndDuel(bool playerVictory)
+    public virtual void EndDuel(bool playerVictory)
     {
+        endDuel = true;
         // Muestra la interfaz de usuario de finalización del duelo, indicando si el jugador ha ganado o perdido.
         endDuelUI.Show(playerVictory);
     }

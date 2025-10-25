@@ -37,12 +37,12 @@ public class HandCardHandler : MonoBehaviour
 
         if (newValue == DuelPhase.Preparation || newValue == DuelPhase.Battle)
         {
-            ShowCardBorder();
+            ShowCardsBorder();
         }
     }
     private void DuelManager_OnChangeTurn(object sender, EventArgs e)
     {
-        ShowCardBorder();
+        ShowCardsBorder();
     }
     /// <summary>
     /// Establece las posiciones de las cartas en la mano
@@ -74,12 +74,12 @@ public class HandCardHandler : MonoBehaviour
 
                 cardsList[i].SetSortingOrder(i + 100);
 
-                ShowCardBorder();
+                ShowCardsBorder();
             }
         }
     }
 
-    public void ShowCardBorder(bool show = true)
+    public void ShowCardsBorder(bool show = true)
     {
         foreach (Card card in cardsList)
         {
@@ -146,7 +146,7 @@ public class HandCardHandler : MonoBehaviour
             isHideCards = true;
 
             SetCardsPosition();
-            ShowCardBorder(false);
+            ShowCardsBorder(false);
         }
     }
 

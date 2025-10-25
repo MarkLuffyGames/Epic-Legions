@@ -25,6 +25,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject cardPrafab;
 
     private List<Card> card = new List<Card>();
+    public List<Card> CardList => card;
 
     public bool isReady;
 
@@ -200,8 +201,11 @@ public class PlayerManager : MonoBehaviour
                 heroCard.FieldPosition.Highlight(card.cardSO);
             }
         }
+    }
 
-
+    public void ShowAvailablePosition(FieldPosition availablePositions, Card card)
+    {
+        availablePositions.Highlight(card.cardSO);
     }
 
     /// <summary>

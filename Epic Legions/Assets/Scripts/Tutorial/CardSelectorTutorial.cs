@@ -1,3 +1,6 @@
+using NUnit.Framework;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +10,9 @@ public class CardSelectorTutorial : MonoBehaviour
     [SerializeField] private HandCardHandler handCardHandler;
     [SerializeField] private PlayerManager playerManager;
     [SerializeField] private Tutorial duelManager;
+
+    public List<Card> selectableCards = new List<Card>();
+    public List<Card> draggableCards = new List<Card>();
 
     // LayerMask para filtrar las cartas
     public LayerMask cardLayer;
@@ -36,7 +42,7 @@ public class CardSelectorTutorial : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
 
-        DetectCardUnderMouse();
+        StartCoroutine(DetectCardUnderMouse());
 
         if (handCardHandler.IsMouseOverButton()) return;
 
@@ -44,7 +50,7 @@ public class CardSelectorTutorial : MonoBehaviour
         if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)))
         {
             OnMouseDownCard();
-            if (currentCard != null) isHoldingCard = true;
+            if (currentCard != null && selectableCards.Contains(currentCard)) isHoldingCard = true;
             isClicking = true;
         }
 
@@ -65,12 +71,12 @@ public class CardSelectorTutorial : MonoBehaviour
     /// <summary>
     /// Detecta si el mouse está sobre una carta
     /// </summary>
-    private void DetectCardUnderMouse()
+    private IEnumerator DetectCardUnderMouse()
     {
 
         if (isHoldingCard)
         {
-            return;
+            yield break;
         }
 
         Ray ray = new();
@@ -117,6 +123,7 @@ public class CardSelectorTutorial : MonoBehaviour
             if (currentCard != null)
             {
                 OnMouseExitCard(currentCard);
+                yield return null; // Espera un frame para evitar conflictos
                 currentCard = null;
             }
         }
@@ -128,6 +135,10 @@ public class CardSelectorTutorial : MonoBehaviour
     /// <param name="card">Carta a la que entra el mouse</param>
     private void OnMouseEnterCard(Card card)
     {
+        if(!selectableCards.Contains(card))
+        {
+            return;
+        }
         HighlightCardInHand(card);
     }
 
@@ -168,16 +179,18 @@ public class CardSelectorTutorial : MonoBehaviour
         {
             return; // Si la carta es nula, no hacer nada
         }
+        
         //Cuando se suelta el click y se cumplen las condiciones coloca la carta en la pocion en el campo.
-        if (currentFieldPosition != null && handCardHandler.CardInThePlayerHand(currentCard)
-            && currentFieldPosition.IsFree(currentCard.cardSO) && card.UsableCard(playerManager)
-            && !playerManager.isReady)
+        if (currentFieldPosition != null && handCardHandler.CardInThePlayerHand(card)
+            && currentFieldPosition.IsFree(card.cardSO) && card.UsableCard(playerManager)
+            && !playerManager.isReady && (duelManager.availablePosition == currentFieldPosition || card.cardSO is SpellCardSO))
         {
+
             if (playerManager.GetFieldPositionList().Contains(currentFieldPosition) || playerManager.SpellFieldPosition == currentFieldPosition)
             {
                 PlaceCardOnTheField(card);
             }
-            else if (currentCard != null && isHoldingCard)
+            else if (card != null && isHoldingCard)
             {
                 isHoldingCard = false;
                 if (handCardHandler.CardInThePlayerHand(card))
@@ -202,7 +215,10 @@ public class CardSelectorTutorial : MonoBehaviour
         if (handCardHandler.GetCardInHandList().Contains(card) && !duelManager.sampleCard.IsEnlarged)
         {
             if (handCardHandler.isHideCards) handCardHandler.ShowingCards = true;
-            if (handCardHandler.ShowingCards) handCardHandler.ShowHandCard();
+            if (handCardHandler.ShowingCards)
+            {
+                handCardHandler.ShowHandCard();
+            }
         }
     }
 
@@ -215,18 +231,18 @@ public class CardSelectorTutorial : MonoBehaviour
         if (handCardHandler.CardInThePlayerHand(card))
         {
             card.StopDragging(true);
-        }
+        } 
 
-        StartCoroutine(duelManager.OnClick());
-
-        if (duelManager.isPauseGame)
-        {
-            return;
-        }
+        StartCoroutine(duelManager.OnClick(card));
 
         //Si se esta estableciendo el objetivo de ataque la carta seleccionada es la carta a la que se debe atacar.
         if (duelManager.SettingAttackTarget && card != null)
         {
+            /*if (!selectableCards.Contains(card))
+            {
+                return;
+            }*/
+
             if (card.isAttackable)
             {
                 duelManager.CardSelectingTarget.actionIsReady = true;
@@ -267,16 +283,23 @@ public class CardSelectorTutorial : MonoBehaviour
         //Si no hay ninguna carta enfocada enfocar la carta seleccionada.
         else if (!duelManager.sampleCard.IsEnlarged && card != null && card.isVisible)
         {
+            if(duelManager.isPauseGame) return;
+            if(!selectableCards.Contains(card)) return;
+
             card.RemoveHighlight();
             card.Enlarge();
+            StartCoroutine(ResizeTimer());
             handCardHandler.HideHandCards();
-            duelManager.OnEnlargueCard(card);
+            StartCoroutine(duelManager.OnEnlargueCard(card));
         }
         //Si hay una carta enfocada desenfocar la carta.
         else if (duelManager.sampleCard.IsEnlarged)
         {
-            duelManager.sampleCard.OnClick(currentCard);
-            if (!duelManager.sampleCard.CardWasClicked(currentCard) && handCardHandler.ShowingCards)
+            if(!canResize) return;
+            if (duelManager.isPauseGame) return;
+
+            duelManager.sampleCard.OnClick(card);
+            if (!duelManager.sampleCard.CardWasClicked(card) && handCardHandler.ShowingCards)
             {
                 handCardHandler.ShowHandCard();
                 duelManager.OnResizeCard();
@@ -284,12 +307,24 @@ public class CardSelectorTutorial : MonoBehaviour
         }
     }
 
+    bool canResize = true;
+    private IEnumerator ResizeTimer()
+    {
+        canResize = false;
+        yield return new WaitForSeconds(0.3f);
+        canResize = true;
+    }
     /// <summary>
     /// Método para cuando se mantiene la carta
     /// </summary>
     /// <param name="card">Carta que se esta manteniendo</param>
     private void OnCardHeld(Card card)
     {
+        if(!draggableCards.Contains(card))
+        {
+            return;
+        }
+
         float heldTime = Time.time - mouseDownTime;
 
         if (handCardHandler.CardInThePlayerHand(card) && !duelManager.sampleCard.IsEnlarged//La carta esta en la mano del jugador y no esta enfocada
@@ -300,7 +335,12 @@ public class CardSelectorTutorial : MonoBehaviour
 
             if (heldTime > clickHoldTime)
             {
-                playerManager.ShowAvailablePositions(card);
+                duelManager.onAction = true;
+                if (card.cardSO is SpellCardSO)
+                    playerManager.ShowAvailablePositions(card);
+                else
+                    playerManager.ShowAvailablePosition(duelManager.availablePosition, card);
+
                 handCardHandler.HideHandCards();
                 DetectPositionForPlaceCard();
             }
@@ -372,6 +412,7 @@ public class CardSelectorTutorial : MonoBehaviour
     /// <param name="fieldPosition"></param>
     private void OnMouseEnterPosition(FieldPosition fieldPosition)
     {
+        if (duelManager.availablePosition != fieldPosition && currentCard.cardSO is not SpellCardSO) return;
         if (fieldPosition.IsFree(currentCard.cardSO) && (playerManager.GetFieldPositionList().Contains(fieldPosition) || playerManager.SpellFieldPosition == fieldPosition))
         {
             StartCoroutine(currentCard.MoveToPosition(fieldPosition.transform.position + Vector3.up, Card.cardMovementSpeed, true, false));
@@ -391,6 +432,7 @@ public class CardSelectorTutorial : MonoBehaviour
 
     private void RemoveHighlightCardInHand(Card card)
     {
+
         if (handCardHandler.CardInThePlayerHand(card))
         {
             card.RemoveHighlight();
@@ -405,12 +447,12 @@ public class CardSelectorTutorial : MonoBehaviour
 
         if (duelManager.IsSinglePlayer)
         {
-            duelManager.PlaceCardInField(duelManager.Player1Manager, true, handCardHandler.GetIdexOfCard(currentCard), currentFieldPosition.PositionIndex);
+            duelManager.PlaceCardInField(duelManager.Player1Manager, true, handCardHandler.GetIdexOfCard(card), currentFieldPosition.PositionIndex);
         }
         else
         {
             duelManager.PlaceCardOnFieldServerRpc(
-                handCardHandler.GetIdexOfCard(currentCard),
+                handCardHandler.GetIdexOfCard(card),
                 currentFieldPosition.PositionIndex,
                 NetworkManager.Singleton.LocalClientId);
         }

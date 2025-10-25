@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1035
   cardName: Thal'Zar
   cardLastName: Protector de la Cima
-  cardSprite: {fileID: 21300000, guid: 84838479923b7f34da07b080e5f426e8, type: 3}
+  cardSprite: {fileID: 21300000, guid: 5da8776ebab34b1438f0be2f5e6b146b, type: 3}
   cardElemnt: 4
   heroClass: 7
   healt: 75

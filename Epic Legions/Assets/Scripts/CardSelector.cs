@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -69,12 +70,12 @@ public class CardSelector : MonoBehaviour
     /// <summary>
     /// Detecta si el mouse está sobre una carta
     /// </summary>
-    private void DetectCardUnderMouse()
+    private IEnumerator DetectCardUnderMouse()
     {
 
         if (isHoldingCard)
         {
-            return;
+            yield break;
         }
 
         Ray ray = new();
@@ -121,6 +122,7 @@ public class CardSelector : MonoBehaviour
             if (currentCard != null)
             {
                 OnMouseExitCard(currentCard);
+                yield return null; // Espera un frame para evitar conflictos
                 currentCard = null;
             }
         }

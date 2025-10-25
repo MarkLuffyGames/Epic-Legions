@@ -64,6 +64,7 @@ public class Recharge : CardEffect
         Instantiate(sparkPrefab, target, Quaternion.identity);
 
         this.caster = caster;
-        caster.RechargeEnergy(amount);
+
+        caster.RechargeEnergy(amount + caster.GetEnergyBonus());
     }
 }

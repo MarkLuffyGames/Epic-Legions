@@ -7,9 +7,9 @@ public enum CardType { Heroes, Spells, Artifacts, Field }
 public class CardSO : ScriptableObject
 {
     [SerializeField] private int cardId;
-    [SerializeField] public string cardName;
+    [SerializeField] private string cardName;
     [SerializeField] private string cardLastName;
-    [SerializeField] public Sprite cardSprite;
+    [SerializeField] private Sprite cardSprite;
     [SerializeField] private CardElement cardElemnt;
 
     public int CardID => cardId;
@@ -48,7 +48,7 @@ public class CardSO : ScriptableObject
 
     private static readonly int[,] typeChart =
     {
-        //         NON FIR WAT GRA GRO ELE WIN LIG DAR 
+        //          NON  FIR  WAT  GRA  GRO  ELE  WIN  LIG  DAR 
         /* NON */ {   0,   0,   0,   0,   0,   0,   0,   0,   0},
         /* FIR */ {   0,   0,-DEM, DEM,   0,   0,   0,   0,   0},
         /* WAT */ {   0, DEM,   0,-DEM,   0,   0,   0,   0,   0},
@@ -56,8 +56,8 @@ public class CardSO : ScriptableObject
         /* GRO */ {   0,   0,   0,   0,   0, DEM,-DEM,   0,   0},
         /* ELE */ {   0,   0,   0,   0,-DEM,   0, DEM,   0,   0},
         /* WIN */ {   0,   0,   0,   0, DEM,-DEM,   0,   0,   0},
-        /* LIG */ {   0,   0,   0,   0,   0,   0,   0,   0, DEM},
-        /* DAR */ {   0,   0,   0,   0,   0,   0,   0, DEM,   0},
+        /* LIG */ {   0,   0,   0,   0,   0,   0,   0,-DEM, DEM},
+        /* DAR */ {   0,   0,   0,   0,   0,   0,   0, DEM,-DEM},
     };
 
     public static int GetEffectiveness(CardElement attacker, CardElement defender)

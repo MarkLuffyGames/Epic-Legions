@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1008
   cardName: Kuru
   cardLastName: Voz del Bosque
-  cardSprite: {fileID: 21300000, guid: ad31a42f3ce5a3545bcd6e3c3674508d, type: 3}
+  cardSprite: {fileID: 21300000, guid: b0334d11ab7c48c4d90cb749b53bd170, type: 3}
   cardElemnt: 3
   heroClass: 2
   healt: 40

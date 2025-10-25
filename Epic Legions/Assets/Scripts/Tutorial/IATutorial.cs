@@ -28,8 +28,15 @@ public class IATutorial : MonoBehaviour
     {
         if (newValue == DuelPhase.Preparation)
         {
-            if(previousValue != DuelPhase.PlayingSpellCard) turnCount++;
-            StartCoroutine(PlayCardsHand());
+            if (previousValue != DuelPhase.PlayingSpellCard) 
+            {
+                turnCount++;
+                StartCoroutine(PlayCardsHand());
+            }
+            else
+            {
+                playerManager.SetPlayerReady();
+            }
         }
         else if (newValue == DuelPhase.Battle)
         {
@@ -41,19 +48,24 @@ public class IATutorial : MonoBehaviour
     {
         if (turnCount == 1)
         {
-            yield return new WaitWhile(() => !duelManager.explanationFinished);
-            SummonHero(handCardHandler.GetCardInHandList()[0], 2);
+            yield return new WaitUntil(() => duelManager.explanationFinished);
+            duelManager.SetSelectable(handCardHandler.GetCardInHandList()[0]);
+            PlayCard(handCardHandler.GetCardInHandList()[0], 2);
         }
         else if (turnCount == 2)
         {
-            SummonHero(handCardHandler.GetCardInHandList()[0], 7);
+
+            duelManager.SetSelectable(handCardHandler.GetCardInHandList()[0]);
+            PlayCard(handCardHandler.GetCardInHandList()[0], 7);
         }
-        else if( turnCount == 4)
+        else if (turnCount == 4)
         {
-            SummonHero(handCardHandler.GetCardInHandList()[0], 12);
+
+            duelManager.SetSelectable(handCardHandler.GetCardInHandList()[0]);
+            PlayCard(handCardHandler.GetCardInHandList()[0], 12);
         }
 
-            yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1);
 
         playerManager.SetPlayerReady();
     }
@@ -75,7 +87,7 @@ public class IATutorial : MonoBehaviour
         }
         else if (turnCount == 3 || turnCount == 4)
         {
-            duelManager.UseMovement(1, heroesInTurn[0], heroesInTurn[0].Moves[1].MoveSO.NeedTarget ? 2 : -1);
+            duelManager.UseMovement(1, heroesInTurn[0], heroesInTurn[0].Moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? 7 : 2);
         }
         else if (turnCount == 5)
         {
@@ -86,11 +98,9 @@ public class IATutorial : MonoBehaviour
             duelManager.UseMovement(heroesInTurn[0].Moves[1].MoveSO.MoveType == MoveType.PositiveEffect ? 0 : 1, heroesInTurn[0], 3);
         }
 
-
-
     }
 
-    private void SummonHero(Card heroToPlay, int positionIndex)
+    private void PlayCard(Card heroToPlay, int positionIndex)
     {
         duelManager.PlaceCardInField(playerManager, playerManager.isPlayer,
                     handCardHandler.GetIdexOfCard(heroToPlay), positionIndex);

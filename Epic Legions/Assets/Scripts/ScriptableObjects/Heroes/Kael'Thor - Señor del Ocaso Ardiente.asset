@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1039
   cardName: Kael'Thor
   cardLastName: "Se\xF1or del Ocaso Ardiente"
-  cardSprite: {fileID: 21300000, guid: 5b4d971e10d5a1142b6649e646b78296, type: 3}
+  cardSprite: {fileID: 21300000, guid: 8b1180a05a6dafe44a70d7eb14882593, type: 3}
   cardElemnt: 4
   heroClass: 8
   healt: 70

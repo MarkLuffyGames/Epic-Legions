@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1053
   cardName: Ignar
   cardLastName: Llama Indomable
-  cardSprite: {fileID: 21300000, guid: c1d708f2bf4ae62489d164bb925c051d, type: 3}
+  cardSprite: {fileID: 21300000, guid: bc23b5cb498e5b646b66765dd0432556, type: 3}
   cardElemnt: 1
   heroClass: 0
   healt: 55

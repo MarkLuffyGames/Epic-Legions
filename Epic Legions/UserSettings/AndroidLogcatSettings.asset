@@ -2,8 +2,8 @@
     "m_SelectedDeviceId": "85Z9KBVCHIRKEMCY",
     "m_SelectedProcess": {
         "deviceId": "85Z9KBVCHIRKEMCY",
-        "name": "com.MarkLuffyGames.HemeraLegions",
-        "processId": 27185,
+        "name": "com.ForgeDreamsGames.HemeraLegion",
+        "processId": 24660,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -36,6 +36,84 @@
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.MarkLuffyGames.HemeraLegions",
             "processId": 27185,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.MarkLuffyGames.HemeraLegions",
+            "processId": 31152,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 22646,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 20447,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 21640,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 24148,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 26891,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 14423,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 18016,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 18551,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 20384,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 8842,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 27145,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 24660,
             "exited": false
         }
     ],

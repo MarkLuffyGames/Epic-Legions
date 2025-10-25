@@ -58,4 +58,14 @@ public class MovementUI : MonoBehaviour
     {
         moveButton.gameObject.SetActive(interactable);
     }
+
+    public void DisableButton()
+    {
+        moveButton.interactable = false;
+    }
+
+    public void EnableButton()
+    {
+        moveButton.interactable = true;
+    }
 }

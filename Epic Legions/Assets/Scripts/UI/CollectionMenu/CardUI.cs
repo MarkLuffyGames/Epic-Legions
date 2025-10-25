@@ -76,7 +76,9 @@ public class CardUI : MonoBehaviour
             ActivateHeroStats(false);
 
             elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
-            elementIcon.enabled = true;
+            elementIcon.enabled = equipmentCardSO.CardElemnt != CardElement.None;
+            classIcon.sprite = CardDatabase.GetClassIcon(equipmentCardSO.SupportedClasses[0]);
+            classIcon.enabled = equipmentCardSO.SupportedClasses[0] != HeroClass.None;
             description.text = equipmentCardSO.Description;
         }
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1043
   cardName: Alaira
   cardLastName: Silvadora del Robledal
-  cardSprite: {fileID: 21300000, guid: 757ee54104131c1448d8cfaab599021d, type: 3}
+  cardSprite: {fileID: 21300000, guid: 8253d9111b1b29f4abb49a01b9d93d41, type: 3}
   cardElemnt: 3
   heroClass: 5
   healt: 50

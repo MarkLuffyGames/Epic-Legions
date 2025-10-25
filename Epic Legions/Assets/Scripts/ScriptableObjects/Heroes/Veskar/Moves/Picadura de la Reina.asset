@@ -21,7 +21,7 @@ MonoBehaviour:
   targetsCondition: {fileID: 0}
   needTarget: 1
   onMyself: 0
-  moveType: 3
+  moveType: 0
   targetsType: 0
   visualEffect: {fileID: 7611201976539897820, guid: 39706049c667f7d4bbca965b63cd3bec, type: 3}
   visualEffectHit: {fileID: 0}

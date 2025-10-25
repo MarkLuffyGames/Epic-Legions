@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: 1011
   cardName: Tharun
   cardLastName: Guardian de la Bruma
-  cardSprite: {fileID: 21300000, guid: 57d5dabcc7fec1e41958213d916a19c0, type: 3}
+  cardSprite: {fileID: 21300000, guid: 1e90b6b9d4ac9fa48b0d13ed084b9a53, type: 3}
   cardElemnt: 2
   heroClass: 0
   healt: 60
