@@ -11,6 +11,7 @@ public abstract class CardEffect : ScriptableObject
 
     public GameObject visualEffectCardEffect;
     public Sprite iconSprite;
+    public float effectDuration = 1.0f;
     public float effectScore = 1.0f;
     public bool isPermanent;
     public bool isPassive;

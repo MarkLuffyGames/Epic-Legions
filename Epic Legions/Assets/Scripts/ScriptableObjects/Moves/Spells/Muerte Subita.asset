@@ -15,14 +15,15 @@ MonoBehaviour:
   moveName: "Muerte S\xFAbita"
   damage: 0
   energyCost: 0
-  moveEffect: {fileID: 11400000, guid: 99f269342313b2d4a8ffaf3316995f47, type: 2}
-  effectCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
-  targetsCondition: {fileID: 0}
-  alwaysActive: 1
-  needTarget: 0
+  element: 0
+  moveEffect: {fileID: 11400000, guid: cf2a3a76abb473946ae85331af2c8036, type: 2}
+  effectCondition: {fileID: 11400000, guid: ee49b7e985176df49a6651b0922a4b46, type: 2}
+  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  needTarget: 1
   onMyself: 0
   moveType: 1
-  targetsType: 3
+  targetsType: 0
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 0}
-  effectDescription: "inflige 30 de da\xF1o directo a los puntos de vida del enemigo."
+  effectDescription: "Solo puedes jugar este hechizo si controlas menos h\xE9roes
+    que tu rival. Elige y destruye 1 h\xE9roe enemigo."

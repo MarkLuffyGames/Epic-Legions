@@ -5,11 +5,16 @@ public class EffectHandler : MonoBehaviour
     [SerializeField] private GameObject effect;
     private void OnEnable()
     {
-        effect.SetActive(true);
+        if (effect != null) effect.SetActive(true);
     }
 
     private void OnDisable()
     {
-        effect.SetActive(false);
+        if (effect != null) effect.SetActive(false);
+    }
+
+    public void SetEffect(GameObject effect)
+    {
+        this.effect = effect;
     }
 }

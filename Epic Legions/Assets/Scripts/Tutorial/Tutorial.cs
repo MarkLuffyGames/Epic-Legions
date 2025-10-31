@@ -2,20 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.ParticleSystem;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class Tutorial : DuelManager
 {
     [SerializeField] private ParticleSystem particleTutorial;
-    public GameObject[] explanationTextsBoxs;
+    [SerializeField] private TutorialLoader tutorialLoader;
+    [SerializeField] private EffectHandler effectHandler;
+
+    [SerializeField] private GameObject textBox;
+    [SerializeField] private Image background;
+    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private GameObject elementGraph;
+
+    [SerializeField] private GameObject[] effects;
 
     int turnCount = 0;
     public bool explanationFinished = false;
@@ -164,7 +166,7 @@ public class Tutorial : DuelManager
 
                 InitializeBattleTurns();
 
-                StartCoroutine(StartHeroTurn());
+                StartHeroTurn();
 
                 if (IsClient || isSinglePlayer)
                 {
@@ -233,9 +235,9 @@ public class Tutorial : DuelManager
     {
         yield return ShowText(0);
         yield return ShowText(1);
-        yield return ShowText(2);
-        yield return ShowText(3);
-        yield return ShowText(4);
+        yield return ShowText(2, false, true, effects[0]);
+        yield return ShowText(3, false, true, effects[1]);
+        yield return ShowText(4, false, true, effects[2]);
     }
 
     IEnumerator PhaseExplanation()
@@ -250,7 +252,7 @@ public class Tutorial : DuelManager
     IEnumerator HandExplanation()
     {
         yield return ShowText(26);
-        yield return ShowText(5);
+        yield return ShowText(5, false, true, effects[3]);
 
         SetSelectable(player1Manager.GetHandCardHandler().GetCardInHandList()[1]);
         yield return ShowText(6, true, false);
@@ -263,12 +265,12 @@ public class Tutorial : DuelManager
 
         player1Manager.GetHandCardHandler().HideHandCards();
         yield return ShowText(7);
-        yield return ShowText(8);
-        yield return ShowText(9);
-        yield return ShowText(10);
-        yield return ShowText(11);
-        yield return ShowText(12);
-        yield return ShowText(13);
+        yield return ShowText(8, false, true, effects[4]);
+        yield return ShowText(9, false, true, effects[5]);
+        yield return ShowText(10, false, true, effects[6]);
+        yield return ShowText(11, false, true, effects[7]);
+        yield return ShowText(12, false, true, effects[8]);
+        yield return ShowText(13, false, true, effects[9]);
         yield return ShowText(14, true, false);
         StartCoroutine(PlayFirstTurnExplanation());
     }
@@ -293,48 +295,15 @@ public class Tutorial : DuelManager
         yield return ShowText(66);
         yield return ShowText(67);
         yield return ShowText(68);
-        yield return ShowElementGraph();
+        elementGraph.SetActive(true);
+        yield return ToggleObject(Vector3.one);
+        yield return ShowText(19);
+        yield return ShowText(24);
+        yield return ShowText(83);
+        yield return ShowText(84);
+        yield return ToggleObject(Vector3.zero);
+        elementGraph.SetActive(false);
         yield return YourTurnExplanation();
-    }
-
-    [SerializeField] private TextMeshProUGUI elementGraphText;
-    [SerializeField] private string[] elementGraphString;
-    [SerializeField] private RectTransform elementGraphRectTransform;
-    [SerializeField] private Vector3[] elementGraphPos;
-    private IEnumerator ShowElementGraph()
-    {
-        isPauseGame = true;
-        explanationTextsBoxs[19].SetActive(true);
-
-        elementGraphRectTransform.localPosition = elementGraphPos[0];
-        yield return SetText(elementGraphText, elementGraphString[0]);
-        yield return new WaitUntil(() => onClick);
-
-        elementGraphRectTransform.localPosition = elementGraphPos[1];
-        yield return SetText(elementGraphText, elementGraphString[1]);
-        yield return new WaitUntil(() => onClick);
-
-        elementGraphRectTransform.localPosition = elementGraphPos[2];
-        yield return SetText(elementGraphText, elementGraphString[2]);
-        yield return new WaitUntil(() => onClick);
-
-        elementGraphRectTransform.localPosition = elementGraphPos[3];
-        yield return SetText(elementGraphText, elementGraphString[3]);
-        yield return new WaitUntil(() => onClick);
-
-        isPauseGame = false;
-        explanationTextsBoxs[19].SetActive(false);
-
-    }
-
-    private IEnumerator SetText(TextMeshProUGUI textComponent, string fullText)
-    {
-        textComponent.text = "";
-        foreach (char c in fullText)
-        {
-            textComponent.text += c;
-            yield return new WaitForSeconds(0.02f);
-        }
     }
 
     private IEnumerator YourTurnExplanation()
@@ -346,7 +315,7 @@ public class Tutorial : DuelManager
     {
         firstAttack = false;
         yield return ShowText(22);
-        yield return ShowText(23);
+        yield return ShowText(23, false, true, effects[10]);
         sampleCard.Cards[0].RechargeButton.interactable = true;
     }
 
@@ -416,7 +385,7 @@ public class Tutorial : DuelManager
     private IEnumerator WeaponExplanation()
     {
         yield return ShowText(39);
-        yield return ShowText(40);
+        yield return ShowText(40, false, true, effects[11]);
         yield return ShowText(41);
         SetDraggable(player1Manager.GetHandCardHandler().GetCardInHandList()[0], 2);
         yield return new WaitUntil(() => player1Manager.GetAllCardInField()[0].GetEquipmentCounts() == 1);
@@ -432,7 +401,7 @@ public class Tutorial : DuelManager
     private IEnumerator AttireExplanation()
     {
         yield return ShowText(43);
-        yield return ShowText(44);
+        yield return ShowText(44, false, true, effects[11]);
         yield return ShowText(45);
         SetDraggable(player1Manager.GetHandCardHandler().GetCardInHandList()[2], 2);
         yield return new WaitUntil(() => player1Manager.GetAllCardInField()[0].GetEquipmentCounts() == 2);
@@ -467,6 +436,7 @@ public class Tutorial : DuelManager
     {
         yield return ShowText(55, true, false);
         yield return new WaitWhile(() => sampleCard.IsEnlarged);
+        yield return ShowText(85);
         yield return ShowText(56);
         yield return ShowText(57);
         yield return ShowText(58);
@@ -515,34 +485,50 @@ public class Tutorial : DuelManager
         coroutineRunning = false;
     }
 
+    private void SetText(int index)
+    {
+        var textData = tutorialLoader.tutorialTexts.FirstOrDefault(t => t.id == index);
+        textBox.transform.localPosition = new Vector3(textData.position.x, textData.position.y, 0);
+        text.text = textData.text;
+        text.rectTransform.sizeDelta = new Vector2(textData.textWidth, text.rectTransform.sizeDelta.y);
+        background.rectTransform.sizeDelta = new Vector2(textData.bgWidth, textData.bgHeight);
+    }
+
     private IEnumerator ShowTextCoroutine(int index, bool waitAction, bool pauseGame, GameObject particle)
     {
         isPauseGame = pauseGame;
-        explanationTextsBoxs[index].SetActive(true);
-        yield return ToggleText(index, Vector3.one);
+        effectHandler.SetEffect(particle);
+        textBox.SetActive(true);
+        SetText(index);
+
+        yield return ToggleObject(Vector3.one);
         onAction = false;
         yield return new WaitUntil(() => waitAction ? onAction : onClick);
         if (particle != null) particle.SetActive(false);
         isPauseGame = true;
-        yield return ToggleText(index, Vector3.zero);
-        explanationTextsBoxs[index].SetActive(false);
+        yield return ToggleObject(Vector3.zero);
+        textBox.SetActive(false);
         isPauseGame = false;
         onAction = false;
     }
 
-    private IEnumerator ToggleText(int textIndex, Vector3 targetScale)
+    private IEnumerator ToggleObject(Vector3 targetScale, GameObject toggleObject = null)
     {
-        explanationTextsBoxs[textIndex].transform.localScale = targetScale == Vector3.zero ? Vector3.one : Vector3.zero;
-        Vector3 initialScale = explanationTextsBoxs[textIndex].transform.localScale;
+        if(toggleObject == null)
+        {
+            toggleObject = textBox;
+        }
+        toggleObject.transform.localScale = targetScale == Vector3.zero ? Vector3.one : Vector3.zero;
+        Vector3 initialScale = toggleObject.transform.localScale;
         float elapsedTime = 0f;
         float duration = 0.3f;
         while (elapsedTime < duration)
         {
-            explanationTextsBoxs[textIndex].transform.localScale = Vector3.Lerp(initialScale, targetScale, (elapsedTime / duration));
+            toggleObject.transform.localScale = Vector3.Lerp(initialScale, targetScale, (elapsedTime / duration));
             elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
-        explanationTextsBoxs[textIndex].transform.localScale = targetScale;
+        toggleObject.transform.localScale = targetScale;
         yield return null;
     }
 
@@ -567,7 +553,11 @@ public class Tutorial : DuelManager
                 sampleCard.Cards[0].MovementUI2.DisableButton();
                 sampleCard.Cards[0].RechargeButton.interactable = false;
 
-                if (turnCount == 2)
+                if(turnCount == 1)
+                {
+                    sampleCard.Cards[0].RechargeButton.interactable = true;
+                }
+                else if (turnCount == 2)
                 {
                     if (card.cardSO.CardID == 1002)
                     {
@@ -607,7 +597,7 @@ public class Tutorial : DuelManager
                     }
                     else if (card.cardSO.CardID == 1051)
                     {
-                        yield return ShowText(53, true, false, particleTutorial.gameObject);
+                        yield return ShowText(53, true, false, effects[12]);
                         sampleCard.Cards[1].MovementUI1.EnableButton();
                     }
                     else if (card.cardSO.CardID == 1025)

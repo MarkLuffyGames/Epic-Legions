@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "85Z9KBVCHIRKEMCY",
         "name": "com.ForgeDreamsGames.HemeraLegion",
-        "processId": 24660,
+        "processId": 24692,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -114,6 +114,24 @@
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.ForgeDreamsGames.HemeraLegion",
             "processId": 24660,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 15663,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 7799,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 24692,
             "exited": false
         }
     ],

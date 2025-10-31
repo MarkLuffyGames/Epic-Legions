@@ -37,7 +37,7 @@ public class CardSelector : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsHost) return;
 
-        DetectCardUnderMouse();
+        StartCoroutine(DetectCardUnderMouse());
 
         if (handCardHandler.IsMouseOverButton()) return;
 

@@ -5,6 +5,10 @@ public class LowerSpeed : Condition
 {
     public override bool CheckCondition(Card caster, Card target)
     {
+        if(target == null || caster == null)
+        {
+            return false;
+        }
         return target.CurrentSpeedPoints < caster.CurrentSpeedPoints;
     }
 }

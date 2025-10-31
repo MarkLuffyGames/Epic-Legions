@@ -70,3 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+/[Aa]ssets/[Vv]ideos/InShot_20251011_223753688.mp4
+/[Aa]ssets/[Vv]ideos/InShot_20251011_223753688.mp4.meta

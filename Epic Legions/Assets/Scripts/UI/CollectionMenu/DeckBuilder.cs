@@ -265,7 +265,7 @@ public class DeckBuilder : MonoBehaviour
             UnblockAllCards();
             
         if(cardsInDeck.Count == 0 
-            && enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck)
+            && (enlargedCardHolder.OrigCard == null || enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck))
         {
             enlargedCardHolder.HideCard();
             StartCoroutine(UpdateUI());

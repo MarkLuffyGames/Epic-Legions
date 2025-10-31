@@ -57,6 +57,7 @@ public class DuelManager : NetworkBehaviour
     public PlayerManager Player1Manager => player1Manager;
     public PlayerManager Player2Manager => player2Manager;
     public List<Card> HeroInTurn => heroInTurn;
+    public List<Card>[] Turns => turns;
     public int MovementToUse => movementToUse;
     public bool SettingAttackTarget => settingAttackTarget;
     public Card CardSelectingTarget => cardSelectingTarget;
@@ -118,7 +119,7 @@ public class DuelManager : NetworkBehaviour
 
                 InitializeBattleTurns();
 
-                StartCoroutine(StartHeroTurn());
+                StartHeroTurn();
 
                 if (IsClient || isSinglePlayer)
                 {
@@ -395,7 +396,7 @@ public class DuelManager : NetworkBehaviour
     /// <summary>
     /// Inicia el turno de los héroes en la fase actual, gestionando efectos y verificando estados.
     /// </summary>
-    protected IEnumerator StartHeroTurn()
+    protected void StartHeroTurn()
     {
         // Actualiza el texto de la fase del duelo
         UpdateDuelPhaseText();
@@ -410,7 +411,8 @@ public class DuelManager : NetworkBehaviour
         {
             if (IsClient) SetPlayerReadyAndTransitionPhaseServerRpc(NetworkManager.Singleton.LocalClientId);
             if (isSinglePlayer) NextTurn();
-            yield break;
+
+            return;
         }
 
         // Reinicia la lista de héroes que participarán en este turno
@@ -418,7 +420,7 @@ public class DuelManager : NetworkBehaviour
 
         foreach (var card in turns[heroesInTurnIndex])
         {
-            if (card.IsStunned() || card.IsInLethargy() || card.IsParalyzed() || card.turnCompleted)
+            if (card.IsActionBlocked())
             {
                 card.PassTurn();
             }
@@ -426,7 +428,7 @@ public class DuelManager : NetworkBehaviour
             {
                 heroInTurn.Add(card); // Agrega el héroe a la lista si tiene posición en el campo
             }
-            card.turnCompleted = true;
+            
         }
 
         // Si no hay héroes disponibles después de la validación, finaliza las acciones del turno
@@ -751,6 +753,12 @@ public class DuelManager : NetworkBehaviour
 
     public PlayerManager GetPlayerManagerForCard(Card card)
     {
+        if(card.cardSO is SpellCardSO)
+        {
+            return player1Manager.GetHandCardHandler().GetCardInHandList().Contains(card) 
+                || player1Manager.SpellFieldPosition.Card == card ? player1Manager : player2Manager;
+            
+        }
         if (card.cardSO is EquipmentCardSO)
         {
             card = card.HeroOwner; // Si la carta es un equipo, se obtiene el héroe propietario del equipo
@@ -762,7 +770,8 @@ public class DuelManager : NetworkBehaviour
             return player1Manager;
         }
         // Verifica si el héroe está en el campo del jugador 2
-        else if (player2Manager.GetFieldPositionList().Contains(card.FieldPosition) || player2Manager.SpellFieldPosition == card.FieldPosition)
+        else if (player2Manager.GetFieldPositionList().Contains(card.FieldPosition) || player2Manager.SpellFieldPosition == card.FieldPosition
+            || player2Manager.GetHandCardHandler().GetCardInHandList().Contains(card))
         {
             return player2Manager;
         }
@@ -774,24 +783,7 @@ public class DuelManager : NetworkBehaviour
 
     protected PlayerManager GetPlayerManagerRival(Card card)
     {
-        if(card.cardSO is EquipmentCardSO)
-        {
-            card = card.HeroOwner; // Si la carta es un equipo, se obtiene el héroe propietario del equipo
-        }
-        // Verifica si la carta está en el campo del jugador 1
-        if (player1Manager.GetFieldPositionList().Contains(card.FieldPosition))
-        {
-            return player2Manager;
-        }
-        // Verifica si la carta está en el campo del jugador 2
-        else if (player2Manager.GetFieldPositionList().Contains(card.FieldPosition))
-        {
-            return player1Manager;
-        }
-
-        // Si el héroe no se encuentra en el campo de ningún jugador, se muestra un error y se devuelve 0
-        Debug.LogError("El héroe no pertenece a ningún jugador");
-        return null;
+        return GetOpposingPlayerManager(GetPlayerManagerForCard(card));
     }
 
     public PlayerManager GetOpposingPlayerManager(PlayerManager playerManager)
@@ -1024,7 +1016,8 @@ public class DuelManager : NetworkBehaviour
 
                 if(card.GetController() != null ||
                     (card.cardSO is HeroCardSO hero && hero.HeroClass == HeroClass.Hunter 
-                    && card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack))
+                    && card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.RangedAttack)
+                    || card.cardSO is SpellCardSO)
                 {
                     for (int i = 0; i < rivalField.Count; i++)
                     {
@@ -1174,7 +1167,7 @@ public class DuelManager : NetworkBehaviour
         movementToUseIndex = -1;
 
         heroInTurn.Remove(cardUsesTheAttack);
-            
+        cardUsesTheAttack.turnCompleted = true;
 
         DestroySpell(cardUsesTheAttack);
 
@@ -1534,22 +1527,22 @@ public class DuelManager : NetworkBehaviour
         // Restaura la posición de la carta atacante luego del movimiento.
         attackerCard.MoveToLastPosition();
 
-
         // Aplica efectos adicionales del ataque si no es un efecto pasivo.
         ActivateEffects(attackerCard, cardToAttack, movementToUseIndex);
-
-        // Resetea el índice del movimiento utilizado.
-        movementToUseIndex = -1;
 
         // Si el atacante es una carta de hechizo, destruye la carta después de su uso.
         DestroySpell(attackerCard);
 
         // Espera un breve momento antes de finalizar la acción.
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect ? attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect.effectDuration : 1);
+
+        // Resetea el índice del movimiento utilizado.
+        movementToUseIndex = -1;
 
         heroInTurn.Remove(attackerCard);
+        attackerCard.turnCompleted = true;
 
-        if(attackerCard.IsControlled()) attackerCard.GetControllerEffect().MoveEffect.DeactivateEffect(attackerCard.GetControllerEffect());
+        if (attackerCard.IsControlled()) attackerCard.GetControllerEffect().MoveEffect.DeactivateEffect(attackerCard.GetControllerEffect());
 
         // Si es el último movimiento, finaliza las acciones.
         if (lastMove) yield return FinishActions();
@@ -1557,19 +1550,25 @@ public class DuelManager : NetworkBehaviour
 
     private void ActivateEffects(Card attackerCard, Card cardToAttack, int movementToUseIndex)
     {
-        if (!cardToAttack.EffectIsApplied(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType)) return;
+        
 
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
         {
+            if (!cardToAttack.EffectIsApplied(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType)) return;
+
             attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, cardToAttack);
         }
         else
         {
-            attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex));
+            foreach (var target in GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex))
+            {
+                if (!target.EffectIsApplied(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType)) continue;
+                attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, target);
+            }
         }
     }
 
-    protected int CalculateAttackDamage(Card attackerCard, int movementToUseIndex, Card cardToAttack)
+    public int CalculateAttackDamage(Card attackerCard, int movementToUseIndex, Card cardToAttack)
     {
         if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveEffect is DestroyDefense)
         {
@@ -1586,7 +1585,7 @@ public class DuelManager : NetworkBehaviour
         return damage;
     }
 
-    protected int CalculateDefenseIgnored(Card attackerCard,Card cardToAttack, int movementToUseIndex)
+    public int CalculateDefenseIgnored(Card attackerCard,Card cardToAttack, int movementToUseIndex)
     {
         var move = attackerCard.Moves[movementToUseIndex].MoveSO;
         if (move.MoveEffect is IgnoredDefense ignored)
@@ -1661,7 +1660,7 @@ public class DuelManager : NetworkBehaviour
     /// <param name="attackerCard">Carta que realiza el ataque.</param>
     /// <param name="movementToUseIndex">Índice del movimiento a usar para determinar los objetivos.</param>
     /// <returns>Una lista de cartas que representan los objetivos del ataque.</returns>
-    protected List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
+    public List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
     {
         // Si el tipo de objetivo es una línea (TargetLine).
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.ADJACENT)
@@ -1863,7 +1862,7 @@ public class DuelManager : NetworkBehaviour
         {
             heroesInTurnIndex++; // Avanzar al siguiente héroe en turno.
             StartHeroTurnClientRpc(heroesInTurnIndex); // Notificar a los clientes sobre el cambio de turno.
-            StartCoroutine(StartHeroTurn()); // Iniciar el turno del nuevo héroe.
+            StartHeroTurn(); // Iniciar el turno del nuevo héroe.
         }
         else // Si hemos llegado al último héroe, reiniciar el ciclo de turnos.
         {
@@ -1893,7 +1892,7 @@ public class DuelManager : NetworkBehaviour
         this.heroesInTurnIndex = heroesInTurnIndex;
 
         // Inicia el turno del héroe en el cliente.
-        StartCoroutine(StartHeroTurn());
+        StartHeroTurn();
     }
 
 

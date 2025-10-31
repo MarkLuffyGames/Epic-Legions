@@ -1,0 +1,1034 @@
+[
+  {
+    "id": 0,
+    "text": "¡Bienvenido a Hemera Legion!",
+    "position": {
+      "x": 0.0,
+      "y": 138.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 600,
+    "bgHeight": 140
+  },
+  {
+    "id": 1,
+    "text": "Jugaremos una partida guiada para que conozcas lo básico y estés listo para la verdadera batalla.",
+    "position": {
+      "x": 0.0,
+      "y": 140.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 760,
+    "bgHeight": 230
+  },
+  {
+    "id": 2,
+    "text": "Este es tu campo de juego. Aquí colocas a tus héroes para que luchen por ti.",
+    "position": {
+      "x": 0.0,
+      "y": 350.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 700,
+    "bgHeight": 200
+  },
+  {
+    "id": 3,
+    "text": "Justo al frente está el campo de juego de tu oponente.",
+    "position": {
+      "x": 0.0,
+      "y": -22.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 720,
+    "bgHeight": 200
+  },
+  {
+    "id": 4,
+    "text": "Aquí está tu Mazo.\nAl comenzar la partida robas 7 cartas para formar tu mano.",
+    "position": {
+      "x": 257.0,
+      "y": -220.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 690,
+    "bgHeight": 220
+  },
+  {
+    "id": 5,
+    "text": "Esta es tu Mano.\\nAquí tienes las cartas disponibles para jugar.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 730,
+    "bgHeight": 200
+  },
+  {
+    "id": 6,
+    "text": "Puedes tocar una carta para verla en detalles, por ahora toca la carta con el borde resaltado.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 650,
+    "textHeight": 50,
+    "bgWidth": 720,
+    "bgHeight": 180
+  },
+  {
+    "id": 7,
+    "text": "Esta es una carta de Héroe. \\nCada héroe tiene habilidades únicas que pueden cambiar el curso de la batalla.",
+    "position": {
+      "x": -630.0,
+      "y": 140.0
+    },
+    "textWidth": 500,
+    "textHeight": 50,
+    "bgWidth": 560,
+    "bgHeight": 230
+  },
+  {
+    "id": 8,
+    "text": "Aquí se muestra la cantidad de energía necesaria para jugar esta carta.",
+    "position": {
+      "x": -630.0,
+      "y": 370.0
+    },
+    "textWidth": 500,
+    "textHeight": 50,
+    "bgWidth": 520,
+    "bgHeight": 190
+  },
+  {
+    "id": 9,
+    "text": "Aquí se muestran la clase y el elemento de tu héroe. Te explicaré cómo funcionan durante la batalla.",
+    "position": {
+      "x": 620.0,
+      "y": 400.0
+    },
+    "textWidth": 500,
+    "textHeight": 50,
+    "bgWidth": 520,
+    "bgHeight": 220
+  },
+  {
+    "id": 10,
+    "text": "Esta es la velocidad de tu héroe. Esto determina quién actúa primero.",
+    "position": {
+      "x": 630.0,
+      "y": 170.0
+    },
+    "textWidth": 504,
+    "textHeight": 50,
+    "bgWidth": 540,
+    "bgHeight": 201
+  },
+  {
+    "id": 11,
+    "text": "Esta es la defensa, ayuda a mitigar el daño. Se reinicia al final de cada turno.",
+    "position": {
+      "x": 627.0,
+      "y": -200.0
+    },
+    "textWidth": 500,
+    "textHeight": 50,
+    "bgWidth": 560,
+    "bgHeight": 190
+  },
+  {
+    "id": 12,
+    "text": "Esta es la vida.\\n Si llega a 0, tu Héroe queda fuera de combate.",
+    "position": {
+      "x": -570.0,
+      "y": -200.0
+    },
+    "textWidth": 305,
+    "textHeight": 50,
+    "bgWidth": 370,
+    "bgHeight": 240
+  },
+  {
+    "id": 13,
+    "text": "Estas son las habilidades del héroe. Muestran su coste de uso, nombre, daño (si lo hay) y descripción con su efecto (si lo hay).",
+    "position": {
+      "x": 0.0,
+      "y": -115.0
+    },
+    "textWidth": 730,
+    "textHeight": 50,
+    "bgWidth": 800,
+    "bgHeight": 200
+  },
+  {
+    "id": 14,
+    "text": "Toca cualquier parte de la pantalla fuera de la carta para ocultar esta vista.",
+    "position": {
+      "x": 0.0,
+      "y": 140.0
+    },
+    "textWidth": 500,
+    "textHeight": 50,
+    "bgWidth": 570,
+    "bgHeight": 190
+  },
+  {
+    "id": 15,
+    "text": "Ahora jugaremos esta carta en el campo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 680,
+    "textHeight": 50,
+    "bgWidth": 750,
+    "bgHeight": 130
+  },
+  {
+    "id": 16,
+    "text": "Mantén presionada la carta y arrástrala a la posición en tu campo donde quieres jugarla, esta vez colócala en la fila central.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1100,
+    "textHeight": 50,
+    "bgWidth": 1150,
+    "bgHeight": 200
+  },
+  {
+    "id": 17,
+    "text": "Bien, ahora ya no te queda energía para jugar más cartas de héroe. Toca el botón de siguiente fase para pasar a la fase de batalla.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 900,
+    "textHeight": 50,
+    "bgWidth": 950,
+    "bgHeight": 220
+  },
+  {
+    "id": 18,
+    "text": "Tu héroe es del elemento Planta y el enemigo es del elemento Fuego.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 630,
+    "textHeight": 50,
+    "bgWidth": 700,
+    "bgHeight": 180
+  },
+  {
+    "id": 19,
+    "text": "Observa atentamente las flechas, cada una indica hacia qué elemento tienes ventaja.",
+    "position": {
+      "x": -715.0,
+      "y": 300.0
+    },
+    "textWidth": 436,
+    "textHeight": 50,
+    "bgWidth": 486,
+    "bgHeight": 222
+  },
+  {
+    "id": 20,
+    "text": "Es el turno del héroe que colocaste en el campo, los héroes bajo tu control que están esperando que les ordenes una acción están representados con este color.",
+    "position": {
+      "x": 0.0,
+      "y": 125.0
+    },
+    "textWidth": 900,
+    "textHeight": 50,
+    "bgWidth": 1000,
+    "bgHeight": 200
+  },
+  {
+    "id": 21,
+    "text": "Para seleccionar su acción, toca la carta para abrir la vista detallada.",
+    "position": {
+      "x": 0.0,
+      "y": 110.0
+    },
+    "textWidth": 909,
+    "textHeight": 50,
+    "bgWidth": 950,
+    "bgHeight": 180
+  },
+  {
+    "id": 22,
+    "text": "Cada héroe tiene dos habilidades que puede usar en combate, o puede usar la habilidad de recarga para aumentar la energía en +10.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 909,
+    "textHeight": 50,
+    "bgWidth": 920,
+    "bgHeight": 200
+  },
+  {
+    "id": 23,
+    "text": "En este turno elige recargar ya que no tienes suficiente ataque para dañar al héroe enemigo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 909,
+    "textHeight": 50,
+    "bgWidth": 950,
+    "bgHeight": 200
+  },
+  {
+    "id": 24,
+    "text": "Ataca en esa dirección para infligir +20 de daño y evita enfrentarte al elemento que te supera.",
+    "position": {
+      "x": -708.0,
+      "y": 300.0
+    },
+    "textWidth": 436,
+    "textHeight": 50,
+    "bgWidth": 489,
+    "bgHeight": 224
+  },
+  {
+    "id": 25,
+    "text": "Ahora estamos en la fase de preparación, ambos jugadores pueden invocar héroes al campo, lanzar hechizos y equipar a sus héroes.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 900,
+    "textHeight": 50,
+    "bgWidth": 900,
+    "bgHeight": 220
+  },
+  {
+    "id": 26,
+    "text": "Las cartas en el campo se colocan boca abajo hasta la fase de batalla para no revelar su identidad.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 900,
+    "textHeight": 50,
+    "bgWidth": 980,
+    "bgHeight": 170
+  },
+  {
+    "id": 27,
+    "text": "Tus datos se muestran en la esquina superior izquierda y los de tu oponente, en la derecha. Allí verás el avatar, el nombre, la vida (barra roja) y la energía (barra azul).",
+    "position": {
+      "x": 0.0,
+      "y": 350.0
+    },
+    "textWidth": 970,
+    "textHeight": 0,
+    "bgWidth": 1000,
+    "bgHeight": 240
+  },
+  {
+    "id": 28,
+    "text": "Tu héroe está en desventaja debido al elemento, así que para protegerlo, coloca a Ignar justo frente a él para que reciba los ataques.\n\r\nLuego, pasa a la fase de batalla.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1180,
+    "textHeight": 50,
+    "bgWidth": 1271,
+    "bgHeight": 255
+  },
+  {
+    "id": 29,
+    "text": "No tienes mucho que hacer con este héroe, recarguemos energía para estar listos para el siguiente turno.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 929,
+    "textHeight": 50,
+    "bgWidth": 1046,
+    "bgHeight": 194
+  },
+  {
+    "id": 30,
+    "text": "Tu enemigo tiene suficiente energía para eliminar a uno de tus héroes si acierta ambos ataques. Debes eliminar a uno de ellos o impedir que ataque.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 922,
+    "textHeight": 50,
+    "bgWidth": 996,
+    "bgHeight": 202
+  },
+  {
+    "id": 31,
+    "text": "Coloca a Acrón en el campo junto a Ignar, este héroe tiene suficiente defensa y vida para recibir ataques en la línea del frente y uno de sus ataques puede cambiar el curso del combate.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 922,
+    "textHeight": 50,
+    "bgWidth": 996,
+    "bgHeight": 240
+  },
+  {
+    "id": 32,
+    "text": "Con este héroe usa \"Carga Salvaje\", aunque el oponente sea resistente a tu elemento le infliges 10 de daño más el efecto que reduce la defensa en 10.",
+    "position": {
+      "x": 0.0,
+      "y": -41.0
+    },
+    "textWidth": 843,
+    "textHeight": 50,
+    "bgWidth": 936,
+    "bgHeight": 224
+  },
+  {
+    "id": 33,
+    "text": "Ese último ataque de Acrón aturdió al oponente y no puede moverse este turno, tus héroes están a salvo por ahora.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 774,
+    "textHeight": 50,
+    "bgWidth": 864,
+    "bgHeight": 181
+  },
+  {
+    "id": 34,
+    "text": "Tus héroes sufrieron un poco de daño, vamos a curarlos.\nSelecciona la carta con el borde resaltado.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 692,
+    "textHeight": 50,
+    "bgWidth": 918,
+    "bgHeight": 205
+  },
+  {
+    "id": 35,
+    "text": "Esta es una carta de hechizo, estas se colocan en la zona de activación para activar su efecto.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 918,
+    "bgHeight": 169
+  },
+  {
+    "id": 36,
+    "text": "Cuando todos los héroes terminan sus acciones la fase de batalla termina, cada jugador roba una carta y comienza un nuevo turno.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 980,
+    "bgHeight": 202
+  },
+  {
+    "id": 37,
+    "text": "Esta carta te permite curar a uno de tus héroes. \nActívala para sanar a Maegir.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1015,
+    "textHeight": 50,
+    "bgWidth": 1074,
+    "bgHeight": 169
+  },
+  {
+    "id": 38,
+    "text": "Ahora te mostraré otro tipo de carta. Cartas equipables. Toca la carta resaltada para verla en detalles.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 980,
+    "bgHeight": 169
+  },
+  {
+    "id": 39,
+    "text": "Hay tres tipos de cartas equipables, en este caso se trata de un arma, estas le dan al héroe una nueva habilidad para usar en combate.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 989,
+    "bgHeight": 205
+  },
+  {
+    "id": 40,
+    "text": "Para equipar un arma a un héroe, sus clases deben coincidir.",
+    "position": {
+      "x": 630.0,
+      "y": 387.0
+    },
+    "textWidth": 504,
+    "textHeight": 50,
+    "bgWidth": 611,
+    "bgHeight": 240
+  },
+  {
+    "id": 41,
+    "text": "Puedes equipar esta arma a un guerrero, tienes a Ignar en el campo de clase guerrero, arrástrala hacia el héroe para equiparla.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 989,
+    "bgHeight": 205
+  },
+  {
+    "id": 42,
+    "text": "Bien, ahora Ignar puede usar una nueva habilidad. \nToca la carta resaltada para ver otro tipo de carta equipable.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1150,
+    "textHeight": 50,
+    "bgWidth": 1076,
+    "bgHeight": 135
+  },
+  {
+    "id": 43,
+    "text": "Este es un atuendo, estos otorgan alguna habilidad pasiva al héroe. Cuando el héroe recibe un ataque se toma en cuenta el elemento del atuendo para calcular debilidad o resistencia.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1031,
+    "textHeight": 50,
+    "bgWidth": 1126,
+    "bgHeight": 194
+  },
+  {
+    "id": 44,
+    "text": "Los atuendos así como las armas para equiparse deben coincidir con la clase del héroe.",
+    "position": {
+      "x": 630.0,
+      "y": 387.0
+    },
+    "textWidth": 504,
+    "textHeight": 50,
+    "bgWidth": 611,
+    "bgHeight": 240
+  },
+  {
+    "id": 45,
+    "text": "Equipa a Ignar con esta coraza y será resistente a los ataques de fuego enemigo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 951,
+    "bgHeight": 180
+  },
+  {
+    "id": 46,
+    "text": "El último tipo de cartas equipables son los accesorios.\nToca la carta resaltada para verla en detalles.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1150,
+    "textHeight": 50,
+    "bgWidth": 1076,
+    "bgHeight": 135
+  },
+  {
+    "id": 47,
+    "text": "Los accesorios son cartas que complementan a tu héroe otorgándole una habilidad pasiva.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1031,
+    "textHeight": 50,
+    "bgWidth": 1126,
+    "bgHeight": 194
+  },
+  {
+    "id": 48,
+    "text": "A diferencia de las otras cartas equipables, estas se pueden equipar a cualquier clase de héroe.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1031,
+    "textHeight": 50,
+    "bgWidth": 1126,
+    "bgHeight": 194
+  },
+  {
+    "id": 49,
+    "text": "Equipa a Ignar con este accesorio para regenerar su vida en cada turno.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 951,
+    "bgHeight": 180
+  },
+  {
+    "id": 50,
+    "text": "Cada héroe puede tener tres cartas equipadas, una de cada tipo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 823,
+    "textHeight": 50,
+    "bgWidth": 850,
+    "bgHeight": 180
+  },
+  {
+    "id": 51,
+    "text": "Pasemos a la fase de batalla para acabar con el enemigo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1002,
+    "textHeight": 50,
+    "bgWidth": 1024,
+    "bgHeight": 127
+  },
+  {
+    "id": 52,
+    "text": "Usa \"Carga Salvaje\" para dañar un poco al héroe enemigo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1002,
+    "textHeight": 50,
+    "bgWidth": 1024,
+    "bgHeight": 127
+  },
+  {
+    "id": 53,
+    "text": "Usa el ataque del arma equipada para infligir más daño al héroe enemigo debido a su debilidad al agua. \n\nPara ello, toca la carta del arma para moverla al frente y selecciona el ataque.",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 662,
+    "textHeight": 50,
+    "bgWidth": 723,
+    "bgHeight": 292
+  },
+  {
+    "id": 54,
+    "text": "Recarga energía para el siguiente turno, con estos ataques no podrás dañar lo suficiente al héroe enemigo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 970,
+    "textHeight": 50,
+    "bgWidth": 1014,
+    "bgHeight": 150
+  },
+  {
+    "id": 55,
+    "text": "Tu oponente ha usado una protección que hace al héroe inmune a los ataques cuerpo a cuerpo. Puedes seleccionar la carta y verificar los efectos activos en el panel lateral.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 970,
+    "textHeight": 50,
+    "bgWidth": 1014,
+    "bgHeight": 206
+  },
+  {
+    "id": 56,
+    "text": "Deberías eliminar a Yansso para que no siga protegiendo a sus aliados en el futuro.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 970,
+    "textHeight": 50,
+    "bgWidth": 1014,
+    "bgHeight": 150
+  },
+  {
+    "id": 57,
+    "text": "No puedes atacar a Yansso directamente porque tiene un aliado frente a él.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1041,
+    "textHeight": 50,
+    "bgWidth": 1114,
+    "bgHeight": 150
+  },
+  {
+    "id": 58,
+    "text": " Las clases de héroe Cazador y Asesino tienen una habilidad especial. \n\nLos Cazadores pueden atacar a cualquier héroe en el campo enemigo a distancia.\n\nLos Asesinos pueden atacar por la retaguardia. Así, si el objetivo no está protegido por detrás, puedes seleccionarlo como objetivo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1129,
+    "textHeight": 50,
+    "bgWidth": 1188,
+    "bgHeight": 372
+  },
+  {
+    "id": 59,
+    "text": "En tu mano tienes a Kaelis, un asesino que puede ayudarte en esta situación. Colócalo en el campo detrás de Acrón para mantenerlo protegido.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 890,
+    "textHeight": 50,
+    "bgWidth": 886,
+    "bgHeight": 184
+  },
+  {
+    "id": 60,
+    "text": "Kaelis solo no podría derrotar al objetivo, por lo que vamos a potenciar su ataque.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1044,
+    "textHeight": 50,
+    "bgWidth": 1067,
+    "bgHeight": 173
+  },
+  {
+    "id": 61,
+    "text": "Con este hechizo, puedes potenciar el ataque de los héroes de tu lado del campo sacrificando a uno de ellos.\r\n\r\nEsta vez, sacrifiquemos a Maegir.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1044,
+    "textHeight": 50,
+    "bgWidth": 1126,
+    "bgHeight": 253
+  },
+  {
+    "id": 62,
+    "text": "Intentemos acabar con el oponente en los próximos turnos mientras los ataques de tus héroes estén potenciados, no dejemos que el sacrificio de Maegir sea en vano.\n\nPasemos a la fase de batalla.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1044,
+    "textHeight": 50,
+    "bgWidth": 1046,
+    "bgHeight": 260
+  },
+  {
+    "id": 63,
+    "text": "Usa \"Herida Profunda\" contra Yansso.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1044,
+    "textHeight": 50,
+    "bgWidth": 692,
+    "bgHeight": 114
+  },
+  {
+    "id": 64,
+    "text": "Recarga energía para el siguiente turno cuando el objetivo no tenga protección.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1044,
+    "textHeight": 50,
+    "bgWidth": 1095,
+    "bgHeight": 129
+  },
+  {
+    "id": 65,
+    "text": "El objetivo ya no está protegido, pero recarga energía para el siguiente turno.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1044,
+    "textHeight": 50,
+    "bgWidth": 1061,
+    "bgHeight": 137
+  },
+  {
+    "id": 66,
+    "text": "El fuego tiene ventaja sobre la planta, por lo que tus ataques harán 20 puntos menos de daño.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 900,
+    "textHeight": 50,
+    "bgWidth": 938,
+    "bgHeight": 170
+  },
+  {
+    "id": 67,
+    "text": "Si atacas a un enemigo débil a tu elemento, le infligirás +20 de daño.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 720,
+    "textHeight": 50,
+    "bgWidth": 800,
+    "bgHeight": 170
+  },
+  {
+    "id": 68,
+    "text": "En este caso tu oponente tiene la ventaja.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 900,
+    "textHeight": 50,
+    "bgWidth": 800,
+    "bgHeight": 120
+  },
+  {
+    "id": 69,
+    "text": "Mientras te queden cartas para robar, también recibirás 50 puntos de energía.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 894,
+    "textHeight": 50,
+    "bgWidth": 980,
+    "bgHeight": 202
+  },
+  {
+    "id": 70,
+    "text": "Recuerda que recibes 50 de energía por turno. \nSi terminas con más de 50, la estarás desperdiciando.\n\nSi no puedes herir al enemigo, usa tu energía para fortalecer a tus aliados o alterar el curso del combate.",
+    "position": {
+      "x": 0.0,
+      "y": -7.0
+    },
+    "textWidth": 929,
+    "textHeight": 50,
+    "bgWidth": 1031,
+    "bgHeight": 318
+  },
+  {
+    "id": 71,
+    "text": "Usa \"Impacto Ascendente\" que inflige 30 de daño más la bonificación de +20 que puedes ver en el panel de la izquierda.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 701,
+    "textHeight": 50,
+    "bgWidth": 779,
+    "bgHeight": 260
+  },
+  {
+    "id": 72,
+    "text": "Utiliza \"Golpe Escudado\", como tu oponente ya no tiene defensa este ataque lo aturdirá y no podrá moverse hasta el siguiente turno.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 783,
+    "textHeight": 50,
+    "bgWidth": 851,
+    "bgHeight": 260
+  },
+  {
+    "id": 73,
+    "text": "Toca el objetivo que quieras atacar, los disponibles aparecerán marcados en rojo.",
+    "position": {
+      "x": 0.0,
+      "y": -41.0
+    },
+    "textWidth": 843,
+    "textHeight": 50,
+    "bgWidth": 936,
+    "bgHeight": 190
+  },
+  {
+    "id": 74,
+    "text": "Robaste un héroe de agua, es eficaz contra el héroe rival en el campo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1176,
+    "textHeight": 50,
+    "bgWidth": 1229,
+    "bgHeight": 137
+  },
+  {
+    "id": 75,
+    "text": "Si quieres atacar, asegúrate siempre de tener suficiente energía.\r\nEn este caso, tendrías suficiente energía para atacar con los cuatro héroes, así que puedes jugarlo.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 1176,
+    "textHeight": 50,
+    "bgWidth": 1186,
+    "bgHeight": 204
+  },
+  {
+    "id": 76,
+    "text": "Usa \"Herida Profunda\".",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 662,
+    "textHeight": 50,
+    "bgWidth": 451,
+    "bgHeight": 112
+  },
+  {
+    "id": 77,
+    "text": "Usa el ataque del arma que consume menos energía para poder atacar con el último héroe.",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 811,
+    "textHeight": 50,
+    "bgWidth": 839,
+    "bgHeight": 172
+  },
+  {
+    "id": 78,
+    "text": "Utiliza \"Golpe Escudado\" y termina con esto.",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 804,
+    "textHeight": 50,
+    "bgWidth": 799,
+    "bgHeight": 132
+  },
+  {
+    "id": 79,
+    "text": "Utiliza \"Remolino Travesura\". Con este ataque deberás derrotar al héroe rival.",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 662,
+    "textHeight": 50,
+    "bgWidth": 723,
+    "bgHeight": 162
+  },
+  {
+    "id": 80,
+    "text": "Has dominado los fundamentos del poder de Hemera.\nDesde aquí, tus decisiones forjarán tu leyenda en el campo de batalla.",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 1232,
+    "textHeight": 50,
+    "bgWidth": 1225,
+    "bgHeight": 190
+  },
+  {
+    "id": 81,
+    "text": "Si el enemigo no tiene héroes en el campo, tus ataques se dirigen a sus puntos de vida.\n\nCuando los puntos de vida del rival llegan a 0… ¡Ganas la partida!",
+    "position": {
+      "x": 0.0,
+      "y": 45.0
+    },
+    "textWidth": 811,
+    "textHeight": 50,
+    "bgWidth": 856,
+    "bgHeight": 292
+  },
+  {
+    "id": 82,
+    "text": "Las defensas de los héroes dañados se regeneran completamente al final del turno.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 774,
+    "textHeight": 50,
+    "bgWidth": 864,
+    "bgHeight": 181
+  },
+  {
+    "id": 83,
+    "text": "Luz y Oscuridad son opuestas y se dañan mutuamente.",
+    "position": {
+      "x": -694.0,
+      "y": -222.0
+    },
+    "textWidth": 436,
+    "textHeight": 50,
+    "bgWidth": 424,
+    "bgHeight": 224
+  },
+  {
+    "id": 84,
+    "text": "Cada una es débil ante la otra, pero resistentes a su propio elemento.",
+    "position": {
+      "x": -708.0,
+      "y": -222.0
+    },
+    "textWidth": 436,
+    "textHeight": 50,
+    "bgWidth": 486,
+    "bgHeight": 196
+  },
+  {
+    "id": 85,
+    "text": " Los ataques cuerpo a cuerpo están representados con <sprite=1>, y a distancia con <sprite=0>.",
+    "position": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "textWidth": 700,
+    "textHeight": 50,
+    "bgWidth": 780,
+    "bgHeight": 170
+  }
+]

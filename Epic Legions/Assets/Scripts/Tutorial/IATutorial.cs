@@ -105,4 +105,10 @@ public class IATutorial : MonoBehaviour
         duelManager.PlaceCardInField(playerManager, playerManager.isPlayer,
                     handCardHandler.GetIdexOfCard(heroToPlay), positionIndex);
     }
+
+    private void OnDestroy()
+    {
+        duelManager.duelPhase.OnValueChanged -= OnDuelPhaseChanged;
+        duelManager.OnChangeTurn -= DuelManager_OnChangeTurn;
+    }
 }

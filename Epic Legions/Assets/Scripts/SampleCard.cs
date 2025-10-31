@@ -40,7 +40,7 @@ public class SampleCard : MonoBehaviour
         this.card = card;
         isEnlarged = true;
         EnlargeCard(card, 0, positions[0]);
-        effectsActivatedUI.ShowEffectsActivated(card.StatModifier);
+        effectsActivatedUI.ShowEffectsActivated(card.ActiveEffects);
 
         if (card.GetEquipmentCounts() > 0)
         {

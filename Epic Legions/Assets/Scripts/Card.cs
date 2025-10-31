@@ -64,8 +64,8 @@ public class Card : MonoBehaviour
         cardMovementSpeed = 20; // Inicializa el valor de cardMovementSpeed
     }
 
-    private List<Effect> statModifier;
-    public List<Effect> StatModifier => statModifier;
+    private List<Effect> activeEffects;
+    public List<Effect> ActiveEffects => activeEffects;
 
     private Vector3 lastPosition;
     private Vector3 defaultRotation;
@@ -161,7 +161,7 @@ public class Card : MonoBehaviour
             ActivateHeroStats(true);
             description.text = "";
 
-            statModifier = new List<Effect>();
+            activeEffects = new List<Effect>();
             UpdateText();
         }
         else if (cardSO is SpellCardSO spellCardSO)
@@ -706,6 +706,7 @@ public class Card : MonoBehaviour
 
     public void PassTurn()
     {
+        turnCompleted = true;
         CancelStun();
     }
 
@@ -986,12 +987,12 @@ public class Card : MonoBehaviour
     /// <returns></returns>
     public bool IsStunned()
     {
-        return statModifier.Any(x => x.IsStunned());
+        return activeEffects.Any(x => x.IsStunned());
     }
 
     private void CancelStun()
     {
-        statModifier.ForEach(x => x.CancelStun());
+        activeEffects.ForEach(x => x.CancelStun());
     }
 
     /// <summary>
@@ -999,7 +1000,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ActivateEffect()
     {
-        statModifier.ForEach(effect => effect.ActivateEffect());
+        activeEffects.ForEach(effect => effect.ActivateEffect());
 
         ActivateVisualEffects();
 
@@ -1011,7 +1012,7 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ManageEffects()
     {
-        foreach (var effect in statModifier)
+        foreach (var effect in activeEffects)
         {
             if (effect.durability > 0)
             {
@@ -1020,7 +1021,7 @@ public class Card : MonoBehaviour
         }
 
         List<Effect> effects = new List<Effect>();
-        foreach (var effect in statModifier)
+        foreach (var effect in activeEffects)
         {
             if (effect.durability <= 0)
             {
@@ -1028,11 +1029,11 @@ public class Card : MonoBehaviour
             }
         }
 
-        statModifier.RemoveAll(stat => stat.durability <= 0);
+        activeEffects.RemoveAll(stat => stat.durability <= 0);
 
         foreach (var effect in effects)
         {
-            if (statModifier.All(x => x.MoveEffect != effect.MoveEffect))
+            if (activeEffects.All(x => x.MoveEffect != effect.MoveEffect))
             {
                 HideIcon(effect.MoveEffect.iconSprite);
             }
@@ -1048,12 +1049,12 @@ public class Card : MonoBehaviour
         if (cardSO is HeroCardSO)
         {
             if (stunEffect != null) stunEffect.SetActive(false);
-            foreach (var effect in statModifier)
+            foreach (var effect in activeEffects)
             {
                 HideIcon(effect.MoveEffect.iconSprite);
             }
 
-            statModifier.Clear();
+            activeEffects.Clear();
         }
     }
 
@@ -1065,7 +1066,7 @@ public class Card : MonoBehaviour
         if (currentDefense < defense)
         {
             currentDefense = defense;
-            foreach (Effect statModifier in statModifier)
+            foreach (Effect statModifier in activeEffects)
             {
                 statModifier.RegenerateDefense();
             }
@@ -1080,10 +1081,10 @@ public class Card : MonoBehaviour
     /// <param name="effect">Efecto que se añade a la carta.</param>
     public void AddEffect(Effect effect)
     {
-        if (effect.MoveEffect is not Poison || statModifier.All(x => x.MoveEffect is not Antivenom))
+        if (effect.MoveEffect is not Poison || activeEffects.All(x => x.MoveEffect is not Antivenom))
         {
             ShowIcon(effect.MoveEffect.iconSprite);
-            statModifier.Add(effect);
+            activeEffects.Add(effect);
         }
 
         UpdateText();
@@ -1141,7 +1142,7 @@ public class Card : MonoBehaviour
 
             var remainingDamage = CurrentDefensePoints - damage;
             currentDefense = 0;
-            foreach (Effect statModifier in statModifier)
+            foreach (Effect statModifier in activeEffects)
             {
                 if (statModifier.GetCurrentDefence() > 0)
                 {
@@ -1164,7 +1165,7 @@ public class Card : MonoBehaviour
             }
             else
             {
-                foreach (Effect statModifier in statModifier)
+                foreach (Effect statModifier in activeEffects)
                 {
                     if (statModifier.GetCurrentDefence() > 0)
                     {
@@ -1198,7 +1199,7 @@ public class Card : MonoBehaviour
 
     public bool CanReceiveHealing()
     {
-        return !statModifier.Any(x => x.MoveEffect is NoHealing);
+        return !activeEffects.Any(x => x.MoveEffect is NoHealing);
     }
 
     /// <summary>
@@ -1239,12 +1240,12 @@ public class Card : MonoBehaviour
 
     public IEnumerator Counter(Card card)
     {
-        foreach (var item in statModifier)
+        foreach (var item in activeEffects)
         {
             if (item.MoveEffect is Counterattack counterattack)
             {
                 yield return duelManager.Counterattack(item.casterHero, card, item.GetCounterattackDamage());
-                statModifier.Remove(item);
+                activeEffects.Remove(item);
                 break;
             }
             else if (item.MoveEffect is ToxicContact poisonedcounterattack)
@@ -1257,12 +1258,12 @@ public class Card : MonoBehaviour
 
     public void ClearAllEffects()
     {
-        statModifier.RemoveAll(e => e.IsRemovable());
+        activeEffects.RemoveAll(e => e.IsRemovable());
     }
 
     public void CleanAllNegativeEffects()
     {
-        statModifier.RemoveAll(e => e.IsNegative());
+        activeEffects.RemoveAll(e => e.IsNegative());
     }
 
     /// <summary>
@@ -1271,7 +1272,7 @@ public class Card : MonoBehaviour
     /// <returns>True si tiene un protector.</returns>
     private Effect HasProtector()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.HasProtector()) return effect;
         }
@@ -1281,12 +1282,12 @@ public class Card : MonoBehaviour
 
     public bool IsInLethargy()
     {
-        return statModifier.Any(x => x.MoveEffect is Lethargy);
+        return activeEffects.Any(x => x.MoveEffect is Lethargy);
     }
 
     private bool HasPhantomShield()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is PhantomShield phantomShield)
             {
@@ -1299,7 +1300,7 @@ public class Card : MonoBehaviour
 
     private bool HasRangedImmunity()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is AttackImmunity rangedImmunity)
             {
@@ -1312,7 +1313,7 @@ public class Card : MonoBehaviour
 
     private bool HasMeleeImmunity()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is AttackImmunity rangedImmunity)
             {
@@ -1325,7 +1326,7 @@ public class Card : MonoBehaviour
 
     private bool HasFullDamageReflection()
     {
-        return statModifier.Any(x => x.MoveEffect is FullDamageReflection);
+        return activeEffects.Any(x => x.MoveEffect is FullDamageReflection);
     }
 
     /// <summary>
@@ -1336,7 +1337,7 @@ public class Card : MonoBehaviour
     {
         int defenceModifier = 0;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is ModifyDefense) defenceModifier += effect.GetCurrentDefence();
         }
@@ -1352,7 +1353,7 @@ public class Card : MonoBehaviour
     {
         int speedModifier = 0;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is ModifySpeed) speedModifier += effect.GetSpeed();
         }
@@ -1368,9 +1369,9 @@ public class Card : MonoBehaviour
     {
         int attackModifier = 0;
 
-        if (statModifier == null) return attackModifier;
+        if (activeEffects == null) return attackModifier;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is ModifyAttack) attackModifier += effect.GetAttack();
         }
@@ -1382,9 +1383,9 @@ public class Card : MonoBehaviour
     {
         int energy = 0;
 
-        if (statModifier == null) return energy;
+        if (activeEffects == null) return energy;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is IncreaseEnergy) energy += effect.GetAmount();
         }
@@ -1400,7 +1401,7 @@ public class Card : MonoBehaviour
     {
         int damageAbsorbed = 0;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             damageAbsorbed += effect.GetDamageAbsorbed();
         }
@@ -1410,9 +1411,9 @@ public class Card : MonoBehaviour
 
     public Card GetController()
     {
-        if (statModifier == null) return null;
+        if (activeEffects == null) return null;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is HeroControl heroControl) return heroControl.Caster;
         }
@@ -1422,7 +1423,7 @@ public class Card : MonoBehaviour
 
     public Effect GetControllerEffect()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is HeroControl heroControl) return effect;
         }
@@ -1436,9 +1437,9 @@ public class Card : MonoBehaviour
     /// <returns></returns>
     public bool IsControlled()
     {
-        if (statModifier == null) return false;
+        if (activeEffects == null) return false;
 
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is HeroControl)
             {
@@ -1450,7 +1451,7 @@ public class Card : MonoBehaviour
     private bool IsControlledByPlayer()
     {
         Card controller = null;
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is HeroControl)
             {
@@ -1471,7 +1472,7 @@ public class Card : MonoBehaviour
 
     public bool IsParalyzed()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is Paralysis)
             {
@@ -1483,7 +1484,7 @@ public class Card : MonoBehaviour
 
     public bool IsBurned()
     {
-        foreach (Effect effect in statModifier)
+        foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is Burn)
             {
@@ -1562,6 +1563,14 @@ public class Card : MonoBehaviour
         effectivenessUI.Deactivate();
     }
 
-    
+    public bool IsActionBlocked()
+    {
+        if( IsStunned() || IsInLethargy() || IsParalyzed() || turnCompleted)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 

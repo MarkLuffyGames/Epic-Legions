@@ -29,7 +29,8 @@ public class SacrificeForAttack : CardEffect
     IEnumerator Activate(Card caster, Card target)
     {
         target.ReceiveDamage(100, 100, caster, MoveType.PositiveEffect);
-        yield return new WaitForSeconds(0.5f);
-        modifyAttack.ActivateEffect(caster, target.DuelManager.GetPlayerManagerForCard(target).GetAllCardInField());
+        var targetManager = target.DuelManager.GetPlayerManagerForCard(target);
+        yield return new WaitForSeconds(2f);
+        modifyAttack.ActivateEffect(caster, targetManager.GetAllCardInField());
     }
 }

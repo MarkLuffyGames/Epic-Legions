@@ -1,3 +1,4 @@
+using IngameDebugConsole;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -14,13 +15,16 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button multiplayerButton;
     [SerializeField] private Button collectionButton;
     [SerializeField] private Button tutorialButton;
+    [SerializeField] private Button optionButton;
     [SerializeField] private TextMeshProUGUI versionText;
     [SerializeField] private Animator imageAnimator;
     [SerializeField] private Animator cameraAnimator;
     private void Awake()
     {
         versionText.text = $"v{Application.version}";
-        Application.targetFrameRate = 1000;
+        Application.targetFrameRate = 60;
+
+        DebugLogManager.Instance.gameObject.SetActive(PlayerPrefs.GetInt("IngameDebugConsole", 0) == 1);
 
         InitializeUnityAuthentication();
         singlePlayerButton.onClick.AddListener(() =>
@@ -46,6 +50,11 @@ public class MainMenu : MonoBehaviour
         {
             StartAnimation();
             Invoke(nameof(StartTutorial), 0.6f);
+        });
+
+        optionButton.onClick.AddListener(() =>
+        {
+            Loader.LoadScene("OptionsScene", true);
         });
 
         if (NetworkManager.Singleton != null)

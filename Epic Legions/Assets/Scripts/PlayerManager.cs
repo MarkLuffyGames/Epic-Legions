@@ -30,6 +30,7 @@ public class PlayerManager : MonoBehaviour
     public bool isReady;
 
     public FieldPosition SpellFieldPosition => spellFieldPosition;
+    public int PlayerHealt => playerHealt;
     public int PlayerEnergy => playerEnergy;
 
     public bool isPlayer;
@@ -336,6 +337,21 @@ public class PlayerManager : MonoBehaviour
         foreach(var field in fieldPositionList)
         {
             if(field.Card != null)
+            {
+                cards.Add(field.Card);
+            }
+        }
+
+        return cards;
+    }
+
+    public List<Card> GetAllCardVisibleInField()
+    {
+        List<Card> cards = new List<Card>();
+
+        foreach (var field in fieldPositionList)
+        {
+            if (field.Card != null && field.Card.isVisible)
             {
                 cards.Add(field.Card);
             }
