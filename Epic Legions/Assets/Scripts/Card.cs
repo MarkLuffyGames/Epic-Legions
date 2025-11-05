@@ -110,6 +110,14 @@ public class Card : MonoBehaviour
 
     Coroutine moveCoroutine;
     Coroutine rotateCoroutine;
+
+    private void Start()
+    {
+        if(cardSO != null)
+        {
+            SetCard();
+        }
+    }
     /// <summary>
     /// Establece todos los datos de la carta.
     /// </summary>
@@ -155,8 +163,8 @@ public class Card : MonoBehaviour
             currentHealt = maxHealt;
             currentDefense = defense;
 
-            classIcon.sprite = CardDatabase.GetClassIcon(heroCardSO.HeroClass);
-            elementIcon.sprite = CardDatabase.GetElementIcon(heroCardSO.CardElemnt);
+            if(classIcon) classIcon.sprite = CardDatabase.GetClassIcon(heroCardSO.HeroClass);
+            if(elementIcon) elementIcon.sprite = CardDatabase.GetElementIcon(heroCardSO.CardElemnt);
 
             ActivateHeroStats(true);
             description.text = "";
@@ -197,8 +205,8 @@ public class Card : MonoBehaviour
         defenseText.enabled = activate;
         speedText.enabled = activate;
         energyText.enabled = activate;
-        classIcon.enabled = activate;
-        elementIcon.enabled = activate;
+        if (classIcon) classIcon.enabled = activate;
+        if (elementIcon) elementIcon.enabled = activate;
     }
 
     public void CopyCard(Card card, DuelManager duelManager)

@@ -1,23 +1,23 @@
 # ninja log v5
-42	5433	7834196003498389	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8ff3600ca7dd81e1
-104	888	7834195957939266	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	864aa739cebbdbec
-889	2193	7834195969702740	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libswappywrapper.so	6c311a37585d8e6c
-82	4287	7834195991305276	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	6a93ebeb6da8e40d
-32	4579	7834195994756045	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	28eb723db2d9b910
-92	4766	7834195996640592	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	dc2e902d6eb8655e
-60	4810	7834195997226133	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	8d9b68f785c26a50
-51	4405	7834195992929623	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5c8380efd035268
-19	4695	7834195996046039	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b3e9855f0bf19b2e
-71	5574	7834196004887459	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	b45b17a1a58773a5
-5574	5841	7834196007600126	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libgame.so	f719e91de8484400
-89	663	7834229820367120	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	864aa739cebbdbec
-664	1995	7834229830734879	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libswappywrapper.so	6c311a37585d8e6c
-33	3786	7834229851738894	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	28eb723db2d9b910
-15	3903	7834229852821527	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b3e9855f0bf19b2e
-60	3909	7834229853163996	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	6a93ebeb6da8e40d
-51	4093	7834229854939094	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	8d9b68f785c26a50
-41	4109	7834229855100222	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5c8380efd035268
-79	4423	7834229858331416	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	dc2e902d6eb8655e
-70	4536	7834229859495843	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	b45b17a1a58773a5
 24	4570	7834229859848439	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8ff3600ca7dd81e1
+89	663	7834229820367120	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	864aa739cebbdbec
+60	3909	7834229853163996	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	6a93ebeb6da8e40d
+664	1995	7834229830734879	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libswappywrapper.so	6c311a37585d8e6c
+79	4423	7834229858331416	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	dc2e902d6eb8655e
+33	3786	7834229851738894	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	28eb723db2d9b910
+41	4109	7834229855100222	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5c8380efd035268
+51	4093	7834229854939094	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	8d9b68f785c26a50
+15	3903	7834229852821527	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b3e9855f0bf19b2e
+70	4536	7834229859495843	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	b45b17a1a58773a5
 4570	4733	7834229861525510	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libgame.so	f719e91de8484400
+84	769	7835821262773281	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	864aa739cebbdbec
+769	2243	7835821275508491	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libswappywrapper.so	6c311a37585d8e6c
+17	3021	7835821285158705	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b3e9855f0bf19b2e
+10	3243	7835821287374072	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	28eb723db2d9b910
+54	3309	7835821288283249	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	8d9b68f785c26a50
+35	3338	7835821288434517	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5c8380efd035268
+44	3410	7835821289355712	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	6a93ebeb6da8e40d
+74	3735	7835821292623493	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	dc2e902d6eb8655e
+64	3851	7835821293837909	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	b45b17a1a58773a5
+26	3973	7835821295040314	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8ff3600ca7dd81e1
+3973	4153	7835821296910836	D:/MarkLuffyGames/Projects/Epic-Legions/Epic Legions/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/252g3x6h/obj/armeabi-v7a/libgame.so	f719e91de8484400

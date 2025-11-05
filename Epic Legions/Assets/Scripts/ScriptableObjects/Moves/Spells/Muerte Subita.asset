@@ -18,7 +18,7 @@ MonoBehaviour:
   element: 0
   moveEffect: {fileID: 11400000, guid: cf2a3a76abb473946ae85331af2c8036, type: 2}
   effectCondition: {fileID: 11400000, guid: ee49b7e985176df49a6651b0922a4b46, type: 2}
-  targetsCondition: {fileID: 11400000, guid: 2c45a29c71b3edc4cbec24a63f0d3e09, type: 2}
+  targetsCondition: {fileID: 11400000, guid: ee49b7e985176df49a6651b0922a4b46, type: 2}
   needTarget: 1
   onMyself: 0
   moveType: 1

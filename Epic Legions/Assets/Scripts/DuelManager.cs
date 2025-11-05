@@ -1409,12 +1409,16 @@ public class DuelManager : NetworkBehaviour
         if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
             // Si no se seleccionó un héroe objetivo (índice -1), realiza un ataque directo.
-            if (heroToAttackPositionIndex == -1)
+            if (heroToAttackPositionIndex == -1 || 
+                (heroToAttackPositionIndex == attackerCard.FieldPosition.PositionIndex &&
+                targetManager.GetAllCardInField().Count == 0))
             {
+                Debug.Log("Ataque directo ejecutado desde el servidor.");
                 yield return HeroDirectAttack(playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
             }
             else
             {
+                Debug.Log("Ataque a héroe ejecutado desde el servidor.");
                 // Si se seleccionó un héroe objetivo, realiza un ataque a ese héroe.
                 Card card = targetManager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
                 yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
