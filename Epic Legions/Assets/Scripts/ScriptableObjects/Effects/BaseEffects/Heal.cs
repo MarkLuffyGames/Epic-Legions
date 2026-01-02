@@ -12,6 +12,8 @@ public class Heal : CardEffect
     [SerializeField] private GameObject particlePrefab;
     [SerializeField] private GameObject arcPrefab;
     [SerializeField] private GameObject receivePrefab;
+
+    public int Amount => amount;
     public override void ActivateEffect(Card caster, Card target)
     {
         if(particlePrefab != null && arcPrefab != null && receivePrefab != null)
@@ -23,6 +25,9 @@ public class Heal : CardEffect
         }
         else
         {
+            if (visualEffectCardEffect)
+                Instantiate(visualEffectCardEffect, target.FieldPosition.transform.position, Quaternion.identity);
+
             target.ToHeal(amount);
         }
 
@@ -50,12 +55,17 @@ public class Heal : CardEffect
         
     }
 
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.ToHeal(amount);
+    }
+
     public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         throw new System.NotImplementedException();
     }

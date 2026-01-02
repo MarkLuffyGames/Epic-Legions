@@ -11,4 +11,13 @@ public class FewerHeroesField : Condition
         }
         return false;
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        if(caster.snapshot.EnemyHeroes.Count > 0)
+        {
+            return caster.snapshot.MyControlledHeroes.Count < target.snapshot.EnemyHeroes.Count;
+        }
+        return false;
+    }
 }

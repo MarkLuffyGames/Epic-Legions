@@ -17,12 +17,17 @@ public class StatusCleanser : CardEffect
         }
     }
 
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.ClearAllEffects();
+    }
+
     public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         throw new System.NotImplementedException();
     }

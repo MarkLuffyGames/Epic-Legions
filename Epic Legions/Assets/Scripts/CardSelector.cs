@@ -48,7 +48,7 @@ public class CardSelector : MonoBehaviour
             if (currentCard != null)
             {
                 isHoldingCard = true;
-                CursorThemeHL.Instance.Apply(HLCursorStyle.Hand);
+                CursorThemeHL.Instance?.Apply(HLCursorStyle.Hand);
             } 
             isClicking = true;
         }
@@ -187,7 +187,7 @@ public class CardSelector : MonoBehaviour
             else if (currentCard != null && isHoldingCard)
             {
                 isHoldingCard = false;
-                CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
+                CursorThemeHL.Instance?.Apply(HLCursorStyle.Default);
                 if (handCardHandler.CardInThePlayerHand(card))
                 {
                     card.StopDragging(true);
@@ -198,7 +198,7 @@ public class CardSelector : MonoBehaviour
         else if (isHoldingCard)
         {
             isHoldingCard = false;
-            CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
+            CursorThemeHL.Instance?.Apply(HLCursorStyle.Default);
             if (handCardHandler.CardInThePlayerHand(card))
             {
                 card.StopDragging(true);
@@ -221,7 +221,7 @@ public class CardSelector : MonoBehaviour
     private void OnQuickClick(Card card)
     {
         isHoldingCard = false;
-        CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
+        CursorThemeHL.Instance?.Apply(HLCursorStyle.Default);
         if (handCardHandler.CardInThePlayerHand(card))
         {
             card.StopDragging(true);
@@ -399,7 +399,7 @@ public class CardSelector : MonoBehaviour
     {
         card.waitForServer = true;
         isHoldingCard = false;
-        CursorThemeHL.Instance.Apply(HLCursorStyle.Default);
+        CursorThemeHL.Instance?.Apply(HLCursorStyle.Default);
         card.StopDragging(false);
 
         if (duelManager.IsSinglePlayer)

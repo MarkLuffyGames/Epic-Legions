@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9997b2117893a5944b18c607960bacaf, type: 3}
   m_Name: Drain Health
   m_EditorClassIdentifier: 
-  amount: 0
+  Id: 1009
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0

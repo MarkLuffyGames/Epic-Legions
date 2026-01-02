@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0756b474481c9c14b9eec580579fed49, type: 3}
   m_Name: Recharge
   m_EditorClassIdentifier: 
+  Id: 1005
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 0}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebee11cf742f705458e3cc8505365428, type: 3}
   m_Name: Increase Speed +20
   m_EditorClassIdentifier: 
+  Id: 1055
   visualEffectCardEffect: {fileID: 5920328240178098596, guid: b605c85b2383a0f42b09cace55b3f31a, type: 3}
   iconSprite: {fileID: 21300000, guid: 82c693de10f1f0344bd179186b34a981, type: 3}
+  effectDuration: 1
   effectScore: 1
-  isPermanent: 1
+  isPermanent: 0
   isPassive: 0
   passiveSkillActivationPhase: 0
   amount: 20

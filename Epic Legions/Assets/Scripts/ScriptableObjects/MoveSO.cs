@@ -1,9 +1,11 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Move", menuName = "Hemera Legions/Move")]
 public class MoveSO : ScriptableObject
 {
+    [SerializeField] private int moveId;
     [SerializeField] private string moveName;
     [SerializeField] private int damage;
     [SerializeField] private int energyCost;
@@ -19,6 +21,7 @@ public class MoveSO : ScriptableObject
     [SerializeField] private GameObject visualEffectHit; 
     [SerializeField][TextArea] private string effectDescription;
 
+    public int Id => moveId;
     public string MoveName => moveName;
     public int Damage => damage;
     public int EnergyCost => energyCost;
@@ -33,6 +36,26 @@ public class MoveSO : ScriptableObject
     public GameObject VisualEffect => visualEffect;
     public GameObject VisualEffectHit => visualEffectHit;
     public string EffectDescription => effectDescription;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (moveId == 0)
+        {
+            var generator = AssetDatabase.LoadAssetAtPath<IDGenerator>("Assets/Scripts/ScriptableObjects/IDGenerator/IDGenerator.asset");
+            if (generator != null)
+            {
+                moveId = generator.MoveID();
+                EditorUtility.SetDirty(this);
+                Debug.Log($"Move ID set to {moveId} for {moveName}");
+            }
+            else
+            {
+                Debug.LogWarning("IDGenerator not found. Please create an IDGenerator asset at Assets/Scripts/ScriptableObjects/IdGenerator.asset");
+            }
+        }
+    }
+#endif
 }
 
 public enum MoveType

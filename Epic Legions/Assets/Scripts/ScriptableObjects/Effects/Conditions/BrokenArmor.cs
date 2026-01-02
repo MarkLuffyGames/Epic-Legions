@@ -8,4 +8,9 @@ public class BrokenArmor : Condition
     {
         return target.CurrentDefensePoints <= 0;
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        return target.CurrentDEF <= 0;
+    }
 }

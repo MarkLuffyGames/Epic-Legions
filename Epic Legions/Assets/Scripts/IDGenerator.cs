@@ -3,16 +3,40 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "IDGenerator", menuName = "Hemera Legions/IDGenerator")]
 public class IDGenerator : ScriptableObject
 {
-    public int lastId = 1000;
+    public int CardLastId = 1000;
+    public int MoveLastId = 1000;
+    public int EffectLastId = 1000;
 
-    public int ID()
+    public int CardID()
     {
-        lastId++;
+        CardLastId++;
 
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(this);
 #endif
 
-        return lastId;
+        return CardLastId;
+    }
+
+    public int MoveID()
+    {
+        MoveLastId++;
+
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+
+        return MoveLastId;
+    }
+
+    public int EffectID()
+    {
+        EffectLastId++;
+
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+
+        return EffectLastId;
     }
 }

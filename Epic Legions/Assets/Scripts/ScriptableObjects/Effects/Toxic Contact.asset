@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748706369c87d704cab0ea847cd15ae9, type: 3}
   m_Name: Toxic Contact
   m_EditorClassIdentifier: 
+  Id: 1001
   visualEffectCardEffect: {fileID: 0}
-  iconSprite: {fileID: 21300000, guid: 04db09724fa3e2c41b03ced41e7f4971, type: 3}
+  iconSprite: {fileID: 0}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

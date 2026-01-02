@@ -26,7 +26,7 @@ public class CardSO : ScriptableObject
             var generator = AssetDatabase.LoadAssetAtPath<IDGenerator>("Assets/Scripts/ScriptableObjects/IDGenerator/IDGenerator.asset");
             if (generator != null)
             {
-                cardId = generator.ID();
+                cardId = generator.CardID();
                 EditorUtility.SetDirty(this);
                 Debug.Log($"Card ID set to {cardId} for {cardName} {cardLastName}");
             }

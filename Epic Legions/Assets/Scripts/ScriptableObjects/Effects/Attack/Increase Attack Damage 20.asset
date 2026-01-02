@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48870d62b5c2e87468e1cff56a3bc84e, type: 3}
   m_Name: Increase Attack Damage 20
   m_EditorClassIdentifier: 
+  Id: 1037
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 0}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c21c04c67bf9f84e939b061eedf2a8f, type: 3}
   m_Name: Burn
   m_EditorClassIdentifier: 
+  Id: 1023
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: 9662b28011883c543830dd4466f7121f, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

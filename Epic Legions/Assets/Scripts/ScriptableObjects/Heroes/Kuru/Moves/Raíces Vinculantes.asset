@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
   m_Name: "Ra\xEDces Vinculantes"
   m_EditorClassIdentifier: 
+  moveId: 1109
   moveName: "Ra\xEDces Vinculantes"
   damage: 20
   energyCost: 20
@@ -26,4 +27,4 @@ MonoBehaviour:
   visualEffect: {fileID: 0}
   visualEffectHit: {fileID: 6855955652325114174, guid: f8dc879bd6649cb4782409815764d676, type: 3}
   effectDescription: "Enredaderas oscuras absorben la vida igual al da\xF1o infligido
-    directamente a la salud del enemigo."
+    al enemigo."

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
   m_Name: "Maldici\xF3n del Susurro"
   m_EditorClassIdentifier: 
+  moveId: 1021
   moveName: "Maldici\xF3n del Susurro"
   damage: 25
   energyCost: 15

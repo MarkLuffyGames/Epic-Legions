@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
   m_Name: Picadura de la Reina
   m_EditorClassIdentifier: 
+  moveId: 1063
   moveName: Picadura de la Reina
   damage: 30
   energyCost: 15

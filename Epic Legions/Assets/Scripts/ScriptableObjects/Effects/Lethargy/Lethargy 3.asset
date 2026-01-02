@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2965376766f0543a9221a02a756c21, type: 3}
   m_Name: Lethargy 3
   m_EditorClassIdentifier: 
+  Id: 1014
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 0}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   numberTurns: 3

@@ -17,12 +17,17 @@ public class IncreaseAttackDamage : CardEffect
         throw new System.NotImplementedException();
     }
 
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        
+    }
+
     public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         throw new System.NotImplementedException();
     }

@@ -21,7 +21,7 @@ public class FullDamageReflection : CardEffect
         
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -29,5 +29,10 @@ public class FullDamageReflection : CardEffect
     public string DescriptionText(Effect effect)
     {
         return $"Reflect all damage received for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}.";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

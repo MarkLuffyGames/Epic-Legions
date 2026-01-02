@@ -18,8 +18,8 @@ MonoBehaviour:
   cardSprite: {fileID: 21300000, guid: 7693bca63d82b74419ab16ae94c9f587, type: 3}
   cardElemnt: 8
   heroClass: 8
-  healt: 65
-  defence: 40
+  health: 65
+  defense: 40
   speed: 50
   energy: 85
   moves:

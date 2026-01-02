@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f1faf3f4bb1c145822ef2f349e7830, type: 3}
   m_Name: Ranged Immunity 2
   m_EditorClassIdentifier: 
+  Id: 1049
   visualEffectCardEffect: {fileID: 0}
-  iconSprite: {fileID: 21300000, guid: b81ff0aa63ecc134db12e088c741207f, type: 3}
+  iconSprite: {fileID: 21300000, guid: 82c693de10f1f0344bd179186b34a981, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

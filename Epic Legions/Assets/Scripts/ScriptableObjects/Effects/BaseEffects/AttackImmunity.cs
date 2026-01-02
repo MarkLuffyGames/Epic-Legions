@@ -26,7 +26,7 @@ public class AttackImmunity : CardEffect
 
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         if (!isPermanent) effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -35,5 +35,10 @@ public class AttackImmunity : CardEffect
     {
         var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
         return $"Immune to {(effect.isRanged ? "ranged" : "melee")} attacks " + (!isPermanent ? s : "");
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

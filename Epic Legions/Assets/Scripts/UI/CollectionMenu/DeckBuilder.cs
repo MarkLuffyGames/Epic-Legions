@@ -271,7 +271,7 @@ public class DeckBuilder : MonoBehaviour
             StartCoroutine(UpdateUI());
             return;
         }
-        if (enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck)
+        if (enlargedCardHolder.OrigCard != null && enlargedCardHolder.OrigCard.cardDraggable.DeckDropZone.isDeck)
         {
             currentEnlargedCardIndex--;
             ChangeEnlargedCard(true);

@@ -35,7 +35,7 @@ public class TransferDamage : CardEffect
         }
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -79,5 +79,10 @@ public class TransferDamage : CardEffect
     public string DescriptionText(Effect effect)
     {
         return $"Transfer all damage received to {caster.cardSO.CardName} for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

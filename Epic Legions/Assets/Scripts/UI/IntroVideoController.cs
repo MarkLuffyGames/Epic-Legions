@@ -13,6 +13,8 @@ public class IntroVideoController : MonoBehaviour
     [SerializeField] private CanvasGroup avisoGroup;
     [SerializeField] private CanvasGroup blackScreenGroup;
     [SerializeField] private TextMeshProUGUI avisoText;
+    [SerializeField] private VideoClip videoClip;
+    [SerializeField] private VideoClip videoClipIntro;
 
     [Header("Texto del aviso")]
     [SerializeField] private string textoAviso = "Pulsa de nuevo para omitir";
@@ -66,6 +68,9 @@ public class IntroVideoController : MonoBehaviour
             StartCoroutine(CargarSiguienteEscena());
             return;
         }
+
+        videoPlayer.clip = videoClipIntro;
+
         // Arranca la reproducción
         videoPlayer.Play();
         StartCoroutine(FadeCanvasGroup(blackScreenGroup, blackScreenGroup.alpha, 0f, avisoFadeSeconds));
@@ -100,6 +105,11 @@ public class IntroVideoController : MonoBehaviour
 
     private bool DetectoClickOTouch()
     {
+        if(videoPlayer.clip == videoClipIntro)
+        {
+            // Durante el video intro no se permite saltar
+            return false;
+        }
         if (((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) 
             || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)))
         {
@@ -148,7 +158,18 @@ public class IntroVideoController : MonoBehaviour
 
     private void OnVideoTerminado(VideoPlayer vp)
     {
-        StartCoroutine(CargarSiguienteEscena());
+        if(videoPlayer.clip == videoClipIntro)
+        {
+            // Reproducir el video principal
+            videoPlayer.clip = videoClip;
+            videoPlayer.Play();
+            return;
+        }
+        else
+        {
+            // Video principal terminado: pasar de escena
+            StartCoroutine(CargarSiguienteEscena());
+        }
     }
 
     private IEnumerator CargarSiguienteEscena()

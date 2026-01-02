@@ -31,7 +31,7 @@ public class ModifySpeed : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         if (!isPermanent) effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -39,7 +39,12 @@ public class ModifySpeed : CardEffect
 
     public string DescriptionText(Effect effect)
     {
-        var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
+        var s = $" for {effect.durability} turn{(effect.Durability > 1 ? "s" : "")}";
         return $"{(isIncrease ? "+" : "-")}{amount} speed{(!isPermanent ? s : "")}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

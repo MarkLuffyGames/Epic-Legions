@@ -22,12 +22,18 @@ public class HeroControl : CardEffect
         effect.durability--;
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         
     }
     public string DescriptionText()
     {
         return $"Brain control";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        this.caster = caster.OriginalCard;
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

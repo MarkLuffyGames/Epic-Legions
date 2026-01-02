@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8ca9e612c637241aecc5d32e712571, type: 3}
   m_Name: Destroy Defense
   m_EditorClassIdentifier: 
+  Id: 1053
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 0}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

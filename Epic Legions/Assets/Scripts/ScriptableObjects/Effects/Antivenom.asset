@@ -12,3 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 036c21f22ac430a438ab6c19d932f7da, type: 3}
   m_Name: Antivenom
   m_EditorClassIdentifier: 
+  Id: 1020
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0

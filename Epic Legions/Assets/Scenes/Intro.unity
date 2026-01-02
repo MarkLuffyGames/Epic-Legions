@@ -945,14 +945,12 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -991,6 +989,8 @@ MonoBehaviour:
   avisoGroup: {fileID: 1313290542}
   blackScreenGroup: {fileID: 1530633234}
   avisoText: {fileID: 1313290543}
+  videoClip: {fileID: 32900000, guid: 83275fdf423dd064ca7efd96db8a7f80, type: 3}
+  videoClipIntro: {fileID: 32900000, guid: 5a2ade6ccec0e724d83038ebea6b5d7d, type: 3}
   textoAviso: Pulsa de nuevo para omitir
   avisoFadeSeconds: 0.15
   ocultarAvisoAutomatico: 1

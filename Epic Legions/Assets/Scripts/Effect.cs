@@ -47,6 +47,7 @@ public class Effect
             durability = modifyDefense.NumberTurns;
             isNegative = !modifyDefense.IsIncrease;
             effectDescription = modifyDefense.DescriptionText(this);
+            if (!isNegative) durability++;
         }
         else if(cardEffect is TransferDamage transferDamage)
         {
@@ -62,6 +63,7 @@ public class Effect
             durability = modifySpeed.NumberTurns;
             isNegative = !modifySpeed.IsIncrease;
             effectDescription = modifySpeed.DescriptionText(this);
+            if (!isNegative) durability++;
         }
         else if(cardEffect is ModifyAttack modifyAttack)
         {
@@ -69,7 +71,7 @@ public class Effect
             durability = modifyAttack.NumberTurns;
             isNegative = !modifyAttack.IsIncrease;
             effectDescription = modifyAttack.DescriptionText(this);
-            durability++;
+            if (!isNegative) durability++;
         }
         else if(cardEffect is Stun stun)
         {
@@ -229,15 +231,27 @@ public class Effect
         return amount;
     }
 
-    public void ApplyPoisonDamage()
+    public void ApplyPoisonDamage(SimCardState simCardState = null)
     {
+        if (simCardState != null)
+        {
+            simCardState.ApplyPoisonDamage(amount);
+            return;
+        }
+        
         affectedHero.ApplyPoisonDamage(amount);
+        
     }
 
-    public void DrainHelat()
+    public void DrainHelat(SimCardState simCardState)
     {
-        affectedHero.ReceiveDamage(amount, amount, null, MoveType.PositiveEffect);
-        casterHero.ToHeal(amount);
+        if(simCardState != null)
+        {
+            simCardState.DrainHelat(amount, casterHero);
+            return;
+        }
+        
+        casterHero.ToHeal(affectedHero.ReceiveDamage(amount, amount, null, MoveType.PositiveEffect));
     }
 
     public void CancelStun()

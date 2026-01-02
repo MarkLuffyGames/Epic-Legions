@@ -8,4 +8,9 @@ public class SpeedBelow : Condition
     {
         return target.CurrentSpeedPoints < speedThreshold;
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        return target.CurrentSPD < speedThreshold;
+    }
 }

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebee11cf742f705458e3cc8505365428, type: 3}
   m_Name: Reduce Speed -20, 1
   m_EditorClassIdentifier: 
+  Id: 1056
   visualEffectCardEffect: {fileID: 2717293893997149916, guid: 8f2d8143043461140b7c3d833cd06fa5, type: 3}
   iconSprite: {fileID: 21300000, guid: 259b4b3941dc53f439fd79eac6dd0a2d, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

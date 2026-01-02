@@ -22,12 +22,17 @@ public class PhantomShield : CardEffect
         effect.durability = 0;
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
 
     }
      public string DescriptionText()
     {
         return $"Absorb all damage";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

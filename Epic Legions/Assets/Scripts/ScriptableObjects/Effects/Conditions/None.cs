@@ -6,4 +6,9 @@ public class None : Condition
     {
         return true;
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        return true;    
+    }
 }

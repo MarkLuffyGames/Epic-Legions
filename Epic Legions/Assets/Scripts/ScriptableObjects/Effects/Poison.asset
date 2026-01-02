@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5cb8e201c1d4b499a224192c048a72, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  visualEffectCardEffect: {fileID: 8960550792083637929, guid: d0fe5c41c0985b044a2c2d30cce73c6d, type: 3}
+  Id: 1024
+  visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: dce2ea4fa17fff443be60cb8ad2626d9, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

@@ -11,4 +11,13 @@ public class LowerSpeed : Condition
         }
         return target.CurrentSpeedPoints < caster.CurrentSpeedPoints;
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        if (target == null || caster == null)
+        {
+            return false;
+        }
+        return target.CurrentSPD < caster.CurrentSPD;
+    }
 }

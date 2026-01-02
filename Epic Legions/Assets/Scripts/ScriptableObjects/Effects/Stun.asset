@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8705cbf60df404da13a0037f266442, type: 3}
   m_Name: Stun
   m_EditorClassIdentifier: 
+  Id: 1040
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: 57b482802f6e11949ac46d2969f67cae, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

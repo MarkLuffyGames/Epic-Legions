@@ -1,0 +1,667 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class EnhancedHemeraLegionAI : MonoBehaviour
+{
+    [Header("Card Playing AI")]
+    [SerializeField] private bool enableCardPlayingAI = true;
+    [SerializeField] private float cardDecisionDelay = 0.5f;
+    [SerializeField] private int maxCardsToPlayPerTurn = 1;
+    [SerializeField] private float minimumCardScoreToPlay = 10f;
+
+    
+    private int cardsPlayedThisTurn = 0;
+    private bool isPlayingCard = false;
+    private CardPlacementEvaluator placementEvaluator;
+
+    [Header("AI Configuration")]
+    [SerializeField] private bool enableEnhancedAI = true;
+    [SerializeField] private float decisionDelay = 0.5f;
+
+    [Header("Performance Settings")]
+    [SerializeField] private float maxMillisecondsPerFrame = 4f;
+    [SerializeField] private float maxCombinationsPerTurn = Mathf.Infinity;
+
+    // Estado de la corrutina de IA
+    private Coroutine aiDecisionCoroutine;
+    private bool isAITakingDecision = false;
+
+    [Header("Debug")]
+    [SerializeField] private bool showDebugLogs = true;
+    [SerializeField] private bool showDetailedCombinationLogs = false;
+
+    [SerializeField] private DuelManager duelManager;
+    [SerializeField] private PlayerManager aiPlayerManager;
+    [SerializeField] private PlayerManager humanPlayerManager;
+    private EnhancedAISimulation simulation;
+    private TurnSimulator turnSimulator;
+    private MovementSimulator movementSimulator;
+    private PlanGenerator planGenerator;
+    private void Start()
+    {
+        duelManager = FindAnyObjectByType<DuelManager>();
+        if (duelManager == null)
+        {
+            Debug.LogError("DuelManager no encontrado en la escena!");
+            return;
+        }
+
+        duelManager.OnStartSinglePlayerDuel += OnDuelStarted;
+    }
+
+    private void OnDuelStarted(object sender, EventArgs e)
+    {
+        simulation = new EnhancedAISimulation(aiPlayerManager, humanPlayerManager, duelManager, showDebugLogs);
+        turnSimulator = new TurnSimulator(this, showDebugLogs);
+        movementSimulator = new MovementSimulator(showDebugLogs);
+        planGenerator = new PlanGenerator(showDebugLogs, movementSimulator);
+
+        // Suscribirse a eventos del duelo
+        duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
+        duelManager.OnChangeTurn += OnTurnChanged;
+
+        if (showDebugLogs)
+            Debug.Log("IA inicializada");
+    }
+
+    private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
+    {
+        if (duelManager.GetCurrentDuelPhase() == DuelPhase.Preparation)
+        {
+            cardsPlayedThisTurn = 0;
+            HandlePreparationPhase();
+        }
+    }
+
+    private void HandlePreparationPhase()
+    {
+        if (!enableCardPlayingAI) return;
+
+        if (showDebugLogs)
+            Debug.Log("🎴 IA evaluando jugar cartas en fase de preparación...");
+
+        // Verificar si es el turno de la IA para jugar cartas
+        if (!IsItAITurnInPreparation())
+        {
+            if (showDebugLogs)
+                Debug.Log("No es el turno de la IA para jugar cartas o no hay cartas disponibles");
+
+            PassTurn();
+            return;
+        }
+
+        // Iniciar proceso de decisión
+        StartCoroutine(DecideCardPlay());
+    }
+
+    private bool IsItAITurnInPreparation()
+    {
+        // En single player, la IA es siempre el jugador 2
+        // Verificamos que estemos en fase de preparación
+        if (duelManager.GetCurrentDuelPhase() != DuelPhase.Preparation)
+            return false;
+
+        // Verificar que la IA tenga energía y cartas
+        if (aiPlayerManager.PlayerEnergy <= 0)
+            return false;
+
+        if (aiPlayerManager.GetHandCardHandler().GetCardInHandList().Count == 0)
+            return false;
+
+        return true;
+    }
+
+    private IEnumerator DecideCardPlay()
+    {
+        if (isPlayingCard) yield break;
+
+        isPlayingCard = true;
+
+        try
+        {
+            // Pequeño delay para simular pensamiento
+            yield return new WaitForSeconds(cardDecisionDelay);
+
+            // Evaluar si debería jugar una carta
+            if (ShouldPlayCardThisTurn())
+            {
+                var bestPlay = FindBestCardToPlay();
+
+                if (bestPlay.card != null && bestPlay.score >= minimumCardScoreToPlay)
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"🎯 IA decide jugar: {bestPlay.card.cardSO.CardName} en posición {bestPlay.position} (score: {bestPlay.score:F1})");
+
+                    PlayHeroCard(bestPlay.card, bestPlay.position);
+                    cardsPlayedThisTurn++;
+                }
+                else
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"⏭️ IA decide pasar (mejor score: {bestPlay.score:F1}, mínimo requerido: {minimumCardScoreToPlay})");
+
+                    PassTurn();
+                }
+            }
+            else
+            {
+                if (showDebugLogs)
+                    Debug.Log("⏭️ IA decide pasar (no debe jugar carta este turno)");
+
+                PassTurn();
+            }
+        }
+        finally
+        {
+            isPlayingCard = false;
+        }
+    }
+
+    private bool ShouldPlayCardThisTurn()
+    {
+        // Verificar límite de cartas por turno
+        if (cardsPlayedThisTurn >= maxCardsToPlayPerTurn)
+            return false;
+
+        // Verificar energía mínima
+        int minEnergyNeeded = GetMinimumEnergyForAnyCard();
+        if (aiPlayerManager.PlayerEnergy < minEnergyNeeded)
+            return false;
+
+        // Verificar espacio en el campo
+        int availableSlots = CountAvailableFieldSlots();
+        if (availableSlots <= 0)
+            return false;
+
+        return true;
+    }
+
+    private (Card card, int position, double score) FindBestCardToPlay()
+    {
+        var hand = aiPlayerManager.GetHandCardHandler().GetCardInHandList();
+        Card bestCard = null;
+        int bestPosition = -1;
+        double bestScore = 0;
+
+        if (placementEvaluator == null)
+            placementEvaluator = new CardPlacementEvaluator(showDebugLogs);
+
+        foreach (var card in hand)
+        {
+            if (card.cardSO is HeroCardSO heroSO)
+            {
+                // Verificar si podemos pagar el costo
+                if (heroSO.Energy > aiPlayerManager.PlayerEnergy)
+                    continue;
+
+                // Evaluar la carta
+                double cardScore = EvaluateHeroCard(heroSO);
+
+                // Encontrar mejor posición para esta carta
+                var (position, positionScore) = placementEvaluator.EvaluateBestPositionForHero(heroSO, aiPlayerManager);
+
+                if (position == -1) continue; // No hay posición disponible
+
+                double totalScore = cardScore + positionScore;
+
+                if (totalScore > bestScore)
+                {
+                    bestScore = totalScore;
+                    bestCard = card;
+                    bestPosition = position;
+                }
+
+                if (showDebugLogs)
+                    Debug.Log($"   {heroSO.CardName}: Score={totalScore:F1} (carta={cardScore:F1}, posición={positionScore:F1})");
+            }
+        }
+
+        return (bestCard, bestPosition, bestScore);
+    }
+
+    private double EvaluateHeroCard(HeroCardSO hero)
+    {
+        double score = 0;
+
+        // 1. Estadísticas básicas
+        score += hero.Health * 0.8;      // HP es importante
+        score += hero.Defense * 0.6;     // Defensa moderadamente importante
+        score += hero.Speed * 1.2;       // Velocidad muy importante
+
+        // 2. Costo de energía (penalización)
+        score -= hero.Energy * 1.5;
+
+        // 3. Evaluar movimientos
+        foreach (var move in hero.Moves)
+        {
+            // Daño
+            score += move.Damage * 0.3;
+
+            // Efectos especiales
+            if (move.MoveEffect != null)
+            {
+                score += 5; // Bonus base por tener efecto
+
+                // Bonus adicional por efectos poderosos
+                if (move.MoveEffect is HeroControl) score += 10;
+                if (move.MoveEffect is Recharge) score += 8;
+                if (move.MoveEffect is Heal) score += 6;
+            }
+        }
+
+        // 4. Bonus por clase
+        switch (hero.HeroClass)
+        {
+            case HeroClass.Hunter:
+                score += 15; // Muy valioso por ataque a distancia
+                break;
+            case HeroClass.Assassin:
+                score += 10; // Valioso por flanqueo
+                break;
+            default:
+                score += 8;  // Bonus base para otras clases
+                break;
+        }
+
+        return score;
+    }
+
+    private int GetMinimumEnergyForAnyCard()
+    {
+        int minEnergy = int.MaxValue;
+        var hand = aiPlayerManager.GetHandCardHandler().GetCardInHandList();
+
+        foreach (var card in hand)
+        {
+            if (card.cardSO is HeroCardSO hero)
+            {
+                minEnergy = Mathf.Min(minEnergy, hero.Energy);
+            }
+        }
+
+        return minEnergy == int.MaxValue ? 0 : minEnergy;
+    }
+
+    private int CountAvailableFieldSlots()
+    {
+        int occupied = 0;
+        var fieldPositions = aiPlayerManager.GetFieldPositionList();
+
+        foreach (var pos in fieldPositions)
+        {
+            if (pos.Card != null)
+                occupied++;
+        }
+
+        return fieldPositions.Count - occupied;
+    }
+
+    private int GetCardIndexInHand(Card card)
+    {
+        var hand = aiPlayerManager.GetHandCardHandler().GetCardInHandList();
+        for (int i = 0; i < hand.Count; i++)
+        {
+            if (hand[i] == card)
+                return i;
+        }
+        return -1;
+    }
+
+    private void PlayHeroCard(Card card, int position)
+    {
+        if (card == null) return;
+
+        int cardIndex = GetCardIndexInHand(card);
+        if (cardIndex == -1)
+        {
+            Debug.LogError($"No se encontró la carta {card.cardSO.CardName} en la mano de la IA");
+            return;
+        }
+
+        if (showDebugLogs)
+            Debug.Log($"▶️ IA jugando {card.cardSO.CardName} en posición {position}");
+
+        duelManager.PlaceCardInField(aiPlayerManager, false, cardIndex, position);
+
+        // Programar siguiente decisión (pasar turno o jugar otra carta)
+        Invoke(nameof(ContinuePreparationPhase), 0.5f);
+    }
+
+    private void ContinuePreparationPhase()
+    {
+        // Después de jugar una carta, decidir si jugar otra o pasar
+        if (cardsPlayedThisTurn < maxCardsToPlayPerTurn && ShouldPlayCardThisTurn())
+        {
+            StartCoroutine(DecideCardPlay());
+        }
+        else
+        {
+            PassTurn();
+        }
+    }
+
+    private void PassTurn()
+    {
+        if (showDebugLogs)
+            Debug.Log("⏭️ IA pasando turno en fase de preparación");
+
+        // Resetear contador para el próximo turno
+        cardsPlayedThisTurn = 0;
+
+        // Marcar como listo para avanzar de fase
+        aiPlayerManager.isReady = true;
+        duelManager.SetPlayerReadyAndTransitionPhase();
+    }
+
+    private void OnTurnChanged(object sender, System.EventArgs e)
+    {
+        if (!enableEnhancedAI) return;
+
+        // Verificar si es el turno de la IA
+        if (IsAITurn())
+        {
+            if (showDebugLogs)
+                Debug.Log("Turno de IA detectado, programando decisión...");
+
+            // Programar la decisión con un pequeño delay
+            Invoke(nameof(MakeAIDecision), decisionDelay);
+        }
+    }
+
+    private bool IsAITurn()
+    {
+        // Verificar si algún héroe controlado por la IA está en turno
+        foreach (var hero in duelManager.HeroInTurn)
+        {
+            if (IsHeroControlledByAI(hero))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool IsHeroControlledByAI(Card hero)
+    {
+        var manager = duelManager.GetPlayerManagerForCard(hero);
+        if (manager == aiPlayerManager && !hero.IsControlled())
+            return true;
+
+        if (hero.IsControlled())
+            return true;
+        
+
+        return false;
+    }
+
+    private void MakeAIDecision()
+    {
+        if (!enableEnhancedAI || duelManager.GetCurrentDuelPhase() != DuelPhase.Battle)
+            return;
+
+        // Cancelar decisión anterior si está en curso
+        if (isAITakingDecision && aiDecisionCoroutine != null)
+        {
+            StopCoroutine(aiDecisionCoroutine);
+            if (showDebugLogs)
+                Debug.Log("🔄 Cancelando decisión anterior de IA...");
+        }
+
+        if (showDebugLogs)
+            Debug.Log("🧠 IA iniciando decisión...");
+
+        // Iniciar nueva decisión asíncrona
+        aiDecisionCoroutine = StartCoroutine(MakeAIDecisionTimeSliced());
+        
+    }
+
+    private IEnumerator MakeAIDecisionTimeSliced()
+    {
+        isAITakingDecision = true;
+
+        try
+        {
+            // 1. Obtener TODOS los héroes de IA que NO han actuado en todo el turno
+            var allPendingAIHeroes = GetAllAIPendingHeroes();
+
+            if (allPendingAIHeroes.Count == 0)
+            {
+                if (showDebugLogs)
+                    Debug.Log("No hay héroes de IA pendientes por actuar en todo el turno, pasando...");
+
+                isAITakingDecision = false;
+                yield break;
+            }
+
+            // 2. Los héroes que deben actuar EN ESTE SUBTURNO son heroInTurn
+            var heroesInThisSubTurn = duelManager.HeroInTurn.Where(IsHeroControlledByAI).ToList();
+
+            if (showDebugLogs)
+            {
+                Debug.Log($"Héroes pendientes en todo el turno: {allPendingAIHeroes.Count}");
+                Debug.Log($"Héroes que actúan en ESTE subturno: {heroesInThisSubTurn.Count}");
+            }
+
+            // 3. Construir snapshot del estado actual
+            var currentSnapshot = simulation.BuildSimSnapshot();
+
+            // 4. Generar y evaluar combinaciones con TODOS los héroes pendientes
+            //var bestPlan = FindBestPlan(currentSnapshot, allPendingAIHeroes);
+            FullPlanSim bestPlan = null;
+            yield return StartCoroutine(FindBestPlan(currentSnapshot, allPendingAIHeroes,
+                (plan) => {
+                    bestPlan = plan;
+                    if (showDebugLogs)
+                        Debug.Log("🧪 Callback ejecutado, bestPlan asignado");
+                }));
+
+            // 5. Ejecutar solo las acciones de los héroes de ESTE subturno
+            if (bestPlan != null)
+            {
+                ExecutePlanForCurrentSubTurn(bestPlan, heroesInThisSubTurn);
+            }
+            else
+            {
+                Debug.LogError("No se encontró plan viable...");
+            }
+        }
+        finally
+        {
+            isAITakingDecision = false;
+        }
+    }
+
+    private List<Card> GetAllAIPendingHeroes()
+    {
+        var allPendingHeroes = new List<Card>();
+
+        // Revisar TODOS los héroes en el campo de la IA
+        var allAIFieldHeroes = aiPlayerManager.GetAllCardInField();
+
+        foreach (var hero in allAIFieldHeroes)
+        {
+            if (IsHeroControlledByAI(hero) && !hero.turnCompleted && hero.CurrentHealthPoints > 0)
+            {
+                allPendingHeroes.Add(hero);
+            }
+        }
+
+        // También incluir héroes controlados del rival que no han actuado
+        var allEnemyFieldHeroes = humanPlayerManager.GetAllCardInField()
+            .Where(h => h.cardSO is HeroCardSO && h.IsControlled())
+            .ToList();
+
+        foreach (var hero in allEnemyFieldHeroes)
+        {
+            if (!hero.turnCompleted && hero.CurrentHealthPoints > 0)
+            {
+                allPendingHeroes.Add(hero);
+            }
+        }
+
+        if (showDebugLogs)
+        {
+            Debug.Log($"Héroes IA pendientes encontrados: {allPendingHeroes.Count}");
+            foreach (var hero in allPendingHeroes)
+            {
+                Debug.Log($"  - {hero.cardSO.CardName} (turnCompleted: {hero.turnCompleted})");
+            }
+        }
+
+        return allPendingHeroes;
+    }
+
+
+    private void ExecutePlanForCurrentSubTurn(FullPlanSim plan, List<Card> heroesInThisSubTurn)
+    {
+        if (showDebugLogs)
+        {
+            Debug.Log($"EJECUTANDO PLAN COMPLETO - {plan.Actions.Count} acciones totales");
+            Debug.Log($"Héroes en subturno actual: {heroesInThisSubTurn.Count}");
+
+            // Mostrar plan completo con información clara
+            foreach (var (hero, moveIndex, targetPosition) in plan.Actions)
+            {
+                var move = hero.moves[moveIndex];
+                string targetInfo = GetTargetInfoString(move, targetPosition);
+                Debug.Log($"  - {hero.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName} {targetInfo}");
+            }
+        }
+
+        int actionsExecuted = 0;
+
+        foreach (var heroInTurn in heroesInThisSubTurn)
+        {
+            var plannedAction = plan.Actions.FirstOrDefault(a => a.hero.OriginalCard == heroInTurn);
+
+            if (plannedAction.hero != null && plannedAction.moveIndex >= 0)
+            {
+                if (IsMoveUsable(plannedAction.hero.OriginalCard, plannedAction.moveIndex))
+                {
+                    // Log claro de lo que se va a ejecutar
+                    var move = plannedAction.hero.moves[plannedAction.moveIndex];
+                    string actionType = move.MoveSO.NeedTarget ?
+                        (plannedAction.targetPosition == -1 ? "ATAQUE DIRECTO A VIDA" : "ATAQUE A OBJETIVO") :
+                        "EFECTO AUTO-APLICADO";
+
+                    if (showDebugLogs)
+                        Debug.Log($"Ejecutando: {heroInTurn.cardSO.CardName} -> {move.MoveSO.MoveName} [{actionType}]");
+
+                    duelManager.UseMovement(plannedAction.moveIndex, plannedAction.hero.OriginalCard, plannedAction.targetPosition);
+                    actionsExecuted++;
+                }
+            }
+        }
+
+        if (showDebugLogs)
+            Debug.Log($"Acciones ejecutadas en este subturno: {actionsExecuted}");
+    }
+
+    private IEnumerator FindBestPlan(SimSnapshot snapshot, List<Card> aiHeroes, Action<FullPlanSim> onComplete)
+    {
+        yield return null; // Esperar un frame para no bloquear
+        List<SimCardState> aiHeroesStates = aiHeroes
+            .Select(hero => snapshot.CardStates[hero])
+            .ToList();
+
+        FullPlanSim bestPlan = planGenerator.GenerateBestPlan(snapshot);
+
+        Debug.Log($"🧪 Plan encontrado con score {bestPlan.Score:F2} y {bestPlan.Actions.Count} acciones:");
+        Debug.Log(GetCombinationString(bestPlan.Actions));
+        onComplete?.Invoke(bestPlan);
+    }
+
+    private string GetCombinationString(List<(SimCardState hero, int moveIndex, int targetPosition)> combination)
+    {
+        string result = "";
+        foreach (var (hero, moveIndex, targetPosition) in combination)
+        {
+            var move = hero.moves[moveIndex];
+            string moveName = move.MoveSO.MoveName;
+            string targetInfo = move.MoveSO.NeedTarget ?
+                (targetPosition == -1 ? "→[VIDA]" : $"→[POS{targetPosition}]") : "→[AUTO]";
+
+            result += $"{hero.OriginalCard.cardSO.CardName}:{moveName}{targetInfo} ";
+        }
+        return result.Trim();
+    }
+
+    private string GetTargetInfoString(Movement move, int targetPosition)
+    {
+        var moveSO = move.MoveSO;
+
+        if (!moveSO.NeedTarget)
+        {
+            return "(auto-aplicado)";
+        }
+        else if (targetPosition == -1)
+        {
+            return "→ [ATAQUE DIRECTO A VIDA]";
+        }
+        else
+        {
+            return $"→ objetivo posición {targetPosition}";
+        }
+    }
+
+    private List<int> GetAvailableMovesForHero(Card hero)
+    {
+        var availableMoves = new List<int>();
+
+        for (int i = 0; i < hero.Moves.Count; i++)
+        {
+            if (IsMoveUsable(hero, i)) // Este es para el estado REAL
+            {
+                availableMoves.Add(i);
+            }
+        }
+
+        return availableMoves;
+    }
+
+    private bool IsMoveUsable(Card hero, int moveIndex)
+    {
+        var move = hero.Moves[moveIndex];
+
+        // Verificar energía
+        if (move.MoveSO.EnergyCost > aiPlayerManager.PlayerEnergy)
+        {
+            if (showDebugLogs)
+                Debug.Log($"Movimiento {moveIndex} de {hero.cardSO.CardName} requiere {move.MoveSO.EnergyCost} energía, pero solo hay {aiPlayerManager.PlayerEnergy}");
+            return false;
+        }
+
+        // Verificar si el héroe puede actuar
+        if (hero.IsActionBlocked())
+        {
+            if (showDebugLogs)
+                Debug.Log($"Héroe {hero.cardSO.CardName} no puede actuar (bloqueado)");
+            return false;
+        }
+
+        // Para movimientos que necesitan objetivo, verificar si hay objetivos
+        if (move.MoveSO.NeedTarget)
+        {
+            var targets = duelManager.ObtainTargets(hero, moveIndex);
+            if (targets.Count == 0 && humanPlayerManager.GetAllCardInField().Count > 0)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"Movimiento {moveIndex} de {hero.cardSO.CardName} no tiene objetivos disponibles");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void OnDestroy()
+    {
+        if (duelManager != null)
+        {
+            duelManager.OnChangeTurn -= OnTurnChanged;
+        }
+    }
+}

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088db273ef596f1479b1e86f8635e955, type: 3}
   m_Name: Increase Defense +20, 2
   m_EditorClassIdentifier: 
+  Id: 1019
   visualEffectCardEffect: {fileID: 4359607285572960429, guid: 36e647ab46f4a634ba6e44440ea8597f, type: 3}
   iconSprite: {fileID: 21300000, guid: 82c693de10f1f0344bd179186b34a981, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

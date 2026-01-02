@@ -26,7 +26,7 @@ public class Antivenom : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         if (effect.casterHero.FieldPosition == null)
         {
@@ -36,6 +36,11 @@ public class Antivenom : CardEffect
     public string DescriptionText()
     {
         return $"Cannot be poisoned";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }
 

@@ -97,9 +97,12 @@ public class Card : MonoBehaviour
 
     public int lastDamageInflicted = 0;
 
-    public int HealtPoint => maxHealt;
-    public int CurrentHealtPoints => currentHealt;
+
+    public int Energy => energy;
+    public int HealthPoint => maxHealt;
+    public int CurrentHealthPoints => currentHealt;
     public int CurrentDefensePoints => Mathf.Clamp(currentDefense + GetDefenseModifier(), 0, 99);
+    public int Speed => speed;
     public int CurrentSpeedPoints => Mathf.Clamp(speed + GetSpeedModifier(), 1, 99);
     public List<Movement> Moves => moves;
     public Card[] EquipmentCard => equipmentCard;
@@ -113,7 +116,7 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        if(cardSO != null)
+        if(cardSO != null && moves.Count == 0)
         {
             SetCard();
         }
@@ -124,6 +127,8 @@ public class Card : MonoBehaviour
     /// <param name="cardSO">Scriptable Object que contiene los datos de la carta que se desea establecer</param>
     public void SetNewCard(CardSO cardSO, DuelManager duelManager)
     {
+        CleanCard();
+
         this.cardSO = cardSO;
         this.duelManager = duelManager;
 
@@ -149,8 +154,8 @@ public class Card : MonoBehaviour
 
         if (cardSO is HeroCardSO heroCardSO)
         {
-            maxHealt = heroCardSO.Healt;
-            defense = heroCardSO.Defence;
+            maxHealt = heroCardSO.Health;
+            defense = heroCardSO.Defense;
             speed = heroCardSO.Speed;
             energy = heroCardSO.Energy;
 
@@ -187,10 +192,10 @@ public class Card : MonoBehaviour
 
             ActivateHeroStats(false);
 
-            elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
-            elementIcon.enabled = equipmentCardSO.CardElemnt != CardElement.None;
-            classIcon.sprite = CardDatabase.GetClassIcon(equipmentCardSO.SupportedClasses[0]);
-            classIcon.enabled = equipmentCardSO.SupportedClasses[0] != HeroClass.None;
+            if (elementIcon) elementIcon.sprite = CardDatabase.GetElementIcon(equipmentCardSO.CardElemnt);
+            if (elementIcon) elementIcon.enabled = equipmentCardSO.CardElemnt != CardElement.None;
+            if (classIcon) classIcon.sprite = CardDatabase.GetClassIcon(equipmentCardSO.SupportedClasses[0]);
+            if (classIcon) classIcon.enabled = equipmentCardSO.SupportedClasses[0] != HeroClass.None;
             description.text = equipmentCardSO.Description;
         }
 
@@ -880,6 +885,12 @@ public class Card : MonoBehaviour
     /// <returns>Cantidad de vida perdida por el heroe</returns>
     public int ReceiveDamage(int amountDamage, int ignoredDefense, Card attacker, MoveType moveType)
     {
+        var protector = HasProtector();
+        if (protector != null && protector.HasProtector() && attacker.cardSO is HeroCardSO)
+        {
+            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense, attacker, moveType);
+        }
+
         if (attacker != null)
         {
             if (IsBurned()) amountDamage += 10;
@@ -897,14 +908,11 @@ public class Card : MonoBehaviour
         }
 
         var damageInflicted = 0;
-        var protector = HasProtector();
-        if (protector != null && protector.HasProtector() && attacker.cardSO is HeroCardSO)
-        {
-            return protector.casterHero.ReceiveDamage(amountDamage, ignoredDefense, attacker, moveType);
-        }
+        
         amountDamage -= GetDamageAbsorbed();
         if (amountDamage < 0) amountDamage = 0;
 
+        int startHelathAndDefense = currentHealt + CurrentDefensePoints;
         ignoredDefense = Mathf.Min(ignoredDefense, amountDamage);
         int remainingDamage = ReceiveDamageToShield(amountDamage - ignoredDefense) + ignoredDefense;
 
@@ -919,7 +927,7 @@ public class Card : MonoBehaviour
 
         UpdateText();
 
-        return damageInflicted;
+        return Mathf.Min(amountDamage, startHelathAndDefense);
     }
 
     private void ReceivePoisonDamage(int amount)
@@ -1468,7 +1476,7 @@ public class Card : MonoBehaviour
             }
         }
 
-        if (controller != null)
+        if (controller?.fieldPosition != null)
         {
             return duelManager.Player1Manager == duelManager.GetPlayerManagerForCard(controller);
         }
@@ -1480,26 +1488,12 @@ public class Card : MonoBehaviour
 
     public bool IsParalyzed()
     {
-        foreach (Effect effect in activeEffects)
-        {
-            if (effect.MoveEffect is Paralysis)
-            {
-                return true;
-            }
-        }
-        return false;
+        return activeEffects.Any(x => x.MoveEffect is Paralysis);
     }
 
     public bool IsBurned()
     {
-        foreach (Effect effect in activeEffects)
-        {
-            if (effect.MoveEffect is Burn)
-            {
-                return effect.IsBurned();
-            }
-        }
-        return false;
+        return activeEffects.Any(x => x.MoveEffect is Burn);
     }
 
 

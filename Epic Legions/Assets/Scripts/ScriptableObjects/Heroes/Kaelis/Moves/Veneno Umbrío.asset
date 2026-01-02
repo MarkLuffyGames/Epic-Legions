@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
   m_Name: "Veneno Umbr\xEDo"
   m_EditorClassIdentifier: 
+  moveId: 1136
   moveName: "Veneno Umbr\xEDo"
   damage: 20
   energyCost: 15

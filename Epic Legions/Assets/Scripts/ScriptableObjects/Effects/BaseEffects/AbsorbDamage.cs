@@ -30,7 +30,7 @@ public class AbsorbDamage : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         if (!isPermanent) effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -40,5 +40,10 @@ public class AbsorbDamage : CardEffect
     {
         var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
         return "Absorb " + amount + " damage" + (!isPermanent ? s : "");
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

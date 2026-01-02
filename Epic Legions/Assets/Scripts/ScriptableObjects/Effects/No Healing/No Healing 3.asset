@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e300b54002b17304dac04ebe4d64eed8, type: 3}
   m_Name: No Healing 3
   m_EditorClassIdentifier: 
+  Id: 1041
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: 2f7c500dbf0eb544890b9720451204f3, type: 3}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   numberTurns: 3

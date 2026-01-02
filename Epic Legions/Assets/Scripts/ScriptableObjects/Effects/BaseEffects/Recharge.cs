@@ -14,6 +14,8 @@ public class Recharge : CardEffect
     [SerializeField] private float archHeight = 1.5f;
     [SerializeField] private GameObject particlePrefab;
     [SerializeField] private GameObject sparkPrefab;
+
+    public int Amount => amount;
     public override void ActivateEffect(Card caster, Card target)
     {
         GameObject p = Instantiate(particlePrefab, caster.transform.position, Quaternion.identity);
@@ -25,12 +27,17 @@ public class Recharge : CardEffect
         
     }
 
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        caster.RechargeEnergy(amount + caster.GetEnergyBonus());
+    }
+
     public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         throw new System.NotImplementedException();
     }

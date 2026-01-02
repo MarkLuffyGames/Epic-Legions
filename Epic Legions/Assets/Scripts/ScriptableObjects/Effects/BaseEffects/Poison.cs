@@ -28,18 +28,23 @@ public class Poison : CardEffect
         effect.durability = 0;
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.elapsedTurns++;
 
         if (effect.elapsedTurns / (float)DuelManager.NumberOfTurns == 1)
         {
-            effect.ApplyPoisonDamage();
+            effect.ApplyPoisonDamage(simCardState);
             effect.elapsedTurns = 0;
         }
     }
     public string DescriptionText()
     {
         return $"Take {amount} poison damage per turn.";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

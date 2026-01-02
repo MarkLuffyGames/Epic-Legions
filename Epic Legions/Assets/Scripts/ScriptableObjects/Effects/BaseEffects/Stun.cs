@@ -19,12 +19,17 @@ public class Stun : CardEffect
         effect.durability = 0;
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
 
     }
     public string DescriptionText()
     {
         return $"Stunned";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

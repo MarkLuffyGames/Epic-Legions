@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 246e2b2d25e29e144a8ecf5cc8946dc4, type: 3}
   m_Name: Ignored Defense 20
   m_EditorClassIdentifier: 
+  Id: 1043
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 0}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   amount: 20

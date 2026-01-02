@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf42f62b5f22e494197b5636024a3a0d, type: 3}
   m_Name: Paralysis 1
   m_EditorClassIdentifier: 
+  Id: 1030
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 21300000, guid: 2a1c3c8305873b4499ad3743ddf67ecb, type: 3}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

@@ -25,7 +25,7 @@ public class NoHealing : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -33,5 +33,10 @@ public class NoHealing : CardEffect
     public string DescriptionText(Effect effect)
     {
         return $"No healing \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

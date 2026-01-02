@@ -12,3 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88dff882097053f42b77d2c2478bdf11, type: 3}
   m_Name: Cleanse Negative
   m_EditorClassIdentifier: 
+  Id: 1035
+  visualEffectCardEffect: {fileID: 0}
+  iconSprite: {fileID: 0}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0

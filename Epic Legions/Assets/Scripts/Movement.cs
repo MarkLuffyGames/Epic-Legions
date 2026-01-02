@@ -23,6 +23,17 @@ public class Movement
         }
     }
 
+    public void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        if (moveSO.EffectCondition.CheckCondition(caster, target))
+        {
+            if (moveSO.MoveEffect != null)
+            {
+                moveSO.MoveEffect.ActivateEffect(caster, moveSO.OnMyself ? caster : target);
+            }
+        }
+    }
+
     public void ActivateEffect(Card caster, List<Card> target)
     {
         if(moveSO.OnMyself)

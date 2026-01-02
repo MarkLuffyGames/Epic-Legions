@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject nextPhaseButton;
     [SerializeField] private GameObject waitTextGameObject;
     [SerializeField] private PlayerDuelUI playerDuelUI;
+    [SerializeField] private string playerName;
 
     private int playerHealt;
     private int playerEnergy;
@@ -32,6 +33,7 @@ public class PlayerManager : MonoBehaviour
     public FieldPosition SpellFieldPosition => spellFieldPosition;
     public int PlayerHealt => playerHealt;
     public int PlayerEnergy => playerEnergy;
+    public string PlayerName => playerName;
 
     public bool isPlayer;
 

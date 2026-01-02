@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2174875627ca9304fb97db7e0b1837b7, type: 3}
   m_Name: Counterattack 20
   m_EditorClassIdentifier: 
+  Id: 1004
   visualEffectCardEffect: {fileID: 0}
-  iconSprite: {fileID: 21300000, guid: 2a3b62b498e054a4a9afbf2343983c62, type: 3}
+  iconSprite: {fileID: 0}
+  effectDuration: 1
+  effectScore: 1
+  isPermanent: 0
+  isPassive: 0
+  passiveSkillActivationPhase: 0
   amount: 20

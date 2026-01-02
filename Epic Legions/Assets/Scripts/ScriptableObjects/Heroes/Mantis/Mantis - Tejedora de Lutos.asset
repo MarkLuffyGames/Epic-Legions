@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981269f5252928c4e8f84524e3f48a3f, type: 3}
+  m_Name: Mantis - Tejedora de Lutos
+  m_EditorClassIdentifier: Assembly-CSharp::HeroCardSO
+  cardId: 1102
+  cardName: 'Mantis '
+  cardLastName: Tejedora de Lutos
+  cardSprite: {fileID: 21300000, guid: 6f0ed95442ffd314292ffe1fa9cf2962, type: 3}
+  cardElemnt: 8
+  heroClass: 8
+  health: 70
+  defense: 35
+  speed: 45
+  energy: 55
+  moves:
+  - {fileID: 11400000, guid: ef2ee761fbb2c6d439c5fdca1c427c46, type: 2}
+  - {fileID: 11400000, guid: 046e353fe2cbc2d4bb3379cd8e4b07f1, type: 2}
+  - {fileID: 11400000, guid: 51461595b0cfde1468563dde14cb4937, type: 2}

@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "85Z9KBVCHIRKEMCY",
         "name": "com.ForgeDreamsGames.HemeraLegion",
-        "processId": 21386,
+        "processId": 4844,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -144,6 +144,12 @@
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.ForgeDreamsGames.HemeraLegion",
             "processId": 21386,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 4844,
             "exited": false
         }
     ],

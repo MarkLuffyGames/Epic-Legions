@@ -626,7 +626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2675592557
+  GlobalObjectIdHash: 4071121019
   InScenePlacedSourceGlobalObjectIdHash: 2675592557
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2786,7 +2786,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1291054851702726554}
   - component: {fileID: 6511605509360802617}
-  - component: {fileID: 5991394128480243321}
+  - component: {fileID: 6412646843338722174}
   m_Layer: 0
   m_Name: P2 Manager
   m_TagString: Untagged
@@ -2852,10 +2852,11 @@ MonoBehaviour:
   nextPhaseButton: {fileID: 0}
   waitTextGameObject: {fileID: 0}
   playerDuelUI: {fileID: 6811282437678650942}
+  playerName: Player 2
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
   isReady: 0
   isPlayer: 0
---- !u!114 &5991394128480243321
+--- !u!114 &6412646843338722174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2864,22 +2865,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 4224281443612371653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae542272dec119f4eabcf28b63ccd6c4, type: 3}
+  m_Script: {fileID: 11500000, guid: bddd2fe75b7d23e4fb92adf0dc4eec12, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnhancedHemeraLegionAI
+  enableCardPlayingAI: 1
+  cardDecisionDelay: 2
+  maxCardsToPlayPerTurn: 1
+  minimumCardScoreToPlay: 15
+  enableEnhancedAI: 1
+  decisionDelay: 2
+  maxMillisecondsPerFrame: 4
+  maxCombinationsPerTurn: Infinity
+  showDebugLogs: 1
+  showDetailedCombinationLogs: 0
   duelManager: {fileID: 1328336599689875757}
-  playerManager: {fileID: 6511605509360802617}
-  handCardHandler: {fileID: 143965796660243171}
-  difficulty: 1
-  debugAI: 1
-  debugDeep: 1
-  energySoftTarget: 50
-  softOverflowPenaltyPerPoint: 5
-  overkillPenaltyFactor: 0.5
-  minHpDamagePercent: 0.35
-  playCardDelayRange: {x: 0.35, y: 0.8}
-  enqueueMoveDelayRange: {x: 0.1, y: 0.25}
-  combosYieldEvery: 4
+  aiPlayerManager: {fileID: 6511605509360802617}
+  humanPlayerManager: {fileID: 7240668214990470102}
 --- !u!1 &4336813898532854497
 GameObject:
   m_ObjectHideFlags: 0
@@ -3027,7 +3028,7 @@ GameObject:
   - component: {fileID: 3294105951735913547}
   - component: {fileID: 7240668214990470102}
   - component: {fileID: 8055258763400123612}
-  - component: {fileID: 1860937751351873734}
+  - component: {fileID: 632541840089712943}
   m_Layer: 0
   m_Name: P1 Manager
   m_TagString: Untagged
@@ -3093,6 +3094,7 @@ MonoBehaviour:
   nextPhaseButton: {fileID: 1810634410124334763}
   waitTextGameObject: {fileID: 4114043887252851380}
   playerDuelUI: {fileID: 1072447034699925666}
+  playerName: Player 1
   cardPrafab: {fileID: 6094107271579088076, guid: 2fe81c56a34c5bd46983b78ff4ca8fd7, type: 3}
   isReady: 0
   isPlayer: 1
@@ -3117,7 +3119,7 @@ MonoBehaviour:
   fieldLayer:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &1860937751351873734
+--- !u!114 &632541840089712943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3126,22 +3128,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 4712058943611541470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae542272dec119f4eabcf28b63ccd6c4, type: 3}
+  m_Script: {fileID: 11500000, guid: bddd2fe75b7d23e4fb92adf0dc4eec12, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HemeraLegionAI
+  m_EditorClassIdentifier: Assembly-CSharp::EnhancedHemeraLegionAI
+  enableCardPlayingAI: 1
+  cardDecisionDelay: 2
+  maxCardsToPlayPerTurn: 1
+  minimumCardScoreToPlay: 15
+  enableEnhancedAI: 1
+  decisionDelay: 2
+  maxMillisecondsPerFrame: 4
+  maxCombinationsPerTurn: Infinity
+  showDebugLogs: 1
+  showDetailedCombinationLogs: 0
   duelManager: {fileID: 1328336599689875757}
-  playerManager: {fileID: 7240668214990470102}
-  handCardHandler: {fileID: 5679681744472100564}
-  difficulty: 1
-  debugAI: 1
-  debugDeep: 1
-  energySoftTarget: 50
-  softOverflowPenaltyPerPoint: 5
-  overkillPenaltyFactor: 0.5
-  minHpDamagePercent: 0.35
-  playCardDelayRange: {x: 0.35, y: 0.8}
-  enqueueMoveDelayRange: {x: 0.1, y: 0.25}
-  combosYieldEvery: 4
+  aiPlayerManager: {fileID: 7240668214990470102}
+  humanPlayerManager: {fileID: 6511605509360802617}
 --- !u!1 &5092478196738682343
 GameObject:
   m_ObjectHideFlags: 0

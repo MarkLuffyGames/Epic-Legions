@@ -27,14 +27,14 @@ public class ParasiteSeed : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.elapsedTurns++;
 
         if (effect.elapsedTurns / (float)DuelManager.NumberOfTurns  == 1)
         {
             effect.elapsedTurns = 0;
-            effect.DrainHelat();
+            effect.DrainHelat(simCardState);
         }
 
         effect.durability--;
@@ -43,5 +43,11 @@ public class ParasiteSeed : CardEffect
     public string DescriptionText(Effect effect)
     {
         return $"Parasite Seed \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        this.caster = caster.OriginalCard;
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

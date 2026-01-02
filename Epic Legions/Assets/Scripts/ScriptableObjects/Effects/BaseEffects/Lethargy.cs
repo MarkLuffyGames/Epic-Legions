@@ -22,7 +22,7 @@ public class Lethargy : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -30,5 +30,10 @@ public class Lethargy : CardEffect
     public string DescriptionText(Effect effect)
     {
         return $"Lethargy \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

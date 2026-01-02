@@ -8,4 +8,9 @@ public class TargetElement : Condition
     {
         return target.cardSO.CardElemnt == element;
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        return target.OriginalCard.cardSO.CardElemnt == element;
+    }
 }

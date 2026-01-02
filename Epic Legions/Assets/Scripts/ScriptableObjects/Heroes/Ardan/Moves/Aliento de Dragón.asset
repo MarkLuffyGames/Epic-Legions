@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2ec5808febd57443a89a41c826ecc75, type: 3}
   m_Name: "Aliento de Drag\xF3n"
   m_EditorClassIdentifier: 
+  moveId: 1126
   moveName: "Aliento de Drag\xF3n"
   damage: 40
   energyCost: 30

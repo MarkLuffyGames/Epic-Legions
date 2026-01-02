@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6c226ef305ee9740a44420d9c2972c0, type: 3}
   m_Name: Cleanse And Regen 25
   m_EditorClassIdentifier: 
+  Id: 1017
   visualEffectCardEffect: {fileID: 0}
   iconSprite: {fileID: 0}
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

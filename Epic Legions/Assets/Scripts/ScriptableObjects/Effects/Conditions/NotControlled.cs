@@ -7,4 +7,9 @@ public class NotControlled : Condition
     {
         return !target.IsControlled();
     }
+
+    public override bool CheckCondition(SimCardState caster, SimCardState target)
+    {
+        return !target.GetController();
+    }
 }

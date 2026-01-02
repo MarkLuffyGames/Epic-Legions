@@ -21,12 +21,17 @@ public class IncreaseEnergy : CardEffect
         }
     }
 
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
+    }
+
     public override void DeactivateEffect(Effect effect)
     {
         
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         if (!isPermanent) effect.durability--;
     }

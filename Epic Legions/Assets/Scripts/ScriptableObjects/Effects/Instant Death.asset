@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b5a63566e2c564da7d47c6ec582aa7, type: 3}
   m_Name: Instant Death
   m_EditorClassIdentifier: Assembly-CSharp::InstantDeath
+  Id: 1028
   visualEffectCardEffect: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
   iconSprite: {fileID: 0}
-  effectDuration: 2
+  effectDuration: 1
   effectScore: 1
   isPermanent: 0
   isPassive: 0

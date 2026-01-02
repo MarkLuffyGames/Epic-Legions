@@ -20,12 +20,19 @@ public class CleanseAndRegen : CardEffect
             card.ToHeal(amount);
         }
     }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.CleanAllNegativeEffects();
+        target.ToHeal(amount);
+    }
+
     public override void DeactivateEffect(Effect effect)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         throw new System.NotImplementedException();
     }

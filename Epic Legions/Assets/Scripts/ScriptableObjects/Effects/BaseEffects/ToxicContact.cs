@@ -26,7 +26,7 @@ public class ToxicContact : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -34,5 +34,10 @@ public class ToxicContact : CardEffect
     public string DescriptionText(Effect effect)
     {
         return $"Toxic contact \nRemaining turn{(effect.Durability > 1 ? "s" : "")} {effect.Durability}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

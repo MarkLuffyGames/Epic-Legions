@@ -32,7 +32,7 @@ public class ModifyDefense : CardEffect
         throw new System.NotImplementedException();
     }
 
-    public override void UpdateEffect(Effect effect)
+    public override void UpdateEffect(Effect effect, SimCardState simCardState)
     {
         if (!isPermanent) effect.durability--;
         effect.SetEffectDescription(DescriptionText(effect));
@@ -42,5 +42,10 @@ public class ModifyDefense : CardEffect
     {
         var s = $" for {effect.Durability} turn{(effect.Durability > 1 ? "s" : "")}";
         return $"{(isIncrease ? "+" : "-")}{amount} defense{(!isPermanent ? s : "")}";
+    }
+
+    public override void ActivateEffect(SimCardState caster, SimCardState target)
+    {
+        target.AddEffect(new Effect(this, target.OriginalCard));
     }
 }

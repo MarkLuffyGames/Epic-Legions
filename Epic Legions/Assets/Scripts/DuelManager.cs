@@ -25,6 +25,7 @@ public class DuelManager : NetworkBehaviour
     }
 
     public event EventHandler OnChangeTurn;
+    public event EventHandler OnStartSinglePlayerDuel;
 
     [SerializeField] protected PlayerManager player1Manager;
     [SerializeField] protected PlayerManager player2Manager;
@@ -44,6 +45,8 @@ public class DuelManager : NetworkBehaviour
     protected List<Card> HeroCardsOnTheField = new List<Card>();
     protected List<Card>[] turns = new List<Card>[NumberOfTurns];
     protected int heroesInTurnIndex;
+
+    public int HeroesInTurnIndex => heroesInTurnIndex;
 
     [SerializeField] protected TextMeshProUGUI duelPhaseText;
     protected List<Card> heroInTurn = new List<Card>();
@@ -84,6 +87,7 @@ public class DuelManager : NetworkBehaviour
         if (isSinglePlayer)
         {
             AssignPlayersAndStartDuel(Loader.player1deckCardIds.ToArray(), Loader.player2deckCardIds.ToArray());
+            OnStartSinglePlayerDuel?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -1413,12 +1417,10 @@ public class DuelManager : NetworkBehaviour
                 (heroToAttackPositionIndex == attackerCard.FieldPosition.PositionIndex &&
                 targetManager.GetAllCardInField().Count == 0))
             {
-                Debug.Log("Ataque directo ejecutado desde el servidor.");
                 yield return HeroDirectAttack(playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
             }
             else
             {
-                Debug.Log("Ataque a héroe ejecutado desde el servidor.");
                 // Si se seleccionó un héroe objetivo, realiza un ataque a ese héroe.
                 Card card = targetManager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
                 yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
@@ -1477,6 +1479,8 @@ public class DuelManager : NetworkBehaviour
             {
                 // Si el ataque tiene múltiples objetivos, obtiene todos los objetivos y aplica el daño.
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
+                if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect) 
+                    targets.Remove(attackerCard); // Asegura que el atacante no se incluya como objetivo.
                 for (var i = 0; i < targets.Count; i++)
                 {
                     if (targets[i] == targets[targets.Count - 1])
@@ -1512,6 +1516,8 @@ public class DuelManager : NetworkBehaviour
             else
             {
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
+                if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect) 
+                    targets.Remove(attackerCard); // Asegura que el atacante no se incluya como objetivo.
                 for (var i = 0; i < targets.Count; i++)
                 {
                     if(targets[i] == targets[targets.Count - 1])
@@ -1554,8 +1560,6 @@ public class DuelManager : NetworkBehaviour
 
     private void ActivateEffects(Card attackerCard, Card cardToAttack, int movementToUseIndex)
     {
-        
-
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.SINGLE)
         {
             if (!cardToAttack.EffectIsApplied(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType)) return;
@@ -1564,8 +1568,11 @@ public class DuelManager : NetworkBehaviour
         }
         else
         {
-            foreach (var target in GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex))
+            var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
+            if(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect) targets.Remove(attackerCard); // Asegura que el atacante no se incluya como objetivo.
+            foreach (var target in targets)
             {
+
                 if (!target.EffectIsApplied(attackerCard.Moves[movementToUseIndex].MoveSO.MoveType)) continue;
                 attackerCard.Moves[movementToUseIndex].ActivateEffect(attackerCard, target);
             }
@@ -1584,7 +1591,8 @@ public class DuelManager : NetworkBehaviour
 
         var move = attackerCard.Moves[movementToUseIndex].MoveSO;
         damage += move.MoveEffect is IncreaseAttackDamage attackModifier ? (move.EffectCondition.CheckCondition(attackerCard, cardToAttack) ? attackModifier.Amount : 0) : 0; // Añade el modificador de ataque del movimiento, si lo tiene.
-        if(cardToAttack != null) damage += CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
+        damage += move.MoveEffect is MissingHPToAttack missingHPToAttack ? (attackerCard.HealthPoint - attackerCard.CurrentHealthPoints) : 0; // Añade el modificador de ataque por HP faltante, si lo tiene.
+        if (cardToAttack != null) damage += CardSO.GetEffectiveness(attackerCard.Moves[movementToUseIndex].MoveSO.Element, cardToAttack.GetElement());
 
         return damage;
     }
@@ -1666,43 +1674,45 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Una lista de cartas que representan los objetivos del ataque.</returns>
     public List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
     {
-        // Si el tipo de objetivo es una línea (TargetLine).
+        PlayerManager player1 = attackerCard.IsControlled() ? player2Manager : player1Manager;
+        PlayerManager player2 = player1 == player1Manager ? player2Manager : player1Manager;
+
         if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.ADJACENT)
         {
-            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
-                return player1Manager.GetAdjacentForCard(cardToAttack);
+                return player1.GetAdjacentForCard(cardToAttack);
             }
             else
             {
-                return player2Manager.GetAdjacentForCard(cardToAttack);
+                return player2.GetAdjacentForCard(cardToAttack);
             }
         }
         else if(attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.COLUMN)
         {
-            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
-                return player1Manager.GetColumnForCard(cardToAttack, 3);
+                return player1.GetColumnForCard(cardToAttack, 3);
             }
             else
             {
-                return player2Manager.GetColumnForCard(cardToAttack, 3);
+                return player2.GetColumnForCard(cardToAttack, 3);
             }
         }
         // Si el tipo de objetivo es el campo medio (Midfield).
         else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.FIELD)
         {
             // Verifica si la carta atacante está en el campo de jugador 1 o jugador 2 y decide los objetivos según el tipo de movimiento.
-            if (player1Manager.GetFieldPositionList().Contains(attackerCard.FieldPosition))
+            if (player1.GetFieldPositionList().Contains(attackerCard.FieldPosition))
             {
                 // Si el movimiento es un efecto positivo, devuelve todas las cartas del jugador 1.
                 if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
                 {
-                    return player1Manager.GetAllCardInField();
+                    return player1.GetAllCardInField();
                 }
                 else
                 {
-                    return player2Manager.GetAllCardInField();
+                    return player2.GetAllCardInField();
                 }
             }
             else
@@ -1710,35 +1720,35 @@ public class DuelManager : NetworkBehaviour
                 // Si el movimiento es un efecto positivo, devuelve todas las cartas del jugador 2.
                 if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
                 {
-                    return player2Manager.GetAllCardInField();
+                    return player2.GetAllCardInField();
                 }
                 else
                 {
-                    return player1Manager.GetAllCardInField();
+                    return player1.GetAllCardInField();
                 }
             }
         }
         else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.PIERCE)
         {
             // Devuelve la línea de cartas asociada a la carta objetivo.
-            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
-                return player1Manager.GetColumnForCard(cardToAttack, 2);
+                return player1.GetColumnForCard(cardToAttack, 2);
             }
             else
             {
-                return player2Manager.GetColumnForCard(cardToAttack, 2);
+                return player2.GetColumnForCard(cardToAttack, 2);
             }
         }
         else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.CONE)
         {
-            if (player1Manager.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
+            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
             {
-                return player1Manager.GetColumnForCard(cardToAttack, 2);
+                return player1.GetColumnForCard(cardToAttack, 2);
             }
             else
             {
-                return player2Manager.GetColumnForCard(cardToAttack, 2);
+                return player2.GetColumnForCard(cardToAttack, 2);
             }
         }
 
@@ -1761,7 +1771,7 @@ public class DuelManager : NetworkBehaviour
         foreach (var target in player1Manager.GetFieldPositionList())
         {
             // Si la carta está en el campo y su salud es 0 o menor, se destruye y se manda al cementerio de jugador 1.
-            if (target.Card != null && target.Card.CurrentHealtPoints <= 0)
+            if (target.Card != null && target.Card.CurrentHealthPoints <= 0)
             {
                 target.DestroyCard(player1Manager.GetGraveyard(), true);
             }
@@ -1771,7 +1781,7 @@ public class DuelManager : NetworkBehaviour
         foreach (var target in player2Manager.GetFieldPositionList())
         {
             // Si la carta está en el campo y su salud es 0 o menor, se destruye y se manda al cementerio de jugador 2.
-            if (target.Card != null && target.Card.CurrentHealtPoints <= 0)
+            if (target.Card != null && target.Card.CurrentHealthPoints <= 0)
             {
                 target.DestroyCard(player2Manager.GetGraveyard(), false);
             }

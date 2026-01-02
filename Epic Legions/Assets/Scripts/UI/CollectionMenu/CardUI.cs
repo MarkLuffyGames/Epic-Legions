@@ -54,8 +54,8 @@ public class CardUI : MonoBehaviour
             ActivateHeroStats(true);
             description.text = "";
 
-            healtText.text = heroCardSO.Healt.ToString();
-            defenseText.text = heroCardSO.Defence.ToString();
+            healtText.text = heroCardSO.Health.ToString();
+            defenseText.text = heroCardSO.Defense.ToString();
             speedText.text = heroCardSO.Speed.ToString();
             energyText.text = heroCardSO.Energy.ToString();
         }
