@@ -48,10 +48,9 @@ public class PlanGenerator
 
         Log($"📊 Mapeo - DuelManager subturn {snap.CurrentSubTurn} -> mi índice {startOurIndex}");
         Log($"📊 Total grupos velocidad: {allSubturns.Count}");
+        Log($"📊 Total de heroes este subturno: {allSubturns[startOurIndex].Count}");
 
-        Debug.Log(allSubturns[0].Count);
-
-        GenerateInitialPlans(snap.Clone(), allSubturns[0]);
+        GenerateInitialPlans(snap.Clone(), allSubturns[startOurIndex]);
 
         for (int ourIndex = startOurIndex; ourIndex < allSubturns.Count; ourIndex++)
         {
@@ -66,7 +65,9 @@ public class PlanGenerator
             result.CalculateScore(0, _showDebugInfo);
         }
 
-        return plans.OrderByDescending(p => p.Value.Score).First().Value;
+        var bestPlan = plans.OrderByDescending(p => p.Value.Score).First().Value.Clone();
+        plans.Clear();
+        return bestPlan;
     }
 
     private void GenerateInitialPlans(SimSnapshot snap, List<SimCardState> currentSubturnHeroes)
@@ -83,10 +84,10 @@ public class PlanGenerator
             var heroActions = GetValidActionsForHero(snap, currentSubturnHeroes[i]);
             actions.Add(heroActions);
         }
-        Debug.Log($"📊 Acciones válidas obtenidas para héroes del subturno inicial: {actions.Count}");
+        Log($"📊 Acciones válidas obtenidas para héroes del subturno inicial: {actions.Count}");
 
         var combs = GenerateActionCombinations(actions);
-        Debug.Log($"📊 Combinaciones iniciales generadas: {combs.Count}");
+        Log($"📊 Combinaciones iniciales generadas: {combs.Count}");
 
         foreach (var comb in combs)
         {
@@ -98,55 +99,59 @@ public class PlanGenerator
             plans[snap.Clone()] = sim;
         }
 
-        Debug.Log($"📊 Planes iniciales generados: {plans.Count}");
+        Log($"📊 Planes iniciales generados: {plans.Count}");
     }
 
     private void ContinuePlans(List<SimCardState> currentSubturnHeroes)
     {
-        foreach (var planEntry in plans)
+        var plansList = plans.ToList();
+        for (int i = 0; i < plansList.Count; i++)
         {
-            var snap = planEntry.Key;
-            var plan = planEntry.Value;
+            var snap = plansList[i].Key.Clone();
+            var plan = plansList[i].Value;
+            var planClone = plan.Clone();
 
             var actions = new List<List<(SimCardState hero, int moveIndex, int targetPosition)>>();
 
-            for (int i = 0; i < currentSubturnHeroes.Count; i++)
+            for (int j = 0; j < currentSubturnHeroes.Count; j++)
             {
-                if (snap.MyControlledHeroes.FirstOrDefault(a => a.OriginalCard == currentSubturnHeroes[i].OriginalCard) == null)
+                if (snap.MyControlledHeroes.FirstOrDefault(a => a.OriginalCard == currentSubturnHeroes[j].OriginalCard) == null)
                     continue;
-                if (!currentSubturnHeroes[i].CanAct())
+                if (!currentSubturnHeroes[j].CanAct())
                     continue;
 
-                var heroActions = GetValidActionsForHero(snap, currentSubturnHeroes[i]);
+                var heroActions = GetValidActionsForHero(snap, currentSubturnHeroes[j]);
                 actions.Add(heroActions);
             }
 
             var combs = GenerateActionCombinations(actions);
 
-            for (int i = 0; i < combs.Count; i++)
+            for (int j = 0; j < combs.Count; j++)
             {
-                foreach (var action in combs[i])
+                foreach (var action in combs[j])
                 {
-                    if (i == 0)// Reutilizar el plan existente para la primera combinación
+                    if (j == 0)// Reutilizar el plan existente para la primera combinación
                     {
                         plan.AddAction(action.hero, action.moveIndex, action.targetPosition);
                     }
                     else// Clonar el plan existente para las demás combinaciones
                     {
-                        var newPlan = plan.Clone();
+                        var newPlan = planClone.Clone();
                         newPlan.AddAction(action.hero, action.moveIndex, action.targetPosition);
                         plans[snap.Clone()] = newPlan;
                     }
                 }
             }
         }
+
+        plansList = plans.ToList(); // Actualizar la lista de planes en cada iteración
     }
 
     private void SimSubturns(int ourIndex, List<SimCardState> currentSubturn, Dictionary<int, int> turnMapping)
     {
         foreach (var planEntry in plans)
         {
-            var snap = planEntry.Key;
+            var snap = planEntry.Key.Clone();
             var plan = planEntry.Value;
 
             plan.totalActionsExecuted = 0;
@@ -280,11 +285,14 @@ public class PlanGenerator
                 {
                     Log($"No hay enemigos en el campo, atacar directo a vida");
                     validAction.Add((hero, moveIndex, -1));
+                    Log($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex]} -> Vida del jugador");
                     continue;
                 }
+
                 foreach (var target in targets)
                 {
                     validAction.Add((hero, moveIndex, target.FieldIndex));
+                    Log($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex].MoveSO.MoveName} -> {target.OriginalCard.cardSO.CardName} Pos: {target.FieldIndex}");
                 }
             }
             else
@@ -338,8 +346,8 @@ public class PlanGenerator
         var move = attacker.moves[moveIndex];
         var moveSO = move.MoveSO;
 
-        if (moveSO.TargetsCondition == null
-            || !moveSO.TargetsCondition.CheckCondition(attacker, target)) return false;
+        if (moveSO.TargetsCondition != null
+            && !moveSO.TargetsCondition.CheckCondition(attacker, target)) return false;
 
         // Verificar que el objetivo esté vivo
         if (!target.Alive) return false;
