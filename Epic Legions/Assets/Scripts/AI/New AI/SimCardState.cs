@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -301,5 +302,4 @@ public class SimCardState
 
         snapshot.CardStates.FirstOrDefault(x => x.Key == casterHero).Value.ToHeal(healthDrained);
     }
-
 }

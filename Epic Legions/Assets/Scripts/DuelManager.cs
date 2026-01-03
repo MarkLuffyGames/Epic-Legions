@@ -1497,7 +1497,7 @@ public class DuelManager : NetworkBehaviour
                 {
                     // Aplica el daño a todos los objetivos.
                     attackerCard.lastDamageInflicted = card.ReceiveDamage(CalculateAttackDamage(attackerCard, movementToUseIndex, card),
-                        CalculateDefenseIgnored(attackerCard, cardToAttack, movementToUseIndex), attackerCard, moveType);
+                        CalculateDefenseIgnored(attackerCard, card, movementToUseIndex), attackerCard, moveType);
                 }
             }
 

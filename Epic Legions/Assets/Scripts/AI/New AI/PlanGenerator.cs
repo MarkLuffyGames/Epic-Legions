@@ -285,7 +285,7 @@ public class PlanGenerator
                 {
                     Log($"No hay enemigos en el campo, atacar directo a vida");
                     validAction.Add((hero, moveIndex, -1));
-                    Log($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex]} -> Vida del jugador");
+                    Log($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex].MoveSO.MoveName} -> Vida del jugador");
                     continue;
                 }
 

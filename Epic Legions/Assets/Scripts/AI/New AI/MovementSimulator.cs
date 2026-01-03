@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MovementSimulator
@@ -14,72 +16,10 @@ public class MovementSimulator
 
     public void SimUseMovement(SimSnapshot snap, SimCardState hero, int moveIndex, int targetPosition, FullPlanSim result)
     {
-        // VALIDACIÓN DURANTE SIMULACIÓN: Verificar si esta acción específica es válida
-
-        if (!snap.CardStates.TryGetValue(hero.OriginalCard, out var attackerState) || !attackerState.CanAct())
-        {
-            if (showDebugLogs)
-                Debug.Log($"✗ Simulación descartada: {hero.OriginalCard.cardSO.CardName} no puede actuar");
-            return;
-        }
-
         var move = hero.moves[moveIndex];
         var moveSO = move.MoveSO;
 
-        // Validar energía
-        if (moveSO.EnergyCost > snap.MyEnergy)
-        {
-            if (showDebugLogs)
-                Debug.Log($"✗ Simulación descartada: {hero.OriginalCard.cardSO.CardName} energía insuficiente");
-            return;
-        }
-
-        // DIFERENCIAR entre movimientos sin objetivo vs ataques a vida directa
-        if (targetPosition == -1)
-        {
-            if (moveSO.NeedTarget)
-            {
-                // ES ATAQUE DIRECTO A VIDA - validar que no hay héroes enemigos
-                bool hayHeroesEnemigosEnCampo = snap.EnemyHeroes.Any(e => e.Alive);
-                if (hayHeroesEnemigosEnCampo && moveSO.MoveType != MoveType.PositiveEffect && moveSO.Damage != 0)
-                {
-                    if (showDebugLogs)
-                        Debug.Log($"✗ Simulación descartada: No se puede atacar directo a vida con héroes enemigos en el campo");
-                    return;
-                }
-                else if (!hayHeroesEnemigosEnCampo && moveSO.MoveType != MoveType.PositiveEffect && moveSO.Damage == 0)
-                {
-                    if (showDebugLogs)
-                        Debug.Log($"✗ Simulación descartada: No se puede aplicar efecto negativo directo a vida");
-                    return;
-                }
-                // Si es efecto positivo con target -1, es auto-aplicado (válido)
-            }
-            // Si NO necesita objetivo, es movimiento auto-aplicado (siempre válido)
-        }
-        else
-        {
-            // Validar objetivo específico
-            var target = FindCardByPosition(snap, targetPosition, move.MoveSO.MoveType);
-            if (target == null || !snap.CardStates.TryGetValue(target.OriginalCard, out var targetState) || !targetState.Alive)
-            {
-                if (showDebugLogs)
-                    Debug.Log($"✗ Simulación descartada: Objetivo en posición {targetPosition} no válido");
-                return;
-            }
-
-            // Validar línea de visión
-            if (!HasLineOfSightToTarget(snap, attackerState, targetState,
-                IsHunterRangedAttack(hero, moveSO), IsAssassin(hero)))
-            {
-                if (showDebugLogs)
-                    Debug.Log($"✗ Simulación descartada: Sin línea de visión a posición {targetPosition}");
-                return;
-            }
-        }
-
-
-        // SI PASÓ TODAS LAS VALIDACIONES, ejecutar la simulación
+        if (!ValidateMovement(snap, hero, move, targetPosition)) return;
 
         // Consumir energía
         snap.MyEnergy -= moveSO.EnergyCost;
@@ -87,6 +27,8 @@ public class MovementSimulator
 
         // Registrar esta acción
         result.AddAction(hero, moveIndex, targetPosition);
+
+
 
         if (showDebugLogs)
         {
@@ -100,10 +42,11 @@ public class MovementSimulator
         if (moveSO.TargetsType != TargetsType.SINGLE && moveSO.TargetsType != TargetsType.DIRECT)
         {
             // ATAQUE DE ÁREA - afecta a varios enemigos
-            SimAreaAttack(snap, hero, moveIndex, result);
+            SimAreaAttack(snap, hero, moveIndex, targetPosition, result);
         }
         else if (targetPosition == -1 && moveSO.MoveType != MoveType.PositiveEffect)
         {
+            Debug.LogWarning("⚠️ Simulación de ataque directo a vida con ataque de 0 daño");
             // ATAQUE DIRECTO A VIDA
             SimDirectLifeAttack(snap, hero, moveIndex, result);
         }
@@ -119,7 +62,137 @@ public class MovementSimulator
         }
     }
 
-    private void SimAreaAttack(SimSnapshot snap, SimCardState attacker, int moveIndex, FullPlanSim result)
+    private bool ValidateMovement(SimSnapshot snap, SimCardState hero, Movement move, int targetPosition)
+    {
+        if (!snap.CardStates.TryGetValue(hero.OriginalCard, out var attackerState) || !attackerState.CanAct())
+        {
+            if (showDebugLogs)
+                Debug.Log($"✗ Simulación descartada: {hero.OriginalCard.cardSO.CardName} no puede actuar");
+            return false;
+        }
+
+        var moveSO = move.MoveSO;
+
+        // Validar energía
+        if (moveSO.EnergyCost > snap.MyEnergy)
+        {
+            if (showDebugLogs)
+                Debug.Log($"✗ Simulación descartada: {hero.OriginalCard.cardSO.CardName} energía insuficiente");
+            return false;
+        }
+
+        // DIFERENCIAR entre movimientos sin objetivo vs ataques a vida directa
+        if (targetPosition == -1)
+        {
+            if (moveSO.NeedTarget)
+            {
+                // ES ATAQUE DIRECTO A VIDA - validar que no hay héroes enemigos
+                bool hayHeroesEnemigosEnCampo = snap.EnemyHeroes.Any(e => e.Alive);
+                if (hayHeroesEnemigosEnCampo && moveSO.MoveType != MoveType.PositiveEffect && moveSO.Damage != 0)
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"✗ Simulación descartada: No se puede atacar directo a vida con héroes enemigos en el campo");
+                    return false;
+                }
+                else if (!hayHeroesEnemigosEnCampo && moveSO.MoveType != MoveType.PositiveEffect && moveSO.Damage == 0)
+                {
+                    if (showDebugLogs)
+                        Debug.Log($"✗ Simulación descartada: No se puede aplicar efecto negativo directo a vida");
+                    return false;
+                }
+                // Si es efecto positivo con target -1, es auto-aplicado (válido)
+            }
+            // Si NO necesita objetivo, es movimiento auto-aplicado (siempre válido)
+        }
+        else
+        {
+            // Validar objetivo específico
+            var target = FindCardByPosition(snap, targetPosition, move.MoveSO.MoveType);
+            if (target == null || !snap.CardStates.TryGetValue(target.OriginalCard, out var targetState) || !targetState.Alive)
+            {
+                if (showDebugLogs)
+                    Debug.Log($"✗ Simulación descartada: Objetivo en posición {targetPosition} no válido");
+                return false;
+            }
+
+            // Validar línea de visión
+            if (!HasLineOfSightToTarget(snap, attackerState, targetState,
+                IsHunterRangedAttack(hero, moveSO), IsAssassin(hero)))
+            {
+                if (showDebugLogs)
+                    Debug.Log($"✗ Simulación descartada: Sin línea de visión a posición {targetPosition}");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void SimMovement(SimSnapshot snap, SimCardState attackerCard, int movementToUseIndex, SimCardState cardToAttack,FullPlanSim fullPlan)
+    {
+        if (attackerCard.moves[movementToUseIndex].MoveSO.Damage != 0)
+        {
+            var moveType = attackerCard.moves[movementToUseIndex].MoveSO.MoveType;
+            var targetsType = attackerCard.moves[movementToUseIndex].MoveSO.TargetsType;
+
+            if (targetsType == TargetsType.SINGLE)
+            {
+                // Aplica el daño a la carta objetivo, considerando efectos especiales como la ignorancia de defensa.
+                SimReceiveDamage(snap, attackerCard, cardToAttack, movementToUseIndex, fullPlan);
+            }
+            else
+            {
+                if (showDebugLogs)
+                    Debug.Log($"🌍 ATAQUE DE ÁREA: {attackerCard.OriginalCard.cardSO.CardName} -> {attackerCard.moves[movementToUseIndex].MoveSO.MoveName}");
+                // Si el ataque tiene múltiples objetivos, obtiene todos los objetivos y aplica el daño.
+                var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
+                if (attackerCard.moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
+                    targets.Remove(attackerCard); // Asegura que el atacante no se incluya como objetivo.
+
+                foreach (var target in targets)
+                {
+                    // Aplica el daño a todos los objetivos.
+                    SimReceiveDamage(snap, attackerCard, target, movementToUseIndex, fullPlan);
+                }
+            }
+
+            if (attackerCard.moves[movementToUseIndex].MoveSO.MoveType == MoveType.MeleeAttack)
+            {
+                Counterattack(cardToAttack, attackerCard, snap, fullPlan);
+            }
+        }
+    }
+
+    private List<SimCardState> GetTargetsForMovement(SimCardState cardToAttack, SimCardState attackerCard, int movementToUseIndex)
+    {
+        var targets = new List<SimCardState>();
+        targets.Add(cardToAttack);
+        return targets;
+    }
+
+    private void Counterattack(SimCardState counterCardState, SimCardState targetCardState, SimSnapshot snap, FullPlanSim fullPlan)
+    {
+        foreach (var effect in counterCardState.activeEffects)
+        {
+            if (effect.MoveEffect is Counterattack counterattack)
+            {
+                if(showDebugLogs)
+                    Debug.Log($"   ⚔️ Contraataque de {counterCardState.OriginalCard.cardSO.CardName} a {targetCardState.OriginalCard.cardSO.CardName} por {effect.GetCounterattackDamage()} de daño");
+                ApplyDamageToSimCard(snap, targetCardState, effect.GetCounterattackDamage(), 0, fullPlan);
+                counterCardState.activeEffects.Remove(effect);
+                break;
+            }
+            else if (effect.MoveEffect is ToxicContact poisonedcounterattack)
+            {
+                if(showDebugLogs)
+                    Debug.Log($"   ☠️ Contacto Tóxico de {counterCardState.OriginalCard.cardSO.CardName} a {targetCardState.OriginalCard.cardSO.CardName}");
+                var poison = poisonedcounterattack.PoisonEffect;
+                poison.ActivateEffect(counterCardState, targetCardState);
+            }
+        }
+    }
+
+    private void SimAreaAttack(SimSnapshot snap, SimCardState attacker, int moveIndex,int targetPosition, FullPlanSim result)
     {
         var move = attacker.moves[moveIndex];
         var moveSO = move.MoveSO;
@@ -127,22 +200,23 @@ public class MovementSimulator
         if (showDebugLogs)
             Debug.Log($"🌍 ATAQUE DE ÁREA: {attacker.OriginalCard.cardSO.CardName} -> {moveSO.MoveName}");
 
-        // Verificar si hay enemigos en el campo
-        var aliveEnemies = snap.EnemyHeroes.Where(e => e.Alive).ToList();
+        // Obtener los objetivos del ataque de área
+        var targets = snap.EnemyHeroes.Where(e => e.Alive).ToList();
 
-        if (aliveEnemies.Count > 0)
+        if (targets.Count > 0)
         {
             // Aplicar daño a todos los enemigos
-            foreach (var enemyState in aliveEnemies)
+            foreach (var targetState in targets)
             {
-                var enemyCard = enemyState;
-                int damageBefore = enemyState.CurrentHP;
-                int defenseBefore = enemyState.CurrentDEF;
+                var targetCard = targetState;
+                int damageBefore = targetState.CurrentHP;
+                int defenseBefore = targetState.CurrentDEF;
 
-                SimReceiveDamage(snap, attacker, enemyCard, moveIndex, result);
+                if(moveSO.Damage > 0)
+                    SimReceiveDamage(snap, attacker, targetCard, moveIndex, result);
 
                 // Aplicar efectos del movimiento
-                SimApplyMovementEffects(snap, attacker, enemyCard, moveIndex, result);
+                SimApplyMovementEffects(snap, attacker, targetCard, moveIndex, result);
             }
         }
         else
@@ -175,48 +249,6 @@ public class MovementSimulator
 
             return null;
     }
-
-    public List<SimCardState> SimObtainTargets(SimSnapshot snap, SimCardState attacker, int moveIndex)
-    {
-        var targets = new List<SimCardState>();
-        var move = attacker.moves[moveIndex];
-
-        if (showDebugLogs)
-            Debug.Log($"Buscando objetivos para {attacker.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName}");
-
-        // Determinar qué jugador es el objetivo
-        List<SimCardState> potentialTargets;
-
-        if (move.MoveSO.MoveType != MoveType.PositiveEffect)
-        {
-            // Ataque: buscar enemigos
-            potentialTargets = snap.EnemyHeroes.Where(e => e.Alive).ToList();
-            if (showDebugLogs)
-                Debug.Log($"Potenciales objetivos enemigos: {potentialTargets.Count}");
-        }
-        else
-        {
-            // Efecto positivo: buscar aliados (incluyéndose a sí mismo)
-            potentialTargets = snap.MyControlledHeroes.Where(a => a.Alive).ToList();
-            if (showDebugLogs)
-                Debug.Log($"Potenciales objetivos aliados: {potentialTargets.Count}");
-        }
-
-        // Filtrar por línea de visión
-        foreach (var target in potentialTargets)
-        {
-            if (IsValidSimTarget(snap, attacker, target, moveIndex))
-            {
-                targets.Add(target);
-            }
-        }
-
-        if (showDebugLogs)
-            Debug.Log($"Objetivos válidos encontrados: {targets.Count}");
-
-        return targets;
-    }
-
     public bool IsValidSimTarget(SimSnapshot snap, SimCardState attacker, SimCardState target, int moveIndex)
     {
         var move = attacker.moves[moveIndex];
