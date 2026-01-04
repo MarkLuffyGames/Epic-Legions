@@ -6,7 +6,6 @@ public class SimSnapshot
     public Dictionary<Card, SimCardState> CardStates = new();
     public List<SimCardState> MyControlledHeroes = new();
     public List<SimCardState> EnemyHeroes = new();
-    public HashSet<Card> HeroesThatAlreadyActed = new HashSet<Card>();
 
     public int MyLife;
     public int EnemyLife;
@@ -27,16 +26,15 @@ public class SimSnapshot
             CurrentSubTurn = this.CurrentSubTurn,
             OriginalSubTurn = this.OriginalSubTurn,
             SubTurnsPassedInSimulation = this.SubTurnsPassedInSimulation,
-            HeroesThatAlreadyActed = new HashSet<Card>(this.HeroesThatAlreadyActed)
         };
 
         foreach (var kvp in this.CardStates)
         {
-            clone.CardStates[kvp.Key] = kvp.Value.Clone();
+            clone.CardStates[kvp.Key] = kvp.Value.Clone(clone);
         }
 
         // Reconstruir listas de héroes
-        foreach (var state in this.CardStates.Values)
+        foreach (var state in clone.CardStates.Values)
         {
             if (state.ControllerIsMine && state.Alive)
                 clone.MyControlledHeroes.Add(state);

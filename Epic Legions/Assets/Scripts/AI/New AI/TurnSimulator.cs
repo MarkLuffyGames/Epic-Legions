@@ -146,7 +146,7 @@ MovementSimulator movementSimulator, EnhancedHemeraLegionAI ai)
         }
 
         result.FinalEnergy = snap.MyEnergy;
-        result.CalculateScore(invalidActions, showDebugLogs);
+        result.CalculateScore(showDebugLogs);
 
         return result;
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental;
 using UnityEngine;
 
 [Serializable]
@@ -28,7 +29,7 @@ public class SimCardState
 
     public int lastDamageInflicted;
 
-    public SimCardState Clone()
+    public SimCardState Clone(SimSnapshot snap)
     {
         return new SimCardState
         {
@@ -44,9 +45,9 @@ public class SimCardState
             FieldIndex = this.FieldIndex,
             Alive = this.Alive,
             moves = new List<Movement>(this.moves),
-            equipmentCard = (Card[])this.equipmentCard.Clone(),
+            equipmentCard = (Card[])this.equipmentCard,
             activeEffects = new List<Effect>(this.activeEffects),
-            snapshot = this.snapshot
+            snapshot = snap
         };
     }
 
@@ -231,12 +232,13 @@ public class SimCardState
         return null;
     }
 
-    public bool EffectIsApplied(MoveType moveType)
+    public bool EffectIsApplied(MoveSO moveSO, SimCardState caster, SimCardState target)
     {
         if (IsInLethargy() || HasPhantomShield()
-            || (moveType == MoveType.RangedAttack && HasRangedImmunity())
-            || (moveType == MoveType.MeleeAttack && HasMeleeImmunity())
-            || HasProtector() != null)
+            || (moveSO.MoveType == MoveType.RangedAttack && HasRangedImmunity())
+            || (moveSO.MoveType == MoveType.MeleeAttack && HasMeleeImmunity())
+            || HasProtector() != null
+            || !(moveSO.EffectCondition != null && moveSO.EffectCondition.CheckCondition(caster, target)))
         {
             return false;
         }
@@ -275,9 +277,11 @@ public class SimCardState
 
     public void RechargeEnergy(int amount)
     {
-        var energy = ControllerIsMine ? snapshot.MyEnergy : snapshot.EnemyEnergy;
-        energy += amount;
-        if (energy > 100) energy = 100;
+        var snap = ControllerIsMine ? snapshot : snapshot;
+        snap.MyEnergy += amount;
+        if (snap.MyEnergy > 100) snap.MyEnergy = 100;
+
+        Debug.Log($"Energía recargada en {amount}. Energía actual: {snap.MyEnergy}");
     }
 
     public void ApplyPoisonDamage(int amount)

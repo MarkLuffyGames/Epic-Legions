@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -54,7 +55,11 @@ public class PlanGenerator
 
         for (int ourIndex = startOurIndex; ourIndex < allSubturns.Count; ourIndex++)
         {
-            if (ourIndex != startOurIndex) ContinuePlans(allSubturns[ourIndex]);
+            if (ourIndex != startOurIndex)
+            { 
+                Log($" ⏭️ Continuando planes para el grupo de velocidad {ourIndex}");
+                ContinuePlans(allSubturns[ourIndex]); 
+            }
             SimSubturns(ourIndex, allSubturns[ourIndex], turnMapping);
         }
 
@@ -62,10 +67,10 @@ public class PlanGenerator
         {
             var result = plan.Value;
             result.FinalEnergy = snap.MyEnergy;
-            result.CalculateScore(0, _showDebugInfo);
+            result.CalculateScore(_showDebugInfo);
         }
 
-        var bestPlan = plans.OrderByDescending(p => p.Value.Score).First().Value.Clone();
+        var bestPlan = plans.OrderByDescending(p => p.Value.Score).First().Value.Clone(snap);
         plans.Clear();
         return bestPlan;
     }
@@ -83,11 +88,11 @@ public class PlanGenerator
 
             var heroActions = GetValidActionsForHero(snap, currentSubturnHeroes[i]);
             actions.Add(heroActions);
+
+            Log($"📊 Acciones válidas obtenidas para {currentSubturnHeroes[i].OriginalCard.cardSO.CardName} del subturno inicial: {heroActions.Count}");
         }
-        Log($"📊 Acciones válidas obtenidas para héroes del subturno inicial: {actions.Count}");
 
         var combs = GenerateActionCombinations(actions);
-        Log($"📊 Combinaciones iniciales generadas: {combs.Count}");
 
         foreach (var comb in combs)
         {
@@ -107,9 +112,9 @@ public class PlanGenerator
         var plansList = plans.ToList();
         for (int i = 0; i < plansList.Count; i++)
         {
-            var snap = plansList[i].Key.Clone();
+            var snap = plansList[i].Key;
             var plan = plansList[i].Value;
-            var planClone = plan.Clone();
+            var planClone = plan.Clone(snap);
 
             var actions = new List<List<(SimCardState hero, int moveIndex, int targetPosition)>>();
 
@@ -133,29 +138,38 @@ public class PlanGenerator
                     if (j == 0)// Reutilizar el plan existente para la primera combinación
                     {
                         plan.AddAction(action.hero, action.moveIndex, action.targetPosition);
+                        Log($"🔄 Reutilizando plan existente para la primera combinación");
                     }
                     else// Clonar el plan existente para las demás combinaciones
                     {
-                        var newPlan = planClone.Clone();
+                        Log($"➕ Clonando plan para nueva combinación");
+                        var newSnap = snap.Clone();
+                        var newPlan = planClone.Clone(newSnap);
                         newPlan.AddAction(action.hero, action.moveIndex, action.targetPosition);
-                        plans[snap.Clone()] = newPlan;
+                        plans[newSnap] = newPlan;
                     }
                 }
             }
         }
-
-        plansList = plans.ToList(); // Actualizar la lista de planes en cada iteración
     }
 
     private void SimSubturns(int ourIndex, List<SimCardState> currentSubturn, Dictionary<int, int> turnMapping)
     {
+        Log($"=== Simulando planes del subturno grupo velocidad {ourIndex} ===");
         foreach (var planEntry in plans)
         {
-            var snap = planEntry.Key.Clone();
+            var snap = planEntry.Key;
             var plan = planEntry.Value;
+
+            foreach (var action in plan.Actions)
+            {
+                action.hero.snapshot = snap;
+            }
 
             plan.totalActionsExecuted = 0;
             plan.invalidActions = 0;
+
+            Log($" ⚡ Energia inicial {snap.MyEnergy}");
 
             //Actualizar el CurrentSubTurn con el valor correspondiente del mapeo inverso
             snap.CurrentSubTurn = GetDuelManagerTurnFromOurIndex(ourIndex, turnMapping);
@@ -168,7 +182,6 @@ public class PlanGenerator
 
             Log($"🔄 Grupo velocidad {ourIndex}: {currentSubturn.Count} héroes");
 
-
             // Buscar y separar acciones para este subturno
             var positiveActions = new List<(SimCardState hero, int moveIndex, int targetPosition)>();
             var otherActions = new List<(SimCardState hero, int moveIndex, int targetPosition)>();
@@ -177,7 +190,7 @@ public class PlanGenerator
             {
                 if (!heroState.ControllerIsMine || !heroState.Alive) continue;
 
-                var plannedAction = plan.Actions.FirstOrDefault(a => a.hero == heroState);
+                var plannedAction = plan.Actions.FirstOrDefault(a => a.hero.OriginalCard == heroState.OriginalCard);
 
                 if (plannedAction.hero != null && plannedAction.moveIndex >= 0)
                 {
@@ -207,6 +220,10 @@ public class PlanGenerator
             {
                 ExecuteAction(snap, action, plan, movementSimulator);
             }
+
+            Log($" ⚡ Energia final {snap.MyEnergy}");
+            if(positiveActions.Count > 0)
+                Log(snap == positiveActions.First().hero.snapshot ? "Snapshot coincide" : "Snapshot no coincide");
         }
     }
 

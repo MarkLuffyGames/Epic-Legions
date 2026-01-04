@@ -18,7 +18,7 @@ public class FullPlanSim
 
     // Para tracking de acciones específicas
     public List<(SimCardState hero, int moveIndex, int targetPosition)> Actions = new();
-    public void CalculateScore(int invalidActions, bool showDebugLogs)
+    public void CalculateScore(bool showDebugLogs)
     {
         Score = 0;
         double previousScore = 0;
@@ -147,7 +147,7 @@ public class FullPlanSim
         Actions.AddRange(other.Actions);
     }
 
-    public FullPlanSim Clone()
+    public FullPlanSim Clone(SimSnapshot snap)
     {
         var clone = new FullPlanSim
         {
