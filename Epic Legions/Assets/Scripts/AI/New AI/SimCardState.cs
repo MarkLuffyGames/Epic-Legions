@@ -296,6 +296,13 @@ public class SimCardState
 
     public void DrainHelat(int amount, Card casterHero)
     {
+        var casterState = snapshot.CardStates.FirstOrDefault(x => x.Key == casterHero).Value;
+        if (casterState == null || !casterState.Alive)
+        {
+            Debug.Log("El héroe que drena vida no está presente o no está vivo en la simulación.");
+            return;
+        }
+
         int healthDrained = Math.Min(amount, CurrentHP);
         CurrentHP -= amount;
         if (CurrentHP <= 0)
@@ -303,7 +310,8 @@ public class SimCardState
             CurrentHP = 0;
             Alive = false;
         }
-
+         
+        
         snapshot.CardStates.FirstOrDefault(x => x.Key == casterHero).Value.ToHeal(healthDrained);
     }
 }

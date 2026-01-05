@@ -92,7 +92,7 @@ public class PlanGenerator
             Log($"📊 Acciones válidas obtenidas para {currentSubturnHeroes[i].OriginalCard.cardSO.CardName} del subturno inicial: {heroActions.Count}");
         }
 
-        var combs = GenerateActionCombinations(actions);
+        var combs = GenerateActionCombinations(actions, snap.MyEnergy);
 
         foreach (var comb in combs)
         {
@@ -129,7 +129,7 @@ public class PlanGenerator
                 actions.Add(heroActions);
             }
 
-            var combs = GenerateActionCombinations(actions);
+            var combs = GenerateActionCombinations(actions, snap.MyEnergy);
 
             for (int j = 0; j < combs.Count; j++)
             {
@@ -466,7 +466,7 @@ public class PlanGenerator
         if (position < 0 || position > 14) return false;
 
         // Buscar si hay algún héroe vivo en esta posición
-        foreach (var state in snap.CardStates.Values)
+        foreach (var state in snap.EnemyHeroes)
         {
             if (state.Alive && state.FieldIndex == position)
             {
@@ -538,7 +538,7 @@ public class PlanGenerator
     }
 
     private List<List<(SimCardState hero, int moveIndex, int targetPosition)>> GenerateActionCombinations(
-        List<List<(SimCardState hero, int moveIndex, int targetPosition)>> heroActionsList)
+        List<List<(SimCardState hero, int moveIndex, int targetPosition)>> heroActionsList, int energyLimit)
     {
         var combinations = new List<List<(SimCardState, int, int)>>();
 
@@ -557,10 +557,19 @@ public class PlanGenerator
             {
                 currentCombination.Add(heroActionsList[i][indices[i]]);
             }
-            combinations.Add(currentCombination);
 
-            // Encontrar el próximo índice a incrementar
-            int j = heroActionsList.Count - 1;
+            if (currentCombination.Sum(heroActionsList =>
+            heroActionsList.Item1.moves[heroActionsList.Item2].MoveSO.EnergyCost) <= energyLimit) // Verificar límite de energía
+            {
+                combinations.Add(currentCombination);
+            }
+            else
+            {
+                Log("Combinación descartada por límite de energía");
+            }
+
+                // Encontrar el próximo índice a incrementar
+                int j = heroActionsList.Count - 1;
             while (j >= 0)
             {
                 indices[j]++;
