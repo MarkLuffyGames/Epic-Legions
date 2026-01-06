@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "85Z9KBVCHIRKEMCY",
         "name": "com.ForgeDreamsGames.HemeraLegion",
-        "processId": 4844,
+        "processId": 3896,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -150,6 +150,60 @@
             "deviceId": "85Z9KBVCHIRKEMCY",
             "name": "com.ForgeDreamsGames.HemeraLegion",
             "processId": 4844,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 18213,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 9739,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 19190,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 25810,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 28357,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 30752,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 32140,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 3895,
+            "exited": false
+        },
+        {
+            "deviceId": "85Z9KBVCHIRKEMCY",
+            "name": "com.ForgeDreamsGames.HemeraLegion",
+            "processId": 3896,
             "exited": false
         }
     ],

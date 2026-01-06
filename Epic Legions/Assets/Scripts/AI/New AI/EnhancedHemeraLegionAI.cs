@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+enum AIDifficulty
+{
+    Easy,
+    Normal,
+    Hard,
+    Nightmare
+}
 public class EnhancedHemeraLegionAI : MonoBehaviour
 {
     [Header("Card Playing AI")]
@@ -40,24 +47,40 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
     private TurnSimulator turnSimulator;
     private MovementSimulator movementSimulator;
     private PlanGenerator planGenerator;
-    private void Start()
+    HeroValueEvaluator heroValueEvaluator;
+    HeroExposureEvaluator heroExposureEvaluator;
+    ProtectionDecisionMaker protectionDecisionMaker;
+    private void Awake()
     {
-        duelManager = FindAnyObjectByType<DuelManager>();
-        if (duelManager == null)
-        {
-            Debug.LogError("DuelManager no encontrado en la escena!");
-            return;
-        }
-
         duelManager.OnStartSinglePlayerDuel += OnDuelStarted;
     }
 
     private void OnDuelStarted(object sender, EventArgs e)
     {
+        bool isplayer1 = duelManager.Player1Manager.isPlayer;
+
+        if(isplayer1)
+        {
+            enableCardPlayingAI = PlayerPrefs.GetInt("Player1Control", 0) == 1;
+            enableEnhancedAI = PlayerPrefs.GetInt("Player1Control", 0) == 1;
+
+            showDebugLogs = PlayerPrefs.GetInt("Player1AIDebug", 0) == 1;
+        }
+        else
+        {
+            enableCardPlayingAI = true;
+            enableEnhancedAI = true;
+
+            showDebugLogs = PlayerPrefs.GetInt("Player2AIDebug", 0) == 1;
+        }
+
         simulation = new EnhancedAISimulation(aiPlayerManager, humanPlayerManager, duelManager, showDebugLogs);
         turnSimulator = new TurnSimulator(this, showDebugLogs);
         movementSimulator = new MovementSimulator(showDebugLogs);
         planGenerator = new PlanGenerator(showDebugLogs, movementSimulator);
+        heroValueEvaluator = new HeroValueEvaluator();
+        heroExposureEvaluator = new HeroExposureEvaluator();
+        protectionDecisionMaker = new ProtectionDecisionMaker();
 
         // Suscribirse a eventos del duelo
         duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
@@ -82,6 +105,8 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
         if (showDebugLogs)
             Debug.Log("🎴 IA evaluando jugar cartas en fase de preparación...");
+
+        AnalyzePreparationPhase();
 
         // Verificar si es el turno de la IA para jugar cartas
         if (!IsItAITurnInPreparation())
@@ -114,6 +139,51 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         return true;
     }
 
+    private void AnalyzePreparationPhase()
+    {
+        Debug.Log("=== [AI] ANALYZE PREPARATION PHASE ===");
+
+        foreach (var hero in aiPlayerManager.GetAllCardInField())
+        {
+            if (hero == null)
+                continue;
+
+            var heroSO = hero.cardSO as HeroCardSO;
+
+            int pos = hero.FieldPosition.PositionIndex;
+            int row = pos / 5;
+            int col = pos % 5;
+
+            double value = heroValueEvaluator.EvaluateHeroValue(
+                hero,
+                aiPlayerManager,
+                humanPlayerManager);
+
+            ExposureLevel exposure = heroExposureEvaluator.EvaluateExposure(
+                hero,
+                aiPlayerManager,
+                humanPlayerManager);
+
+            ProtectionActionType protection =
+                protectionDecisionMaker.DecideProtection(
+                    hero,
+                    exposure,
+                    value,
+                    aiPlayerManager.PlayerEnergy);
+
+            Debug.Log(
+                $"[AI][Hero Analysis] {heroSO.CardName} | " +
+                $"Pos: (R{row},C{col}) | " +
+                $"Value: {value:F1} | " +
+                $"Exposure: {exposure} | " +
+                $"Decision: {protection}"
+            );
+        }
+
+        Debug.Log("=== [AI] END ANALYSIS ===");
+    }
+
+
     private IEnumerator DecideCardPlay()
     {
         if (isPlayingCard) yield break;
@@ -122,9 +192,6 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
         try
         {
-            // Pequeño delay para simular pensamiento
-            yield return new WaitForSeconds(cardDecisionDelay);
-
             // Evaluar si debería jugar una carta
             if (ShouldPlayCardThisTurn())
             {

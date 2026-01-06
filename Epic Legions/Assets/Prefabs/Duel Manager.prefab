@@ -626,7 +626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4071121019
+  GlobalObjectIdHash: 2675592557
   InScenePlacedSourceGlobalObjectIdHash: 2675592557
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3028,7 +3028,7 @@ GameObject:
   - component: {fileID: 3294105951735913547}
   - component: {fileID: 7240668214990470102}
   - component: {fileID: 8055258763400123612}
-  - component: {fileID: 632541840089712943}
+  - component: {fileID: 6782379505290683800}
   m_Layer: 0
   m_Name: P1 Manager
   m_TagString: Untagged
@@ -3119,7 +3119,7 @@ MonoBehaviour:
   fieldLayer:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &632541840089712943
+--- !u!114 &6782379505290683800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

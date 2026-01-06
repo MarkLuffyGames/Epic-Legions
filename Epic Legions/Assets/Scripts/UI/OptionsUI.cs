@@ -46,7 +46,7 @@ public class OptionsUI : MonoBehaviour
         }
         else
         {
-            /*if(value == 1)
+            if(value == 1)
             {
                 PlayerPrefs.SetString("AIDifficulty", AIDifficulty.Easy.ToString());
             }
@@ -61,7 +61,7 @@ public class OptionsUI : MonoBehaviour
             else if(value == 4)
             {
                 PlayerPrefs.SetString("AIDifficulty", AIDifficulty.Nightmare.ToString());
-            }*/
+            }
 
             player1AIDebugToggle.interactable = true;
             player1AIDebugDeepToggle.interactable = true;
@@ -73,7 +73,7 @@ public class OptionsUI : MonoBehaviour
     {
         int value = player2Control.value;
         PlayerPrefs.SetInt("Player2Control", value);
-        /*if (value == 0)
+        if (value == 0)
         {
             PlayerPrefs.SetString("AIDifficulty2", AIDifficulty.Easy.ToString());
         }
@@ -88,7 +88,7 @@ public class OptionsUI : MonoBehaviour
         else if (value == 3)
         {
             PlayerPrefs.SetString("AIDifficulty2", AIDifficulty.Nightmare.ToString());
-        }*/
+        }
     }
 
     public void SetPlayer1AIDebug()
