@@ -57,9 +57,9 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
     private void OnDuelStarted(object sender, EventArgs e)
     {
-        bool isplayer1 = duelManager.Player1Manager.isPlayer;
+        bool isplayer1 = aiPlayerManager.isPlayer;
 
-        if(isplayer1)
+        if (isplayer1)
         {
             enableCardPlayingAI = PlayerPrefs.GetInt("Player1Control", 0) == 1;
             enableEnhancedAI = PlayerPrefs.GetInt("Player1Control", 0) == 1;

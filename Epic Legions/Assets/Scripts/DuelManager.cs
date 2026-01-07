@@ -1096,16 +1096,19 @@ public class DuelManager : NetworkBehaviour
 
     protected void TryAddTarget(Card cardPosition, Card card, int movementToUseIndex, List<Card> targets)
     {
+        var move = card.Moves[movementToUseIndex];
         if (cardPosition != null && cardPosition != card)
         {
-            if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition != null
-                    && card.Moves[movementToUseIndex].MoveSO.TargetsCondition.CheckCondition(card, cardPosition))
-            {
-                targets.Add(cardPosition);
-            }
-            else if (card.Moves[movementToUseIndex].MoveSO.TargetsCondition == null)
+            if (move.MoveSO.TargetsCondition == null)
             {
                 targets.Add(cardPosition); // Si no hay condición, se agrega directamente
+            }
+            else if(move.MoveSO.TargetsCondition.CheckCondition(card, cardPosition))
+            {
+                if(move.MoveSO.EffectCondition == null)
+                    targets.Add(cardPosition);
+                else if(card.Moves[movementToUseIndex].MoveSO.EffectCondition.CheckCondition(card, cardPosition) || move.MoveSO.Damage > 0)
+                    targets.Add(cardPosition);
             }
         }
     }
@@ -1207,7 +1210,7 @@ public class DuelManager : NetworkBehaviour
             // Verificar el jugador (1 o 2) que está realizando la acción
             if (playerRoles[clientId] == 1)
             {
-                PlayerManager playerManagerTemp = isControlledHero ? GetOpposingPlayerManager(player1Manager) : player1Manager;
+                PlayerManager playerManagerTemp = isControlledHero ? player2Manager : player1Manager;
 
                 // Marcar la carta como lista para la acción
                 playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
@@ -1224,7 +1227,7 @@ public class DuelManager : NetworkBehaviour
             else
             {
                 // Lo mismo para el jugador 2
-                PlayerManager playerManagerTemp = isControlledHero ? GetOpposingPlayerManager(player2Manager) : player2Manager;
+                PlayerManager playerManagerTemp = isControlledHero ? player1Manager : player2Manager;
                 playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.actionIsReady = true;
                 hasPriority = playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect;
                 player2Manager.ConsumeEnergy(playerManagerTemp.GetFieldPositionList()[heroUsesTheAttack].Card.Moves[movementToUseIndex].MoveSO.EnergyCost);
@@ -1677,83 +1680,29 @@ public class DuelManager : NetworkBehaviour
         PlayerManager player1 = attackerCard.IsControlled() ? player2Manager : player1Manager;
         PlayerManager player2 = player1 == player1Manager ? player2Manager : player1Manager;
 
-        if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.ADJACENT)
-        {
-            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
-            {
-                return player1.GetAdjacentForCard(cardToAttack);
-            }
-            else
-            {
-                return player2.GetAdjacentForCard(cardToAttack);
-            }
-        }
-        else if(attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.COLUMN)
-        {
-            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
-            {
-                return player1.GetColumnForCard(cardToAttack, 3);
-            }
-            else
-            {
-                return player2.GetColumnForCard(cardToAttack, 3);
-            }
-        }
-        // Si el tipo de objetivo es el campo medio (Midfield).
-        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.FIELD)
-        {
-            // Verifica si la carta atacante está en el campo de jugador 1 o jugador 2 y decide los objetivos según el tipo de movimiento.
-            if (player1.GetFieldPositionList().Contains(attackerCard.FieldPosition))
-            {
-                // Si el movimiento es un efecto positivo, devuelve todas las cartas del jugador 1.
-                if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
-                {
-                    return player1.GetAllCardInField();
-                }
-                else
-                {
-                    return player2.GetAllCardInField();
-                }
-            }
-            else
-            {
-                // Si el movimiento es un efecto positivo, devuelve todas las cartas del jugador 2.
-                if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType == MoveType.PositiveEffect)
-                {
-                    return player2.GetAllCardInField();
-                }
-                else
-                {
-                    return player1.GetAllCardInField();
-                }
-            }
-        }
-        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.PIERCE)
-        {
-            // Devuelve la línea de cartas asociada a la carta objetivo.
-            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
-            {
-                return player1.GetColumnForCard(cardToAttack, 2);
-            }
-            else
-            {
-                return player2.GetColumnForCard(cardToAttack, 2);
-            }
-        }
-        else if (attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType == TargetsType.CONE)
-        {
-            if (player1.GetFieldPositionList().Contains(cardToAttack.FieldPosition))
-            {
-                return player1.GetColumnForCard(cardToAttack, 2);
-            }
-            else
-            {
-                return player2.GetColumnForCard(cardToAttack, 2);
-            }
-        }
+        var moveSO = attackerCard.Moves[movementToUseIndex].MoveSO;
+        var targetsType = attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType;
+        var targetField = player1Manager.GetAllCardInField().Contains(cardToAttack) ?
+            player1Manager : player2Manager;
 
-        // Si no hay un tipo de objetivo válido, devuelve null.
-        return null;
+        switch (targetsType)
+        {
+            case TargetsType.ADJACENT:
+                return targetField.GetAdjacentForCard(cardToAttack);
+            case TargetsType.COLUMN:
+                return targetField.GetColumnForCard(cardToAttack, 3);
+            case TargetsType.PIERCE:
+                return targetField.GetColumnForCard(cardToAttack, 2);
+            case TargetsType.CONE:
+                return targetField.GetColumnForCard(cardToAttack, 2);
+            case TargetsType.FIELD:
+                targetField = moveSO.MoveType == MoveType.PositiveEffect ? targetField : GetOpposingPlayerManager(targetField);
+                var targets = attackerCard.IsControlled() ? GetOpposingPlayerManager(targetField).GetAllCardInField() : targetField.GetAllCardInField();
+                if(moveSO.MoveType != MoveType.PositiveEffect) targets.Remove(attackerCard);
+                return targets;
+            default:
+                return null;
+        }
     }
 
 

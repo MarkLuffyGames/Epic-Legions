@@ -66,6 +66,11 @@ public class PlanGenerator
             result.CalculateScore(_showDebugInfo);
         }
 
+        if(plans.Count == 0)
+        {
+            Log("⚠️ No se generaron planes válidos.");
+            return new FullPlanSim();
+        }
         var bestPlan = plans.OrderByDescending(p => p.Value.Score).First().Value.Clone(snap);
         plans.Clear();
         return bestPlan;
