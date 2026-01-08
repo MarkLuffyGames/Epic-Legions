@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: 1028
   visualEffectCardEffect: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
   iconSprite: {fileID: 0}
-  effectDuration: 1
+  effectDuration: 2
   effectScore: 1
   isPermanent: 0
   isPassive: 0

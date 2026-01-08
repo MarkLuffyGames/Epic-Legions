@@ -1099,6 +1099,8 @@ public class DuelManager : NetworkBehaviour
         var move = card.Moves[movementToUseIndex];
         if (cardPosition != null && cardPosition != card)
         {
+            if (!cardPosition.isVisible) return;
+
             if (move.MoveSO.TargetsCondition == null)
             {
                 targets.Add(cardPosition); // Si no hay condición, se agrega directamente
@@ -1714,7 +1716,7 @@ public class DuelManager : NetworkBehaviour
     /// y en caso afirmativo, destruye la carta y la coloca en el cementerio correspondiente. Para el jugador 1, las cartas se envían
     /// al cementerio de ese jugador, y para el jugador 2, se hace lo mismo.
     /// </remarks>
-    protected void SendCardsToGraveyard()
+    public void SendCardsToGraveyard()
     {
         // Recorre las cartas del jugador 1 en el campo.
         foreach (var target in player1Manager.GetFieldPositionList())

@@ -18,8 +18,8 @@ MonoBehaviour:
   effectDuration: 1
   effectScore: 1
   isPermanent: 0
-  isPassive: 0
-  passiveSkillActivationPhase: 0
+  isPassive: 1
+  passiveSkillActivationPhase: 1
   amount: 10
   duration: 3
   archHeight: 1.5
