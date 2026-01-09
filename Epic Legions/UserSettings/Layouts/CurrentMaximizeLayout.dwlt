@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 3299
+  controlID: 3591
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 3300
+  controlID: 3592
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 3301
+  controlID: 3593
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -247,9 +247,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: b8fd0000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 402cffffccc9ffff58d1ffffc8d9ffffe0d9ffff04deffffd4dfffff12e1ffff24e1ffff42eeffff62eeffff94eeffffb0f0ffffd0f0ffffdefafffff4ffffff
+      m_ExpandedIDs: e46ff5ff8270f5ff9a70f5ffa673f5ff402cffffccc9ffff58d1ffffc8d9ffffe0d9ffff04deffffd4dfffff12e1ffff24e1ffff42eeffff62eeffff94eeffffb0f0ffffd0f0ffffdefafffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1838,7 +1838,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/ScriptableObjects/Effects/Energy
+    - Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Eerie
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1848,16 +1848,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/ScriptableObjects/Effects/Energy
+  - Assets/JMO Assets/Cartoon FX Remaster/CFXR Prefabs/Eerie
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\MarkLuffyGames\Projects\Epic-Legions\Epic Legions
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 483}
-    m_SelectedIDs: fa610100
-    m_LastClickedID: 90618
-    m_ExpandedIDs: 000000000e03010010030100120301001403010016030100180301001a0301001c0301001e03010090530100aa5301000c62010028620100
+    scrollPos: {x: 0, y: 287}
+    m_SelectedIDs: 5eb50100
+    m_LastClickedID: 111966
+    m_ExpandedIDs: 000000000e03010010030100120301001403010016030100180301001a0301001c0301001e0301007c53010090530100aa5301000c620100126201002862010060b50100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1912,24 +1912,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: b8fd0000
-    m_LastClickedInstanceID: 64952
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300008eef000072e600003ef6000064150100bcfd0000aafd0000befd0000d2060100200c010068f200008c0e01004e0201007ce8f9fffc4701004e40010056fb0000347501008af90000ecff000076c40100161d010000000000b6f400004c040100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: FewerHeroesField
+      m_OriginalName: FewerHeroesField
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 60978
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 12}
@@ -2018,7 +2018,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 144726
+  m_LastSelectedObjectID: -724468
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52

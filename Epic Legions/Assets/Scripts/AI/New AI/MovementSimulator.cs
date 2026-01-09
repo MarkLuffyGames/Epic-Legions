@@ -20,9 +20,6 @@ public class MovementSimulator
         snap.MyEnergy -= moveSO.EnergyCost;
         result.TotalEnergyCost += moveSO.EnergyCost;
 
-        // Registrar esta acción
-        result.AddAction(hero, moveIndex, targetPosition);
-
         if (showDebugLogs)
         {
             var moveName = moveSO.MoveName;

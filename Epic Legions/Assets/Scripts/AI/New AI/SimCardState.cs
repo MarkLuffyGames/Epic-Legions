@@ -280,8 +280,6 @@ public class SimCardState
         var snap = ControllerIsMine ? snapshot : snapshot;
         snap.MyEnergy += amount;
         if (snap.MyEnergy > 100) snap.MyEnergy = 100;
-
-        Debug.Log($"Energía recargada en {amount}. Energía actual: {snap.MyEnergy}");
     }
 
     public void ApplyPoisonDamage(int amount)

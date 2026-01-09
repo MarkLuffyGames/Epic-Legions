@@ -51,10 +51,19 @@ public class PlanGenerator
 
         for (int ourIndex = startOurIndex; ourIndex < allSubturns.Count; ourIndex++)
         {
+            string actionsCount = "";
+            int count = 0;
+            foreach (var item in plans)
+            {
+                count++;
+                actionsCount += $" {count} - {item.Value.Actions.Count} acciones.";
+            }
+            
+            Log($"📊 Planes existentes: {plans.Count},{actionsCount}");
             if (ourIndex != startOurIndex)
-            { 
+            {
                 Log($" ⏭️ Continuando planes para el grupo de velocidad {ourIndex}");
-                ContinuePlans(allSubturns[ourIndex]); 
+                ContinuePlans(allSubturns[ourIndex]);
             }
             SimSubturns(ourIndex, allSubturns[ourIndex], turnMapping);
         }
@@ -377,7 +386,7 @@ public class PlanGenerator
 
         // 2. Verificar si el atacante es de clase Assassin (puede atacar por detrás)
         bool isAssassin = IsAssassin(attacker);
-        Log($"Atacante es Asesino: {isHunterRanged}");
+        Log($"Atacante es Asesino: {isAssassin}");
 
         // 3. Verificar línea de visión (si hay héroes delante protegiendo)
         bool hasLineOfSight = HasLineOfSightToTarget(snap, attacker, target, isHunterRanged, isAssassin);
@@ -563,6 +572,7 @@ public class PlanGenerator
             heroActionsList.Item1.moves[heroActionsList.Item2].MoveSO.EnergyCost) <= energyLimit) // Verificar límite de energía
             {
                 combinations.Add(currentCombination);
+                Log($"Combinacion generada {currentCombination.Count} acciones");
             }
             else
             {
