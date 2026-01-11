@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class TurnSimulator
 {
-    private MovementSimulator movementSimulator = new MovementSimulator();
-
     private EnhancedHemeraLegionAI ai;
     private bool showDebugLogs;
     public TurnSimulator(EnhancedHemeraLegionAI ai, bool showDebugLogs)

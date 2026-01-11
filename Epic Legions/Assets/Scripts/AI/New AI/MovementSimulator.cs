@@ -4,11 +4,23 @@ using UnityEngine;
 
 public class MovementSimulator
 {
-    private bool showDebugLogs;
+    bool _showDebugLogs;
+    bool _showDebugDeepLogs;
 
-    public MovementSimulator(bool showDebugLogs = false)
+    public MovementSimulator(bool showDebugLogs, bool showDebugDeepLogs)
     {
-        this.showDebugLogs = showDebugLogs;
+        _showDebugLogs = showDebugLogs;
+        _showDebugDeepLogs = showDebugDeepLogs;
+    }
+
+    public void Log(string message)
+    {
+        if (_showDebugLogs) Debug.Log(message);
+    }
+
+    public void LogDeep(string message)
+    {
+        if (_showDebugDeepLogs) Debug.Log(message);
     }
 
     public void SimUseMovement(SimSnapshot snap, SimCardState hero, int moveIndex, int targetPosition, FullPlanSim result)
@@ -20,13 +32,10 @@ public class MovementSimulator
         snap.MyEnergy -= moveSO.EnergyCost;
         result.TotalEnergyCost += moveSO.EnergyCost;
 
-        if (showDebugLogs)
-        {
-            var moveName = moveSO.MoveName;
-            string actionInfo = moveSO.NeedTarget ?
-                (targetPosition == -1 ? $"[ATAQUE A VIDA]" : $"[OBJETIVO POS{targetPosition}]") : "[AUTO]";
-            Debug.Log($"✓ Simulando: {hero.OriginalCard.cardSO.CardName} -> {moveName} {actionInfo}");
-        }
+        var moveName = moveSO.MoveName;
+        string actionInfo = moveSO.NeedTarget ?
+            (targetPosition == -1 ? $"[ATAQUE A VIDA]" : $"[OBJETIVO POS{targetPosition}]") : "[AUTO]";
+        LogDeep($"✓ Simulando: {hero.OriginalCard.cardSO.CardName} -> {moveName} {actionInfo}");
 
         if (targetPosition == -1 && moveSO.MoveType != MoveType.PositiveEffect && !snap.EnemyHeroes.Any(e => e.Alive))
         {
@@ -65,8 +74,7 @@ public class MovementSimulator
             }
             else
             {
-                if (showDebugLogs)
-                    Debug.Log($"🌍 ATAQUE DE ÁREA: {attackerCard.OriginalCard.cardSO.CardName} -> {attackerCard.moves[movementToUseIndex].MoveSO.MoveName}");
+                LogDeep($"🌍 ATAQUE DE ÁREA: {attackerCard.OriginalCard.cardSO.CardName} -> {attackerCard.moves[movementToUseIndex].MoveSO.MoveName}");
                 // Si el ataque tiene múltiples objetivos, obtiene todos los objetivos y aplica el daño.
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
                 if (attackerCard.moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
@@ -101,16 +109,14 @@ public class MovementSimulator
         {
             if (effect.MoveEffect is Counterattack counterattack)
             {
-                if(showDebugLogs)
-                    Debug.Log($"   ⚔️ Contraataque de {counterCardState.OriginalCard.cardSO.CardName} a {targetCardState.OriginalCard.cardSO.CardName} por {effect.GetCounterattackDamage()} de daño");
+                LogDeep($"   ⚔️ Contraataque de {counterCardState.OriginalCard.cardSO.CardName} a {targetCardState.OriginalCard.cardSO.CardName} por {effect.GetCounterattackDamage()} de daño");
                 ApplyDamageToSimCard(snap, targetCardState, effect.GetCounterattackDamage(), 0, fullPlan);
                 counterCardState.activeEffects.Remove(effect);
                 break;
             }
             else if (effect.MoveEffect is ToxicContact poisonedcounterattack)
             {
-                if(showDebugLogs)
-                    Debug.Log($"   ☠️ Contacto Tóxico de {counterCardState.OriginalCard.cardSO.CardName} a {targetCardState.OriginalCard.cardSO.CardName}");
+                LogDeep($"   ☠️ Contacto Tóxico de {counterCardState.OriginalCard.cardSO.CardName} a {targetCardState.OriginalCard.cardSO.CardName}");
                 var poison = poisonedcounterattack.PoisonEffect;
                 poison.ActivateEffect(counterCardState, targetCardState);
             }
@@ -148,7 +154,7 @@ public class MovementSimulator
         snap.EnemyLife = Mathf.Max(0, snap.EnemyLife - damage);
         result.DirectLifeDamage += damage;
 
-        if (showDebugLogs) Debug.Log($"Ataque directo a vida: {damage} daño");
+        LogDeep($"Ataque directo a vida: {damage} daño");
     }
 
     private void SimReceiveDamage(SimSnapshot snap, SimCardState attacker, SimCardState target, int moveIndex, FullPlanSim result)
@@ -165,7 +171,7 @@ public class MovementSimulator
 
         if (target.HasProtector() != null)
         {
-            Debug.Log($"   🛡️ Daño protegido por {target.HasProtector().casterHero.cardSO.CardName}");
+            LogDeep($"   🛡️ Daño protegido por {target.HasProtector().casterHero.cardSO.CardName}");
             ApplyDamageToSimCard(snap, snap.CardStates.GetValueOrDefault(target.HasProtector().casterHero), damage, 0, result);
             return;
         }
@@ -173,7 +179,7 @@ public class MovementSimulator
         // Aplicar reflejo de daño completo
         if (target.HasFullDamageReflection())
         {
-            Debug.Log($"   🔄 Daño reflejado por {target.OriginalCard.cardSO.CardName}");
+            LogDeep($"   🔄 Daño reflejado por {target.OriginalCard.cardSO.CardName}");
             ApplyDamageToSimCard(snap, attacker, damage, 0, result);
         }
 
@@ -187,14 +193,14 @@ public class MovementSimulator
         int actualDamage = ApplyDamageToSimCard(snap, target, damage, ignoredDefense, result);
         int hpDamage = 0;
         // Logs detallados del daño
-        if (showDebugLogs && actualDamage > 0)
+        if (actualDamage > 0)
         {
             int hpAfter = target.CurrentHP;
             int defAfter = target.CurrentDEF;
 
             hpDamage = hpBefore - hpAfter;
 
-            Debug.Log($"   💥 {target.OriginalCard.cardSO.CardName}: " +
+            LogDeep($"   💥 {target.OriginalCard.cardSO.CardName}: " +
                      $"-{hpDamage} HP, -{defBefore - defAfter} DEF " +
                      $"(Vida: {hpAfter}/{target.HP}, DEF: {defAfter})");
         }
@@ -205,11 +211,12 @@ public class MovementSimulator
             result.DamageToEnemyHeroes[target] =
                 result.DamageToEnemyHeroes.GetValueOrDefault(target) + hpDamage;
 
+            LogDeep($"   🎯 Daño total a vida de {target.OriginalCard.cardSO.CardName}: {result.DamageToEnemyHeroes[target]}");
+
             if (!target.Alive)
             {
                 result.EnemyHeroesKilled++;
-                if(showDebugLogs)
-                    Debug.Log($"   💀 ¡{target.OriginalCard.cardSO.CardName} ELIMINADO!");
+                LogDeep($"   💀 ¡{target.OriginalCard.cardSO.CardName} ELIMINADO!");
             }
         }
         else
@@ -224,7 +231,6 @@ public class MovementSimulator
     {
         var moveSO = move.MoveSO;
 
-        // REPLICAR EXACTAMENTE la lógica de DuelManager.CalculateAttackDamage
         if (moveSO.MoveEffect is DestroyDefense)
         {
             return target.CurrentDEF + target.GetDamageAbsorbed();
@@ -277,18 +283,16 @@ public class MovementSimulator
         if (!snap.CardStates.TryGetValue(target.OriginalCard, out var targetState) || !targetState.Alive)
             return 0;
 
-        if (showDebugLogs)
-            Debug.Log($"   🎯 {target.OriginalCard.cardSO.CardName}: " +
+        LogDeep($"   🎯 {target.OriginalCard.cardSO.CardName}: " +
                      $"(Vida: {target.CurrentHP}/{target.HP}, DEF: {target.DEF}/{target.CurrentDEF})");
 
-        if (showDebugLogs)
-            Debug.Log($"   Calculando daño: {damage} base, {ignoredDefense} defensa ignorada");
+        LogDeep($"   Calculando daño: {damage} base, {ignoredDefense} defensa ignorada");
 
         // Aplicar absorción de daño
         damage = Mathf.Max(0, damage - target.GetDamageAbsorbed());
 
-        if (target.GetDamageAbsorbed() > 0 && showDebugLogs)
-            Debug.Log($"   Absorción: {target.GetDamageAbsorbed()} daño absorbido");
+        if (target.GetDamageAbsorbed() > 0)
+            LogDeep($"   Absorción: {target.GetDamageAbsorbed()} daño absorbido");
 
         // Calcular reducción de defensa
         int effectiveDefense = Mathf.Max(0, target.GetEffectiveDefense());
@@ -302,11 +306,8 @@ public class MovementSimulator
         int hpDamage = Mathf.Min(target.CurrentHP, remainingDamage);
         target.CurrentHP -= hpDamage;
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"   Defensa efectiva: {effectiveDefense} (ignorada: {ignoredDefense})");
-            Debug.Log($"   Reducción: {defenseReduction} DEF, {hpDamage} HP");
-        }
+        LogDeep($"   Defensa efectiva: {effectiveDefense} (ignorada: {ignoredDefense})");
+        LogDeep($"   Reducción: {defenseReduction} DEF, {hpDamage} HP");
 
         // Verificar muerte
         if (target.CurrentHP <= 0)
@@ -318,8 +319,7 @@ public class MovementSimulator
             snap.MyControlledHeroes.Remove(target);
             snap.EnemyHeroes.Remove(target);
 
-            if (showDebugLogs)
-                Debug.Log($"   💀 {target.OriginalCard.cardSO.CardName} HA MUERTO");
+            LogDeep($"   💀 {target.OriginalCard.cardSO.CardName} HA MUERTO");
         }
 
         return hpDamage + defenseReduction;
@@ -333,14 +333,13 @@ public class MovementSimulator
         if (moveEffect == null) return;
         if (!target.EffectIsApplied(move.MoveSO, attacker, target)) 
         {
-            if (showDebugLogs)
-                Debug.Log($"Efecto {moveEffect.GetType().Name} no aplicable a {target.OriginalCard.cardSO.CardName}");
+            result.invalidActions++;
+            LogDeep($"Efecto {moveEffect.GetType().Name} no aplicable a {target.OriginalCard.cardSO.CardName}");
 
             return;
         }
 
-        if(showDebugLogs)
-            Debug.Log($"Aplicando efecto: {moveEffect.GetType().Name}");
+        LogDeep($"Aplicando efecto: {moveEffect.GetType().Name}");
 
         move.ActivateEffect(attacker, target);
     }

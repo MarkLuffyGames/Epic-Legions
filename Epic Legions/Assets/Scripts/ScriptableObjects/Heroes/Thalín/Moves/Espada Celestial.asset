@@ -26,4 +26,5 @@ MonoBehaviour:
   targetsType: 0
   visualEffect: {fileID: 6389406066330802589, guid: 5ef8d476ac4025a4e85cc5e7c5004889, type: 3}
   visualEffectHit: {fileID: 2343566965193021713, guid: dc37dcf1a64203b4cb39315d48aa3df6, type: 3}
-  effectDescription: ' Ataca con una espada de luz, causando un golpe directo.'
+  effectDescription: ' Ataca con una espada de luz, causando un golpe directo que
+    ignora la defensa del objetivo.'

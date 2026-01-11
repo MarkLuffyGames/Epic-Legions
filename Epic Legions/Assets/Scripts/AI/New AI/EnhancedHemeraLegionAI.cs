@@ -38,13 +38,12 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
-    [SerializeField] private bool showDetailedCombinationLogs = false;
+    [SerializeField] private bool showDebugDeepLogs = false;
 
     [SerializeField] private DuelManager duelManager;
     [SerializeField] private PlayerManager aiPlayerManager;
     [SerializeField] private PlayerManager humanPlayerManager;
     private EnhancedAISimulation simulation;
-    private TurnSimulator turnSimulator;
     private MovementSimulator movementSimulator;
     private PlanGenerator planGenerator;
     HeroValueEvaluator heroValueEvaluator;
@@ -65,6 +64,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             enableEnhancedAI = PlayerPrefs.GetInt("Player1Control", 0) == 1;
 
             showDebugLogs = PlayerPrefs.GetInt("Player1AIDebug", 0) == 1;
+            showDebugDeepLogs = PlayerPrefs.GetInt("Player1AIDebugDeep", 0) == 1;
         }
         else
         {
@@ -72,12 +72,12 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             enableEnhancedAI = true;
 
             showDebugLogs = PlayerPrefs.GetInt("Player2AIDebug", 0) == 1;
+            showDebugDeepLogs = PlayerPrefs.GetInt("Player2AIDebugDeep", 0) == 1;
         }
 
         simulation = new EnhancedAISimulation(aiPlayerManager, humanPlayerManager, duelManager, showDebugLogs);
-        turnSimulator = new TurnSimulator(this, showDebugLogs);
-        movementSimulator = new MovementSimulator(showDebugLogs);
-        planGenerator = new PlanGenerator(showDebugLogs, movementSimulator);
+        movementSimulator = new MovementSimulator(showDebugLogs, showDebugDeepLogs);
+        planGenerator = new PlanGenerator(showDebugLogs, showDebugDeepLogs, movementSimulator);
         heroValueEvaluator = new HeroValueEvaluator();
         heroExposureEvaluator = new HeroExposureEvaluator();
         protectionDecisionMaker = new ProtectionDecisionMaker();
@@ -86,8 +86,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         duelManager.duelPhase.OnValueChanged += OnDuelPhaseChanged;
         duelManager.OnChangeTurn += OnTurnChanged;
 
-        if (showDebugLogs)
-            Debug.Log("IA inicializada");
+        Log("IA inicializada");
     }
 
     private void OnDuelPhaseChanged(DuelPhase previousValue, DuelPhase newValue)
@@ -103,16 +102,14 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
     {
         if (!enableCardPlayingAI) return;
 
-        if (showDebugLogs)
-            Debug.Log("🎴 IA evaluando jugar cartas en fase de preparación...");
+        Log("🎴 IA evaluando jugar cartas en fase de preparación...");
 
         AnalyzePreparationPhase();
 
         // Verificar si es el turno de la IA para jugar cartas
         if (!IsItAITurnInPreparation())
         {
-            if (showDebugLogs)
-                Debug.Log("No es el turno de la IA para jugar cartas o no hay cartas disponibles");
+            Log("No es el turno de la IA para jugar cartas o no hay cartas disponibles");
 
             PassTurn();
             return;
@@ -141,7 +138,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
     private void AnalyzePreparationPhase()
     {
-        Debug.Log("=== [AI] ANALYZE PREPARATION PHASE ===");
+        LogDeep("=== [AI] ANALYZE PREPARATION PHASE ===");
 
         foreach (var hero in aiPlayerManager.GetAllCardInField())
         {
@@ -171,7 +168,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
                     value,
                     aiPlayerManager.PlayerEnergy);
 
-            Debug.Log(
+            LogDeep(
                 $"[AI][Hero Analysis] {heroSO.CardName} | " +
                 $"Pos: (R{row},C{col}) | " +
                 $"Value: {value:F1} | " +
@@ -180,7 +177,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             );
         }
 
-        Debug.Log("=== [AI] END ANALYSIS ===");
+        LogDeep("=== [AI] END ANALYSIS ===");
     }
 
 
@@ -199,25 +196,25 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
                 if (bestPlay.card != null && bestPlay.score >= minimumCardScoreToPlay)
                 {
-                    if (showDebugLogs)
-                        Debug.Log($"🎯 IA decide jugar: {bestPlay.card.cardSO.CardName} en posición {bestPlay.position} (score: {bestPlay.score:F1})");
+                    Log($"🎯 IA decide jugar: {bestPlay.card.cardSO.CardName} en posición {bestPlay.position} (score: {bestPlay.score:F1})");
 
+                    yield return new WaitForSeconds(cardDecisionDelay);
                     PlayHeroCard(bestPlay.card, bestPlay.position);
                     cardsPlayedThisTurn++;
                 }
                 else
                 {
-                    if (showDebugLogs)
-                        Debug.Log($"⏭️ IA decide pasar (mejor score: {bestPlay.score:F1}, mínimo requerido: {minimumCardScoreToPlay})");
+                    Log($"⏭️ IA decide pasar (mejor score: {bestPlay.score:F1}, mínimo requerido: {minimumCardScoreToPlay})");
 
+                    yield return new WaitForSeconds(cardDecisionDelay);
                     PassTurn();
                 }
             }
             else
             {
-                if (showDebugLogs)
-                    Debug.Log("⏭️ IA decide pasar (no debe jugar carta este turno)");
+                Log("⏭️ IA decide pasar (no debe jugar carta este turno)");
 
+                yield return new WaitForSeconds(cardDecisionDelay);
                 PassTurn();
             }
         }
@@ -281,8 +278,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
                     bestPosition = position;
                 }
 
-                if (showDebugLogs)
-                    Debug.Log($"   {heroSO.CardName}: Score={totalScore:F1} (carta={cardScore:F1}, posición={positionScore:F1})");
+                LogDeep($"   {heroSO.CardName}: Score={totalScore:F1} (carta={cardScore:F1}, posición={positionScore:F1})");
             }
         }
 
@@ -388,8 +384,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             return;
         }
 
-        if (showDebugLogs)
-            Debug.Log($"▶️ IA jugando {card.cardSO.CardName} en posición {position}");
+        Log($"▶️ IA jugando {card.cardSO.CardName} en posición {position}");
 
         duelManager.PlaceCardInField(aiPlayerManager, false, cardIndex, position);
 
@@ -412,8 +407,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
     private void PassTurn()
     {
-        if (showDebugLogs)
-            Debug.Log("⏭️ IA pasando turno en fase de preparación");
+        Log("⏭️ IA pasando turno en fase de preparación");
 
         // Resetear contador para el próximo turno
         cardsPlayedThisTurn = 0;
@@ -430,8 +424,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         // Verificar si es el turno de la IA
         if (IsAITurn())
         {
-            if (showDebugLogs)
-                Debug.Log("Turno de IA detectado, programando decisión...");
+            Log("Turno de IA detectado, programando decisión...");
 
             // Programar la decisión con un pequeño delay
             Invoke(nameof(MakeAIDecision), decisionDelay);
@@ -473,12 +466,10 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         if (isAITakingDecision && aiDecisionCoroutine != null)
         {
             StopCoroutine(aiDecisionCoroutine);
-            if (showDebugLogs)
-                Debug.Log("🔄 Cancelando decisión anterior de IA...");
+            Log("🔄 Cancelando decisión anterior de IA...");
         }
 
-        if (showDebugLogs)
-            Debug.Log("🧠 IA iniciando decisión...");
+        Log("🧠 IA iniciando decisión...");
 
         // Iniciar nueva decisión asíncrona
         aiDecisionCoroutine = StartCoroutine(MakeAIDecisionTimeSliced());
@@ -496,8 +487,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
             if (allPendingAIHeroes.Count == 0)
             {
-                if (showDebugLogs)
-                    Debug.Log("No hay héroes de IA pendientes por actuar en todo el turno, pasando...");
+                Log("No hay héroes de IA pendientes por actuar en todo el turno, pasando...");
 
                 isAITakingDecision = false;
                 yield break;
@@ -506,11 +496,8 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             // 2. Los héroes que deben actuar EN ESTE SUBTURNO son heroInTurn
             var heroesInThisSubTurn = duelManager.HeroInTurn.Where(IsHeroControlledByAI).ToList();
 
-            if (showDebugLogs)
-            {
-                Debug.Log($"Héroes pendientes en todo el turno: {allPendingAIHeroes.Count}");
-                Debug.Log($"Héroes que actúan en ESTE subturno: {heroesInThisSubTurn.Count}");
-            }
+            Log($"Héroes pendientes en todo el turno: {allPendingAIHeroes.Count}");
+            Log($"Héroes que actúan en ESTE subturno: {heroesInThisSubTurn.Count}");
 
             // 3. Construir snapshot del estado actual
             var currentSnapshot = simulation.BuildSimSnapshot();
@@ -521,8 +508,6 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             yield return StartCoroutine(FindBestPlan(currentSnapshot, allPendingAIHeroes,
                 (plan) => {
                     bestPlan = plan;
-                    if (showDebugLogs)
-                        Debug.Log("🧪 Callback ejecutado, bestPlan asignado");
                 }));
 
             // 5. Ejecutar solo las acciones de los héroes de ESTE subturno
@@ -569,13 +554,10 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             }
         }
 
-        if (showDebugLogs)
+        LogDeep($"Héroes IA pendientes encontrados: {allPendingHeroes.Count}");
+        foreach (var hero in allPendingHeroes)
         {
-            Debug.Log($"Héroes IA pendientes encontrados: {allPendingHeroes.Count}");
-            foreach (var hero in allPendingHeroes)
-            {
-                Debug.Log($"  - {hero.cardSO.CardName} (turnCompleted: {hero.turnCompleted})");
-            }
+            LogDeep($"  - {hero.cardSO.CardName} (turnCompleted: {hero.turnCompleted})");
         }
 
         return allPendingHeroes;
@@ -584,18 +566,15 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
     private void ExecutePlanForCurrentSubTurn(FullPlanSim plan, List<Card> heroesInThisSubTurn)
     {
-        if (showDebugLogs)
-        {
-            Debug.Log($"EJECUTANDO PLAN COMPLETO - {plan.Actions.Count} acciones totales");
-            Debug.Log($"Héroes en subturno actual: {heroesInThisSubTurn.Count}");
+        Log($"EJECUTANDO PLAN COMPLETO - {plan.Actions.Count} acciones totales");
+        Log($"Héroes en subturno actual: {heroesInThisSubTurn.Count}");
 
-            // Mostrar plan completo con información clara
-            foreach (var (hero, moveIndex, targetPosition) in plan.Actions)
-            {
-                var move = hero.moves[moveIndex];
-                string targetInfo = GetTargetInfoString(move, targetPosition);
-                Debug.Log($"  - {hero.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName} {targetInfo}");
-            }
+        // Mostrar plan completo con información clara
+        foreach (var (hero, moveIndex, targetPosition) in plan.Actions)
+        {
+            var move = hero.moves[moveIndex];
+            string targetInfo = GetTargetInfoString(move, targetPosition);
+            Log($"  - {hero.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName} {targetInfo}");
         }
 
         int actionsExecuted = 0;
@@ -614,8 +593,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
                         (plannedAction.targetPosition == -1 ? "ATAQUE DIRECTO A VIDA" : "ATAQUE A OBJETIVO") :
                         "EFECTO AUTO-APLICADO";
 
-                    if (showDebugLogs)
-                        Debug.Log($"Ejecutando: {heroInTurn.cardSO.CardName} -> {move.MoveSO.MoveName} [{actionType}]");
+                    Log($"Ejecutando: {heroInTurn.cardSO.CardName} -> {move.MoveSO.MoveName} [{actionType}]");
 
                     duelManager.UseMovement(plannedAction.moveIndex, plannedAction.hero.OriginalCard, plannedAction.targetPosition);
                     actionsExecuted++;
@@ -623,8 +601,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             }
         }
 
-        if (showDebugLogs)
-            Debug.Log($"Acciones ejecutadas en este subturno: {actionsExecuted}");
+        Log($"Acciones ejecutadas en este subturno: {actionsExecuted}");
     }
 
     private IEnumerator FindBestPlan(SimSnapshot snapshot, List<Card> aiHeroes, Action<FullPlanSim> onComplete)
@@ -636,8 +613,8 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
 
         FullPlanSim bestPlan = planGenerator.GenerateBestPlan(snapshot);
 
-        Debug.Log($"🧪 Plan encontrado con score {bestPlan.Score:F2} y {bestPlan.Actions.Count} acciones:");
-        Debug.Log(GetCombinationString(bestPlan.Actions));
+        Log($"🧪 Plan encontrado con score {bestPlan.Score:F2} y {bestPlan.Actions.Count} acciones:");
+        Log(GetCombinationString(bestPlan.Actions));
         onComplete?.Invoke(bestPlan);
     }
 
@@ -674,21 +651,6 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         }
     }
 
-    private List<int> GetAvailableMovesForHero(Card hero)
-    {
-        var availableMoves = new List<int>();
-
-        for (int i = 0; i < hero.Moves.Count; i++)
-        {
-            if (IsMoveUsable(hero, i)) // Este es para el estado REAL
-            {
-                availableMoves.Add(i);
-            }
-        }
-
-        return availableMoves;
-    }
-
     private bool IsMoveUsable(Card hero, int moveIndex)
     {
         var move = hero.Moves[moveIndex];
@@ -696,16 +658,14 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         // Verificar energía
         if (move.MoveSO.EnergyCost > aiPlayerManager.PlayerEnergy)
         {
-            if (showDebugLogs)
-                Debug.Log($"Movimiento {moveIndex} de {hero.cardSO.CardName} requiere {move.MoveSO.EnergyCost} energía, pero solo hay {aiPlayerManager.PlayerEnergy}");
+            LogDeep($"Movimiento {moveIndex} de {hero.cardSO.CardName} requiere {move.MoveSO.EnergyCost} energía, pero solo hay {aiPlayerManager.PlayerEnergy}");
             return false;
         }
 
         // Verificar si el héroe puede actuar
         if (hero.IsActionBlocked())
         {
-            if (showDebugLogs)
-                Debug.Log($"Héroe {hero.cardSO.CardName} no puede actuar (bloqueado)");
+            LogDeep($"Héroe {hero.cardSO.CardName} no puede actuar (bloqueado)");
             return false;
         }
 
@@ -715,8 +675,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
             var targets = duelManager.ObtainTargets(hero, moveIndex);
             if (targets.Count == 0 && humanPlayerManager.GetAllCardInField().Count > 0)
             {
-                if (showDebugLogs)
-                    Debug.Log($"Movimiento {moveIndex} de {hero.cardSO.CardName} no tiene objetivos disponibles");
+                LogDeep($"Movimiento {moveIndex} de {hero.cardSO.CardName} no tiene objetivos disponibles");
                 return false;
             }
         }
@@ -730,5 +689,15 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         {
             duelManager.OnChangeTurn -= OnTurnChanged;
         }
+    }
+
+    public void Log(string message)
+    {
+        if (showDebugLogs) Debug.Log(message);
+    }
+
+    public void LogDeep(string message)
+    {
+        if (showDebugDeepLogs) Debug.Log(message);
     }
 }

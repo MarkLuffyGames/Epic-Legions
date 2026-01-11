@@ -5,18 +5,25 @@ using UnityEngine;
 
 public class PlanGenerator
 {
-    bool _showDebugInfo;
+    bool _showDebugLogs;
+    bool _showDebugDeepLogs;
     Dictionary<SimSnapshot, FullPlanSim> plans = new();
-    private MovementSimulator movementSimulator = new MovementSimulator();
-    public PlanGenerator(bool showDebugInfo, MovementSimulator movementSimulator)
+    private MovementSimulator movementSimulator;
+    public PlanGenerator(bool showDebugLogs, bool showDebugDeepLogs, MovementSimulator movementSimulator)
     {
-        _showDebugInfo = showDebugInfo;
+        _showDebugLogs = showDebugLogs;
+        _showDebugDeepLogs = showDebugDeepLogs;
         this.movementSimulator = movementSimulator;
     }
 
-    private void Log(string message)
+    public void Log(string message)
     {
-        if (_showDebugInfo) Debug.Log(message);
+        if (_showDebugLogs) Debug.Log(message);
+    }
+
+    public void LogDeep(string message)
+    {
+        if (_showDebugDeepLogs) Debug.Log(message);
     }
     public FullPlanSim GenerateBestPlan(SimSnapshot originalSnapshot)
     {
@@ -42,27 +49,18 @@ public class PlanGenerator
                 }
             }
         }
-
-        Log($"📊 Mapeo - DuelManager subturn {snap.CurrentSubTurn} -> mi índice {startOurIndex}");
-        Log($"📊 Total grupos velocidad: {allSubturns.Count}");
-        Log($"📊 Total de heroes este subturno: {allSubturns[startOurIndex].Count}");
+        Log("⏭️ Generando mejor plan.");
+        LogDeep($"📊 Mapeo - DuelManager subturn {snap.CurrentSubTurn} -> mi índice {startOurIndex}");
+        LogDeep($"📊 Total grupos velocidad: {allSubturns.Count}");
+        LogDeep($"📊 Total de heroes este subturno: {allSubturns[startOurIndex].Count}");
 
         GenerateInitialPlans(snap.Clone(), allSubturns[startOurIndex]);
 
         for (int ourIndex = startOurIndex; ourIndex < allSubturns.Count; ourIndex++)
         {
-            string actionsCount = "";
-            int count = 0;
-            foreach (var item in plans)
-            {
-                count++;
-                actionsCount += $" {count} - {item.Value.Actions.Count} acciones.";
-            }
-            
-            Log($"📊 Planes existentes: {plans.Count},{actionsCount}");
             if (ourIndex != startOurIndex)
             {
-                Log($" ⏭️ Continuando planes para el grupo de velocidad {ourIndex}");
+                LogDeep($" ⏭️ Continuando planes para el grupo de velocidad {ourIndex}");
                 ContinuePlans(allSubturns[ourIndex]);
             }
             SimSubturns(ourIndex, allSubturns[ourIndex], turnMapping);
@@ -72,7 +70,8 @@ public class PlanGenerator
         {
             var result = plan.Value;
             result.FinalEnergy = snap.MyEnergy;
-            result.CalculateScore(_showDebugInfo);
+            result.CalculateScore(_showDebugLogs);
+            LogDeep(GetCombinationString(plan.Value.Actions));
         }
 
         if(plans.Count == 0)
@@ -99,7 +98,7 @@ public class PlanGenerator
             var heroActions = GetValidActionsForHero(snap, currentSubturnHeroes[i]);
             actions.Add(heroActions);
 
-            Log($"📊 Acciones válidas obtenidas para {currentSubturnHeroes[i].OriginalCard.cardSO.CardName} del subturno inicial: {heroActions.Count}");
+            LogDeep($"📊 Acciones válidas obtenidas para {currentSubturnHeroes[i].OriginalCard.cardSO.CardName} del subturno inicial: {heroActions.Count}");
         }
 
         var combs = GenerateActionCombinations(actions, snap.MyEnergy);
@@ -114,7 +113,7 @@ public class PlanGenerator
             plans[snap.Clone()] = sim;
         }
 
-        Log($"📊 Planes iniciales generados: {plans.Count}");
+        LogDeep($"📊 Planes iniciales generados: {plans.Count}");
     }
 
     private void ContinuePlans(List<SimCardState> currentSubturnHeroes)
@@ -148,11 +147,11 @@ public class PlanGenerator
                     if (j == 0)// Reutilizar el plan existente para la primera combinación
                     {
                         plan.AddAction(action.hero, action.moveIndex, action.targetPosition);
-                        Log($"🔄 Reutilizando plan existente para la primera combinación");
+                        LogDeep($"🔄 Reutilizando plan existente para la primera combinación");
                     }
                     else// Clonar el plan existente para las demás combinaciones
                     {
-                        Log($"➕ Clonando plan para nueva combinación");
+                        LogDeep($"➕ Clonando plan para nueva combinación");
                         var newSnap = snap.Clone();
                         var newPlan = planClone.Clone(newSnap);
                         newPlan.AddAction(action.hero, action.moveIndex, action.targetPosition);
@@ -179,7 +178,7 @@ public class PlanGenerator
             plan.totalActionsExecuted = 0;
             plan.invalidActions = 0;
 
-            Log($" ⚡ Energia inicial {snap.MyEnergy}");
+            LogDeep($" ⚡ Energia inicial {snap.MyEnergy}");
 
             //Actualizar el CurrentSubTurn con el valor correspondiente del mapeo inverso
             snap.CurrentSubTurn = GetDuelManagerTurnFromOurIndex(ourIndex, turnMapping);
@@ -187,10 +186,10 @@ public class PlanGenerator
             // AVANZAR SUBTURNO antes de procesar acciones
             AdvanceSubTurn(snap);
 
-            Log($"🔄 Subturno simulado {snap.CurrentSubTurn} " +
+            LogDeep($"🔄 Subturno simulado {snap.CurrentSubTurn} " +
                          $"(Total pasados: {snap.SubTurnsPassedInSimulation})");
 
-            Log($"🔄 Grupo velocidad {ourIndex}: {currentSubturn.Count} héroes");
+            LogDeep($"🔄 Grupo velocidad {ourIndex}: {currentSubturn.Count} héroes");
 
             // Buscar y separar acciones para este subturno
             var positiveActions = new List<(SimCardState hero, int moveIndex, int targetPosition)>();
@@ -217,7 +216,7 @@ public class PlanGenerator
                 }
             }
 
-            Log($"  - Efectos positivos: {positiveActions.Count}, Otros: {otherActions.Count}");
+            LogDeep($"  - Efectos positivos: {positiveActions.Count}, Otros: {otherActions.Count}");
 
             // Ejecutar acciones positivas
             foreach (var action in positiveActions)
@@ -231,9 +230,9 @@ public class PlanGenerator
                 ExecuteAction(snap, action, plan, movementSimulator);
             }
 
-            Log($" ⚡ Energia final {snap.MyEnergy}");
-            if(positiveActions.Count > 0)
-                Log(snap == positiveActions.First().hero.snapshot ? "Snapshot coincide" : "Snapshot no coincide");
+            LogDeep($" ⚡ Energia final {snap.MyEnergy}");
+            if (positiveActions.Count > 0)
+                LogDeep(snap == positiveActions.First().hero.snapshot ? "Snapshot coincide" : "Snapshot no coincide");
         }
     }
 
@@ -245,7 +244,7 @@ public class PlanGenerator
 
         string targetInfo = move.MoveSO.NeedTarget ?
                 (targetPosition == -1 ? "VIDA" : $"POS{targetPosition}") : "AUTO";
-        Log($"  🎮 {hero.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName} [{targetInfo}]");
+        LogDeep($"  🎮 {hero.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName} [{targetInfo}]");
 
         var energyBefore = snap.MyEnergy;
         var actionsBefore = result.Actions.Count;
@@ -260,12 +259,12 @@ public class PlanGenerator
             result.totalActionsExecuted++;
             int damageDealt = enemyLifeBefore - snap.EnemyLife;
             if (damageDealt > 0)
-                Log($"    💥 Daño infligido: {damageDealt}");
+                LogDeep($"    💥 Daño infligido: {damageDealt}");
         }
         else
         {
             result.invalidActions++;
-            Log($"    ❌ ACCIÓN DESCARTADA");
+            LogDeep($"    ❌ ACCIÓN DESCARTADA");
             return true; // Detener si la acción no fue válida.
         }
 
@@ -310,16 +309,16 @@ public class PlanGenerator
 
                 if(targets.Count == 0)
                 {
-                    Log($"No hay enemigos en el campo, atacar directo a vida");
+                    LogDeep($"No hay enemigos en el campo, atacar directo a vida");
                     validAction.Add((hero, moveIndex, -1));
-                    Log($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex].MoveSO.MoveName} -> Vida del jugador");
+                    LogDeep($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex].MoveSO.MoveName} -> Vida del jugador");
                     continue;
                 }
 
                 foreach (var target in targets)
                 {
                     validAction.Add((hero, moveIndex, target.FieldIndex));
-                    Log($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex].MoveSO.MoveName} -> {target.OriginalCard.cardSO.CardName} Pos: {target.FieldIndex}");
+                    LogDeep($"{hero.OriginalCard.cardSO.CardName} -> {hero.OriginalCard.Moves[moveIndex].MoveSO.MoveName} -> {target.OriginalCard.cardSO.CardName} Pos: {target.FieldIndex}");
                 }
             }
             else
@@ -336,7 +335,7 @@ public class PlanGenerator
         var targets = new List<SimCardState>();
         var move = attacker.moves[moveIndex];
 
-        Log($"Buscando objetivos para {attacker.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName}");
+        LogDeep($"Buscando objetivos para {attacker.OriginalCard.cardSO.CardName} -> {move.MoveSO.MoveName}");
 
         // Determinar qué jugador es el objetivo
         List<SimCardState> potentialTargets;
@@ -345,13 +344,13 @@ public class PlanGenerator
         {
             // Ataque: buscar enemigos
             potentialTargets = snap.EnemyHeroes.Where(e => e.Alive).ToList();
-            Log($"Potenciales objetivos enemigos: {potentialTargets.Count}");
+            LogDeep($"Potenciales objetivos enemigos: {potentialTargets.Count}");
         }
         else
         {
             // Efecto positivo: buscar aliados (excluyéndose a sí mismo)
             potentialTargets = snap.MyControlledHeroes.Where(a => a.Alive && a != attacker).ToList();
-            Log($"Potenciales objetivos aliados: {potentialTargets.Count}");
+            LogDeep($"Potenciales objetivos aliados: {potentialTargets.Count}");
         }
 
         // Filtrar por línea de visión
@@ -363,7 +362,7 @@ public class PlanGenerator
             }
         }
 
-        Log($"Objetivos válidos encontrados: {targets.Count}");
+        LogDeep($"Objetivos válidos encontrados: {targets.Count}");
 
         return targets;
     }
@@ -378,19 +377,15 @@ public class PlanGenerator
 
         // Verificar que el objetivo esté vivo
         if (!target.Alive) return false;
-        Log("Objetivo vivo");
 
         // 1. Verificar si el atacante es de clase Hunter y el movimiento es de rango
         bool isHunterRanged = IsHunterRangedAttack(attacker, moveSO);
-        Log($"Atacante es Cazador: {isHunterRanged}");
 
         // 2. Verificar si el atacante es de clase Assassin (puede atacar por detrás)
         bool isAssassin = IsAssassin(attacker);
-        Log($"Atacante es Asesino: {isAssassin}");
 
         // 3. Verificar línea de visión (si hay héroes delante protegiendo)
         bool hasLineOfSight = HasLineOfSightToTarget(snap, attacker, target, isHunterRanged, isAssassin);
-        Log($"Línea de visión al objetivo: {hasLineOfSight}");
 
         return hasLineOfSight;
     }
@@ -572,11 +567,11 @@ public class PlanGenerator
             heroActionsList.Item1.moves[heroActionsList.Item2].MoveSO.EnergyCost) <= energyLimit) // Verificar límite de energía
             {
                 combinations.Add(currentCombination);
-                Log($"Combinacion generada {currentCombination.Count} acciones");
+                LogDeep($"Combinacion generada {currentCombination.Count} acciones");
             }
             else
             {
-                Log("Combinación descartada por límite de energía");
+                LogDeep("Combinación descartada por límite de energía");
             }
 
                 // Encontrar el próximo índice a incrementar
@@ -607,5 +602,20 @@ public class PlanGenerator
                 return mapping.Key;
         }
         return ourIndex; // Fallback
+    }
+
+    private string GetCombinationString(List<(SimCardState hero, int moveIndex, int targetPosition)> combination)
+    {
+        string result = "";
+        foreach (var (hero, moveIndex, targetPosition) in combination)
+        {
+            var move = hero.moves[moveIndex];
+            string moveName = move.MoveSO.MoveName;
+            string targetInfo = move.MoveSO.NeedTarget ?
+                (targetPosition == -1 ? "→[VIDA]" : $"→[POS{targetPosition}]") : "→[AUTO]";
+
+            result += $"{hero.OriginalCard.cardSO.CardName}:{moveName}{targetInfo} ";
+        }
+        return result.Trim();
     }
 }
