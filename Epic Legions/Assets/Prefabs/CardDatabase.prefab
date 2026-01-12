@@ -140,6 +140,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ddb553dc78626834c859783368463ea6, type: 2}
   - {fileID: 11400000, guid: 9ffd289fc1d02f144ad1073ae68e7f2c, type: 2}
   - {fileID: 11400000, guid: 352b01385b3189d4db454dd4d710d399, type: 2}
+  - {fileID: 11400000, guid: dba37387123e1674ca4f78ace5b00784, type: 2}
+  - {fileID: 11400000, guid: 526c051b460d86f4a884585a00d51f3c, type: 2}
+  - {fileID: 11400000, guid: 6305da7fd6ddf9f4595da772c6626ac3, type: 2}
+  - {fileID: 11400000, guid: 95f27ac200f09404a94b17572f4f3c91, type: 2}
   classIcons:
   - heroClass: 0
     icon: {fileID: 21300000, guid: 708f829855bba4949b50535bfd08e2b9, type: 3}
@@ -187,5 +191,3 @@ MonoBehaviour:
     icon: {fileID: 723716962, guid: 1eec5652195a9f34abc80831fe9045de, type: 3}
   - moveType: 2
     icon: {fileID: 21300000, guid: ed3b9c47b66255e408799100ec986eec, type: 3}
-  - moveType: 3
-    icon: {fileID: 21300000, guid: 92e382fc18caa8f4e9051d2f6c895494, type: 3}
