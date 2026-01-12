@@ -123,7 +123,7 @@ public class DuelManager : NetworkBehaviour
 
                 InitializeBattleTurns();
 
-                StartHeroTurn();
+                if (IsServer || isSinglePlayer) StartHeroTurn();
 
                 if (IsClient || isSinglePlayer)
                 {
@@ -402,6 +402,8 @@ public class DuelManager : NetworkBehaviour
     /// </summary>
     protected void StartHeroTurn()
     {
+        if (!isSinglePlayer) StartHeroTurnClientRpc(heroesInTurnIndex);
+
         // Actualiza el texto de la fase del duelo
         UpdateDuelPhaseText();
 
@@ -1270,7 +1272,7 @@ public class DuelManager : NetworkBehaviour
     protected void ConsumeEnergyClientRpc(ulong clientId, int amount)
     {
         // Si el cliente actual es el host (servidor), no se realiza ninguna acción (el host ya maneja la energía)
-        if (IsHost) return;
+        if (IsServer) return;
 
         // Verificar si el cliente que ejecuta esta función es el cliente local
         if (clientId == NetworkManager.Singleton.LocalClientId)
@@ -1778,7 +1780,7 @@ public class DuelManager : NetworkBehaviour
     protected IEnumerator HeroAttackClient(int fieldPositionIndex, ulong attackerClientId, bool isHero, int heroUsesTheAttack, int movementToUseIndex, bool lastMove, bool isControlledHero)
     {
         // Si este cliente es el host, no se ejecuta la lógica en él.
-        if (IsHost) yield break;
+        if (IsServer) yield break;
 
         // Determina qué carta está realizando el ataque (héroe o hechizo).
         Card attackerCard = isHero ?
@@ -1826,7 +1828,6 @@ public class DuelManager : NetworkBehaviour
         if (heroesInTurnIndex < turns.Length - 1)
         {
             heroesInTurnIndex++; // Avanzar al siguiente héroe en turno.
-            StartHeroTurnClientRpc(heroesInTurnIndex); // Notificar a los clientes sobre el cambio de turno.
             StartHeroTurn(); // Iniciar el turno del nuevo héroe.
         }
         else // Si hemos llegado al último héroe, reiniciar el ciclo de turnos.
@@ -1851,7 +1852,7 @@ public class DuelManager : NetworkBehaviour
     protected void StartHeroTurnClientRpc(int heroesInTurnIndex)
     {
         // Si el cliente es el host, no realiza ninguna acción.
-        if (IsHost) return;
+        if (IsServer) return;
 
         // Actualiza el índice del héroe en turno en el cliente.
         this.heroesInTurnIndex = heroesInTurnIndex;
@@ -1891,7 +1892,7 @@ public class DuelManager : NetworkBehaviour
     protected void RemoveDestroyedCardsClientRpc()
     {
         // Asegúrate de que solo los clientes (no el host) ejecuten esta función.
-        if (IsHost) return;
+        if (IsServer) return;
 
         // Elimina todas las cartas en el campo de batalla que no tienen una posición (indicando que han sido destruidas).
         HeroCardsOnTheField.RemoveAll(card => card.FieldPosition == null);
@@ -1932,7 +1933,7 @@ public class DuelManager : NetworkBehaviour
     protected void RegenerateDefenseClientRpc(int fieldPositionIndex, ulong ownerClientId)
     {
         // Si el cliente es el host, no se hace nada, ya que el host maneja la lógica del servidor.
-        if (IsHost) return;
+        if (IsServer) return;
 
         Card card = null;
 
