@@ -1437,12 +1437,19 @@ public class DuelManager : NetworkBehaviour
         else
         {
             // Si el movimiento es un efecto positivo, ataca al héroe objetivo correspondiente.
-            Card card = (targetPlayer == 2) ? player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card 
+            Card card = null;
+
+            if (attackerCard.Moves[movementToUseIndex].MoveSO.NeedTarget)
+            {
+                card = (targetPlayer == 2) ? player1Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card
                 : player2Manager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+            }
+            else
+            {
+                card = attackerCard;
+            }
 
-            if (!attackerCard.Moves[movementToUseIndex].MoveSO.NeedTarget) card = attackerCard;
-
-            yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
+                yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
         }
     }
 
@@ -1686,7 +1693,8 @@ public class DuelManager : NetworkBehaviour
 
         var moveSO = attackerCard.Moves[movementToUseIndex].MoveSO;
         var targetsType = attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType;
-        var targetField = player1Manager.GetAllCardInField().Contains(cardToAttack) ?
+        var targetField = player1Manager.GetAllCardInField().Contains(cardToAttack) 
+            || player1Manager.SpellFieldPosition.Card == cardToAttack ?
             player1Manager : player2Manager;
 
         switch (targetsType)
