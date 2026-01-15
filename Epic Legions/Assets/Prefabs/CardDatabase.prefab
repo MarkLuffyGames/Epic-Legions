@@ -144,6 +144,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 526c051b460d86f4a884585a00d51f3c, type: 2}
   - {fileID: 11400000, guid: 6305da7fd6ddf9f4595da772c6626ac3, type: 2}
   - {fileID: 11400000, guid: 95f27ac200f09404a94b17572f4f3c91, type: 2}
+  - {fileID: 11400000, guid: 818232cbca8d58344be079e83a478b2f, type: 2}
   classIcons:
   - heroClass: 0
     icon: {fileID: 21300000, guid: 708f829855bba4949b50535bfd08e2b9, type: 3}

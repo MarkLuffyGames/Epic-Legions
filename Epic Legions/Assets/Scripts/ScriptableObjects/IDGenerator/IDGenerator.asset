@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba20e752f5705b458773213ed7f0bac, type: 3}
   m_Name: IDGenerator
   m_EditorClassIdentifier: 
-  CardLastId: 1103
-  MoveLastId: 1265
-  EffectLastId: 1288
+  CardLastId: 1104
+  MoveLastId: 1271
+  EffectLastId: 1297
