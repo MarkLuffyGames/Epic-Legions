@@ -1420,16 +1420,16 @@ public class DuelManager : NetworkBehaviour
         if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
             // Si no se seleccionó un héroe objetivo (índice -1), realiza un ataque directo.
-            if (heroToAttackPositionIndex == -1 || 
+            if ((heroToAttackPositionIndex == -1 || 
                 (heroToAttackPositionIndex == attackerCard.FieldPosition.PositionIndex &&
-                targetManager.GetAllCardInField().Count == 0))
+                targetManager.GetAllCardInField().Count == 0)) && isHero)
             {
                 yield return HeroDirectAttack(playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
             }
             else
             {
                 // Si se seleccionó un héroe objetivo, realiza un ataque a ese héroe.
-                Card card = targetManager.GetFieldPositionList()[heroToAttackPositionIndex].Card;
+                Card card = isHero ? targetManager.GetFieldPositionList()[heroToAttackPositionIndex].Card : targetManager.SpellFieldPosition.Card;
                 yield return HeroAttack(card, playerRoles[clientId], attackerCard, movementToUseIndex, lastMove);
             }
 
@@ -1476,6 +1476,8 @@ public class DuelManager : NetworkBehaviour
         // Inicia la animación de ataque.
         yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
+
+        Debug.Log($"Damage {attackerCard.Moves[movementToUseIndex].MoveSO.Damage}");
         // Si el ataque causa daño, se aplica a la carta objetivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
         {
@@ -1690,32 +1692,39 @@ public class DuelManager : NetworkBehaviour
     /// <returns>Una lista de cartas que representan los objetivos del ataque.</returns>
     public List<Card> GetTargetsForMovement(Card cardToAttack, Card attackerCard, int movementToUseIndex)
     {
-        PlayerManager player1 = attackerCard.IsControlled() ? player2Manager : player1Manager;
-        PlayerManager player2 = player1 == player1Manager ? player2Manager : player1Manager;
-
         var moveSO = attackerCard.Moves[movementToUseIndex].MoveSO;
         var targetsType = attackerCard.Moves[movementToUseIndex].MoveSO.TargetsType;
         var targetField = player1Manager.GetAllCardInField().Contains(cardToAttack) 
             || player1Manager.SpellFieldPosition.Card == cardToAttack ?
             player1Manager : player2Manager;
 
+        var targetsList = new List<Card>();
+
         switch (targetsType)
         {
+
             case TargetsType.ADJACENT:
-                return targetField.GetAdjacentForCard(cardToAttack);
+                targetsList = targetField.GetAdjacentForCard(cardToAttack);
+                if (moveSO.MoveType != MoveType.PositiveEffect) targetsList.Remove(attackerCard);
+                return targetsList;
             case TargetsType.COLUMN:
-                return targetField.GetColumnForCard(cardToAttack, 3);
+                targetsList = targetField.GetColumnForCard(cardToAttack, 3);
+                if (moveSO.MoveType != MoveType.PositiveEffect) targetsList.Remove(attackerCard);
+                return targetsList;
             case TargetsType.PIERCE:
-                return targetField.GetColumnForCard(cardToAttack, 2);
+                targetsList = targetField.GetColumnForCard(cardToAttack, 2);
+                if (moveSO.MoveType != MoveType.PositiveEffect) targetsList.Remove(attackerCard);
+                return targetsList;
             case TargetsType.CONE:
-                return targetField.GetColumnForCard(cardToAttack, 2);
+                targetsList = targetField.GetColumnForCard(cardToAttack, 2);
+                if (moveSO.MoveType != MoveType.PositiveEffect) targetsList.Remove(attackerCard);
+                return targetsList;
             case TargetsType.FIELD:
-                targetField = moveSO.MoveType == MoveType.PositiveEffect ? targetField : GetOpposingPlayerManager(targetField);
-                var targets = attackerCard.IsControlled() ? GetOpposingPlayerManager(targetField).GetAllCardInField() : targetField.GetAllCardInField();
-                if(moveSO.MoveType != MoveType.PositiveEffect) targets.Remove(attackerCard);
-                return targets;
+                targetsList = targetField.GetAllCardInField();
+                if(moveSO.MoveType != MoveType.PositiveEffect) targetsList.Remove(attackerCard);
+                return targetsList;
             default:
-                return null;
+                return targetsList;
         }
     }
 
@@ -1806,13 +1815,15 @@ public class DuelManager : NetworkBehaviour
         // Si el movimiento no es un efecto positivo, realiza un ataque directo o a un objetivo específico.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect)
         {
-            if (fieldPositionIndex == -1)
+            if ((fieldPositionIndex == -1 ||
+                (fieldPositionIndex == attackerCard.FieldPosition.PositionIndex &&
+                targetManager.GetAllCardInField().Count == 0)) && isHero)
             {
                 yield return HeroDirectAttack(playerRole, attackerCard, movementToUseIndex, lastMove);
             }
             else
             {
-                Card card = targetManager.GetFieldPositionList()[fieldPositionIndex].Card;
+                Card card = isHero ? targetManager.GetFieldPositionList()[fieldPositionIndex].Card : targetManager.SpellFieldPosition.Card;
                 yield return HeroAttack(card, playerRole, attackerCard, movementToUseIndex, lastMove);
             }
         }
