@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: IDGenerator
   m_EditorClassIdentifier: 
   CardLastId: 1104
-  MoveLastId: 1271
-  EffectLastId: 1297
+  MoveLastId: 1277
+  EffectLastId: 1314

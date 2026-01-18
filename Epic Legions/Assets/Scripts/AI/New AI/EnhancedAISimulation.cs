@@ -29,7 +29,9 @@ public class EnhancedAISimulation
             EnemyEnergy = enemyManager.PlayerEnergy,
             CurrentSubTurn = duelManager.HeroesInTurnIndex,
             OriginalSubTurn = duelManager.HeroesInTurnIndex,
-            SubTurnsPassedInSimulation = 0
+            SubTurnsPassedInSimulation = 0,
+            MyGlobalEffects = new List<Effect>(myManager.ActiveEffects),
+            EnemyGlobalEffects = new List<Effect>(enemyManager.ActiveEffects),
         };
 
         // Procesar héroes de ambos jugadores

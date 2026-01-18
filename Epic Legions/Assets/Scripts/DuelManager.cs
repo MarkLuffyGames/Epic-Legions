@@ -671,7 +671,7 @@ public class DuelManager : NetworkBehaviour
         card.waitForServer = false;
 
         // Consume la energía correspondiente para usar la carta
-        playerManager.ConsumeEnergy(card.cardSO is HeroCardSO hero ? hero.Energy : 0);
+        playerManager.ConsumeEnergy(card.cardSO is HeroCardSO hero ? hero.Energy : 0 , true);
 
         playerManager.GetHandCardHandler().ShowCardsBorder();
     }
@@ -821,6 +821,24 @@ public class DuelManager : NetworkBehaviour
             // Actualiza el texto que muestra el estado del héroe
             hero.UpdateText();
         }
+
+        foreach (var effect in player1Manager.ActiveEffects)
+        {
+            if (effect.durability > 0)
+            {
+                effect.MoveEffect.UpdateEffect(effect);
+            }
+        }
+        player1Manager.ActiveEffects.RemoveAll(stat => stat.durability <= 0);
+
+        foreach (var effect in player2Manager.ActiveEffects)
+        {
+            if (effect.durability > 0)
+            {
+                effect.MoveEffect.UpdateEffect(effect);
+            }
+        }
+        player2Manager.ActiveEffects.RemoveAll(stat => stat.durability <= 0);
 
         SendCardsToGraveyard();
     }

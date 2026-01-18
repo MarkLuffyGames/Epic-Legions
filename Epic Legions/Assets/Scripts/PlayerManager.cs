@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerDuelUI playerDuelUI;
     [SerializeField] private string playerName;
 
+    private List<Effect> activeEffects = new List<Effect>();
     private int playerHealt;
     private int playerEnergy;
 
@@ -36,6 +37,7 @@ public class PlayerManager : MonoBehaviour
     public string PlayerName => playerName;
 
     public bool isPlayer;
+    public List<Effect> ActiveEffects => activeEffects;
 
 
     private void Start()
@@ -374,9 +376,9 @@ public class PlayerManager : MonoBehaviour
         UpdateUI();
     }
 
-    public void ConsumeEnergy(int amount)
+    public void ConsumeEnergy(int amount, bool isInvoke = false)
     {
-        playerEnergy -= amount;
+        if(isInvoke || !FreeAbilityCost())playerEnergy -= amount;
         UpdateUI();
     }
 
@@ -399,5 +401,23 @@ public class PlayerManager : MonoBehaviour
         UpdateUI();
 
         return playerHealt == 0;
+    }
+
+    public void AddEffect(Effect effect)
+    {
+        activeEffects.Add(effect);
+    }
+
+    public bool FreeAbilityCost()
+    {
+        foreach (var effect in activeEffects)
+        {
+            if (effect.MoveEffect is FreeAbilityCost)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

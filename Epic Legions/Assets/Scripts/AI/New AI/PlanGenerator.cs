@@ -300,7 +300,7 @@ public class PlanGenerator
         {
             var move = hero.moves[moveIndex];
             
-            if (move.MoveSO.EnergyCost > snap.MyEnergy)
+            if (move.MoveSO.EnergyCost > snap.MyEnergy && !snap.FreeAbilityCost(snap.MyGlobalEffects))
                 continue;
 
             if (move.MoveSO.NeedTarget)

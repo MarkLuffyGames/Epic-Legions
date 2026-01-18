@@ -497,7 +497,7 @@ public class Card : MonoBehaviour
     {
         PlayerManager otherPlayerManager = playerManager == duelManager.Player1Manager ? duelManager.Player2Manager : duelManager.Player1Manager;
 
-        return moves[moveIndex].MoveSO.EnergyCost <= playerManager.PlayerEnergy
+        return (moves[moveIndex].MoveSO.EnergyCost <= playerManager.PlayerEnergy || playerManager.FreeAbilityCost())
                 && (duelManager.ObtainTargets(this, moveIndex).Count > 0 || (moves[moveIndex].MoveSO.MoveType == MoveType.PositiveEffect ? !moves[moveIndex].MoveSO.NeedTarget :
                 otherPlayerManager.GetFieldPositionList().All(field => field.Card == null) && moves[moveIndex].MoveSO.Damage > 0));
     }
@@ -866,12 +866,14 @@ public class Card : MonoBehaviour
     /// <param name="movement"></param>
     public IEnumerator AnimationReceivingMovement(Movement movement)
     {
-        var protector = HasProtector();
-        if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)
+        if(cardSO is HeroCardSO)
         {
-            protector.casterHero.ProtectAlly(fieldPosition);
+            var protector = HasProtector();
+            if (protector != null && protector.HasProtector() && movement.MoveSO.Damage > 0)
+            {
+                protector.casterHero.ProtectAlly(fieldPosition);
+            }
         }
-
         if (movement.MoveSO.VisualEffectHit == null) yield break;
 
         var particle = Instantiate(movement.MoveSO.VisualEffectHit, transform.position, Quaternion.identity);
@@ -1288,6 +1290,7 @@ public class Card : MonoBehaviour
     /// <returns>True si tiene un protector.</returns>
     private Effect HasProtector()
     {
+        if (activeEffects == null) return null;
         foreach (Effect effect in activeEffects)
         {
             if (effect.HasProtector()) return effect;
@@ -1298,11 +1301,13 @@ public class Card : MonoBehaviour
 
     public bool IsInLethargy()
     {
-        return activeEffects.Any(x => x.MoveEffect is Lethargy);
+        return cardSO is HeroCardSO ? activeEffects.Any(x => x.MoveEffect is Lethargy) : false;
     }
 
     private bool HasPhantomShield()
     {
+        if(activeEffects == null) return false;
+
         foreach (Effect effect in activeEffects)
         {
             if (effect.MoveEffect is PhantomShield phantomShield)

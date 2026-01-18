@@ -161,6 +161,10 @@ public class Effect
             amount = increaseEnergy.Amount;
             durability = increaseEnergy.NumberTurns;
         }
+        else if(cardEffect is FreeAbilityCost freeAbilityCost)
+        {
+            durability = freeAbilityCost.NumberTurns;
+        }
 
         if (!isNegative)
         {

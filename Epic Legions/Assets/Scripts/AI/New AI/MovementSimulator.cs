@@ -29,8 +29,16 @@ public class MovementSimulator
         var moveSO = move.MoveSO;
 
         // Consumir energía
-        snap.MyEnergy -= moveSO.EnergyCost;
-        result.TotalEnergyCost += moveSO.EnergyCost;
+        if(snap.FreeAbilityCost(snap.MyGlobalEffects))
+        {
+            Log($"No se consume energía por efecto activo de hechizo");
+        }
+        else
+        {
+            snap.MyEnergy -= moveSO.EnergyCost;
+            result.TotalEnergyCost += moveSO.EnergyCost;
+        }
+            
 
         var moveName = moveSO.MoveName;
         string actionInfo = moveSO.NeedTarget ?

@@ -7,6 +7,9 @@ public class SimSnapshot
     public List<SimCardState> MyControlledHeroes = new();
     public List<SimCardState> EnemyHeroes = new();
 
+    public List<Effect> MyGlobalEffects = new();
+    public List<Effect> EnemyGlobalEffects = new();
+
     public int MyLife;
     public int EnemyLife;
     public int MyEnergy;
@@ -26,6 +29,8 @@ public class SimSnapshot
             CurrentSubTurn = this.CurrentSubTurn,
             OriginalSubTurn = this.OriginalSubTurn,
             SubTurnsPassedInSimulation = this.SubTurnsPassedInSimulation,
+            MyGlobalEffects = new List<Effect>(this.MyGlobalEffects),
+            EnemyGlobalEffects = new List<Effect>(this.EnemyGlobalEffects)
         };
 
         foreach (var kvp in this.CardStates)
@@ -43,6 +48,19 @@ public class SimSnapshot
         }
 
         return clone;
+    }
+
+    public bool FreeAbilityCost(List<Effect> globalEffects)
+    {
+        foreach (var effect in globalEffects)
+        {
+            if (effect.MoveEffect is FreeAbilityCost)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

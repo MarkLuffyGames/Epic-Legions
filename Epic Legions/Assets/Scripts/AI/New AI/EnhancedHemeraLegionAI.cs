@@ -656,7 +656,7 @@ public class EnhancedHemeraLegionAI : MonoBehaviour
         var move = hero.Moves[moveIndex];
 
         // Verificar energía
-        if (move.MoveSO.EnergyCost > aiPlayerManager.PlayerEnergy)
+        if (move.MoveSO.EnergyCost > aiPlayerManager.PlayerEnergy || aiPlayerManager.FreeAbilityCost())
         {
             LogDeep($"Movimiento {moveIndex} de {hero.cardSO.CardName} requiere {move.MoveSO.EnergyCost} energía, pero solo hay {aiPlayerManager.PlayerEnergy}");
             return false;
