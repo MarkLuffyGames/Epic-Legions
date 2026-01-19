@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7e458957e68cc45927b7ff5f83ef41, type: 3}
+  m_Name: "Ojo del Drag\xF3n"
+  m_EditorClassIdentifier: Assembly-CSharp::SpellCardSO
+  cardId: 1106
+  cardName: "Ojo del Drag\xF3n"
+  cardLastName: Mirada Opresiva
+  cardSprite: {fileID: 21300000, guid: 736f9d2baccadb641912d10c414cfb9d, type: 3}
+  cardElemnt: 7
+  move: {fileID: 11400000, guid: 581a3ca85d9631940bf7165415016452, type: 2}
