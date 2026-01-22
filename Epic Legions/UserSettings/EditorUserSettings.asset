@@ -21,22 +21,22 @@ EditorUserSettings:
       value: 0002025056065b5f5a585f7b467407444e161b7f787a2564757b1e61e1b6353e
       flags: 0
     RecentlyUsedSceneGuid-4:
-      value: 5005570007500b5e55590f734271094444151c7d2d7e7533747e1c6ae6b46761
-      flags: 0
-    RecentlyUsedSceneGuid-5:
-      value: 5b07515457530a5e595b597542720c444f164d2e7a2c74347d2c4560b6e3376d
-      flags: 0
-    RecentlyUsedSceneGuid-6:
       value: 57090c5052535e02555c5a20462009444f4e4f28787e70687c781f64b0b3606c
       flags: 0
-    RecentlyUsedSceneGuid-7:
+    RecentlyUsedSceneGuid-5:
       value: 5502525652560c0c5b5a5e72452606444216417a787f7468282d4862bab9636b
       flags: 0
-    RecentlyUsedSceneGuid-8:
+    RecentlyUsedSceneGuid-6:
       value: 0507565301530b0c5c5b0d2113700744424f4b79742b27367a2f4437b3b86668
       flags: 0
-    RecentlyUsedSceneGuid-9:
+    RecentlyUsedSceneGuid-7:
       value: 5b00065e0705515f5f575a7511750b4447164d2b2a787034797a4e60b5e63539
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 5005570007500b5e55590f734271094444151c7d2d7e7533747e1c6ae6b46761
+      flags: 0
+    RecentlyUsedSceneGuid-9:
+      value: 5b07515457530a5e595b597542720c444f164d2e7a2c74347d2c4560b6e3376d
       flags: 0
     UIBuilder.DisableMouseWheelZooming:
       value: 2550581500

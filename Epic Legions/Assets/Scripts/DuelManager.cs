@@ -1495,7 +1495,6 @@ public class DuelManager : NetworkBehaviour
         yield return attackerCard.AttackAnimation(player, cardToAttack, attackerCard.Moves[movementToUseIndex]);
 
 
-        Debug.Log($"Damage {attackerCard.Moves[movementToUseIndex].MoveSO.Damage}");
         // Si el ataque causa daño, se aplica a la carta objetivo.
         if (attackerCard.Moves[movementToUseIndex].MoveSO.Damage != 0)
         {
@@ -1513,7 +1512,6 @@ public class DuelManager : NetworkBehaviour
             {
                 // Si el ataque tiene múltiples objetivos, obtiene todos los objetivos y aplica el daño.
                 var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
-                Debug.Log("Targets for damage count: " + targets.Count);
                 if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect) 
                     targets.Remove(attackerCard); // Asegura que el atacante no se incluya como objetivo.
                 for (var i = 0; i < targets.Count; i++)
@@ -1604,7 +1602,6 @@ public class DuelManager : NetworkBehaviour
         else
         {
             var targets = GetTargetsForMovement(cardToAttack, attackerCard, movementToUseIndex);
-            Debug.Log("Targets count: " + targets.Count);
             if (attackerCard.Moves[movementToUseIndex].MoveSO.MoveType != MoveType.PositiveEffect) targets.Remove(attackerCard); // Asegura que el atacante no se incluya como objetivo.
             foreach (var target in targets)
             {
@@ -1915,7 +1912,7 @@ public class DuelManager : NetworkBehaviour
         HeroCardsOnTheField.RemoveAll(card => card.FieldPosition == null);
 
         // Llama al RPC para notificar a los clientes de las cartas destruidas.
-        RemoveDestroyedCardsClientRpc();
+        if (!isSinglePlayer) RemoveDestroyedCardsClientRpc();
     }
 
 

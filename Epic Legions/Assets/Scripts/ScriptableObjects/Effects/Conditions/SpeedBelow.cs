@@ -11,6 +11,6 @@ public class SpeedBelow : Condition
 
     public override bool CheckCondition(SimCardState caster, SimCardState target)
     {
-        return target.CurrentSPD < speedThreshold;
+        return target.GetEffectiveSpeed() < speedThreshold;
     }
 }

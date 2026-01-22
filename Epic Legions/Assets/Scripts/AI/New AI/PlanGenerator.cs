@@ -49,10 +49,13 @@ public class PlanGenerator
                 }
             }
         }
-        Log("⏭️ Generando mejor plan.");
+        Log("🚀 Generando mejor plan.");
         LogDeep($"📊 Mapeo - DuelManager subturn {snap.CurrentSubTurn} -> mi índice {startOurIndex}");
         LogDeep($"📊 Total grupos velocidad: {allSubturns.Count}");
         LogDeep($"📊 Total de heroes este subturno: {allSubturns[startOurIndex].Count}");
+
+        LogDeep($"{snap.MyControlledHeroes[0].GetEffectiveSpeed()}");
+        LogDeep($"{snap.EnemyHeroes[0].GetEffectiveSpeed()}");
 
         GenerateInitialPlans(snap.Clone(), allSubturns[startOurIndex]);
 
@@ -91,9 +94,14 @@ public class PlanGenerator
         for (int i = 0; i < currentSubturnHeroes.Count; i++)
         {
             if (snap.MyControlledHeroes.FirstOrDefault(a => a.OriginalCard == currentSubturnHeroes[i].OriginalCard) == null)
+            {
                 continue;
+            }
             if (!currentSubturnHeroes[i].CanAct())
+            {
+                LogDeep($"❌ {currentSubturnHeroes[i].OriginalCard.cardSO.CardName} no puede actuar en este snapshot inicial.");
                 continue;
+            }
 
             var heroActions = GetValidActionsForHero(snap, currentSubturnHeroes[i]);
             actions.Add(heroActions);

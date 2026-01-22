@@ -72,7 +72,6 @@ public class EnhancedAISimulation
             DEF = heroSO.Defense,
             CurrentDEF = card.CurrentDefensePoints,
             SPD = card.Speed,
-            CurrentSPD = card.CurrentSpeedPoints,
             FieldIndex = card.FieldPosition?.PositionIndex ?? -1,
             Alive = card.CurrentHealthPoints > 0,
             moves = new List<Movement>(card.Moves),

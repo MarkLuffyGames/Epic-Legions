@@ -2877,7 +2877,7 @@ MonoBehaviour:
   maxMillisecondsPerFrame: 4
   maxCombinationsPerTurn: Infinity
   showDebugLogs: 1
-  showDetailedCombinationLogs: 0
+  showDebugDeepLogs: 0
   duelManager: {fileID: 1328336599689875757}
   aiPlayerManager: {fileID: 6511605509360802617}
   humanPlayerManager: {fileID: 7240668214990470102}
@@ -3131,7 +3131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bddd2fe75b7d23e4fb92adf0dc4eec12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnhancedHemeraLegionAI
-  enableCardPlayingAI: 1
+  enableCardPlayingAI: 0
   cardDecisionDelay: 2
   maxCardsToPlayPerTurn: 1
   minimumCardScoreToPlay: 15
@@ -3140,7 +3140,7 @@ MonoBehaviour:
   maxMillisecondsPerFrame: 4
   maxCombinationsPerTurn: Infinity
   showDebugLogs: 1
-  showDetailedCombinationLogs: 0
+  showDebugDeepLogs: 0
   duelManager: {fileID: 1328336599689875757}
   aiPlayerManager: {fileID: 7240668214990470102}
   humanPlayerManager: {fileID: 6511605509360802617}

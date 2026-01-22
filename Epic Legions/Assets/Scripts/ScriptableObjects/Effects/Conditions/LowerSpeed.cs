@@ -18,6 +18,6 @@ public class LowerSpeed : Condition
         {
             return false;
         }
-        return target.CurrentSPD < caster.CurrentSPD;
+        return target.GetEffectiveSpeed() < caster.GetEffectiveSpeed();
     }
 }

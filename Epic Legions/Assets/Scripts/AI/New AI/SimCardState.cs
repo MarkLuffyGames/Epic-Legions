@@ -17,7 +17,6 @@ public class SimCardState
     public int DEF;
     public int CurrentDEF;
     public int SPD;
-    public int CurrentSPD;
     public int FieldIndex;
     public bool Alive = true;
 
@@ -41,7 +40,6 @@ public class SimCardState
             DEF = this.DEF,
             CurrentDEF = this.CurrentDEF,
             SPD = this.SPD,
-            CurrentSPD = this.CurrentSPD,
             FieldIndex = this.FieldIndex,
             Alive = this.Alive,
             moves = new List<Movement>(this.moves),
@@ -104,7 +102,7 @@ public class SimCardState
 
     public int GetEffectiveSpeed()
     {
-        int speed = CurrentSPD;
+        int speed = SPD;
 
         foreach (Effect effect in activeEffects)
         {
