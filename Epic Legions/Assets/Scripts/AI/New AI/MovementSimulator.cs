@@ -163,6 +163,12 @@ public class MovementSimulator
         result.DirectLifeDamage += damage;
 
         LogDeep($"Ataque directo a vida: {damage} daño");
+
+        if (move.MoveSO.OnMyself)
+        {
+            move.ActivateEffect(attacker, attacker);
+            LogDeep($"Efecto activado en sí mismo: {attacker.OriginalCard.cardSO.CardName}");
+        }
     }
 
     private void SimReceiveDamage(SimSnapshot snap, SimCardState attacker, SimCardState target, int moveIndex, FullPlanSim result)

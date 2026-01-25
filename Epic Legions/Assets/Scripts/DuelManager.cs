@@ -1192,6 +1192,11 @@ public class DuelManager : NetworkBehaviour
         // Mover la carta a su posicion en el campo.
         cardUsesTheAttack.MoveToLastPosition();
 
+        if (cardUsesTheAttack.Moves[movementToUseIndex].MoveSO.OnMyself)
+        {
+            ActivateEffects(cardUsesTheAttack, cardUsesTheAttack, movementToUseIndex);
+        }
+
         // Resetear el índice del movimiento utilizado y otras variables de estado
         movementToUseIndex = -1;
 

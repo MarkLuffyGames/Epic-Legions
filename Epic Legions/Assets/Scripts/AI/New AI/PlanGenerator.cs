@@ -54,9 +54,6 @@ public class PlanGenerator
         LogDeep($"📊 Total grupos velocidad: {allSubturns.Count}");
         LogDeep($"📊 Total de heroes este subturno: {allSubturns[startOurIndex].Count}");
 
-        LogDeep($"{snap.MyControlledHeroes[0].GetEffectiveSpeed()}");
-        LogDeep($"{snap.EnemyHeroes[0].GetEffectiveSpeed()}");
-
         GenerateInitialPlans(snap.Clone(), allSubturns[startOurIndex]);
 
         for (int ourIndex = startOurIndex; ourIndex < allSubturns.Count; ourIndex++)
